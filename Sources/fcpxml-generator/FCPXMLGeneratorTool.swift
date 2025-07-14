@@ -63,8 +63,8 @@ struct FCPXMLGeneratorTool {
             print("\n🏗️  Generating FCPXML structure...")
             let generator = MulticamXMLBuilder()
             let xmlString = generator.generateMulticamFCPXML(
-                video1: video1Metadata,
-                video2: video2Metadata,
+                leftSideVideo: video1Metadata,
+                rightSideVideo: video2Metadata,
                 projectName: projectName
             )
             

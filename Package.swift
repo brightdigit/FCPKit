@@ -43,7 +43,7 @@ let package = Package(
         ),
         .testTarget(
             name: "FCPKitTests",
-            dependencies: ["FCPKit"],
+            dependencies: ["FCPKit", "FCPKitMediaTools"],
             resources: [
                 .copy("TestData")
             ]
