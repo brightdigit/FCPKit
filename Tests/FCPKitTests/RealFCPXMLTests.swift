@@ -107,4 +107,81 @@ final class RealFCPXMLTests: XCTestCase {
         print("✅ Interview file: multicam, smart collections, media references")
         print("✅ UntitledXML file: sync clips, transforms, filters, time mapping")
     }
+    
+    func testParseBothMulticamFCPXMLFile() throws {
+        let bundle = Bundle.module
+        guard let fileURL = bundle.url(forResource: "Both-Multicam", withExtension: "fcpxml", subdirectory: "TestData") else {
+            throw XCTSkip("Both-Multicam FCPXML test file not found")
+        }
+        
+        let parser = FCPXMLParser()
+        let fcpxml = try parser.parse(fileURL: fileURL)
+        
+        // Basic assertions
+        XCTAssertEqual(fcpxml.version, "1.13")
+        XCTAssertNotNil(fcpxml.resources)
+        XCTAssertNotNil(fcpxml.library)
+        
+        let resources = try XCTUnwrap(fcpxml.resources)
+        let library = try XCTUnwrap(fcpxml.library)
+        
+        // Test media elements
+        let mediaElements = try XCTUnwrap(resources.media)
+        XCTAssertEqual(mediaElements.count, 4) // Both, Leo, Rachel, Multicam Clip
+        
+        // Find and test the "Both" media with nested sequences
+        let bothMedia = mediaElements.first { $0.name == "Both" }
+        XCTAssertNotNil(bothMedia)
+        let bothSequence = try XCTUnwrap(bothMedia?.sequence)
+        XCTAssertNotNil(bothSequence.spine)
+        
+        // Find and test the multicam media
+        let multicamMedia = mediaElements.first { $0.name == "Multicam Clip" }
+        XCTAssertNotNil(multicamMedia)
+        XCTAssertNotNil(multicamMedia?.multicam)
+        
+        let multicam = try XCTUnwrap(multicamMedia?.multicam)
+        XCTAssertEqual(multicam.tcFormat, "NDF")
+        XCTAssertNotNil(multicam.mcAngles)
+        
+        let mcAngles = try XCTUnwrap(multicam.mcAngles)
+        XCTAssertEqual(mcAngles.count, 3) // Both, Leo, Rachel angles
+        
+        // Verify angle names
+        let angleNames = mcAngles.compactMap { $0.name }
+        XCTAssertTrue(angleNames.contains("Both"))
+        XCTAssertTrue(angleNames.contains("Leo"))
+        XCTAssertTrue(angleNames.contains("Rachel"))
+        
+        // Test library event
+        let events = try XCTUnwrap(library.events)
+        XCTAssertFalse(events.isEmpty)
+        
+        let firstEvent = try XCTUnwrap(events.first)
+        XCTAssertEqual(firstEvent.name, "EAS-202")
+        
+        // Check ref-clips in event
+        let refClips = try XCTUnwrap(firstEvent.refClips)
+        XCTAssertEqual(refClips.count, 3) // Both, Leo, Rachel
+        
+        // Note: mc-clip elements at the event level are not currently parsed by FCPKit
+        // The mc-clip "Multicam Clip" in the FCPXML is being ignored
+        // Only ref-clips are parsed at the event level
+        
+        // Test assets
+        let assets = try XCTUnwrap(resources.assets)
+        XCTAssertEqual(assets.count, 2) // Leo and Rachel video assets
+        
+        // Verify both assets have media representations
+        for asset in assets {
+            XCTAssertNotNil(asset.mediaRep)
+            XCTAssertEqual(asset.hasVideo, "1")
+            XCTAssertEqual(asset.hasAudio, "1")
+        }
+        
+        print("✅ Successfully parsed Both-Multicam FCPXML file with version \(fcpxml.version)")
+        print("✅ Found \(mediaElements.count) media elements including multicam")
+        print("✅ Found \(mcAngles.count) multicam angles: \(angleNames.joined(separator: ", "))")
+        print("⚠️  Note: mc-clip in event is not parsed (FCPKit limitation)")
+    }
 }

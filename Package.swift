@@ -16,6 +16,14 @@ let package = Package(
             name: "FCPKit",
             targets: ["FCPKit"]
         ),
+        .library(
+            name: "FCPKitMediaTools",
+            targets: ["FCPKitMediaTools"]
+        ),
+        .executable(
+            name: "fcpxml-generator",
+            targets: ["fcpxml-generator"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/CoreOffice/XMLCoder.git", from: "0.17.0")
@@ -24,6 +32,14 @@ let package = Package(
         .target(
             name: "FCPKit",
             dependencies: ["XMLCoder"]
+        ),
+        .target(
+            name: "FCPKitMediaTools",
+            dependencies: ["FCPKit"]
+        ),
+        .executableTarget(
+            name: "fcpxml-generator",
+            dependencies: ["FCPKitMediaTools"]
         ),
         .testTarget(
             name: "FCPKitTests",

@@ -6,6 +6,12 @@ public struct FCPXML: Codable {
     public let resources: Resources?
     public let library: Library?
     
+    public init(version: String, resources: Resources? = nil, library: Library? = nil) {
+        self.version = version
+        self.resources = resources
+        self.library = library
+    }
+    
     enum CodingKeys: String, CodingKey {
         case version
         case resources
@@ -18,6 +24,13 @@ public struct Resources: Codable {
     public let formats: [Format]?
     public let effects: [Effect]?
     public let media: [Media]?
+    
+    public init(assets: [Asset]? = nil, formats: [Format]? = nil, effects: [Effect]? = nil, media: [Media]? = nil) {
+        self.assets = assets
+        self.formats = formats
+        self.effects = effects
+        self.media = media
+    }
     
     enum CodingKeys: String, CodingKey {
         case assets = "asset"
