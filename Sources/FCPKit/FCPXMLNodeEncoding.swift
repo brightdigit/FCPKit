@@ -75,6 +75,7 @@ extension AssetClip: DynamicNodeEncoding {
             "keyword", "note", "conform-rate", "adjust-volume", "adjust-blend",
             "audio-channel-source", "marker", "rating", "chapter-marker",
             "filter-audio", "filter-video",
+            "title",
         ])
     }
 }
@@ -95,7 +96,7 @@ extension MCSource: DynamicNodeEncoding {
 
 extension Video: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-        fcpNodeEncoding(for: key, elementKeys: ["filter-video"])
+        fcpNodeEncoding(for: key, elementKeys: ["param", "filter-video"])
     }
 }
 
@@ -112,7 +113,11 @@ extension DataElement: DynamicNodeEncoding {
 }
 
 extension ParamElement: DynamicNodeEncoding {
-    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+        fcpNodeEncoding(for: key, elementKeys: [
+            "param", "data", "fadeIn", "fadeOut", "keyframeAnimation",
+        ])
+    }
 }
 
 extension Media: DynamicNodeEncoding {
@@ -137,6 +142,7 @@ extension RefClip: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
         fcpNodeEncoding(for: key, elementKeys: [
             "conform-rate", "timeMap", "adjust-transform", "adjust-crop", "asset-clip",
+            "video",
         ])
     }
 }
@@ -200,7 +206,9 @@ extension MatchRatings: DynamicNodeEncoding {
 }
 
 extension AdjustVolume: DynamicNodeEncoding {
-    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+        fcpNodeEncoding(for: key, elementKeys: ["param"])
+    }
 }
 
 extension AdjustLoudness: DynamicNodeEncoding {
@@ -219,7 +227,7 @@ extension AudioChannelSource: DynamicNodeEncoding {
 
 extension Title: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-        fcpNodeEncoding(for: key, elementKeys: ["text", "text-style-def"])
+        fcpNodeEncoding(for: key, elementKeys: ["param", "text", "text-style-def"])
     }
 }
 
@@ -229,7 +237,7 @@ extension TextElement: DynamicNodeEncoding {
 
 extension TextStyle: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-        key.stringValue.isEmpty ? .element : .attribute
+        key.stringValue.isEmpty || key.stringValue == "param" ? .element : .attribute
     }
 }
 
@@ -300,6 +308,14 @@ extension Motion: DynamicNodeEncoding {
 }
 
 extension Keyframe: DynamicNodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}
+
+extension KeyframeAnimation: DynamicNodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .element }
+}
+
+extension Fade: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }
 

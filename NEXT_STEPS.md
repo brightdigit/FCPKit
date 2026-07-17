@@ -13,16 +13,17 @@ FCPXML 1.13 exports and finds:
 
 | Files | Dropped elements | Dropped attributes | Dropped text | Total |
 | ---: | ---: | ---: | ---: | ---: |
-| 3 | 186 | 541 | 4 | 731 |
+| 3 | 58 | 197 | 0 | 255 |
 
-Milestones 1 and 2 are complete. Modeling the real Cross Dissolve transition
-removed 28 losses: 8 elements and 20 attributes. No transition subtree paths
-remain in the report.
+Milestones 1 through 3 are complete. The transition slice removed 28 losses.
+Shared recursive parameters, animation, fades, and the parent links needed to
+reach their real fixture instances removed another 476 losses: 128 elements,
+344 attributes, and 4 text values. No parameter, keyframe, or fade paths remain
+in the report.
 
 The largest clusters are:
 
-- Reusable `param` elements and their `name`, `key`, and `value` attributes.
-- Nested `title`, `text-style`, and keyframe content.
+- Remaining title style attributes such as bold and kerning.
 - Nested `ref-clip`, `asset-clip`, and `video` structures.
 - Transform, crop, volume, color-conform, conform-rate, and time-map data.
 - Library-level multicam, sync-clip, role, and audio-channel details.

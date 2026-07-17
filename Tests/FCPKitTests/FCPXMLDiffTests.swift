@@ -226,6 +226,33 @@ final class FCPXMLDiffTests: XCTestCase {
         XCTAssertFalse(findings.contains { $0.path.contains("/transition/") })
     }
 
+    func testObservedHeterogeneousParameterChildOrderSurvivesRoundTrip() throws {
+        let url = try XCTUnwrap(
+            Bundle.module.url(
+                forResource: "UntitledXML",
+                withExtension: "fcpxml",
+                subdirectory: "TestData"
+            )
+        )
+        let modelParser = FCPXMLParser()
+        let model = try modelParser.parse(fileURL: url)
+        let encodedTree = try parser.parse(modelParser.encode(model))
+        let animatedVolume = try XCTUnwrap(
+            descendants(of: encodedTree).first {
+                $0.name == "param"
+                    && $0.attributes["name"] == "amount"
+                    && $0.children.count == 3
+            }
+        )
+
+        XCTAssertEqual(animatedVolume.children.map(\.name), [
+            "fadeIn", "fadeOut", "keyframeAnimation",
+        ])
+        XCTAssertEqual(animatedVolume.children.last?.children.map(\.name), [
+            "keyframe", "keyframe", "keyframe",
+        ])
+    }
+
     func testReportRenderingIsDeterministic() throws {
         let report = SchemaCompletenessReport(
             formatVersion: 1,
@@ -250,18 +277,24 @@ final class FCPXMLDiffTests: XCTestCase {
         }
         let report = try SchemaCompletenessAnalyzer().analyze(fileURLs: urls)
 
-        XCTAssertEqual(report.totals.droppedElements, 186)
-        XCTAssertEqual(report.totals.droppedAttributes, 541)
-        XCTAssertEqual(report.totals.droppedText, 4)
-        XCTAssertEqual(report.totals.total, 731)
+        XCTAssertEqual(report.totals.droppedElements, 58)
+        XCTAssertEqual(report.totals.droppedAttributes, 197)
+        XCTAssertEqual(report.totals.droppedText, 0)
+        XCTAssertEqual(report.totals.total, 255)
         XCTAssertEqual(
             Dictionary(uniqueKeysWithValues: report.files.map { ($0.path, $0.summary.total) }),
-            ["Both-Multicam.fcpxml": 24, "Interview.fcpxml": 42, "UntitledXML.fcpxml": 665]
+            ["Both-Multicam.fcpxml": 24, "Interview.fcpxml": 42, "UntitledXML.fcpxml": 189]
         )
         XCTAssertTrue(report.aggregateFindings.contains {
             $0.kind == .droppedElement
-                && $0.path.hasSuffix("/asset-clip/title/param")
-                && $0.count == 52
+                && $0.path.hasSuffix("/ref-clip/ref-clip")
+                && $0.count == 5
+        })
+        XCTAssertFalse(report.aggregateFindings.contains {
+            $0.path.contains("/param")
+                || $0.path.contains("/keyframe")
+                || $0.path.contains("/fadeIn")
+                || $0.path.contains("/fadeOut")
         })
         XCTAssertTrue(report.aggregateFindings.contains {
             $0.kind == .droppedAttribute
@@ -292,6 +325,7 @@ final class FCPXMLDiffTests: XCTestCase {
             AdjustBlend.self, Transition.self, Marker.self, Rating.self,
             ChapterMarker.self, ConnectedClip.self, Keyframe.self,
             CompoundClip.self, AudioRole.self, VideoRole.self, CaptionRole.self,
+            Fade.self,
         ]
         for type in attributeOnlyTypes {
             assertEncoding(type.nodeEncoding(for: TestCodingKey("value")), is: .attribute)
@@ -307,22 +341,34 @@ final class FCPXMLDiffTests: XCTestCase {
             (Sequence.self, "spine"),
             (Spine.self, "transition"),
             (AssetClip.self, "marker"),
+            (AssetClip.self, "title"),
             (MCClip.self, "mc-source"),
             (Video.self, "filter-video"),
+            (Video.self, "param"),
             (FilterVideo.self, "data"),
+            (ParamElement.self, "param"),
+            (ParamElement.self, "data"),
+            (ParamElement.self, "fadeIn"),
+            (ParamElement.self, "fadeOut"),
+            (ParamElement.self, "keyframeAnimation"),
             (Media.self, "sequence"),
             (Multicam.self, "mc-angle"),
             (MCAngle.self, "ref-clip"),
             (RefClip.self, "timeMap"),
+            (RefClip.self, "video"),
             (TimeMap.self, "timept"),
             (AdjustCrop.self, "trim-rect"),
             (SyncClip.self, "asset-clip"),
             (MediaRep.self, "bookmark"),
             (SmartCollection.self, "match-clip"),
             (AudioChannelSource.self, "adjust-loudness"),
+            (AdjustVolume.self, "param"),
             (Title.self, "text"),
+            (Title.self, "param"),
             (TextElement.self, "text-style"),
             (TextStyleDef.self, "text-style"),
+            (TextStyle.self, "param"),
+            (KeyframeAnimation.self, "keyframe"),
             (FilterAudio.self, "param"),
             (Transition.self, "filter-video"),
             (Transition.self, "filter-audio"),
@@ -346,9 +392,10 @@ final class FCPXMLDiffTests: XCTestCase {
             FCPXML.self, Asset.self, Library.self, Event.self, Project.self,
             Sequence.self, AssetClip.self, MCClip.self, Video.self,
             FilterVideo.self, Media.self, Multicam.self, MCAngle.self,
-            RefClip.self, TimeMap.self, AdjustCrop.self, SyncClip.self,
+            RefClip.self, TimeMap.self, AdjustCrop.self, SyncClip.self, ParamElement.self,
             MediaRep.self, SmartCollection.self, AudioChannelSource.self,
-            Title.self, TextStyleDef.self, FilterAudio.self, Transition.self, Generator.self,
+            AdjustVolume.self, Title.self, TextStyle.self, TextStyleDef.self,
+            FilterAudio.self, Transition.self, Generator.self,
             Storyline.self, RetimeClip.self, ColorCorrection.self, Motion.self,
             Caption.self,
         ]
@@ -359,6 +406,10 @@ final class FCPXMLDiffTests: XCTestCase {
 
     private func tree(_ xml: String) throws -> XMLTreeNode {
         try parser.parse(XCTUnwrap(xml.data(using: .utf8)))
+    }
+
+    private func descendants(of node: XMLTreeNode) -> [XMLTreeNode] {
+        node.children + node.children.flatMap(descendants)
     }
 
     private func report(with droppedElementCount: Int) -> SchemaCompletenessReport {

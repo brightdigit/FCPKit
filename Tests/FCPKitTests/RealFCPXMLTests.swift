@@ -112,6 +112,63 @@ final class RealFCPXMLTests: XCTestCase {
         XCTAssertEqual(reparsedTransition.filterAudio?.first?.name, "Audio Crossfade")
     }
 
+    func testSharedParametersAnimationsAndFadesCanBeReadAndMutated() throws {
+        let fileURL = try XCTUnwrap(
+            Bundle.module.url(
+                forResource: "UntitledXML",
+                withExtension: "fcpxml",
+                subdirectory: "TestData"
+            )
+        )
+        let parser = FCPXMLParser()
+        var document = try parser.parse(fileURL: fileURL)
+        let assetClips = document.resources?.media?.flatMap {
+            $0.sequence?.spine?.assetClips ?? []
+        } ?? []
+        let titles = assetClips.flatMap { $0.titles ?? [] }
+        let title = try XCTUnwrap(titles.first { $0.name?.contains("SyntaxKit") == true })
+        let customSpeed = try XCTUnwrap(title.param?.first { $0.name == "Custom Speed" })
+        let tracking = try XCTUnwrap(
+            title.textStyleDef?.first?.textStyle?.param?.first?.param?.first
+        )
+
+        XCTAssertEqual(customSpeed.value, nil)
+        XCTAssertEqual(customSpeed.keyframeAnimation?.keyframes?.map(\.value), ["0", "1"])
+        XCTAssertEqual(tracking.name, "motionTextTracking")
+        XCTAssertEqual(tracking.value, "-1.7751")
+
+        let mediaIndex = try XCTUnwrap(document.resources?.media?.firstIndex { media in
+            media.sequence?.spine?.assetClips?.contains {
+                $0.adjustVolume?.param?.contains { $0.keyframeAnimation != nil } == true
+            } == true
+        })
+        let assetIndex = try XCTUnwrap(
+            document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?.firstIndex {
+                $0.adjustVolume?.param?.contains { $0.keyframeAnimation != nil } == true
+            }
+        )
+        let volume = try XCTUnwrap(
+            document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
+                .adjustVolume?.param?.first
+        )
+        XCTAssertEqual(volume.fadeIn?.type, "easeIn")
+        XCTAssertEqual(volume.fadeOut?.duration, "1947511/720000s")
+        XCTAssertEqual(volume.keyframeAnimation?.keyframes?.count, 3)
+
+        document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
+            .adjustVolume?.param?[0].keyframeAnimation?.keyframes?[2].value = "-3dB"
+        let reparsed = try parser.parse(data: parser.encode(document))
+        let changedVolume = try XCTUnwrap(
+            reparsed.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
+                .adjustVolume?.param?.first
+        )
+
+        XCTAssertEqual(changedVolume.keyframeAnimation?.keyframes?[2].value, "-3dB")
+        XCTAssertEqual(changedVolume.fadeIn?.type, "easeIn")
+        XCTAssertEqual(changedVolume.fadeOut?.duration, "1947511/720000s")
+        XCTAssertEqual(changedVolume.keyframeAnimation?.keyframes?.count, 3)
+    }
+
     private func crossDissolve(in document: FCPXML) throws -> Transition {
         let media = try XCTUnwrap(document.resources?.media?.first { $0.name == "Music Intro" })
         return try XCTUnwrap(media.sequence?.spine?.transitions?.first)

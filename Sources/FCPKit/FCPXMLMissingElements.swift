@@ -10,6 +10,7 @@ public struct Title: Codable {
     public let start: String?
     public let duration: String?
     public let lane: String?
+    public var param: [ParamElement]?
     public let text: [TextElement]?
     public let textStyleDef: [TextStyleDef]?
     
@@ -20,6 +21,7 @@ public struct Title: Codable {
         case start
         case duration
         case lane
+        case param
         case text
         case textStyleDef = "text-style-def"
     }
@@ -40,6 +42,7 @@ public struct TextStyle: Codable {
     public let fontFace: String?
     public let fontColor: String?
     public let alignment: String?
+    public var param: [ParamElement]?
     public let content: String?
     
     enum CodingKeys: String, CodingKey {
@@ -49,6 +52,7 @@ public struct TextStyle: Codable {
         case fontFace
         case fontColor
         case alignment
+        case param
         case content = ""
     }
 }
@@ -263,13 +267,31 @@ public struct Motion: Codable {
 
 public struct Keyframe: Codable {
     public let time: String?
-    public let value: String?
+    public var value: String?
     public let interp: String?
     
     enum CodingKeys: String, CodingKey {
         case time
         case value
         case interp
+    }
+}
+
+public struct KeyframeAnimation: Codable {
+    public var keyframes: [Keyframe]?
+
+    enum CodingKeys: String, CodingKey {
+        case keyframes = "keyframe"
+    }
+}
+
+public struct Fade: Codable {
+    public let type: String?
+    public var duration: String?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case duration
     }
 }
 

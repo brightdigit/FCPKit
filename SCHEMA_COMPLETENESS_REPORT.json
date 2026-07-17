@@ -1,66 +1,6 @@
 {
   "aggregateFindings" : [
     {
-      "count" : 52,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@key"
-    },
-    {
-      "count" : 52,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@name"
-    },
-    {
-      "count" : 52,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param"
-    },
-    {
-      "count" : 50,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@value"
-    },
-    {
-      "count" : 20,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@key"
-    },
-    {
-      "count" : 20,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@name"
-    },
-    {
-      "count" : 20,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@value"
-    },
-    {
-      "count" : 20,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param"
-    },
-    {
-      "count" : 14,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@key"
-    },
-    {
-      "count" : 14,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@name"
-    },
-    {
-      "count" : 14,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@value"
-    },
-    {
-      "count" : 14,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param"
-    },
-    {
       "count" : 8,
       "kind" : "droppedAttribute",
       "path" : "/fcpxml/library/event/ref-clip/@modDate"
@@ -108,42 +48,7 @@
     {
       "count" : 4,
       "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe/@time"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe/@value"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/@id"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedAttribute",
       "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@bold"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@font"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@fontColor"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@fontSize"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style/@ref"
     },
     {
       "count" : 4,
@@ -178,47 +83,12 @@
     {
       "count" : 4,
       "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedElement",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedText",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style/#text"
     },
     {
       "count" : 3,
       "kind" : "droppedAttribute",
       "path" : "/fcpxml/resources/effect/@src"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe/@time"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe/@value"
     },
     {
       "count" : 3,
@@ -237,41 +107,6 @@
     },
     {
       "count" : 3,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@duration"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@lane"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@name"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@offset"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@ref"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@start"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe"
-    },
-    {
-      "count" : 3,
       "kind" : "droppedElement",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop"
     },
@@ -284,11 +119,6 @@
       "count" : 3,
       "kind" : "droppedElement",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform"
-    },
-    {
-      "count" : 3,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video"
     },
     {
       "count" : 2,
@@ -313,77 +143,7 @@
     {
       "count" : 2,
       "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/@name"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut/@duration"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut/@type"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@duration"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@lane"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@name"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@offset"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@ref"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@start"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
       "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@kerning"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/@key"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/@name"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@key"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@name"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@value"
     },
     {
       "count" : 2,
@@ -429,21 +189,6 @@
       "count" : 2,
       "kind" : "droppedAttribute",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-transform/@position"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/@name"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/@ref"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/data/@key"
     },
     {
       "count" : 2,
@@ -513,41 +258,6 @@
     {
       "count" : 2,
       "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/adjust-volume"
     },
     {
@@ -569,16 +279,6 @@
       "count" : 2,
       "kind" : "droppedElement",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-transform"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/data"
     },
     {
       "count" : 2,
@@ -774,16 +474,6 @@
       "count" : 1,
       "kind" : "droppedAttribute",
       "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/@audioStart"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn/@duration"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn/@type"
     },
     {
       "count" : 1,
@@ -989,16 +679,6 @@
       "count" : 1,
       "kind" : "droppedElement",
       "path" : "/fcpxml/library/event/sync-clip/asset-clip/conform-rate"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation"
     },
     {
       "count" : 1,
@@ -1373,66 +1053,6 @@
       "fcpxmlVersion" : "1.13",
       "findings" : [
         {
-          "count" : 52,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@key"
-        },
-        {
-          "count" : 52,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@name"
-        },
-        {
-          "count" : 52,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param"
-        },
-        {
-          "count" : 50,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@value"
-        },
-        {
-          "count" : 20,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@key"
-        },
-        {
-          "count" : 20,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@name"
-        },
-        {
-          "count" : 20,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@value"
-        },
-        {
-          "count" : 20,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param"
-        },
-        {
-          "count" : 14,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@key"
-        },
-        {
-          "count" : 14,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@name"
-        },
-        {
-          "count" : 14,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@value"
-        },
-        {
-          "count" : 14,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param"
-        },
-        {
           "count" : 4,
           "kind" : "droppedAttribute",
           "path" : "/fcpxml/library/event/ref-clip/@modDate"
@@ -1450,42 +1070,7 @@
         {
           "count" : 4,
           "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe/@time"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe/@value"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/@id"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedAttribute",
           "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@bold"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@font"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@fontColor"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@fontSize"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style/@ref"
         },
         {
           "count" : 4,
@@ -1496,41 +1081,6 @@
           "count" : 4,
           "kind" : "droppedElement",
           "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-transform"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedText",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style/#text"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe/@time"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe/@value"
         },
         {
           "count" : 3,
@@ -1559,48 +1109,8 @@
         },
         {
           "count" : 3,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@duration"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@lane"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@name"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@offset"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@ref"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@start"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe"
-        },
-        {
-          "count" : 3,
           "kind" : "droppedElement",
           "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip"
-        },
-        {
-          "count" : 3,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video"
         },
         {
           "count" : 2,
@@ -1630,77 +1140,7 @@
         {
           "count" : 2,
           "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/@name"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut/@duration"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut/@type"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@duration"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@lane"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@name"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@offset"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@ref"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@start"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
           "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@kerning"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/@key"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/@name"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@key"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@name"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@value"
         },
         {
           "count" : 2,
@@ -1759,58 +1199,8 @@
         },
         {
           "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/@name"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/@ref"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/data/@key"
-        },
-        {
-          "count" : 2,
           "kind" : "droppedElement",
           "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param"
         },
         {
           "count" : 2,
@@ -1831,16 +1221,6 @@
           "count" : 2,
           "kind" : "droppedElement",
           "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-transform"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/data"
         },
         {
           "count" : 1,
@@ -1991,16 +1371,6 @@
           "count" : 1,
           "kind" : "droppedAttribute",
           "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/@audioStart"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn/@duration"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn/@type"
         },
         {
           "count" : 1,
@@ -2285,16 +1655,6 @@
         {
           "count" : 1,
           "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedElement",
           "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip"
         },
         {
@@ -2380,9 +1740,9 @@
       ],
       "path" : "Tests/FCPKitTests/TestData/UntitledXML.fcpxml",
       "summary" : {
-        "droppedAttributes" : 492,
-        "droppedElements" : 169,
-        "droppedText" : 4
+        "droppedAttributes" : 148,
+        "droppedElements" : 41,
+        "droppedText" : 0
       }
     }
   ],
@@ -2394,8 +1754,8 @@
     "Formatting-only whitespace and attribute ordering are ignored."
   ],
   "totals" : {
-    "droppedAttributes" : 541,
-    "droppedElements" : 186,
-    "droppedText" : 4
+    "droppedAttributes" : 197,
+    "droppedElements" : 58,
+    "droppedText" : 0
   }
 }

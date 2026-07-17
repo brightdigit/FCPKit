@@ -168,9 +168,9 @@ public struct Spine: Codable {
     public let clips: [Clip]?
     public let gaps: [Gap]?
     public let mcClips: [MCClip]?
-    public let refClips: [RefClip]?
+    public var refClips: [RefClip]?
     public let syncClips: [SyncClip]?
-    public let assetClips: [AssetClip]?
+    public var assetClips: [AssetClip]?
     public let titles: [Title]?
     public let generators: [Generator]?
     public var transitions: [Transition]?
@@ -249,7 +249,7 @@ public struct AssetClip: Codable {
     public let keywords: [Keyword]?
     public let note: String?
     public let conformRate: ConformRate?
-    public let adjustVolume: AdjustVolume?
+    public var adjustVolume: AdjustVolume?
     public let adjustBlend: AdjustBlend?
     public let audioChannelSource: [AudioChannelSource]?
     public let markers: [Marker]?
@@ -257,6 +257,7 @@ public struct AssetClip: Codable {
     public let chapterMarkers: [ChapterMarker]?
     public let filterAudio: [FilterAudio]?
     public let filterVideo: [FilterVideo]?
+    public var titles: [Title]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -283,6 +284,7 @@ public struct AssetClip: Codable {
         case chapterMarkers = "chapter-marker"
         case filterAudio = "filter-audio"
         case filterVideo = "filter-video"
+        case titles = "title"
     }
 }
 

@@ -38,6 +38,7 @@ public struct Video: Codable {
     public let name: String?
     public let start: String?
     public let duration: String?
+    public var param: [ParamElement]?
     public let filterVideo: [FilterVideo]?
     
     enum CodingKeys: String, CodingKey {
@@ -47,6 +48,7 @@ public struct Video: Codable {
         case name
         case start
         case duration
+        case param
         case filterVideo = "filter-video"
     }
 }
@@ -79,11 +81,21 @@ public struct ParamElement: Codable {
     public let name: String?
     public let key: String?
     public var value: String?
+    public var param: [ParamElement]?
+    public var data: [DataElement]?
+    public var fadeIn: Fade?
+    public var fadeOut: Fade?
+    public var keyframeAnimation: KeyframeAnimation?
     
     enum CodingKeys: String, CodingKey {
         case name
         case key
         case value
+        case param
+        case data
+        case fadeIn
+        case fadeOut
+        case keyframeAnimation
     }
 }
 
@@ -146,6 +158,7 @@ public struct RefClip: Codable {
     public let adjustTransform: AdjustTransform?
     public let adjustCrop: AdjustCrop?
     public let assetClips: [AssetClip]?
+    public var video: [Video]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -158,6 +171,7 @@ public struct RefClip: Codable {
         case adjustTransform = "adjust-transform"
         case adjustCrop = "adjust-crop"
         case assetClips = "asset-clip"
+        case video
     }
 }
 
@@ -302,10 +316,12 @@ public struct MatchRatings: Codable {
 }
 
 public struct AdjustVolume: Codable {
-    public let amount: String?
+    public var amount: String?
+    public var param: [ParamElement]?
     
     enum CodingKeys: String, CodingKey {
         case amount
+        case param
     }
 }
 
