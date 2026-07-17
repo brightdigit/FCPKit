@@ -7,6 +7,7 @@ public struct MCClip: Codable {
     public let name: String?
     public let start: String?
     public let duration: String?
+    public let modDate: String?
     public let mcSources: [MCSource]?
     public let video: [Video]?
     
@@ -16,6 +17,7 @@ public struct MCClip: Codable {
         case name
         case start
         case duration
+        case modDate
         case mcSources = "mc-source"
         case video
     }
@@ -276,6 +278,9 @@ public struct SyncClip: Codable {
     public let name: String?
     public let duration: String?
     public let tcFormat: String?
+    public let format: String?
+    public let start: String?
+    public let modDate: String?
     public let assetClips: [AssetClip]?
     public let video: [Video]?
     public let filterVideo: [FilterVideo]?
@@ -285,6 +290,9 @@ public struct SyncClip: Codable {
         case name
         case duration
         case tcFormat
+        case format
+        case start
+        case modDate
         case assetClips = "asset-clip"
         case video
         case filterVideo = "filter-video"

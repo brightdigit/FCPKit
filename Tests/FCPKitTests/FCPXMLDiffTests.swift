@@ -277,13 +277,13 @@ final class FCPXMLDiffTests: XCTestCase {
         }
         let report = try SchemaCompletenessAnalyzer().analyze(fileURLs: urls)
 
-        XCTAssertEqual(report.totals.droppedElements, 11)
-        XCTAssertEqual(report.totals.droppedAttributes, 38)
+        XCTAssertEqual(report.totals.droppedElements, 0)
+        XCTAssertEqual(report.totals.droppedAttributes, 0)
         XCTAssertEqual(report.totals.droppedText, 0)
-        XCTAssertEqual(report.totals.total, 49)
+        XCTAssertEqual(report.totals.total, 0)
         XCTAssertEqual(
             Dictionary(uniqueKeysWithValues: report.files.map { ($0.path, $0.summary.total) }),
-            ["Both-Multicam.fcpxml": 8, "Interview.fcpxml": 0, "UntitledXML.fcpxml": 41]
+            ["Both-Multicam.fcpxml": 0, "Interview.fcpxml": 0, "UntitledXML.fcpxml": 0]
         )
         XCTAssertTrue(report.aggregateFindings.allSatisfy {
             $0.path.hasPrefix("/fcpxml/library/event/")
@@ -295,11 +295,7 @@ final class FCPXMLDiffTests: XCTestCase {
                 || $0.path.contains("/fadeOut")
         })
         XCTAssertFalse(report.aggregateFindings.contains { $0.path.contains("/title/") })
-        XCTAssertTrue(report.aggregateFindings.contains {
-            $0.kind == .droppedElement
-                && $0.path.hasSuffix("/library/event/mc-clip")
-                && $0.count == 1
-        })
+        XCTAssertEqual(report.aggregateFindings, [])
 
         let renderer = SchemaCompletenessReportRenderer()
         XCTAssertEqual(renderer.markdown(report), renderer.markdown(report))

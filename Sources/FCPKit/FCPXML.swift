@@ -126,6 +126,8 @@ public struct Event: Codable {
     public let projects: [Project]?
     public let assetClips: [AssetClip]?
     public let refClips: [RefClip]?
+    public let mcClips: [MCClip]?
+    public let syncClips: [SyncClip]?
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -133,6 +135,8 @@ public struct Event: Codable {
         case projects = "project"
         case assetClips = "asset-clip"
         case refClips = "ref-clip"
+        case mcClips = "mc-clip"
+        case syncClips = "sync-clip"
     }
 }
 

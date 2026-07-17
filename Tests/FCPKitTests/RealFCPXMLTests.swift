@@ -361,9 +361,10 @@ final class RealFCPXMLTests: XCTestCase {
         let refClips = try XCTUnwrap(firstEvent.refClips)
         XCTAssertEqual(refClips.count, 3) // Both, Leo, Rachel
         
-        // Note: mc-clip elements at the event level are not currently parsed by FCPKit
-        // The mc-clip "Multicam Clip" in the FCPXML is being ignored
-        // Only ref-clips are parsed at the event level
+        let eventMulticam = try XCTUnwrap(firstEvent.mcClips?.first)
+        XCTAssertEqual(eventMulticam.name, "Multicam Clip")
+        XCTAssertEqual(eventMulticam.mcSources?.first?.angleID, "lecA7YF4SLCbdYmLe/clVg")
+        XCTAssertEqual(eventMulticam.mcSources?.first?.srcEnable, "all")
         
         // Test assets
         let assets = try XCTUnwrap(resources.assets)
@@ -379,6 +380,6 @@ final class RealFCPXMLTests: XCTestCase {
         print("✅ Successfully parsed Both-Multicam FCPXML file with version \(fcpxml.version)")
         print("✅ Found \(mediaElements.count) media elements including multicam")
         print("✅ Found \(mcAngles.count) multicam angles: \(angleNames.joined(separator: ", "))")
-        print("⚠️  Note: mc-clip in event is not parsed (FCPKit limitation)")
+        print("✅ Parsed event-level multicam clip and angle source")
     }
 }
