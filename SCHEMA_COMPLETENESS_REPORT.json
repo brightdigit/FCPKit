@@ -1,0 +1,2521 @@
+{
+  "aggregateFindings" : [
+    {
+      "count" : 52,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@key"
+    },
+    {
+      "count" : 52,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@name"
+    },
+    {
+      "count" : 52,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param"
+    },
+    {
+      "count" : 50,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@value"
+    },
+    {
+      "count" : 20,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@key"
+    },
+    {
+      "count" : 20,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@name"
+    },
+    {
+      "count" : 20,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@value"
+    },
+    {
+      "count" : 20,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param"
+    },
+    {
+      "count" : 14,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@key"
+    },
+    {
+      "count" : 14,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@name"
+    },
+    {
+      "count" : 14,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@value"
+    },
+    {
+      "count" : 14,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param"
+    },
+    {
+      "count" : 8,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/ref-clip/@modDate"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@duration"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@lane"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@name"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@offset"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@ref"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@key"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@name"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@value"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip"
+    },
+    {
+      "count" : 5,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-transform/@position"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-transform/@scale"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe/@time"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe/@value"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/@id"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@bold"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@font"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@fontColor"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@fontSize"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style/@ref"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/@start"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@useAudioSubroles"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@interp"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@time"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@value"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-transform"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept"
+    },
+    {
+      "count" : 4,
+      "kind" : "droppedText",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style/#text"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/effect/@src"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe/@time"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe/@value"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/@mode"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect/@left"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform/@position"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@duration"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@lane"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@name"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@offset"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@ref"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@start"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform"
+    },
+    {
+      "count" : 3,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source/@role"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source/@srcCh"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/@audioLayout"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/@audioRate"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/@name"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut/@duration"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut/@type"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@duration"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@lane"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@name"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@offset"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@ref"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@start"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@kerning"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/@key"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/@name"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@key"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@name"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@value"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/adjust-volume/@amount"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect/@right"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/conform-rate/@srcFrameRate"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@autoOrManual"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@conformType"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@enabled"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@peakNitsOfPQSource"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@peakNitsOfSDRToPQSource"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-transform/@position"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/@name"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/@ref"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/data/@key"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@audioRole"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@duration"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@format"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@lane"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@name"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@offset"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@ref"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@tcFormat"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/@role"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/@srcCh"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@amount"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@uniformity"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/adjust-volume"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/conform-rate"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-transform"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/data"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source"
+    },
+    {
+      "count" : 2,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/mc-clip/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/mc-clip/@modDate"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/mc-clip/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/mc-clip/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/mc-clip/mc-source/@angleID"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/mc-clip/mc-source/@srcEnable"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/@format"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/@modDate"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/@tcFormat"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/@audioRole"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/@format"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/@offset"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/@start"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/@tcFormat"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/adjust-volume/@amount"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@audioRole"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@format"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@lane"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@offset"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@tcFormat"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/@role"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/@srcCh"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@amount"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@uniformity"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source/@active"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/conform-rate/@scaleEnabled"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/@audioDuration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/@audioStart"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn/@type"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@audioRole"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@format"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@lane"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@offset"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@start"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@tcFormat"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/@mode"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/trim-rect/@bottom"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/trim-rect/@left"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/trim-rect/@top"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-transform/@position"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-transform/@scale"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/conform-rate/@scaleEnabled"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/conform-rate/@srcFrameRate"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@lane"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@offset"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@start"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/adjust-transform/@position"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/adjust-transform/@scale"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/filter-video/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/filter-video/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/data/@key"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/video/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/video/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/video/@offset"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/video/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedAttribute",
+      "path" : "/fcpxml/resources/media/sequence/spine/video/@start"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/mc-clip"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/mc-clip/mc-source"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/sync-clip"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/adjust-volume"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/library/event/sync-clip/asset-clip/conform-rate"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/trim-rect"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-transform"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/conform-rate"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/adjust-transform"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/filter-video"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/data"
+    },
+    {
+      "count" : 1,
+      "kind" : "droppedElement",
+      "path" : "/fcpxml/resources/media/sequence/spine/video"
+    }
+  ],
+  "files" : [
+    {
+      "fcpxmlVersion" : "1.13",
+      "findings" : [
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/ref-clip/@modDate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/mc-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/mc-clip/@modDate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/mc-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/mc-clip/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/mc-clip/mc-source/@angleID"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/mc-clip/mc-source/@srcEnable"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@lane"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@useAudioSubroles"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/@mode"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect/@left"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform/@position"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/mc-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/mc-clip/mc-source"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform"
+        }
+      ],
+      "path" : "Tests/FCPKitTests/TestData/Both-Multicam.fcpxml",
+      "summary" : {
+        "droppedAttributes" : 18,
+        "droppedElements" : 6,
+        "droppedText" : 0
+      }
+    },
+    {
+      "fcpxmlVersion" : "1.13",
+      "findings" : [
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@interp"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@time"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@value"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/ref-clip/@modDate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/effect/@src"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@lane"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@useAudioSubroles"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/@mode"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect/@left"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect/@right"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform/@position"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/conform-rate/@srcFrameRate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@audioRole"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@format"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@lane"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@tcFormat"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/@role"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/@srcCh"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@amount"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@uniformity"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/conform-rate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness"
+        }
+      ],
+      "path" : "Tests/FCPKitTests/TestData/Interview.fcpxml",
+      "summary" : {
+        "droppedAttributes" : 31,
+        "droppedElements" : 11,
+        "droppedText" : 0
+      }
+    },
+    {
+      "fcpxmlVersion" : "1.13",
+      "findings" : [
+        {
+          "count" : 52,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@key"
+        },
+        {
+          "count" : 52,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@name"
+        },
+        {
+          "count" : 52,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param"
+        },
+        {
+          "count" : 50,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/@value"
+        },
+        {
+          "count" : 20,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@key"
+        },
+        {
+          "count" : 20,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@name"
+        },
+        {
+          "count" : 20,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param/@value"
+        },
+        {
+          "count" : 20,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/param"
+        },
+        {
+          "count" : 14,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@key"
+        },
+        {
+          "count" : 14,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@name"
+        },
+        {
+          "count" : 14,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param/@value"
+        },
+        {
+          "count" : 14,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param"
+        },
+        {
+          "count" : 5,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@key"
+        },
+        {
+          "count" : 5,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@name"
+        },
+        {
+          "count" : 5,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@value"
+        },
+        {
+          "count" : 5,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/ref-clip/@modDate"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-transform/@position"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-transform/@scale"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe/@time"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe/@value"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/@id"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@bold"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@font"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@fontColor"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@fontSize"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style/@ref"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/@start"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-transform"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation/keyframe"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style"
+        },
+        {
+          "count" : 4,
+          "kind" : "droppedText",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text/text-style/#text"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe/@time"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe/@value"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@duration"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@lane"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@name"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@offset"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@ref"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@duration"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@lane"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@name"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@offset"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@ref"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/@start"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation/keyframe"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip"
+        },
+        {
+          "count" : 3,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source/@role"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source/@srcCh"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/effect/@src"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/@audioLayout"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/@audioRate"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/@name"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut/@duration"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut/@type"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@duration"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@lane"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@name"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@offset"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@ref"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/@start"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@kerning"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/@key"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/@name"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@key"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@name"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param/@value"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/adjust-volume/@amount"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/@useAudioSubroles"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@interp"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@time"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept/@value"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@autoOrManual"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@conformType"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@enabled"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@peakNitsOfPQSource"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform/@peakNitsOfSDRToPQSource"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-transform/@position"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/@name"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/@ref"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/data/@key"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeOut"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/param/keyframeAnimation"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/param/param"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/adjust-volume"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap/timept"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-colorConform"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/adjust-transform"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video"
+        },
+        {
+          "count" : 2,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/data"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/@format"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/@modDate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/@tcFormat"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/@audioRole"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/@format"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/@start"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/@tcFormat"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/adjust-volume/@amount"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@audioRole"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@format"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@lane"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/@tcFormat"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/@role"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/@srcCh"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@amount"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@uniformity"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/audio-channel-source/@active"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/conform-rate/@scaleEnabled"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/@audioDuration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/@audioStart"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn/@type"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@audioRole"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@format"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@lane"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@start"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/@tcFormat"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/@mode"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/trim-rect/@bottom"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/trim-rect/@left"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/trim-rect/@top"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-transform/@position"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-transform/@scale"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/conform-rate/@scaleEnabled"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/conform-rate/@srcFrameRate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@lane"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/@start"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/adjust-transform/@position"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/adjust-transform/@scale"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/filter-video/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/filter-video/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/@mode"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect/@left"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect/@right"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform/@position"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/conform-rate/@srcFrameRate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@audioRole"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@format"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@lane"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/@tcFormat"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/@role"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/@srcCh"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@amount"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness/@uniformity"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/data/@key"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/video/@duration"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/video/@name"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/video/@offset"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/video/@ref"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedAttribute",
+          "path" : "/fcpxml/resources/media/sequence/spine/video/@start"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/sync-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/adjust-volume"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/library/event/sync-clip/asset-clip/conform-rate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/fadeIn"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/adjust-volume/param/keyframeAnimation"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-crop/trim-rect"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/adjust-transform"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/asset-clip/conform-rate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/video/adjust-transform"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/filter-video"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-crop/trim-rect"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/adjust-transform"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/conform-rate"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip/timeMap"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/sync-clip/asset-clip/asset-clip/audio-channel-source/adjust-loudness"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/data"
+        },
+        {
+          "count" : 1,
+          "kind" : "droppedElement",
+          "path" : "/fcpxml/resources/media/sequence/spine/video"
+        }
+      ],
+      "path" : "Tests/FCPKitTests/TestData/UntitledXML.fcpxml",
+      "summary" : {
+        "droppedAttributes" : 512,
+        "droppedElements" : 177,
+        "droppedText" : 4
+      }
+    }
+  ],
+  "formatVersion" : 1,
+  "normalization" : [
+    "Resource identifiers matching r1...rN are replaced with pair-stable symbolic references.",
+    "uid, sig, and modDate attribute values are replaced with a volatile placeholder.",
+    "bookmark and data[key=effectConfig] text is replaced with an opaque placeholder.",
+    "Formatting-only whitespace and attribute ordering are ignored."
+  ],
+  "totals" : {
+    "droppedAttributes" : 561,
+    "droppedElements" : 194,
+    "droppedText" : 4
+  }
+}

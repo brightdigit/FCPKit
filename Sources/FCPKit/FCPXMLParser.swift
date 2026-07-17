@@ -30,7 +30,7 @@ public class FCPXMLParser {
         let encoder = XMLEncoder()
         encoder.dateEncodingStrategy = .iso8601
         encoder.keyEncodingStrategy = .useDefaultKeys
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        encoder.outputFormatting = [.prettyPrinted]
         return try encoder.encode(fcpxml, withRootKey: "fcpxml")
     }
     

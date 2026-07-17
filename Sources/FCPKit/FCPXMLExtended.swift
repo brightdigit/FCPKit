@@ -71,7 +71,7 @@ public struct DataElement: Codable {
     
     enum CodingKeys: String, CodingKey {
         case key
-        case value
+        case value = ""
     }
 }
 

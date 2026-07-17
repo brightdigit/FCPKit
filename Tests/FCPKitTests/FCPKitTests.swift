@@ -85,8 +85,10 @@ final class FCPKitTests: XCTestCase {
         let fcpxml = try parser.parse(xmlString: sampleFCPXML)
         let xmlString = try parser.encodeToString(fcpxml)
         
-        XCTAssertTrue(xmlString.contains("fcpxml"))
-        XCTAssertTrue(xmlString.contains("version"))
+        XCTAssertTrue(xmlString.contains("<fcpxml version=\"1.10\">"))
+        XCTAssertFalse(xmlString.contains("<version>"))
+        XCTAssertTrue(xmlString.contains("<format id=\"r1\""))
+        XCTAssertTrue(xmlString.contains("<event name=\"Test Event\""))
         XCTAssertTrue(xmlString.contains("resources"))
         XCTAssertTrue(xmlString.contains("library"))
     }
@@ -101,6 +103,43 @@ final class FCPKitTests: XCTestCase {
         XCTAssertEqual(originalFCPXML.resources?.formats?.count, decodedFCPXML.resources?.formats?.count)
         XCTAssertEqual(originalFCPXML.resources?.assets?.count, decodedFCPXML.resources?.assets?.count)
         XCTAssertEqual(originalFCPXML.library?.events?.count, decodedFCPXML.library?.events?.count)
+    }
+
+    func testDataElementTextContentRoundTrips() throws {
+        let xml = """
+        <fcpxml version="1.13">
+            <resources>
+                <format id="r1"/>
+                <asset id="r2"/>
+            </resources>
+            <library>
+                <event>
+                    <project>
+                        <sequence format="r1" duration="1s">
+                            <spine>
+                                <asset-clip ref="r2" duration="1s">
+                                    <filter-video ref="r3">
+                                        <data key="effectConfig">PAYLOAD</data>
+                                    </filter-video>
+                                </asset-clip>
+                            </spine>
+                        </sequence>
+                    </project>
+                </event>
+            </library>
+        </fcpxml>
+        """
+        let parser = FCPXMLParser()
+        let model = try parser.parse(xmlString: xml)
+
+        let value = model.library?.events?.first?.projects?.first?.sequence?
+            .spine?.assetClips?.first?.filterVideo?.first?.data?.first?.value
+        XCTAssertEqual(value, "PAYLOAD")
+        let encoded = try parser.encodeToString(model)
+        let reparsed = try parser.parse(xmlString: encoded)
+        let reparsedValue = reparsed.library?.events?.first?.projects?.first?.sequence?
+            .spine?.assetClips?.first?.filterVideo?.first?.data?.first?.value
+        XCTAssertEqual(reparsedValue, "PAYLOAD")
     }
     
     func testInvalidXMLHandling() {
