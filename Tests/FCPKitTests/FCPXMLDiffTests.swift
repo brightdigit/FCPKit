@@ -101,6 +101,84 @@ final class FCPXMLDiffTests: XCTestCase {
         XCTAssertFalse(differences.contains { $0.kind == .changedAttribute })
     }
 
+    func testDeletedAndReorderedResourcesDoNotChangeSurvivingReferences() throws {
+        let left = try tree("""
+        <fcpxml><resources>
+            <format id="r1" name="Format"/>
+            <effect id="r2" name="Removed"/>
+            <asset id="r3" name="Clip" format="r1"/>
+        </resources><library><asset-clip ref="r3" format="r1"/></library></fcpxml>
+        """)
+        let right = try tree("""
+        <fcpxml><resources>
+            <asset id="r1" name="Clip" format="r3"/>
+            <format id="r3" name="Format"/>
+        </resources><library><asset-clip ref="r1" format="r3"/></library></fcpxml>
+        """)
+
+        let differences = engine.compare(left, right, mode: .symmetric)
+
+        XCTAssertTrue(differences.allSatisfy { $0.path.contains("/resources/effect") })
+        XCTAssertFalse(differences.contains { $0.kind == .changedAttribute })
+    }
+
+    func testRepeatedSiblingsAreMatchedAsMultisets() throws {
+        let left = try tree("<root><param value=\"a\"/><param value=\"b\"/><param value=\"b\"/></root>")
+        let right = try tree("<root><param value=\"b\"/><param value=\"c\"/><param value=\"b\"/></root>")
+
+        XCTAssertEqual(engine.compare(left, right, mode: .symmetric), [
+            FCPXMLDifference(kind: .changedAttribute, path: "/root/param/@value", count: 1),
+        ])
+    }
+
+    func testAttributeOrderEmptyElementsAndHeterogeneousChildrenAreStable() throws {
+        let left = try tree("<root b=\"2\" a=\"1\"><empty/><a/><b/><a/></root>")
+        let right = try tree("<root a=\"1\" b=\"2\"><empty></empty><a/><b/><a/></root>")
+
+        XCTAssertEqual(engine.compare(left, right, mode: .symmetric), [])
+    }
+
+    func testMixedTextChangesRemainVisible() throws {
+        let left = try tree("<root>before<em>middle</em>after</root>")
+        let right = try tree("<root>before<em>middle</em>changed</root>")
+
+        XCTAssertEqual(engine.compare(left, right, mode: .symmetric), [
+            FCPXMLDifference(kind: .changedText, path: "/root/#text", count: 1),
+        ])
+    }
+
+    func testOpaqueMaskingKeepsElementPathsAndAttributesSignificant() throws {
+        let left = try tree("""
+        <root><bookmark kind="security">OLD</bookmark><data key="effectConfig" version="1">OLD</data></root>
+        """)
+        let payloadOnly = try tree("""
+        <root><bookmark kind="security">NEW</bookmark><data key="effectConfig" version="1">NEW</data></root>
+        """)
+        let changedAttribute = try tree("""
+        <root><bookmark kind="different">NEW</bookmark><data key="effectConfig" version="2">NEW</data></root>
+        """)
+
+        XCTAssertEqual(engine.compare(left, payloadOnly, mode: .symmetric), [])
+        XCTAssertEqual(
+            Set(engine.compare(left, changedAttribute, mode: .symmetric).map(\.path)),
+            ["/root/bookmark/@kind", "/root/data/@version"]
+        )
+
+        let missing = try tree("<root/>")
+        let missingDifferences = engine.compare(left, missing, mode: .completeness)
+        XCTAssertTrue(missingDifferences.contains { $0.path == "/root/bookmark" })
+        XCTAssertTrue(missingDifferences.contains { $0.path == "/root/data/@key" })
+    }
+
+    func testRemovedVolatileAttributeIsStillReportedAsModelLoss() throws {
+        let original = try tree("<root uid=\"volatile-value\"/>")
+        let encoded = try tree("<root/>")
+
+        XCTAssertEqual(engine.compare(original, encoded, mode: .completeness), [
+            FCPXMLDifference(kind: .droppedAttribute, path: "/root/@uid", count: 1),
+        ])
+    }
+
     func testCompleteSyntheticModelHasNoRoundTripLoss() throws {
         let xml = """
         <fcpxml version="1.13">
@@ -178,6 +256,45 @@ final class FCPXMLDiffTests: XCTestCase {
         XCTAssertEqual(try renderer.jsonData(report), try renderer.jsonData(report))
     }
 
+    func testCheckedInFixtureBaselineAndRepresentativePaths() throws {
+        let urls = ["Both-Multicam", "Interview", "UntitledXML"].map {
+            Bundle.module.url(forResource: $0, withExtension: "fcpxml", subdirectory: "TestData")!
+        }
+        let report = try SchemaCompletenessAnalyzer().analyze(fileURLs: urls)
+
+        XCTAssertEqual(report.totals.droppedElements, 194)
+        XCTAssertEqual(report.totals.droppedAttributes, 561)
+        XCTAssertEqual(report.totals.droppedText, 4)
+        XCTAssertEqual(report.totals.total, 759)
+        XCTAssertEqual(
+            Dictionary(uniqueKeysWithValues: report.files.map { ($0.path, $0.summary.total) }),
+            ["Both-Multicam.fcpxml": 24, "Interview.fcpxml": 42, "UntitledXML.fcpxml": 693]
+        )
+        XCTAssertTrue(report.aggregateFindings.contains {
+            $0.kind == .droppedElement
+                && $0.path.hasSuffix("/asset-clip/title/param")
+                && $0.count == 52
+        })
+        XCTAssertTrue(report.aggregateFindings.contains {
+            $0.kind == .droppedAttribute
+                && $0.path.hasSuffix("/library/event/ref-clip/@modDate")
+                && $0.count == 8
+        })
+
+        let renderer = SchemaCompletenessReportRenderer()
+        XCTAssertEqual(renderer.markdown(report), renderer.markdown(report))
+        XCTAssertEqual(try renderer.jsonData(report), try renderer.jsonData(report))
+    }
+
+    func testCompletenessAcceptanceRejectsOnlyTotalsAboveBaseline() {
+        let acceptance = SchemaCompletenessAcceptance(maximumTotalLoss: 10)
+        let accepted = report(with: 10)
+        let rejected = report(with: 11)
+
+        XCTAssertTrue(acceptance.accepts(accepted))
+        XCTAssertFalse(acceptance.accepts(rejected))
+    }
+
     func testEveryModelTypeDeclaresNodeEncoding() {
         let attributeOnlyTypes: [any DynamicNodeEncoding.Type] = [
             Format.self, Effect.self, Clip.self, Gap.self, Keyword.self,
@@ -252,6 +369,19 @@ final class FCPXMLDiffTests: XCTestCase {
 
     private func tree(_ xml: String) throws -> XMLTreeNode {
         try parser.parse(XCTUnwrap(xml.data(using: .utf8)))
+    }
+
+    private func report(with droppedElementCount: Int) -> SchemaCompletenessReport {
+        let findings = [
+            FCPXMLDifference(kind: .droppedElement, path: "/root/missing", count: droppedElementCount),
+        ]
+        return SchemaCompletenessReport(
+            formatVersion: 1,
+            normalization: [],
+            totals: SchemaCompletenessSummary(findings: findings),
+            aggregateFindings: findings,
+            files: []
+        )
     }
 
     private func assertEncoding(

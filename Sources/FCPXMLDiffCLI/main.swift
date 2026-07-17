@@ -5,14 +5,17 @@ import Foundation
 struct FCPXMLDiffCommand {
     static func main() {
         do {
-            try run()
+            let accepted = try run()
+            if !accepted {
+                Foundation.exit(1)
+            }
         } catch {
             writeError("fcpxml-diff: \(error.localizedDescription)\n")
             Foundation.exit(2)
         }
     }
 
-    private static func run() throws {
+    private static func run() throws -> Bool {
         var arguments = Array(CommandLine.arguments.dropFirst())
         guard arguments.first == "schema-completeness" else {
             throw CommandError.usage
@@ -22,6 +25,7 @@ struct FCPXMLDiffCommand {
         var inputs: [String] = []
         var markdownPath: String?
         var jsonPath: String?
+        var maximumTotalLoss: Int?
         var index = 0
         while index < arguments.count {
             switch arguments[index] {
@@ -33,6 +37,13 @@ struct FCPXMLDiffCommand {
                 index += 1
                 guard index < arguments.count else { throw CommandError.usage }
                 jsonPath = arguments[index]
+            case "--fail-if-total-exceeds":
+                index += 1
+                guard index < arguments.count,
+                      let value = Int(arguments[index]),
+                      value >= 0
+                else { throw CommandError.usage }
+                maximumTotalLoss = value
             default:
                 inputs.append(arguments[index])
             }
@@ -61,6 +72,15 @@ struct FCPXMLDiffCommand {
         if let jsonPath {
             try renderer.jsonData(report).write(to: URL(fileURLWithPath: jsonPath), options: .atomic)
         }
+        guard let maximumTotalLoss else { return true }
+        let acceptance = SchemaCompletenessAcceptance(maximumTotalLoss: maximumTotalLoss)
+        if !acceptance.accepts(report) {
+            writeError(
+                "fcpxml-diff: total structural loss \(report.totals.total) exceeds accepted baseline \(maximumTotalLoss)\n"
+            )
+            return false
+        }
+        return true
     }
 
     private static func collectFiles(_ paths: [String]) throws -> [URL] {
@@ -98,7 +118,7 @@ private enum CommandError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .usage:
-            return "usage: fcpxml-diff schema-completeness <file-or-directory>... [--markdown path] [--json path]"
+            return "usage: fcpxml-diff schema-completeness <file-or-directory>... [--markdown path] [--json path] [--fail-if-total-exceeds count]"
         case .noInputFiles:
             return "no .fcpxml input files found"
         case .missingInput(let path):

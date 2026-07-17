@@ -83,8 +83,14 @@ Run the schema-completeness report with:
 ```sh
 swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
   --markdown SCHEMA_COMPLETENESS_REPORT.md \
-  --json SCHEMA_COMPLETENESS_REPORT.json
+  --json SCHEMA_COMPLETENESS_REPORT.json \
+  --fail-if-total-exceeds 759
 ```
+
+The failure threshold makes increases fail with exit status 1 while allowing
+model improvements below the baseline. Volatile attribute values are masked,
+but their presence is not: if `uid`, `sig`, or `modDate` disappears during
+round-tripping, the report correctly records a dropped attribute.
 
 Prioritize feature-isolation samples for transitions, markers, roles,
 titles/`text-style`, and retiming. Store the FCPXML version and a precise

@@ -15,6 +15,19 @@ public struct SchemaCompletenessSummary: Codable, Equatable, Sendable {
     }
 }
 
+public struct SchemaCompletenessAcceptance: Equatable, Sendable {
+    public let maximumTotalLoss: Int
+
+    public init(maximumTotalLoss: Int) {
+        precondition(maximumTotalLoss >= 0, "maximumTotalLoss must not be negative")
+        self.maximumTotalLoss = maximumTotalLoss
+    }
+
+    public func accepts(_ report: SchemaCompletenessReport) -> Bool {
+        report.totals.total <= maximumTotalLoss
+    }
+}
+
 public struct SchemaCompletenessFileReport: Codable, Equatable, Sendable {
     public let path: String
     public let fcpxmlVersion: String?
