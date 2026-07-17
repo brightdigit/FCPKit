@@ -98,11 +98,13 @@ public struct Effect: Codable {
     public let id: String
     public let name: String?
     public let uid: String?
+    public let src: String?
     
     enum CodingKeys: String, CodingKey {
         case id
         case name
         case uid
+        case src
     }
 }
 
@@ -153,6 +155,8 @@ public struct Sequence: Codable {
     public let duration: String?
     public let tcStart: String?
     public let tcFormat: String?
+    public let audioLayout: String?
+    public let audioRate: String?
     public var spine: Spine?
     
     enum CodingKeys: String, CodingKey {
@@ -160,6 +164,8 @@ public struct Sequence: Codable {
         case duration
         case tcStart
         case tcFormat
+        case audioLayout
+        case audioRate
         case spine
     }
 }
@@ -178,6 +184,7 @@ public struct Spine: Codable {
     public let compoundClips: [CompoundClip]?
     public let retimeClips: [RetimeClip]?
     public let captions: [Caption]?
+    public var video: [Video]?
     
     enum CodingKeys: String, CodingKey {
         case clips = "clip"
@@ -193,6 +200,7 @@ public struct Spine: Codable {
         case compoundClips = "compound-clip"
         case retimeClips = "retime-clip"
         case captions = "caption"
+        case video
     }
 }
 
@@ -246,6 +254,8 @@ public struct AssetClip: Codable {
     public let offset: String?
     public let useAudioSubroles: String?
     public let modDate: String?
+    public let audioStart: String?
+    public let audioDuration: String?
     public let keywords: [Keyword]?
     public let note: String?
     public let conformRate: ConformRate?
@@ -258,6 +268,10 @@ public struct AssetClip: Codable {
     public let filterAudio: [FilterAudio]?
     public let filterVideo: [FilterVideo]?
     public var titles: [Title]?
+    public var assetClips: [AssetClip]?
+    public var video: [Video]?
+    public var adjustTransform: AdjustTransform?
+    public var adjustCrop: AdjustCrop?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -273,6 +287,8 @@ public struct AssetClip: Codable {
         case offset
         case useAudioSubroles
         case modDate
+        case audioStart
+        case audioDuration
         case keywords = "keyword"
         case note
         case conformRate = "conform-rate"
@@ -285,6 +301,10 @@ public struct AssetClip: Codable {
         case filterAudio = "filter-audio"
         case filterVideo = "filter-video"
         case titles = "title"
+        case assetClips = "asset-clip"
+        case video
+        case adjustTransform = "adjust-transform"
+        case adjustCrop = "adjust-crop"
     }
 }
 

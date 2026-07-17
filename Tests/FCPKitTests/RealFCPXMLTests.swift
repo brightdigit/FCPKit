@@ -224,6 +224,43 @@ final class RealFCPXMLTests: XCTestCase {
         XCTAssertEqual(changedTitle.textStyleDef?[0].textStyle?.kerning, "-1.7751")
     }
 
+    func testNestedTimelineMutationPreservesSiblingReferencesAndTiming() throws {
+        let fileURL = try XCTUnwrap(
+            Bundle.module.url(
+                forResource: "UntitledXML",
+                withExtension: "fcpxml",
+                subdirectory: "TestData"
+            )
+        )
+        let parser = FCPXMLParser()
+        var document = try parser.parse(fileURL: fileURL)
+        let mediaIndex = try XCTUnwrap(document.resources?.media?.firstIndex { media in
+            media.sequence?.spine?.refClips?.contains { $0.refClips?.isEmpty == false } == true
+        })
+        let parentIndex = try XCTUnwrap(
+            document.resources?.media?[mediaIndex].sequence?.spine?.refClips?.firstIndex {
+                $0.refClips?.isEmpty == false
+            }
+        )
+        let children = try XCTUnwrap(
+            document.resources?.media?[mediaIndex].sequence?.spine?.refClips?[parentIndex].refClips
+        )
+        let childIndex = try XCTUnwrap(children.firstIndex { $0.adjustTransform != nil })
+        let originalReferences = children.map(\.ref)
+        let originalTiming = children.map { [$0.offset, $0.start, $0.duration] }
+
+        document.resources?.media?[mediaIndex].sequence?.spine?.refClips?[parentIndex]
+            .refClips?[childIndex].adjustTransform?.position = "10 20"
+        let reparsed = try parser.parse(data: parser.encode(document))
+        let changedChildren = try XCTUnwrap(
+            reparsed.resources?.media?[mediaIndex].sequence?.spine?.refClips?[parentIndex].refClips
+        )
+
+        XCTAssertEqual(changedChildren[childIndex].adjustTransform?.position, "10 20")
+        XCTAssertEqual(changedChildren.map(\.ref), originalReferences)
+        XCTAssertEqual(changedChildren.map { [$0.offset, $0.start, $0.duration] }, originalTiming)
+    }
+
     private func crossDissolve(in document: FCPXML) throws -> Transition {
         let media = try XCTUnwrap(document.resources?.media?.first { $0.name == "Music Intro" })
         return try XCTUnwrap(media.sequence?.spine?.transitions?.first)

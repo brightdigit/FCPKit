@@ -277,18 +277,16 @@ final class FCPXMLDiffTests: XCTestCase {
         }
         let report = try SchemaCompletenessAnalyzer().analyze(fileURLs: urls)
 
-        XCTAssertEqual(report.totals.droppedElements, 58)
-        XCTAssertEqual(report.totals.droppedAttributes, 191)
+        XCTAssertEqual(report.totals.droppedElements, 11)
+        XCTAssertEqual(report.totals.droppedAttributes, 38)
         XCTAssertEqual(report.totals.droppedText, 0)
-        XCTAssertEqual(report.totals.total, 249)
+        XCTAssertEqual(report.totals.total, 49)
         XCTAssertEqual(
             Dictionary(uniqueKeysWithValues: report.files.map { ($0.path, $0.summary.total) }),
-            ["Both-Multicam.fcpxml": 24, "Interview.fcpxml": 42, "UntitledXML.fcpxml": 183]
+            ["Both-Multicam.fcpxml": 8, "Interview.fcpxml": 0, "UntitledXML.fcpxml": 41]
         )
-        XCTAssertTrue(report.aggregateFindings.contains {
-            $0.kind == .droppedElement
-                && $0.path.hasSuffix("/ref-clip/ref-clip")
-                && $0.count == 5
+        XCTAssertTrue(report.aggregateFindings.allSatisfy {
+            $0.path.hasPrefix("/fcpxml/library/event/")
         })
         XCTAssertFalse(report.aggregateFindings.contains {
             $0.path.contains("/param")
@@ -298,9 +296,9 @@ final class FCPXMLDiffTests: XCTestCase {
         })
         XCTAssertFalse(report.aggregateFindings.contains { $0.path.contains("/title/") })
         XCTAssertTrue(report.aggregateFindings.contains {
-            $0.kind == .droppedAttribute
-                && $0.path.hasSuffix("/library/event/ref-clip/@modDate")
-                && $0.count == 8
+            $0.kind == .droppedElement
+                && $0.path.hasSuffix("/library/event/mc-clip")
+                && $0.count == 1
         })
 
         let renderer = SchemaCompletenessReportRenderer()
@@ -327,6 +325,7 @@ final class FCPXMLDiffTests: XCTestCase {
             ChapterMarker.self, ConnectedClip.self, Keyframe.self,
             CompoundClip.self, AudioRole.self, VideoRole.self, CaptionRole.self,
             Fade.self,
+            AdjustColorConform.self,
         ]
         for type in attributeOnlyTypes {
             assertEncoding(type.nodeEncoding(for: TestCodingKey("value")), is: .attribute)

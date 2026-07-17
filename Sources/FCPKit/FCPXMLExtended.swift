@@ -40,6 +40,8 @@ public struct Video: Codable {
     public let duration: String?
     public var param: [ParamElement]?
     public let filterVideo: [FilterVideo]?
+    public var adjustTransform: AdjustTransform?
+    public var adjustColorConform: AdjustColorConform?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -50,6 +52,8 @@ public struct Video: Codable {
         case duration
         case param
         case filterVideo = "filter-video"
+        case adjustTransform = "adjust-transform"
+        case adjustColorConform = "adjust-colorConform"
     }
 }
 
@@ -152,19 +156,28 @@ public struct RefClip: Codable {
     public let offset: String?
     public let name: String?
     public let duration: String?
+    public let start: String?
+    public let lane: String?
+    public let modDate: String?
     public let useAudioSubroles: String?
     public let conformRate: ConformRate?
     public let timeMap: TimeMap?
-    public let adjustTransform: AdjustTransform?
+    public var adjustTransform: AdjustTransform?
     public let adjustCrop: AdjustCrop?
     public let assetClips: [AssetClip]?
     public var video: [Video]?
+    public var refClips: [RefClip]?
+    public var adjustVolume: AdjustVolume?
+    public var filterVideo: [FilterVideo]?
     
     enum CodingKeys: String, CodingKey {
         case ref
         case offset
         case name
         case duration
+        case start
+        case lane
+        case modDate
         case useAudioSubroles
         case conformRate = "conform-rate"
         case timeMap
@@ -172,6 +185,9 @@ public struct RefClip: Codable {
         case adjustCrop = "adjust-crop"
         case assetClips = "asset-clip"
         case video
+        case refClips = "ref-clip"
+        case adjustVolume = "adjust-volume"
+        case filterVideo = "filter-video"
     }
 }
 
@@ -206,10 +222,28 @@ public struct Timept: Codable {
 }
 
 public struct AdjustTransform: Codable {
-    public let position: String?
+    public var position: String?
+    public var scale: String?
     
     enum CodingKeys: String, CodingKey {
         case position
+        case scale
+    }
+}
+
+public struct AdjustColorConform: Codable {
+    public let enabled: String?
+    public let autoOrManual: String?
+    public let conformType: String?
+    public let peakNitsOfPQSource: String?
+    public let peakNitsOfSDRToPQSource: String?
+
+    enum CodingKeys: String, CodingKey {
+        case enabled
+        case autoOrManual
+        case conformType
+        case peakNitsOfPQSource
+        case peakNitsOfSDRToPQSource
     }
 }
 

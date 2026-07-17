@@ -76,6 +76,7 @@ extension AssetClip: DynamicNodeEncoding {
             "audio-channel-source", "marker", "rating", "chapter-marker",
             "filter-audio", "filter-video",
             "title",
+            "asset-clip", "video", "adjust-transform", "adjust-crop",
         ])
     }
 }
@@ -96,7 +97,9 @@ extension MCSource: DynamicNodeEncoding {
 
 extension Video: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-        fcpNodeEncoding(for: key, elementKeys: ["param", "filter-video"])
+        fcpNodeEncoding(for: key, elementKeys: [
+            "param", "filter-video", "adjust-transform", "adjust-colorConform",
+        ])
     }
 }
 
@@ -143,6 +146,7 @@ extension RefClip: DynamicNodeEncoding {
         fcpNodeEncoding(for: key, elementKeys: [
             "conform-rate", "timeMap", "adjust-transform", "adjust-crop", "asset-clip",
             "video",
+            "ref-clip", "adjust-volume", "filter-video",
         ])
     }
 }
@@ -162,6 +166,10 @@ extension Timept: DynamicNodeEncoding {
 }
 
 extension AdjustTransform: DynamicNodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}
+
+extension AdjustColorConform: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }
 
