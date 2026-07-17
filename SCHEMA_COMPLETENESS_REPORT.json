@@ -48,11 +48,6 @@
     {
       "count" : 4,
       "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@bold"
-    },
-    {
-      "count" : 4,
-      "kind" : "droppedAttribute",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/@start"
     },
     {
@@ -139,11 +134,6 @@
       "count" : 2,
       "kind" : "droppedAttribute",
       "path" : "/fcpxml/resources/media/sequence/@audioRate"
-    },
-    {
-      "count" : 2,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@kerning"
     },
     {
       "count" : 2,
@@ -1070,11 +1060,6 @@
         {
           "count" : 4,
           "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@bold"
-        },
-        {
-          "count" : 4,
-          "kind" : "droppedAttribute",
           "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/@start"
         },
         {
@@ -1136,11 +1121,6 @@
           "count" : 2,
           "kind" : "droppedAttribute",
           "path" : "/fcpxml/resources/media/sequence/@audioRate"
-        },
-        {
-          "count" : 2,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/asset-clip/title/text-style-def/text-style/@kerning"
         },
         {
           "count" : 2,
@@ -1740,7 +1720,7 @@
       ],
       "path" : "Tests/FCPKitTests/TestData/UntitledXML.fcpxml",
       "summary" : {
-        "droppedAttributes" : 148,
+        "droppedAttributes" : 142,
         "droppedElements" : 41,
         "droppedText" : 0
       }
@@ -1754,7 +1734,7 @@
     "Formatting-only whitespace and attribute ordering are ignored."
   ],
   "totals" : {
-    "droppedAttributes" : 197,
+    "droppedAttributes" : 191,
     "droppedElements" : 58,
     "droppedText" : 0
   }

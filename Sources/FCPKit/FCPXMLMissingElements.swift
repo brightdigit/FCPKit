@@ -11,8 +11,8 @@ public struct Title: Codable {
     public let duration: String?
     public let lane: String?
     public var param: [ParamElement]?
-    public let text: [TextElement]?
-    public let textStyleDef: [TextStyleDef]?
+    public var text: [TextElement]?
+    public var textStyleDef: [TextStyleDef]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -28,7 +28,7 @@ public struct Title: Codable {
 }
 
 public struct TextElement: Codable {
-    public let textStyle: [TextStyle]?
+    public var textStyle: [TextStyle]?
     
     enum CodingKeys: String, CodingKey {
         case textStyle = "text-style"
@@ -37,13 +37,15 @@ public struct TextElement: Codable {
 
 public struct TextStyle: Codable {
     public let ref: String?
-    public let font: String?
-    public let fontSize: String?
-    public let fontFace: String?
-    public let fontColor: String?
-    public let alignment: String?
+    public var font: String?
+    public var fontSize: String?
+    public var fontFace: String?
+    public var fontColor: String?
+    public var bold: String?
+    public var kerning: String?
+    public var alignment: String?
     public var param: [ParamElement]?
-    public let content: String?
+    public var content: String?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -51,6 +53,8 @@ public struct TextStyle: Codable {
         case fontSize
         case fontFace
         case fontColor
+        case bold
+        case kerning
         case alignment
         case param
         case content = ""
@@ -59,7 +63,7 @@ public struct TextStyle: Codable {
 
 public struct TextStyleDef: Codable {
     public let id: String?
-    public let textStyle: TextStyle?
+    public var textStyle: TextStyle?
     
     enum CodingKeys: String, CodingKey {
         case id

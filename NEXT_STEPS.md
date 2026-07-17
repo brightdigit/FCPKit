@@ -13,17 +13,17 @@ FCPXML 1.13 exports and finds:
 
 | Files | Dropped elements | Dropped attributes | Dropped text | Total |
 | ---: | ---: | ---: | ---: | ---: |
-| 3 | 58 | 197 | 0 | 255 |
+| 3 | 58 | 191 | 0 | 249 |
 
-Milestones 1 through 3 are complete. The transition slice removed 28 losses.
+Milestones 1 through 4 are complete. The transition slice removed 28 losses.
 Shared recursive parameters, animation, fades, and the parent links needed to
 reach their real fixture instances removed another 476 losses: 128 elements,
 344 attributes, and 4 text values. No parameter, keyframe, or fade paths remain
-in the report.
+in the report. Completing title style attributes removed the remaining 6 title
+losses; no title subtree paths remain.
 
 The largest clusters are:
 
-- Remaining title style attributes such as bold and kerning.
 - Nested `ref-clip`, `asset-clip`, and `video` structures.
 - Transform, crop, volume, color-conform, conform-rate, and time-map data.
 - Library-level multicam, sync-clip, role, and audio-channel details.

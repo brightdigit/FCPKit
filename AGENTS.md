@@ -84,7 +84,7 @@ Run the schema-completeness report with:
 swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
   --markdown SCHEMA_COMPLETENESS_REPORT.md \
   --json SCHEMA_COMPLETENESS_REPORT.json \
-  --fail-if-total-exceeds 255
+  --fail-if-total-exceeds 249
 ```
 
 The failure threshold makes increases fail with exit status 1 while allowing

@@ -278,12 +278,12 @@ final class FCPXMLDiffTests: XCTestCase {
         let report = try SchemaCompletenessAnalyzer().analyze(fileURLs: urls)
 
         XCTAssertEqual(report.totals.droppedElements, 58)
-        XCTAssertEqual(report.totals.droppedAttributes, 197)
+        XCTAssertEqual(report.totals.droppedAttributes, 191)
         XCTAssertEqual(report.totals.droppedText, 0)
-        XCTAssertEqual(report.totals.total, 255)
+        XCTAssertEqual(report.totals.total, 249)
         XCTAssertEqual(
             Dictionary(uniqueKeysWithValues: report.files.map { ($0.path, $0.summary.total) }),
-            ["Both-Multicam.fcpxml": 24, "Interview.fcpxml": 42, "UntitledXML.fcpxml": 189]
+            ["Both-Multicam.fcpxml": 24, "Interview.fcpxml": 42, "UntitledXML.fcpxml": 183]
         )
         XCTAssertTrue(report.aggregateFindings.contains {
             $0.kind == .droppedElement
@@ -296,6 +296,7 @@ final class FCPXMLDiffTests: XCTestCase {
                 || $0.path.contains("/fadeIn")
                 || $0.path.contains("/fadeOut")
         })
+        XCTAssertFalse(report.aggregateFindings.contains { $0.path.contains("/title/") })
         XCTAssertTrue(report.aggregateFindings.contains {
             $0.kind == .droppedAttribute
                 && $0.path.hasSuffix("/library/event/ref-clip/@modDate")

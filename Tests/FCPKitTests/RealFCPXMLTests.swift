@@ -169,6 +169,61 @@ final class RealFCPXMLTests: XCTestCase {
         XCTAssertEqual(changedVolume.keyframeAnimation?.keyframes?.count, 3)
     }
 
+    func testTitleTextAndStyleCanBeMutatedWithoutBreakingReferences() throws {
+        let fileURL = try XCTUnwrap(
+            Bundle.module.url(
+                forResource: "UntitledXML",
+                withExtension: "fcpxml",
+                subdirectory: "TestData"
+            )
+        )
+        let parser = FCPXMLParser()
+        var document = try parser.parse(fileURL: fileURL)
+        let mediaIndex = try XCTUnwrap(document.resources?.media?.firstIndex { media in
+            media.sequence?.spine?.assetClips?.contains {
+                $0.titles?.contains { $0.name?.contains("SyntaxKit") == true } == true
+            } == true
+        })
+        let assetIndex = try XCTUnwrap(
+            document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?.firstIndex {
+                $0.titles?.contains { $0.name?.contains("SyntaxKit") == true } == true
+            }
+        )
+        let titleIndex = try XCTUnwrap(
+            document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
+                .titles?.firstIndex { $0.name?.contains("SyntaxKit") == true }
+        )
+        let originalTitle = try XCTUnwrap(
+            document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
+                .titles?[titleIndex]
+        )
+
+        XCTAssertEqual(originalTitle.text?.flatMap { $0.textStyle ?? [] }.map(\.ref), ["ts1", "ts2"])
+        XCTAssertEqual(originalTitle.textStyleDef?.map(\.id), ["ts1", "ts2"])
+        XCTAssertEqual(originalTitle.textStyleDef?.first?.textStyle?.font, "Helvetica Neue")
+        XCTAssertEqual(originalTitle.textStyleDef?.first?.textStyle?.fontSize, "183")
+        XCTAssertEqual(originalTitle.textStyleDef?.first?.textStyle?.bold, "1")
+        XCTAssertEqual(originalTitle.textStyleDef?.first?.textStyle?.kerning, "-1.7751")
+
+        document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
+            .titles?[titleIndex].text?[0].textStyle?[0].content = "FCPKit"
+        document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
+            .titles?[titleIndex].textStyleDef?[0].textStyle?.fontColor = "1 0.5 0 1"
+
+        let reparsed = try parser.parse(data: parser.encode(document))
+        let changedTitle = try XCTUnwrap(
+            reparsed.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
+                .titles?[titleIndex]
+        )
+
+        XCTAssertEqual(changedTitle.text?[0].textStyle?[0].content, "FCPKit")
+        XCTAssertEqual(changedTitle.textStyleDef?[0].textStyle?.fontColor, "1 0.5 0 1")
+        XCTAssertEqual(changedTitle.text?.flatMap { $0.textStyle ?? [] }.map(\.ref), ["ts1", "ts2"])
+        XCTAssertEqual(changedTitle.textStyleDef?.map(\.id), ["ts1", "ts2"])
+        XCTAssertEqual(changedTitle.textStyleDef?[0].textStyle?.bold, "1")
+        XCTAssertEqual(changedTitle.textStyleDef?[0].textStyle?.kerning, "-1.7751")
+    }
+
     private func crossDissolve(in document: FCPXML) throws -> Transition {
         let media = try XCTUnwrap(document.resources?.media?.first { $0.name == "Music Intro" })
         return try XCTUnwrap(media.sequence?.spine?.transitions?.first)
