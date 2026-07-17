@@ -15,7 +15,7 @@ FCPXML 1.13 exports and finds:
 | ---: | ---: | ---: | ---: | ---: |
 | 3 | 0 | 0 | 0 | 0 |
 
-Milestones 1 through 6 are complete. The transition slice removed 28 losses.
+Milestones 1 through 7 are complete. The transition slice removed 28 losses.
 Shared recursive parameters, animation, fades, and the parent links needed to
 reach their real fixture instances removed another 476 losses: 128 elements,
 344 attributes, and 4 text values. No parameter, keyframe, or fade paths remain
@@ -156,6 +156,12 @@ Acceptance criteria:
 - The schema report shows no unexplained losses for these feature families.
 
 ## Milestone 7: Build Phase 2 Raw-Pair Diffing
+
+Implementation complete. Store manually exported pairs under
+`Tests/FCPKitTests/FeaturePairs/<feature-name>/` as `before.fcpxml`,
+`after.fcpxml`, and `metadata.json`. Metadata records `finalCutVersion`,
+`fcpxmlVersion`, `baselineState`, and `changedAction`; each pair must isolate
+one manual Final Cut change and retain both raw exports intact.
 
 Add a second CLI workflow on the existing normalize-and-diff core:
 

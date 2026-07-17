@@ -17,10 +17,21 @@ struct FCPXMLDiffCommand {
 
     private static func run() throws -> Bool {
         var arguments = Array(CommandLine.arguments.dropFirst())
-        guard arguments.first == "schema-completeness" else {
+        guard let command = arguments.first else { throw CommandError.usage }
+        arguments.removeFirst()
+
+        switch command {
+        case "schema-completeness":
+            return try runSchemaCompleteness(arguments)
+        case "compare":
+            try runCompare(arguments)
+            return true
+        default:
             throw CommandError.usage
         }
-        arguments.removeFirst()
+    }
+
+    private static func runSchemaCompleteness(_ arguments: [String]) throws -> Bool {
 
         var inputs: [String] = []
         var markdownPath: String?
@@ -83,6 +94,53 @@ struct FCPXMLDiffCommand {
         return true
     }
 
+    private static func runCompare(_ arguments: [String]) throws {
+        var inputs: [String] = []
+        var markdownPath: String?
+        var jsonPath: String?
+        var pathFilter: String?
+        var index = 0
+        while index < arguments.count {
+            switch arguments[index] {
+            case "--markdown", "--json", "--path":
+                let option = arguments[index]
+                index += 1
+                guard index < arguments.count else { throw CommandError.usage }
+                if option == "--markdown" { markdownPath = arguments[index] }
+                if option == "--json" { jsonPath = arguments[index] }
+                if option == "--path" { pathFilter = arguments[index] }
+            default:
+                inputs.append(arguments[index])
+            }
+            index += 1
+        }
+        guard inputs.count == 2 else { throw CommandError.usage }
+        let beforeURL = URL(fileURLWithPath: inputs[0])
+        let afterURL = URL(fileURLWithPath: inputs[1])
+        guard FileManager.default.fileExists(atPath: beforeURL.path) else {
+            throw CommandError.missingInput(inputs[0])
+        }
+        guard FileManager.default.fileExists(atPath: afterURL.path) else {
+            throw CommandError.missingInput(inputs[1])
+        }
+        let report = try RawPairAnalyzer().analyze(
+            beforeData: Data(contentsOf: beforeURL),
+            afterData: Data(contentsOf: afterURL),
+            beforePath: inputs[0],
+            afterPath: inputs[1],
+            pathFilter: pathFilter
+        )
+        let renderer = RawPairReportRenderer()
+        let markdown = renderer.markdown(report)
+        print(markdown, terminator: "")
+        if let markdownPath {
+            try Data(markdown.utf8).write(to: URL(fileURLWithPath: markdownPath), options: .atomic)
+        }
+        if let jsonPath {
+            try renderer.jsonData(report).write(to: URL(fileURLWithPath: jsonPath), options: .atomic)
+        }
+    }
+
     private static func collectFiles(_ paths: [String]) throws -> [URL] {
         var results: [URL] = []
         for path in paths {
@@ -118,7 +176,7 @@ private enum CommandError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .usage:
-            return "usage: fcpxml-diff schema-completeness <file-or-directory>... [--markdown path] [--json path] [--fail-if-total-exceeds count]"
+            return "usage: fcpxml-diff schema-completeness <file-or-directory>... [--markdown path] [--json path] [--fail-if-total-exceeds count]\n       fcpxml-diff compare <before.fcpxml> <after.fcpxml> [--path structural-path] [--markdown path] [--json path]"
         case .noInputFiles:
             return "no .fcpxml input files found"
         case .missingInput(let path):

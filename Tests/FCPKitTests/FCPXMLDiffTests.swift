@@ -311,6 +311,43 @@ final class FCPXMLDiffTests: XCTestCase {
         XCTAssertFalse(acceptance.accepts(rejected))
     }
 
+    func testRawPairReportsAddedRemovedAndChangedStructures() throws {
+        let before = Data("""
+        <fcpxml version="1.13"><library><event name="Before"><marker value="old"/><note>gone</note></event></library></fcpxml>
+        """.utf8)
+        let after = Data("""
+        <fcpxml version="1.13"><library><event name="After"><marker value="new"/><keyword value="added"/></event></library></fcpxml>
+        """.utf8)
+
+        let report = try RawPairAnalyzer().analyze(beforeData: before, afterData: after)
+
+        XCTAssertTrue(report.findings.contains { $0.kind == .changedAttribute && $0.path.hasSuffix("/event/@name") })
+        XCTAssertTrue(report.findings.contains { $0.kind == .changedAttribute && $0.path.hasSuffix("/marker/@value") })
+        XCTAssertTrue(report.findings.contains { $0.kind == .droppedElement && $0.path.hasSuffix("/note") })
+        XCTAssertTrue(report.findings.contains { $0.kind == .addedElement && $0.path.hasSuffix("/keyword") })
+    }
+
+    func testRawPairNormalizationIdentityFilteringAndRenderingAreDeterministic() throws {
+        let before = Data("<fcpxml version=\"1.13\" uid=\"old\"><resources><format id=\"r1\"/></resources><library format=\"r1\"><marker value=\"old\"/></library></fcpxml>".utf8)
+        let after = Data("<fcpxml version=\"1.13\" uid=\"new\"><resources><format id=\"r9\"/></resources><library format=\"r9\"><marker value=\"new\"/></library></fcpxml>".utf8)
+        let analyzer = RawPairAnalyzer()
+        let report = try analyzer.analyze(
+            beforeData: before,
+            afterData: after,
+            pathFilter: "/fcpxml/library/marker"
+        )
+
+        XCTAssertEqual(report.findings, [
+            FCPXMLDifference(kind: .changedAttribute, path: "/fcpxml/library/marker/@value", count: 1),
+        ])
+        let renderer = RawPairReportRenderer()
+        XCTAssertEqual(renderer.markdown(report), renderer.markdown(report))
+        XCTAssertEqual(try renderer.jsonData(report), try renderer.jsonData(report))
+
+        let identical = try analyzer.analyze(beforeData: before, afterData: before)
+        XCTAssertEqual(identical.findings, [])
+    }
+
     func testEveryModelTypeDeclaresNodeEncoding() {
         let attributeOnlyTypes: [any DynamicNodeEncoding.Type] = [
             Format.self, Effect.self, Clip.self, Gap.self, Keyword.self,
