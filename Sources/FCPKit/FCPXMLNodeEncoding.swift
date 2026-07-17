@@ -246,7 +246,9 @@ extension FilterAudio: DynamicNodeEncoding {
 }
 
 extension Transition: DynamicNodeEncoding {
-    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+        fcpNodeEncoding(for: key, elementKeys: ["filter-video", "filter-audio"])
+    }
 }
 
 extension Generator: DynamicNodeEncoding {

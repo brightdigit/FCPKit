@@ -3,7 +3,7 @@ import XMLCoder
 
 public struct FCPXML: Codable {
     public let version: String
-    public let resources: Resources?
+    public var resources: Resources?
     public let library: Library?
     
     public init(version: String, resources: Resources? = nil, library: Library? = nil) {
@@ -23,7 +23,7 @@ public struct Resources: Codable {
     public let assets: [Asset]?
     public let formats: [Format]?
     public let effects: [Effect]?
-    public let media: [Media]?
+    public var media: [Media]?
     
     public init(assets: [Asset]? = nil, formats: [Format]? = nil, effects: [Effect]? = nil, media: [Media]? = nil) {
         self.assets = assets
@@ -153,7 +153,7 @@ public struct Sequence: Codable {
     public let duration: String?
     public let tcStart: String?
     public let tcFormat: String?
-    public let spine: Spine?
+    public var spine: Spine?
     
     enum CodingKeys: String, CodingKey {
         case format
@@ -173,7 +173,7 @@ public struct Spine: Codable {
     public let assetClips: [AssetClip]?
     public let titles: [Title]?
     public let generators: [Generator]?
-    public let transitions: [Transition]?
+    public var transitions: [Transition]?
     public let storylines: [Storyline]?
     public let compoundClips: [CompoundClip]?
     public let retimeClips: [RetimeClip]?

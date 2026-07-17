@@ -13,7 +13,11 @@ FCPXML 1.13 exports and finds:
 
 | Files | Dropped elements | Dropped attributes | Dropped text | Total |
 | ---: | ---: | ---: | ---: | ---: |
-| 3 | 194 | 561 | 4 | 759 |
+| 3 | 186 | 541 | 4 | 731 |
+
+Milestones 1 and 2 are complete. Modeling the real Cross Dissolve transition
+removed 28 losses: 8 elements and 20 attributes. No transition subtree paths
+remain in the report.
 
 The largest clusters are:
 
@@ -21,7 +25,6 @@ The largest clusters are:
 - Nested `title`, `text-style`, and keyframe content.
 - Nested `ref-clip`, `asset-clip`, and `video` structures.
 - Transform, crop, volume, color-conform, conform-rate, and time-map data.
-- Transition `filter-video`, `filter-audio`, `param`, and `data` payloads.
 - Library-level multicam, sync-clip, role, and audio-channel details.
 
 The baseline artifacts are `SCHEMA_COMPLETENESS_REPORT.md` and

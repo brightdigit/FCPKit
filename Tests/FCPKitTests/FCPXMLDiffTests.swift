@@ -211,7 +211,7 @@ final class FCPXMLDiffTests: XCTestCase {
         XCTAssertEqual(differences, [])
     }
 
-    func testRealTransitionPayloadIsReportedAsDropped() throws {
+    func testRealTransitionPayloadRoundTripsWithoutStructuralLoss() throws {
         let url = try XCTUnwrap(
             Bundle.module.url(
                 forResource: "UntitledXML",
@@ -223,19 +223,7 @@ final class FCPXMLDiffTests: XCTestCase {
         let report = try SchemaCompletenessAnalyzer().analyze(fileURLs: [url])
         let findings = try XCTUnwrap(report.files.first).findings
 
-        XCTAssertTrue(findings.contains {
-            $0.kind == .droppedElement
-                && $0.path.hasSuffix("/transition/filter-video")
-        })
-        XCTAssertTrue(findings.contains {
-            $0.kind == .droppedElement
-                && $0.path.hasSuffix("/transition/filter-video/param")
-                && $0.count == 5
-        })
-        XCTAssertTrue(findings.contains {
-            $0.kind == .droppedElement
-                && $0.path.hasSuffix("/transition/filter-audio")
-        })
+        XCTAssertFalse(findings.contains { $0.path.contains("/transition/") })
     }
 
     func testReportRenderingIsDeterministic() throws {
@@ -262,13 +250,13 @@ final class FCPXMLDiffTests: XCTestCase {
         }
         let report = try SchemaCompletenessAnalyzer().analyze(fileURLs: urls)
 
-        XCTAssertEqual(report.totals.droppedElements, 194)
-        XCTAssertEqual(report.totals.droppedAttributes, 561)
+        XCTAssertEqual(report.totals.droppedElements, 186)
+        XCTAssertEqual(report.totals.droppedAttributes, 541)
         XCTAssertEqual(report.totals.droppedText, 4)
-        XCTAssertEqual(report.totals.total, 759)
+        XCTAssertEqual(report.totals.total, 731)
         XCTAssertEqual(
             Dictionary(uniqueKeysWithValues: report.files.map { ($0.path, $0.summary.total) }),
-            ["Both-Multicam.fcpxml": 24, "Interview.fcpxml": 42, "UntitledXML.fcpxml": 693]
+            ["Both-Multicam.fcpxml": 24, "Interview.fcpxml": 42, "UntitledXML.fcpxml": 665]
         )
         XCTAssertTrue(report.aggregateFindings.contains {
             $0.kind == .droppedElement
@@ -336,6 +324,8 @@ final class FCPXMLDiffTests: XCTestCase {
             (TextElement.self, "text-style"),
             (TextStyleDef.self, "text-style"),
             (FilterAudio.self, "param"),
+            (Transition.self, "filter-video"),
+            (Transition.self, "filter-audio"),
             (Generator.self, "param"),
             (Storyline.self, "title"),
             (RetimeClip.self, "timeMap"),
@@ -358,7 +348,7 @@ final class FCPXMLDiffTests: XCTestCase {
             FilterVideo.self, Media.self, Multicam.self, MCAngle.self,
             RefClip.self, TimeMap.self, AdjustCrop.self, SyncClip.self,
             MediaRep.self, SmartCollection.self, AudioChannelSource.self,
-            Title.self, TextStyleDef.self, FilterAudio.self, Generator.self,
+            Title.self, TextStyleDef.self, FilterAudio.self, Transition.self, Generator.self,
             Storyline.self, RetimeClip.self, ColorCorrection.self, Motion.self,
             Caption.self,
         ]

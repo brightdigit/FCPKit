@@ -92,28 +92,8 @@
     },
     {
       "count" : 5,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@key"
-    },
-    {
-      "count" : 5,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@name"
-    },
-    {
-      "count" : 5,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@value"
-    },
-    {
-      "count" : 5,
       "kind" : "droppedElement",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/ref-clip"
-    },
-    {
-      "count" : 5,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param"
     },
     {
       "count" : 4,
@@ -943,31 +923,6 @@
     {
       "count" : 1,
       "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio/@name"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio/@ref"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/@name"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/@ref"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedAttribute",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/data/@key"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedAttribute",
       "path" : "/fcpxml/resources/media/sequence/spine/video/@duration"
     },
     {
@@ -1084,21 +1039,6 @@
       "count" : 1,
       "kind" : "droppedElement",
       "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/filter-video"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video"
-    },
-    {
-      "count" : 1,
-      "kind" : "droppedElement",
-      "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/data"
     },
     {
       "count" : 1,
@@ -1491,26 +1431,6 @@
           "count" : 14,
           "kind" : "droppedElement",
           "path" : "/fcpxml/resources/media/sequence/spine/ref-clip/video/filter-video/param"
-        },
-        {
-          "count" : 5,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@key"
-        },
-        {
-          "count" : 5,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@name"
-        },
-        {
-          "count" : 5,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param/@value"
-        },
-        {
-          "count" : 5,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/param"
         },
         {
           "count" : 4,
@@ -2305,31 +2225,6 @@
         {
           "count" : 1,
           "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio/@name"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio/@ref"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/@name"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/@ref"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedAttribute",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/data/@key"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedAttribute",
           "path" : "/fcpxml/resources/media/sequence/spine/video/@duration"
         },
         {
@@ -2480,28 +2375,13 @@
         {
           "count" : 1,
           "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-audio"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedElement",
-          "path" : "/fcpxml/resources/media/sequence/spine/transition/filter-video/data"
-        },
-        {
-          "count" : 1,
-          "kind" : "droppedElement",
           "path" : "/fcpxml/resources/media/sequence/spine/video"
         }
       ],
       "path" : "Tests/FCPKitTests/TestData/UntitledXML.fcpxml",
       "summary" : {
-        "droppedAttributes" : 512,
-        "droppedElements" : 177,
+        "droppedAttributes" : 492,
+        "droppedElements" : 169,
         "droppedText" : 4
       }
     }
@@ -2514,8 +2394,8 @@
     "Formatting-only whitespace and attribute ordering are ignored."
   ],
   "totals" : {
-    "droppedAttributes" : 561,
-    "droppedElements" : 194,
+    "droppedAttributes" : 541,
+    "droppedElements" : 186,
     "droppedText" : 4
   }
 }

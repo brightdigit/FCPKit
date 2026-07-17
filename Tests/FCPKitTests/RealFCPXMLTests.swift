@@ -68,6 +68,54 @@ final class RealFCPXMLTests: XCTestCase {
         print("✅ Found \(resources.media?.count ?? 0) media elements")
         print("✅ Found \(resources.formats?.count ?? 0) format definitions")
     }
+
+    func testCrossDissolveCanBeReadMutatedAndRoundTripped() throws {
+        let fileURL = try XCTUnwrap(
+            Bundle.module.url(
+                forResource: "UntitledXML",
+                withExtension: "fcpxml",
+                subdirectory: "TestData"
+            )
+        )
+        let parser = FCPXMLParser()
+        var document = try parser.parse(fileURL: fileURL)
+        let originalTransition = try crossDissolve(in: document)
+        let videoFilter = try XCTUnwrap(originalTransition.filterVideo?.first)
+        let audioFilter = try XCTUnwrap(originalTransition.filterAudio?.first)
+        let originalData = try XCTUnwrap(videoFilter.data?.first)
+
+        XCTAssertEqual(videoFilter.name, "Cross Dissolve")
+        XCTAssertEqual(audioFilter.name, "Audio Crossfade")
+        XCTAssertEqual(videoFilter.param?.map(\.name), [
+            "Look", "Amount", "Ease", "Ease Amount", "disableDRT",
+        ])
+        XCTAssertEqual(videoFilter.param?.first(where: { $0.name == "Amount" })?.value, "50")
+        XCTAssertEqual(originalData.key, "effectConfig")
+        XCTAssertFalse(try XCTUnwrap(originalData.value).isEmpty)
+
+        let mediaIndex = try XCTUnwrap(document.resources?.media?.firstIndex { $0.name == "Music Intro" })
+        let amountIndex = try XCTUnwrap(
+            document.resources?.media?[mediaIndex].sequence?.spine?.transitions?[0]
+                .filterVideo?[0].param?.firstIndex { $0.name == "Amount" }
+        )
+        document.resources?.media?[mediaIndex].sequence?.spine?.transitions?[0]
+            .filterVideo?[0].param?[amountIndex].value = "65"
+
+        let encoded = try parser.encode(document)
+        let reparsed = try parser.parse(data: encoded)
+        let reparsedTransition = try crossDissolve(in: reparsed)
+        let reparsedVideo = try XCTUnwrap(reparsedTransition.filterVideo?.first)
+
+        XCTAssertEqual(reparsedVideo.param?.first(where: { $0.name == "Amount" })?.value, "65")
+        XCTAssertEqual(reparsedVideo.param?.count, 5)
+        XCTAssertEqual(reparsedVideo.data?.first?.value, originalData.value)
+        XCTAssertEqual(reparsedTransition.filterAudio?.first?.name, "Audio Crossfade")
+    }
+
+    private func crossDissolve(in document: FCPXML) throws -> Transition {
+        let media = try XCTUnwrap(document.resources?.media?.first { $0.name == "Music Intro" })
+        return try XCTUnwrap(media.sequence?.spine?.transitions?.first)
+    }
     
     func testFCPXMLElementCoverage() throws {
         let bundle = Bundle.module

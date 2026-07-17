@@ -54,8 +54,8 @@ public struct Video: Codable {
 public struct FilterVideo: Codable {
     public let ref: String?
     public let name: String?
-    public let data: [DataElement]?
-    public let param: [ParamElement]?
+    public var data: [DataElement]?
+    public var param: [ParamElement]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -67,7 +67,7 @@ public struct FilterVideo: Codable {
 
 public struct DataElement: Codable {
     public let key: String?
-    public let value: String?
+    public var value: String?
     
     enum CodingKeys: String, CodingKey {
         case key
@@ -78,7 +78,7 @@ public struct DataElement: Codable {
 public struct ParamElement: Codable {
     public let name: String?
     public let key: String?
-    public let value: String?
+    public var value: String?
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -92,7 +92,7 @@ public struct Media: Codable {
     public let name: String?
     public let uid: String?
     public let modDate: String?
-    public let sequence: Sequence?
+    public var sequence: Sequence?
     public let multicam: Multicam?
     public let mediaRep: [MediaRep]?
     

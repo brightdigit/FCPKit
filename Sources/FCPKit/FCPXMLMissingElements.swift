@@ -69,7 +69,7 @@ public struct FilterAudio: Codable {
     public let ref: String?
     public let name: String?
     public let enabled: String?
-    public let param: [ParamElement]?
+    public var param: [ParamElement]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -88,6 +88,8 @@ public struct Transition: Codable {
     public let alignment: String?
     public let name: String?
     public let start: String?
+    public var filterVideo: [FilterVideo]?
+    public var filterAudio: [FilterAudio]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -96,6 +98,8 @@ public struct Transition: Codable {
         case alignment
         case name
         case start
+        case filterVideo = "filter-video"
+        case filterAudio = "filter-audio"
     }
 }
 
