@@ -4,7 +4,7 @@ import XMLCoder
 public struct FCPXML: Codable {
     public let version: String
     public var resources: Resources?
-    public let library: Library?
+    public var library: Library?
     
     public init(version: String, resources: Resources? = nil, library: Library? = nil) {
         self.version = version
@@ -20,9 +20,9 @@ public struct FCPXML: Codable {
 }
 
 public struct Resources: Codable {
-    public let assets: [Asset]?
-    public let formats: [Format]?
-    public let effects: [Effect]?
+    public var assets: [Asset]?
+    public var formats: [Format]?
+    public var effects: [Effect]?
     public var media: [Media]?
     
     public init(assets: [Asset]? = nil, formats: [Format]? = nil, effects: [Effect]? = nil, media: [Media]? = nil) {
@@ -42,20 +42,54 @@ public struct Resources: Codable {
 
 public struct Asset: Codable {
     public let id: String
-    public let name: String?
+    public var name: String?
     public let uid: String?
-    public let src: String?
-    public let start: String?
-    public let duration: String?
-    public let format: String?
-    public let hasVideo: String?
-    public let hasAudio: String?
-    public let audioChannels: String?
-    public let audioRate: String?
-    public let videoRate: String?
-    public let videoSources: String?
-    public let audioSources: String?
-    public let mediaRep: [MediaRep]?
+    public var src: String?
+    public var start: String?
+    public var duration: String?
+    public var format: String?
+    public var hasVideo: String?
+    public var hasAudio: String?
+    public var audioChannels: String?
+    public var audioRate: String?
+    public var videoRate: String?
+    public var videoSources: String?
+    public var audioSources: String?
+    public var mediaRep: [MediaRep]?
+
+    public init(
+        id: String,
+        name: String? = nil,
+        uid: String? = nil,
+        src: String? = nil,
+        start: String? = nil,
+        duration: String? = nil,
+        format: String? = nil,
+        hasVideo: String? = nil,
+        hasAudio: String? = nil,
+        audioChannels: String? = nil,
+        audioRate: String? = nil,
+        videoRate: String? = nil,
+        videoSources: String? = nil,
+        audioSources: String? = nil,
+        mediaRep: [MediaRep]? = nil
+    ) {
+        self.id = id
+        self.name = name
+        self.uid = uid
+        self.src = src
+        self.start = start
+        self.duration = duration
+        self.format = format
+        self.hasVideo = hasVideo
+        self.hasAudio = hasAudio
+        self.audioChannels = audioChannels
+        self.audioRate = audioRate
+        self.videoRate = videoRate
+        self.videoSources = videoSources
+        self.audioSources = audioSources
+        self.mediaRep = mediaRep
+    }
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -78,11 +112,27 @@ public struct Asset: Codable {
 
 public struct Format: Codable {
     public let id: String
-    public let name: String?
-    public let frameDuration: String?
-    public let width: String?
-    public let height: String?
-    public let colorSpace: String?
+    public var name: String?
+    public var frameDuration: String?
+    public var width: String?
+    public var height: String?
+    public var colorSpace: String?
+
+    public init(
+        id: String,
+        name: String? = nil,
+        frameDuration: String? = nil,
+        width: String? = nil,
+        height: String? = nil,
+        colorSpace: String? = nil
+    ) {
+        self.id = id
+        self.name = name
+        self.frameDuration = frameDuration
+        self.width = width
+        self.height = height
+        self.colorSpace = colorSpace
+    }
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -109,9 +159,19 @@ public struct Effect: Codable {
 }
 
 public struct Library: Codable {
-    public let location: String?
-    public let events: [Event]?
-    public let smartCollections: [SmartCollection]?
+    public var location: String?
+    public var events: [Event]?
+    public var smartCollections: [SmartCollection]?
+
+    public init(
+        location: String? = nil,
+        events: [Event]? = nil,
+        smartCollections: [SmartCollection]? = nil
+    ) {
+        self.location = location
+        self.events = events
+        self.smartCollections = smartCollections
+    }
     
     enum CodingKeys: String, CodingKey {
         case location
@@ -121,13 +181,31 @@ public struct Library: Codable {
 }
 
 public struct Event: Codable {
-    public let name: String?
+    public var name: String?
     public let uid: String?
-    public let projects: [Project]?
-    public let assetClips: [AssetClip]?
-    public let refClips: [RefClip]?
-    public let mcClips: [MCClip]?
-    public let syncClips: [SyncClip]?
+    public var projects: [Project]?
+    public var assetClips: [AssetClip]?
+    public var refClips: [RefClip]?
+    public var mcClips: [MCClip]?
+    public var syncClips: [SyncClip]?
+
+    public init(
+        name: String? = nil,
+        uid: String? = nil,
+        projects: [Project]? = nil,
+        assetClips: [AssetClip]? = nil,
+        refClips: [RefClip]? = nil,
+        mcClips: [MCClip]? = nil,
+        syncClips: [SyncClip]? = nil
+    ) {
+        self.name = name
+        self.uid = uid
+        self.projects = projects
+        self.assetClips = assetClips
+        self.refClips = refClips
+        self.mcClips = mcClips
+        self.syncClips = syncClips
+    }
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -141,10 +219,22 @@ public struct Event: Codable {
 }
 
 public struct Project: Codable {
-    public let name: String?
+    public var name: String?
     public let uid: String?
-    public let modDate: String?
-    public let sequence: Sequence?
+    public var modDate: String?
+    public var sequence: Sequence?
+
+    public init(
+        name: String? = nil,
+        uid: String? = nil,
+        modDate: String? = nil,
+        sequence: Sequence? = nil
+    ) {
+        self.name = name
+        self.uid = uid
+        self.modDate = modDate
+        self.sequence = sequence
+    }
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -155,13 +245,31 @@ public struct Project: Codable {
 }
 
 public struct Sequence: Codable {
-    public let format: String?
-    public let duration: String?
-    public let tcStart: String?
-    public let tcFormat: String?
-    public let audioLayout: String?
-    public let audioRate: String?
+    public var format: String?
+    public var duration: String?
+    public var tcStart: String?
+    public var tcFormat: String?
+    public var audioLayout: String?
+    public var audioRate: String?
     public var spine: Spine?
+
+    public init(
+        format: String? = nil,
+        duration: String? = nil,
+        tcStart: String? = nil,
+        tcFormat: String? = nil,
+        audioLayout: String? = nil,
+        audioRate: String? = nil,
+        spine: Spine? = nil
+    ) {
+        self.format = format
+        self.duration = duration
+        self.tcStart = tcStart
+        self.tcFormat = tcFormat
+        self.audioLayout = audioLayout
+        self.audioRate = audioRate
+        self.spine = spine
+    }
     
     enum CodingKeys: String, CodingKey {
         case format
@@ -175,20 +283,52 @@ public struct Sequence: Codable {
 }
 
 public struct Spine: Codable {
-    public let clips: [Clip]?
-    public let gaps: [Gap]?
-    public let mcClips: [MCClip]?
+    public var clips: [Clip]?
+    public var gaps: [Gap]?
+    public var mcClips: [MCClip]?
     public var refClips: [RefClip]?
-    public let syncClips: [SyncClip]?
+    public var syncClips: [SyncClip]?
     public var assetClips: [AssetClip]?
-    public let titles: [Title]?
-    public let generators: [Generator]?
+    public var titles: [Title]?
+    public var generators: [Generator]?
     public var transitions: [Transition]?
-    public let storylines: [Storyline]?
-    public let compoundClips: [CompoundClip]?
-    public let retimeClips: [RetimeClip]?
-    public let captions: [Caption]?
+    public var storylines: [Storyline]?
+    public var compoundClips: [CompoundClip]?
+    public var retimeClips: [RetimeClip]?
+    public var captions: [Caption]?
     public var video: [Video]?
+
+    public init(
+        clips: [Clip]? = nil,
+        gaps: [Gap]? = nil,
+        mcClips: [MCClip]? = nil,
+        refClips: [RefClip]? = nil,
+        syncClips: [SyncClip]? = nil,
+        assetClips: [AssetClip]? = nil,
+        titles: [Title]? = nil,
+        generators: [Generator]? = nil,
+        transitions: [Transition]? = nil,
+        storylines: [Storyline]? = nil,
+        compoundClips: [CompoundClip]? = nil,
+        retimeClips: [RetimeClip]? = nil,
+        captions: [Caption]? = nil,
+        video: [Video]? = nil
+    ) {
+        self.clips = clips
+        self.gaps = gaps
+        self.mcClips = mcClips
+        self.refClips = refClips
+        self.syncClips = syncClips
+        self.assetClips = assetClips
+        self.titles = titles
+        self.generators = generators
+        self.transitions = transitions
+        self.storylines = storylines
+        self.compoundClips = compoundClips
+        self.retimeClips = retimeClips
+        self.captions = captions
+        self.video = video
+    }
     
     enum CodingKeys: String, CodingKey {
         case clips = "clip"
@@ -245,37 +385,103 @@ public struct Gap: Codable {
 }
 
 public struct AssetClip: Codable {
-    public let ref: String?
-    public let name: String?
-    public let duration: String?
-    public let start: String?
-    public let format: String?
-    public let tcFormat: String?
-    public let audioChannels: String?
-    public let audioRate: String?
-    public let audioRole: String?
-    public let lane: String?
-    public let offset: String?
-    public let useAudioSubroles: String?
-    public let modDate: String?
-    public let audioStart: String?
-    public let audioDuration: String?
-    public let keywords: [Keyword]?
-    public let note: String?
-    public let conformRate: ConformRate?
+    public var ref: String?
+    public var name: String?
+    public var duration: String?
+    public var start: String?
+    public var format: String?
+    public var tcFormat: String?
+    public var audioChannels: String?
+    public var audioRate: String?
+    public var audioRole: String?
+    public var lane: String?
+    public var offset: String?
+    public var useAudioSubroles: String?
+    public var modDate: String?
+    public var audioStart: String?
+    public var audioDuration: String?
+    public var keywords: [Keyword]?
+    public var note: String?
+    public var conformRate: ConformRate?
     public var adjustVolume: AdjustVolume?
-    public let adjustBlend: AdjustBlend?
-    public let audioChannelSource: [AudioChannelSource]?
-    public let markers: [Marker]?
-    public let rating: Rating?
-    public let chapterMarkers: [ChapterMarker]?
-    public let filterAudio: [FilterAudio]?
-    public let filterVideo: [FilterVideo]?
+    public var adjustBlend: AdjustBlend?
+    public var audioChannelSource: [AudioChannelSource]?
+    public var markers: [Marker]?
+    public var rating: Rating?
+    public var chapterMarkers: [ChapterMarker]?
+    public var filterAudio: [FilterAudio]?
+    public var filterVideo: [FilterVideo]?
     public var titles: [Title]?
     public var assetClips: [AssetClip]?
     public var video: [Video]?
     public var adjustTransform: AdjustTransform?
     public var adjustCrop: AdjustCrop?
+
+    public init(
+        ref: String? = nil,
+        name: String? = nil,
+        duration: String? = nil,
+        start: String? = nil,
+        format: String? = nil,
+        tcFormat: String? = nil,
+        audioChannels: String? = nil,
+        audioRate: String? = nil,
+        audioRole: String? = nil,
+        lane: String? = nil,
+        offset: String? = nil,
+        useAudioSubroles: String? = nil,
+        modDate: String? = nil,
+        audioStart: String? = nil,
+        audioDuration: String? = nil,
+        keywords: [Keyword]? = nil,
+        note: String? = nil,
+        conformRate: ConformRate? = nil,
+        adjustVolume: AdjustVolume? = nil,
+        adjustBlend: AdjustBlend? = nil,
+        audioChannelSource: [AudioChannelSource]? = nil,
+        markers: [Marker]? = nil,
+        rating: Rating? = nil,
+        chapterMarkers: [ChapterMarker]? = nil,
+        filterAudio: [FilterAudio]? = nil,
+        filterVideo: [FilterVideo]? = nil,
+        titles: [Title]? = nil,
+        assetClips: [AssetClip]? = nil,
+        video: [Video]? = nil,
+        adjustTransform: AdjustTransform? = nil,
+        adjustCrop: AdjustCrop? = nil
+    ) {
+        self.ref = ref
+        self.name = name
+        self.duration = duration
+        self.start = start
+        self.format = format
+        self.tcFormat = tcFormat
+        self.audioChannels = audioChannels
+        self.audioRate = audioRate
+        self.audioRole = audioRole
+        self.lane = lane
+        self.offset = offset
+        self.useAudioSubroles = useAudioSubroles
+        self.modDate = modDate
+        self.audioStart = audioStart
+        self.audioDuration = audioDuration
+        self.keywords = keywords
+        self.note = note
+        self.conformRate = conformRate
+        self.adjustVolume = adjustVolume
+        self.adjustBlend = adjustBlend
+        self.audioChannelSource = audioChannelSource
+        self.markers = markers
+        self.rating = rating
+        self.chapterMarkers = chapterMarkers
+        self.filterAudio = filterAudio
+        self.filterVideo = filterVideo
+        self.titles = titles
+        self.assetClips = assetClips
+        self.video = video
+        self.adjustTransform = adjustTransform
+        self.adjustCrop = adjustCrop
+    }
     
     enum CodingKeys: String, CodingKey {
         case ref

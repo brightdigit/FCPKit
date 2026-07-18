@@ -1,185 +1,108 @@
 # FCPKit Next Steps
 
-This roadmap advances FCPKit toward its product goal: a Swift foundation for
-apps that create, modify, and read Final Cut Pro assets. The immediate objective
-is to make the FCPXML model measurable and progressively lossless before using
-it as the authoritative generation layer.
+This is the living engineering roadmap for FCPKit. Completed implementation
+detail belongs in Git history, focused tests, generated reports, and ADRs; this
+document keeps only the evidence needed to understand the current baseline and
+the work that remains.
 
-## Current Baseline
+FCPKit's goal is to become the Swift foundation for apps that create, modify,
+and read Final Cut Pro assets. Work should continue to prioritize faithful
+structure, type-safe inspection and mutation, reliable generation, explicit
+schema compatibility, and stable identifiers, references, timing, ordering,
+and relationships.
 
-Phase 1 is operational in Swift through the `FCPXMLDiff` library and
-`fcpxml-diff` executable. The current structural round-trip report covers three
-FCPXML 1.13 exports and finds:
+## Verified Baseline
+
+As of July 17, 2026, the verified implementation baseline is commit `3fc669a`.
+The Swift test suite passes 42 tests. The schema-completeness workflow reports
+no measured structural loss in the three checked-in FCPXML 1.13 exports:
 
 | Files | Dropped elements | Dropped attributes | Dropped text | Total |
 | ---: | ---: | ---: | ---: | ---: |
 | 3 | 0 | 0 | 0 | 0 |
 
-Milestones 1 through 7 are complete. The transition slice removed 28 losses.
-Shared recursive parameters, animation, fades, and the parent links needed to
-reach their real fixture instances removed another 476 losses: 128 elements,
-344 attributes, and 4 text values. No parameter, keyframe, or fade paths remain
-in the report. Completing title style attributes removed the remaining 6 title
-losses; no title subtree paths remain.
-Timeline containers, timing, transforms, crop, conform, and color-conform
-support removed another 200 losses: 47 elements and 153 attributes.
-Event-level multicam, sync clips, roles, and audio support removed the final 49
-findings from the checked-in fixtures. This zero measured-loss baseline is a
-regression signal for those fixtures, not proof of complete FCPXML coverage.
+The generated evidence is in `SCHEMA_COMPLETENESS_REPORT.md` and
+`SCHEMA_COMPLETENESS_REPORT.json`. Regenerate these artifacts through the CLI;
+never edit them by hand.
 
-The largest clusters are:
+This zero-loss result is a regression signal for the tested fixture vocabulary,
+not proof of complete FCPXML 1.13 coverage or compatibility with every Final
+Cut Pro export. XMLCoder silently ignores unmodeled content, so parsing without
+an error is not sufficient evidence of support.
 
-- No structural-loss clusters remain in the three checked-in fixtures.
+[ADR 0001](docs/adr/0001-supported-schema-and-best-effort-editing.md)
+establishes the current compatibility policy:
 
-The baseline artifacts are `SCHEMA_COMPLETENESS_REPORT.md` and
-`SCHEMA_COMPLETENESS_REPORT.json`. Regenerate them after each model milestone;
-do not edit them by hand.
+- The typed Codable model is authoritative for the explicitly tested
+  vocabulary.
+- Editing imported documents is best effort. Unsupported content may be
+  omitted during encoding.
+- Callers can use round-trip diagnostics to discover dropped elements,
+  attributes, and text.
+- Preserving arbitrary unknown XML, namespaces, or unknown child ordering in a
+  sidecar representation is out of scope for this phase.
 
-## Milestone 1: Lock Down Phase 1
+## Completed Foundation
 
-Before broad model work, make the report a dependable regression signal.
+Milestones 1 through 7 and the diagnostic foundation of Milestone 8 are
+complete:
 
-- Add fixture-level snapshot assertions for aggregate counts and representative
-  structural paths.
-- Add tests for repeated sibling matching, reordered attributes, mixed text,
-  empty elements, and heterogeneous children.
-- Confirm resource-reference normalization handles definitions and references
-  consistently when resources are inserted, deleted, or reordered.
-- Confirm opaque masking preserves the presence, element path, and attributes
-  of `bookmark` and `data[key="effectConfig"]` while masking only payload text.
-- Add a CLI option that returns a nonzero exit status when unexpected losses
-  exceed an accepted baseline, so the report can be used in CI.
-- Document whether a reported volatile attribute that disappears entirely is a
-  real model loss. Volatile values are masked; attribute presence must still be
-  compared.
+| Milestone | Outcome | Commit |
+| --- | --- | --- |
+| 1 | Deterministic schema-completeness snapshots, normalization tests, and CI loss threshold | `78a9ff7` |
+| 2 | Transition payload decoding, mutation, and encoding | `9f25350` |
+| 3 | Recursive parameters, animations, keyframes, and fades | `92d2996` |
+| 4 | Mutable title text and styling with stable references | `3c913e1` |
+| 5 | Nested timeline containers, timing, transforms, crop, and conform behavior | `795db6a` |
+| 6 | Library multicam, sync clips, roles, and audio structures | `e87285f` |
+| 7 | Raw-pair comparison with Markdown, JSON, normalization, and path filtering | `98177ed` |
+| 8 foundation | Supported-schema policy and reusable round-trip loss diagnostics | `3fc669a` |
 
-Acceptance criteria:
+The next milestone must build on this evidence rather than reopening completed
+schema-loss work without a new fixture or focused regression.
 
-- `swift test` passes.
-- Repeated runs produce byte-stable Markdown and JSON reports.
-- Synthetic tests suppress only expected volatile churn and continue to expose
-  real element, attribute, and text changes.
-- The checked-in baseline cannot increase unnoticed in CI.
+## Active Milestone: Typed Generation Vertical Slice
 
-## Milestone 2: Model a Transition End to End
+The automated portion is complete. Application code can now construct the core
+project and multicam graph through public, schema-shaped initializers and
+mutate supported nested values while stable document and resource identities
+remain immutable.
 
-Use the Cross Dissolve in `UntitledXML.fcpxml` as the first vertical slice. It
-is a known, user-visible loss and exercises reusable effect structures.
+Verified automated evidence:
 
-- Extend `Transition` to represent nested `filter-video`, `filter-audio`,
-  `param`, and `data` children.
-- Preserve `data[key="effectConfig"]` content on decode and encode even though
-  the differential display masks its opaque value.
-- Reuse shared effect/parameter types only where their XML shape and child
-  ordering genuinely match.
-- Add focused assertions that read transition parameters from the real fixture.
-- Add a decode, mutate, encode, decode test that changes a safe transition
-  parameter without losing its siblings or opaque configuration.
-- Regenerate the completeness report and record the exact reduction.
+- A public-client test (`import FCPKit`, without `@testable`) constructs and
+  round-trips an FCPXML 1.13 format, asset/media representation, library, event,
+  project, sequence, spine, and asset clip with stable timing and references.
+- Nested value-semantic mutation renames the project without changing resource
+  IDs, UIDs, timing, media paths, or references.
+- A typed multicam graph has zero normalized symmetric findings against one
+  unchanged `MulticamXMLBuilder` output, including media, crop, transforms,
+  angles, sources, relationships, and smart collections.
+- The full suite passes 42 tests and the three real FCPXML 1.13 fixtures remain
+  at zero measured round-trip loss.
 
-Acceptance criteria:
-
-- The Cross Dissolve's complete nested subtree survives round-tripping.
-- The transition-related dropped paths disappear from the report.
-- Existing filter-video uses elsewhere in the fixtures do not regress.
-
-## Milestone 3: Add Shared Parameter and Animation Types
-
-The highest-frequency losses are repeated parameter structures. Address them as
-a coherent family rather than adding feature-specific copies.
-
-- Model `param` recursively where Final Cut emits nested parameters.
-- Model `keyframeAnimation`, `keyframe`, `fadeIn`, and `fadeOut` with all
-  observed attributes.
-- Preserve child order when parameters, data, and animations are interleaved.
-- Cover both title parameters and volume/effect parameters with real fixtures.
-- Treat parameter values as lexical strings unless the schema guarantees a
-  single numeric representation; Final Cut uses several compound formats.
+The Final Cut Pro gate remains pending. Follow the decision-complete
+[manual artifact checklist](docs/manual/final-cut-artifacts.md) to generate the
+typed input, import and re-export it, preserve the `.fcpxmld` bundle, and return
+the structural diff and environment metadata. Do not migrate or remove
+`MulticamXMLBuilder` until that gate passes.
 
 Acceptance criteria:
 
-- The large title/filter `param` clusters no longer appear as dropped.
-- Keyframe and fade structures survive decode, mutation, and re-encode.
-- A shared representation does not force unrelated parameter variants into an
-  invalid shape.
+- Application code can create the minimal project without assembling XML
+  strings or relying on internal/memberwise initializers.
+- The typed document encodes and parses back without structural loss.
+- Resource IDs and all references resolve consistently.
+- Timing and hierarchy survive both construction and mutation tests.
+- The model-generated file imports successfully into Final Cut Pro and its
+  re-export has no unexplained structural delta.
+- `MulticamXMLBuilder` is not migrated or removed until typed parity and the
+  manual import gate are complete.
 
-## Milestone 4: Complete Titles and Text Styling
+## Parallel Evidence Work: Real Feature Pairs
 
-- Model `title`, `text`, `text-style-def`, and `text-style`, including styled
-  text content and references.
-- Preserve font, size, color, bold, kerning, and observed nested parameters.
-- Add mutation tests for visible text and at least one style property.
-- Add a minimal Final Cut export pair that changes only one title property when
-  Phase 2 raw-pair comparison is available.
-
-Acceptance criteria:
-
-- The four currently dropped styled-text values survive round-tripping.
-- Title text can be read and changed through a typed API.
-- Re-encoded style definitions retain valid references and ordering.
-
-## Milestone 5: Complete Timeline Containers
-
-Work outward from shared leaf types to nested timeline containers.
-
-- Support nested `ref-clip`, `asset-clip`, and `video` wherever the fixtures
-  demonstrate they are legal.
-- Complete transform, crop/trim-rect, volume, color-conform, conform-rate, and
-  time-map representations.
-- Preserve lane, offset, start, duration, format, role, and timecode semantics.
-- Add relationship tests for resource references and nested timing rather than
-  asserting only decoded counts.
-
-Acceptance criteria:
-
-- Nested clip/video losses are removed without flattening their hierarchy.
-- Timing and lane values survive round-tripping exactly.
-- Mutation tests demonstrate that changing one nested clip does not alter its
-  siblings or resource references.
-
-## Milestone 6: Complete Library, Multicam, Roles, and Audio
-
-- Model library-level `mc-clip`, `mc-source`, and `sync-clip` content found in
-  the real exports.
-- Complete `audio-channel-source`, `adjust-loudness`, audio roles, subroles, and
-  source-channel attributes.
-- Add tests that traverse from library/event objects to referenced media and
-  validate multicam angle relationships.
-- Keep `MulticamXMLBuilder` unchanged during this milestone; use its generated
-  XML only as additional behavioral evidence.
-
-Acceptance criteria:
-
-- `Both-Multicam.fcpxml` and `Interview.fcpxml` retain their modeled library and
-  audio structures.
-- Apps can inspect multicam angles and audio roles through typed APIs.
-- The schema report shows no unexplained losses for these feature families.
-
-## Milestone 7: Build Phase 2 Raw-Pair Diffing
-
-Implementation complete. Store manually exported pairs under
-`Tests/FCPKitTests/FeaturePairs/<feature-name>/` as `before.fcpxml`,
-`after.fcpxml`, and `metadata.json`. Metadata records `finalCutVersion`,
-`fcpxmlVersion`, `baselineState`, and `changedAction`; each pair must isolate
-one manual Final Cut change and retain both raw exports intact.
-
-Add a second CLI workflow on the existing normalize-and-diff core:
-
-```sh
-swift run fcpxml-diff compare before.fcpxml after.fcpxml
-```
-
-- Report additions, removals, and changed attribute/text values in both
-  directions, not only round-trip losses.
-- Provide Markdown and JSON output with the same structural path vocabulary as
-  Phase 1.
-- Add an optional narrow path filter for isolating a feature subtree without
-  changing normalization behavior.
-- Define a sample-pair directory convention and a small metadata file recording
-  Final Cut version, FCPXML version, baseline state, and the one changed action.
-- Add no-app synthetic tests for added, removed, and changed structures.
-
-Collect minimal Final Cut pairs in this order:
+The `fcpxml-diff compare` workflow is implemented, but real minimal Final Cut
+exports still need to be collected manually. Collect them in this order:
 
 1. Transitions and transition parameters.
 2. Markers.
@@ -187,96 +110,116 @@ Collect minimal Final Cut pairs in this order:
 4. Titles and `text-style` properties.
 5. Retiming and speed ramps.
 
-Acceptance criteria:
+Store each untouched pair under:
 
-- The same normalized documents yield no diff.
-- A single feature toggle produces a focused, deterministic report.
-- Raw-pair output can directly inform a Codable model change and its tests.
+```text
+Tests/FCPKitTests/FeaturePairs/<feature-name>/
+├── before.fcpxml
+├── after.fcpxml
+└── metadata.json
+```
 
-## Milestone 8: Supported-Schema Diagnostics and Typed Generation
+`metadata.json` records `finalCutVersion`, `fcpxmlVersion`, `baselineState`, and
+`changedAction`. Each pair must differ by one precisely recorded Final Cut
+action. Do not hand-clean volatile values, paths, or opaque payloads.
 
-FCPKit focuses first on creating new documents and best-effort editing of
-existing files within its declared supported vocabulary. Unknown-content
-preservation is out of scope for this phase.
+Compare a pair with:
 
-- Define the supported FCPXML vocabulary and version boundary.
-- Report dropped elements, attributes, and text during decode/re-encode
-  diagnostics without rejecting best-effort edits.
-- Complete supported model areas with focused fixture and mutation tests.
-- Add ergonomic typed construction APIs and generate a minimal project without
-  raw XML templates.
+```sh
+swift run fcpxml-diff compare \
+  Tests/FCPKitTests/FeaturePairs/<feature-name>/before.fcpxml \
+  Tests/FCPKitTests/FeaturePairs/<feature-name>/after.fcpxml \
+  --markdown /tmp/feature-diff.md \
+  --json /tmp/feature-diff.json
+```
 
-Acceptance criteria:
+Use `--path /fcpxml/...` only to focus the displayed subtree. Path filtering
+must not change normalization behavior.
 
-- Supported content round-trips through the typed model.
-- Unsupported content loss is deterministic and discoverable through a report.
-- A minimal valid FCPXML document can be constructed solely through typed
-  models.
+## Next Milestone: Versioning and Validation
 
-## Milestone 9: Versioning and Validation
+Begin explicit multi-version work after the typed-generation vertical slice:
 
-- Add explicit coverage for both the checked-in FCPXML 1.13 fixtures and new
-  FCPXML 1.14 samples.
-- Record schema provenance and recheck current Apple primary sources whenever
-  the supported/latest version claim changes.
-- Add validation against an appropriate DTD or equivalent structural rules
-  where current Apple schema material is available.
-- Define decoder behavior for newer, older, and unsupported versions.
-
-Acceptance criteria:
-
-- Callers can determine the parsed version and understand compatibility
-  failures.
-- Generated documents declare a deliberate version.
-- Validation failures identify actionable structural paths.
-
-## Milestone 10: Generation and Builder Consolidation
-
-Begin this only after the relevant model areas have strong round-trip coverage.
-
-- Define ergonomic construction and mutation APIs above the schema-faithful
-  Codable layer.
-- Generate a minimal project solely through the model and import it into Final
-  Cut Pro.
-- Reproduce one `MulticamXMLBuilder` output through typed model construction and
-  compare the normalized structures.
-- Migrate builder functionality incrementally, retaining regression fixtures at
-  each step.
-- Remove raw string generation only when typed output is structurally complete
-  and accepted by Final Cut Pro.
+1. Add original, uncleaned FCPXML 1.14 exports with their Final Cut Pro version
+   and provenance recorded.
+2. Recheck current primary Apple sources before changing any supported or
+   latest-version claim.
+3. Define and test parser behavior for supported, older, newer, and malformed
+   FCPXML versions. A version declaration alone must not imply complete schema
+   coverage.
+4. Add validation against an authoritative DTD or equivalent structural rules
+   where current Apple material is available.
+5. Report validation failures with actionable structural paths.
 
 Acceptance criteria:
 
-- A model-generated project imports successfully and re-exports without an
-  unexplained structural delta.
-- Resource IDs and references are assigned consistently by library code.
-- The typed builder supports application-level creation and modification without
-  requiring callers to assemble XML strings.
+- Callers can inspect the parsed version and understand compatibility or
+  validation failures.
+- Generated documents declare a deliberate supported version.
+- Both 1.13 and 1.14 behavior are backed by intact real fixtures.
+- Version and validation errors identify the affected document path whenever
+  possible.
+
+## Later Milestone: Builder Consolidation
+
+Only after typed generation passes structural and Final Cut import testing:
+
+1. Move `MulticamXMLBuilder` behavior incrementally onto typed construction.
+2. Retain a normalized regression fixture at each migration step.
+3. Centralize resource-ID and reference assignment in library code.
+4. Remove raw XML generation only when typed output has feature parity and is
+   accepted by Final Cut Pro.
+
+The completed API must support application-level creation and modification
+without requiring callers to assemble XML strings.
+
+## Documentation Accuracy
+
+Public documentation must be reconciled with the supported-schema policy. In
+particular, remove claims of complete FCPXML or complete version coverage,
+update stale test counts, document best-effort editing and loss diagnostics,
+and add typed-generation examples only after those APIs exist.
+
+`ROADMAP_HANDOFF.md` is a historical handoff, not a second live roadmap. Future
+status updates should be made here rather than maintaining competing current
+state sections.
+
+## Immediate Work Queue
+
+1. Complete the manual Final Cut import and re-export acceptance check using
+   [the artifact checklist](docs/manual/final-cut-artifacts.md).
+2. Collect the first real transition feature pair when Final Cut is available.
+3. Add FCPXML 1.14 fixture evidence and explicit version behavior.
+4. Add authoritative validation with path-oriented diagnostics.
+5. Migrate the raw multicam builder incrementally after all gates pass.
+6. Reconcile README and API documentation with the supported-schema policy.
 
 ## Definition of Done for Model Features
 
 A model feature is complete only when all of the following are true:
 
 - It decodes from a real or intentionally synthetic fixture.
-- Its meaningful values are exposed through a typed Swift API.
+- Its meaningful values are exposed through a public typed Swift API.
+- Application code can construct it when generation requires it.
 - It can be changed without disturbing unrelated content.
-- It re-encodes with correct element names, attributes, ordering, and
+- It re-encodes with correct element names, attributes, ordering, timing, and
   relationships.
 - Its expected paths are absent from the schema-completeness loss report.
-- It has regression tests, including failure or edge cases appropriate to its
-  risk.
+- It has focused regression tests, including appropriate failure or edge cases.
 - Its behavior across supported FCPXML versions is known or explicitly limited.
 
-## Immediate Work Queue
+## Required Verification
 
-1. Commit the Phase 1 harness, its tests, `AGENTS.md`, and the generated baseline
-   reports as one reviewable foundation change.
-2. Add stable baseline/snapshot and CLI exit-status tests from Milestone 1.
-3. Implement the transition vertical slice from Milestone 2.
-4. Regenerate the reports and quantify the transition-related improvement.
-5. Implement shared parameter/keyframe types, then titles.
-6. Add the Phase 2 `compare` command and begin collecting minimal pairs.
+Before committing a model milestone, run:
 
-Do not use a zero total-diff count as the only completion target. The real goal
-is trustworthy read, modify, and write behavior with meaningful unknown content
-preserved.
+```sh
+swift test
+swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
+  --markdown SCHEMA_COMPLETENESS_REPORT.md \
+  --json SCHEMA_COMPLETENESS_REPORT.json \
+  --fail-if-total-exceeds 0
+```
+
+Generated reports are diagnostic evidence, not proof by themselves. A new real
+fixture may legitimately reveal losses; model and test those losses rather than
+lowering the accepted baseline or broadening normalization to hide them.
