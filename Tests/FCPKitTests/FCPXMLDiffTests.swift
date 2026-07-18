@@ -348,6 +348,62 @@ final class FCPXMLDiffTests: XCTestCase {
         XCTAssertEqual(identical.findings, [])
     }
 
+    func testRoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInput() throws {
+        let xml = Data("""
+        <fcpxml version="1.13">
+            <resources><format id="r1"/></resources>
+            <library><event><project><sequence format="r1" duration="2s"><spine>
+                <gap duration="1s" unsupported-attribute="kept-nowhere"/>
+                <unsupported><nested>payload</nested></unsupported>
+                <gap duration="1s"/>
+            </spine></sequence></project></event></library>
+        </fcpxml>
+        """.utf8)
+
+        let report = try FCPXMLRoundTripAnalyzer().analyze(data: xml)
+
+        XCTAssertTrue(report.hasLoss)
+        XCTAssertEqual(report.summary.droppedAttributes, 1)
+        XCTAssertEqual(report.summary.droppedElements, 2)
+        XCTAssertTrue(report.findings.contains {
+            $0.kind == .droppedAttribute
+                && $0.path.hasSuffix("/gap/@unsupported-attribute")
+        })
+        XCTAssertTrue(report.findings.contains {
+            $0.kind == .droppedElement
+                && $0.path.hasSuffix("/unsupported")
+        })
+        XCTAssertTrue(report.findings.contains {
+            $0.kind == .droppedElement
+                && $0.path.hasSuffix("/unsupported/nested")
+        })
+    }
+
+    func testRoundTripAnalyzerCanCheckAnEditedEncodedDocument() throws {
+        let original = Data("""
+        <fcpxml version="1.13"><resources><format id="r1"/></resources>
+        <library><event><project><sequence format="r1" duration="1s"><spine>
+        <gap duration="1s"/>
+        </spine></sequence></project></event></library></fcpxml>
+        """.utf8)
+        let edited = Data("""
+        <fcpxml version="1.13"><resources><format id="r1"/></resources>
+        <library><event><project><sequence format="r1" duration="2s"><spine>
+        <gap duration="1s"/>
+        </spine></sequence></project></event></library></fcpxml>
+        """.utf8)
+
+        let report = try FCPXMLRoundTripAnalyzer().analyze(
+            originalData: original,
+            encodedData: edited,
+            sourcePath: "edited.fcpxml"
+        )
+
+        XCTAssertFalse(report.hasLoss)
+        XCTAssertEqual(report.sourcePath, "edited.fcpxml")
+        XCTAssertEqual(report.fcpxmlVersion, "1.13")
+    }
+
     func testEveryModelTypeDeclaresNodeEncoding() {
         let attributeOnlyTypes: [any DynamicNodeEncoding.Type] = [
             Format.self, Effect.self, Clip.self, Gap.self, Keyword.self,

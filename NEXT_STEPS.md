@@ -193,26 +193,25 @@ Acceptance criteria:
 - A single feature toggle produces a focused, deterministic report.
 - Raw-pair output can directly inform a Codable model change and its tests.
 
-## Milestone 8: Preserve Unknown Content
+## Milestone 8: Supported-Schema Diagnostics and Typed Generation
 
-Full schema coverage will always lag Final Cut releases. Before FCPKit is used
-to modify user assets, define an explicit forward-compatibility strategy.
+FCPKit focuses first on creating new documents and best-effort editing of
+existing files within its declared supported vocabulary. Unknown-content
+preservation is out of scope for this phase.
 
-- Investigate where XMLCoder can retain unknown attributes and ordered child
-  elements and where a supplemental XML representation is required.
-- Write an architecture decision record covering typed known content, opaque
-  unknown content, ordering, namespaces, and mutation behavior.
-- Prototype preservation on an unknown attribute, an unknown leaf, and an
-  unknown subtree placed between known siblings.
-- Ensure normal encoding does not duplicate preserved nodes after a known field
-  is edited.
+- Define the supported FCPXML vocabulary and version boundary.
+- Report dropped elements, attributes, and text during decode/re-encode
+  diagnostics without rejecting best-effort edits.
+- Complete supported model areas with focused fixture and mutation tests.
+- Add ergonomic typed construction APIs and generate a minimal project without
+  raw XML templates.
 
 Acceptance criteria:
 
-- Decode, edit an unrelated typed field, and encode without losing the unknown
-  test content.
-- The behavior is deterministic and documented for downstream app developers.
-- Unsupported content is distinguishable from malformed content.
+- Supported content round-trips through the typed model.
+- Unsupported content loss is deterministic and discoverable through a report.
+- A minimal valid FCPXML document can be constructed solely through typed
+  models.
 
 ## Milestone 9: Versioning and Validation
 

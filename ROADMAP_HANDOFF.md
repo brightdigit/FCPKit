@@ -2,8 +2,9 @@
 
 ## Current State
 
-Milestones 1 through 7 in `NEXT_STEPS.md` are complete on the `prototype`
-branch and pushed to `origin/prototype`.
+Milestones 1 through 7 in `NEXT_STEPS.md` remain complete. The supported-schema
+and best-effort editing decision is recorded, and the first loss diagnostics
+API is implemented locally but not yet committed.
 
 The structural schema-completeness report currently finds no measured loss in
 the three checked-in FCPXML 1.13 fixtures:
@@ -16,8 +17,9 @@ This is evidence for the checked-in fixtures only. It is not proof that the
 model covers the complete FCPXML schema or content emitted by later Final Cut
 versions.
 
-The test suite has 38 passing tests. The worktree was clean and synchronized
-with `origin/prototype` at commit `98177ed` before this handoff was added.
+The test suite has 40 passing tests. The required schema-completeness command
+passes with zero loss for all three checked-in FCPXML 1.13 fixtures. The
+worktree contains the intentional changes listed below.
 
 ## Completed Milestones
 
@@ -33,6 +35,9 @@ with `origin/prototype` at commit `98177ed` before this handoff was added.
 - Milestone 6: event-level multicam, sync clips, roles, and audio structures.
 - Milestone 7: raw-pair comparison through `fcpxml-diff compare`, including
   Markdown, JSON, normalization, and path filtering.
+- Milestone 8 foundation: accepted supported-schema/best-effort editing policy,
+  reusable round-trip loss diagnostics, focused unsupported-content tests, and
+  updated roadmap documentation.
 
 Relevant commits, oldest first:
 
@@ -44,40 +49,49 @@ Relevant commits, oldest first:
 - `e87285f` Complete library multicam audio model
 - `98177ed` Add raw FCPXML pair comparison
 
-## Immediate Next Step: Preserve Unknown Content
+Current uncommitted files:
 
-Milestone 8 is the highest-priority remaining safety work. FCPKit should not be
-used to edit arbitrary user assets until unsupported XML can survive an
-unrelated typed edit.
+- `Sources/FCPXMLDiff/RoundTripReport.swift` adds `FCPXMLRoundTripAnalyzer` and
+  `FCPXMLRoundTripReport`. It can decode/re-encode input and report dropped
+  elements, attributes, and text, or compare original and edited XML.
+- `Tests/FCPKitTests/FCPXMLDiffTests.swift` adds two diagnostics tests.
+- `docs/adr/0001-supported-schema-and-best-effort-editing.md` records the
+  product decision.
+- `NEXT_STEPS.md` and this document reflect the revised roadmap.
 
-Proceed in this order:
+## Immediate Next Step: Typed Generation Vertical Slice
 
-1. Add synthetic fixtures containing:
-   - An unknown attribute on a known element.
-   - An unknown leaf element.
-   - An unknown subtree placed between known siblings.
-2. Measure exactly what XMLCoder discards and whether any supported extension
-   point can retain unknown keyed content and child order.
-3. Prototype a supplemental XML representation if XMLCoder cannot preserve the
-   required content itself.
-4. Decode the fixture, edit one unrelated typed field, encode it, and prove the
-   unknown content remains present exactly once and in the correct position.
-5. Write an architecture decision record covering:
-   - Ownership of typed and opaque content.
-   - Unknown attributes and namespaces.
-   - Heterogeneous child ordering.
-   - Conflict behavior after a known field is edited.
-   - How malformed content differs from well-formed unsupported content.
+The product focus is new typed document creation and best-effort editing of
+existing files within the supported model. Unknown-content preservation is out
+of scope for this phase.
 
-Do not hide unknown-content differences in normalization to make these tests
-pass. Preservation must occur in the model or encoding architecture.
+Editing existing files is best effort: supported content is typed and mutable,
+unsupported content may be omitted, and callers can inspect a round-trip loss
+report.
 
-Milestone 8 is accepted only when a known field can be edited without losing,
-moving incorrectly, or duplicating each unknown test case.
+Continue Milestone 8 in this order:
 
-## Then: Versioning and Validation
+1. Add public construction APIs for the core document graph: `FCPXML`,
+   resources, formats, assets, media, library, event, project, sequence, spine,
+   and clips.
+2. Generate a minimal project solely through typed models.
+3. Encode and parse it back, asserting resource IDs, references, timing, and
+   hierarchy.
+4. Add mutation tests against the generated document.
+5. Reproduce the existing `MulticamXMLBuilder` output through typed
+   construction, while leaving the raw builder unchanged.
+6. Only after structural tests pass, import the generated file into Final Cut
+   Pro and compare its re-export.
 
-Milestone 9 should follow the unknown-content decision:
+The immediate code gap is that most model types are Codable-only with `let`
+properties and no public construction surface. Prefer ergonomic construction
+APIs above the schema-faithful Codable types; do not use raw XML templates as a
+shortcut.
+
+## Later: Versioning and Validation
+
+Milestone 9 follows the typed-generation slice when explicit multi-version
+support is needed:
 
 - Retain explicit behavior for the checked-in FCPXML 1.13 fixtures.
 - Add original, uncleaned FCPXML 1.14 exports with recorded Final Cut versions.
@@ -87,21 +101,6 @@ Milestone 9 should follow the unknown-content decision:
 - Add validation against authoritative DTD or equivalent structural rules when
   available.
 - Make validation failures identify actionable structural paths.
-
-## Then: Typed Generation
-
-Begin Milestone 10 only after the relevant model areas and unknown-content
-strategy are reliable:
-
-1. Add ergonomic construction APIs above the schema-faithful Codable layer.
-2. Generate a minimal project solely through typed models.
-3. Import it into Final Cut Pro and re-export it.
-4. Structurally compare the generated and re-exported documents.
-5. Reproduce one `MulticamXMLBuilder` result through typed construction.
-6. Migrate the raw string builder incrementally, keeping regression fixtures.
-
-Do not remove raw string generation until typed output imports successfully and
-round-trips without unexplained structural differences.
 
 ## Real Phase 2 Feature Pairs Still Needed
 
@@ -155,6 +154,14 @@ swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
 Regenerate reports rather than editing them manually. A new real fixture may
 legitimately introduce losses; model and test those losses before lowering the
 accepted baseline again.
+
+Verification completed for this handoff:
+
+```text
+swift test: 40 tests passed
+schema-completeness: 3 files, 0 dropped elements, 0 dropped attributes,
+0 dropped text, total 0
+```
 
 ## Guardrails
 
