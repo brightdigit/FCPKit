@@ -151,3 +151,24 @@ Generated reports are diagnostic artifacts, not proof by themselves. The
 desired trajectory is fewer unexplained deltas plus stronger read/mutate/write
 APIs. A zero-delta fixture set is useful only if normalization is narrow enough
 that meaningful differences remain visible.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs live as GitHub issues in `brightdigit/FCPKit`, managed via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five-role vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context — one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+## Agent memory & corrections
+
+Persistent notes for agents live in the repo (committed and shared), not in any machine-local directory:
+
+- **`.claude/CORRECTIONS.md`** — append-only log; the source of truth for user corrections and explicit always/never directives. Whenever the user corrects an agent or gives an "always"/"never" directive, append one concise dated line. Never rewrite, reorder, or delete prior entries.
+- **`.claude/memory/MEMORY.md`** — index of persistent memories; read it, then the linked files under `.claude/memory/`.
