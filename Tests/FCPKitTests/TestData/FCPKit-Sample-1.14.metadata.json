@@ -1,0 +1,13 @@
+{
+  "artifact": "FCPKit-Sample-1.14.fcpxml",
+  "source": "Tests/FCPKitTests/FeaturePairs/markers/before.fcpxml",
+  "fcpxmlVersion": "1.14",
+  "finalCutVersion": "12.3",
+  "finalCutBuild": "450152",
+  "finalCutApp": "Final Cut Pro Creator Studio.app",
+  "macOSVersion": "27.0 (26A5388g)",
+  "hardware": "MacBook Air (Mac17,4), Apple M5, arm64",
+  "exportedAt": "2026-07-28T15:20:38-04:00",
+  "description": "Minimal original FCPXML 1.14 project export: single Left asset-clip, no markers. Promoted from the markers feature-pair baseline for schema-completeness evidence.",
+  "privacyNotes": "Synthetic blue test media; library path references local Movies Current.fcpbundle managed copy."
+}

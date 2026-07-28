@@ -2,13 +2,34 @@ import Foundation
 import XMLCoder
 
 public struct MCClip: Codable {
-    public let ref: String?
-    public let offset: String?
-    public let name: String?
-    public let start: String?
-    public let duration: String?
-    public let mcSources: [MCSource]?
-    public let video: [Video]?
+    public var ref: String?
+    public var offset: String?
+    public var name: String?
+    public var start: String?
+    public var duration: String?
+    public var modDate: String?
+    public var mcSources: [MCSource]?
+    public var video: [Video]?
+
+    public init(
+        ref: String? = nil,
+        offset: String? = nil,
+        name: String? = nil,
+        start: String? = nil,
+        duration: String? = nil,
+        modDate: String? = nil,
+        mcSources: [MCSource]? = nil,
+        video: [Video]? = nil
+    ) {
+        self.ref = ref
+        self.offset = offset
+        self.name = name
+        self.start = start
+        self.duration = duration
+        self.modDate = modDate
+        self.mcSources = mcSources
+        self.video = video
+    }
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -16,6 +37,7 @@ public struct MCClip: Codable {
         case name
         case start
         case duration
+        case modDate
         case mcSources = "mc-source"
         case video
     }
@@ -23,7 +45,12 @@ public struct MCClip: Codable {
 
 public struct MCSource: Codable {
     public let angleID: String?
-    public let srcEnable: String?
+    public var srcEnable: String?
+
+    public init(angleID: String, srcEnable: String? = nil) {
+        self.angleID = angleID
+        self.srcEnable = srcEnable
+    }
     
     enum CodingKeys: String, CodingKey {
         case angleID
@@ -38,7 +65,10 @@ public struct Video: Codable {
     public let name: String?
     public let start: String?
     public let duration: String?
+    public var param: [ParamElement]?
     public let filterVideo: [FilterVideo]?
+    public var adjustTransform: AdjustTransform?
+    public var adjustColorConform: AdjustColorConform?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -47,15 +77,18 @@ public struct Video: Codable {
         case name
         case start
         case duration
+        case param
         case filterVideo = "filter-video"
+        case adjustTransform = "adjust-transform"
+        case adjustColorConform = "adjust-colorConform"
     }
 }
 
 public struct FilterVideo: Codable {
     public let ref: String?
     public let name: String?
-    public let data: [DataElement]?
-    public let param: [ParamElement]?
+    public var data: [DataElement]?
+    public var param: [ParamElement]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -67,34 +100,62 @@ public struct FilterVideo: Codable {
 
 public struct DataElement: Codable {
     public let key: String?
-    public let value: String?
+    public var value: String?
     
     enum CodingKeys: String, CodingKey {
         case key
-        case value
+        case value = ""
     }
 }
 
 public struct ParamElement: Codable {
     public let name: String?
     public let key: String?
-    public let value: String?
+    public var value: String?
+    public var param: [ParamElement]?
+    public var data: [DataElement]?
+    public var fadeIn: Fade?
+    public var fadeOut: Fade?
+    public var keyframeAnimation: KeyframeAnimation?
     
     enum CodingKeys: String, CodingKey {
         case name
         case key
         case value
+        case param
+        case data
+        case fadeIn
+        case fadeOut
+        case keyframeAnimation
     }
 }
 
 public struct Media: Codable {
     public let id: String?
-    public let name: String?
+    public var name: String?
     public let uid: String?
-    public let modDate: String?
-    public let sequence: Sequence?
-    public let multicam: Multicam?
-    public let mediaRep: [MediaRep]?
+    public var modDate: String?
+    public var sequence: Sequence?
+    public var multicam: Multicam?
+    public var mediaRep: [MediaRep]?
+
+    public init(
+        id: String,
+        name: String? = nil,
+        uid: String? = nil,
+        modDate: String? = nil,
+        sequence: Sequence? = nil,
+        multicam: Multicam? = nil,
+        mediaRep: [MediaRep]? = nil
+    ) {
+        self.id = id
+        self.name = name
+        self.uid = uid
+        self.modDate = modDate
+        self.sequence = sequence
+        self.multicam = multicam
+        self.mediaRep = mediaRep
+    }
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -108,10 +169,22 @@ public struct Media: Codable {
 }
 
 public struct Multicam: Codable {
-    public let format: String?
-    public let tcStart: String?
-    public let tcFormat: String?
-    public let mcAngles: [MCAngle]?
+    public var format: String?
+    public var tcStart: String?
+    public var tcFormat: String?
+    public var mcAngles: [MCAngle]?
+
+    public init(
+        format: String? = nil,
+        tcStart: String? = nil,
+        tcFormat: String? = nil,
+        mcAngles: [MCAngle]? = nil
+    ) {
+        self.format = format
+        self.tcStart = tcStart
+        self.tcFormat = tcFormat
+        self.mcAngles = mcAngles
+    }
     
     enum CodingKeys: String, CodingKey {
         case format
@@ -122,10 +195,22 @@ public struct Multicam: Codable {
 }
 
 public struct MCAngle: Codable {
-    public let name: String?
+    public var name: String?
     public let angleID: String?
-    public let gaps: [Gap]?
-    public let refClips: [RefClip]?
+    public var gaps: [Gap]?
+    public var refClips: [RefClip]?
+
+    public init(
+        name: String? = nil,
+        angleID: String,
+        gaps: [Gap]? = nil,
+        refClips: [RefClip]? = nil
+    ) {
+        self.name = name
+        self.angleID = angleID
+        self.gaps = gaps
+        self.refClips = refClips
+    }
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -136,28 +221,80 @@ public struct MCAngle: Codable {
 }
 
 public struct RefClip: Codable {
-    public let ref: String?
-    public let offset: String?
-    public let name: String?
-    public let duration: String?
-    public let useAudioSubroles: String?
-    public let conformRate: ConformRate?
-    public let timeMap: TimeMap?
-    public let adjustTransform: AdjustTransform?
-    public let adjustCrop: AdjustCrop?
-    public let assetClips: [AssetClip]?
+    public var ref: String?
+    public var offset: String?
+    public var name: String?
+    public var duration: String?
+    public var start: String?
+    public var lane: String?
+    public var modDate: String?
+    public var useAudioSubroles: String?
+    public var conformRate: ConformRate?
+    public var timeMap: TimeMap?
+    public var adjustCrop: AdjustCrop?
+    public var adjustTransform: AdjustTransform?
+    public var assetClips: [AssetClip]?
+    public var video: [Video]?
+    public var refClips: [RefClip]?
+    public var adjustVolume: AdjustVolume?
+    public var filterVideo: [FilterVideo]?
+
+    public init(
+        ref: String? = nil,
+        offset: String? = nil,
+        name: String? = nil,
+        duration: String? = nil,
+        start: String? = nil,
+        lane: String? = nil,
+        modDate: String? = nil,
+        useAudioSubroles: String? = nil,
+        conformRate: ConformRate? = nil,
+        timeMap: TimeMap? = nil,
+        adjustTransform: AdjustTransform? = nil,
+        adjustCrop: AdjustCrop? = nil,
+        assetClips: [AssetClip]? = nil,
+        video: [Video]? = nil,
+        refClips: [RefClip]? = nil,
+        adjustVolume: AdjustVolume? = nil,
+        filterVideo: [FilterVideo]? = nil
+    ) {
+        self.ref = ref
+        self.offset = offset
+        self.name = name
+        self.duration = duration
+        self.start = start
+        self.lane = lane
+        self.modDate = modDate
+        self.useAudioSubroles = useAudioSubroles
+        self.conformRate = conformRate
+        self.timeMap = timeMap
+        self.adjustTransform = adjustTransform
+        self.adjustCrop = adjustCrop
+        self.assetClips = assetClips
+        self.video = video
+        self.refClips = refClips
+        self.adjustVolume = adjustVolume
+        self.filterVideo = filterVideo
+    }
     
     enum CodingKeys: String, CodingKey {
         case ref
         case offset
         case name
         case duration
+        case start
+        case lane
+        case modDate
         case useAudioSubroles
         case conformRate = "conform-rate"
         case timeMap
-        case adjustTransform = "adjust-transform"
         case adjustCrop = "adjust-crop"
+        case adjustTransform = "adjust-transform"
         case assetClips = "asset-clip"
+        case video
+        case refClips = "ref-clip"
+        case adjustVolume = "adjust-volume"
+        case filterVideo = "filter-video"
     }
 }
 
@@ -172,7 +309,11 @@ public struct ConformRate: Codable {
 }
 
 public struct TimeMap: Codable {
-    public let timepts: [Timept]?
+    public var timepts: [Timept]?
+
+    public init(timepts: [Timept]? = nil) {
+        self.timepts = timepts
+    }
     
     enum CodingKeys: String, CodingKey {
         case timepts = "timept"
@@ -180,9 +321,15 @@ public struct TimeMap: Codable {
 }
 
 public struct Timept: Codable {
-    public let time: String?
-    public let value: String?
-    public let interp: String?
+    public var time: String?
+    public var value: String?
+    public var interp: String?
+
+    public init(time: String? = nil, value: String? = nil, interp: String? = nil) {
+        self.time = time
+        self.value = value
+        self.interp = interp
+    }
     
     enum CodingKeys: String, CodingKey {
         case time
@@ -192,16 +339,44 @@ public struct Timept: Codable {
 }
 
 public struct AdjustTransform: Codable {
-    public let position: String?
+    public var position: String?
+    public var scale: String?
+
+    public init(position: String? = nil, scale: String? = nil) {
+        self.position = position
+        self.scale = scale
+    }
     
     enum CodingKeys: String, CodingKey {
         case position
+        case scale
+    }
+}
+
+public struct AdjustColorConform: Codable {
+    public let enabled: String?
+    public let autoOrManual: String?
+    public let conformType: String?
+    public let peakNitsOfPQSource: String?
+    public let peakNitsOfSDRToPQSource: String?
+
+    enum CodingKeys: String, CodingKey {
+        case enabled
+        case autoOrManual
+        case conformType
+        case peakNitsOfPQSource
+        case peakNitsOfSDRToPQSource
     }
 }
 
 public struct AdjustCrop: Codable {
-    public let mode: String?
-    public let trimRect: TrimRect?
+    public var mode: String?
+    public var trimRect: TrimRect?
+
+    public init(mode: String? = nil, trimRect: TrimRect? = nil) {
+        self.mode = mode
+        self.trimRect = trimRect
+    }
     
     enum CodingKeys: String, CodingKey {
         case mode
@@ -210,10 +385,22 @@ public struct AdjustCrop: Codable {
 }
 
 public struct TrimRect: Codable {
-    public let left: String?
-    public let right: String?
-    public let top: String?
-    public let bottom: String?
+    public var left: String?
+    public var right: String?
+    public var top: String?
+    public var bottom: String?
+
+    public init(
+        left: String? = nil,
+        right: String? = nil,
+        top: String? = nil,
+        bottom: String? = nil
+    ) {
+        self.left = left
+        self.right = right
+        self.top = top
+        self.bottom = bottom
+    }
     
     enum CodingKeys: String, CodingKey {
         case left
@@ -228,6 +415,9 @@ public struct SyncClip: Codable {
     public let name: String?
     public let duration: String?
     public let tcFormat: String?
+    public let format: String?
+    public let start: String?
+    public let modDate: String?
     public let assetClips: [AssetClip]?
     public let video: [Video]?
     public let filterVideo: [FilterVideo]?
@@ -237,6 +427,9 @@ public struct SyncClip: Codable {
         case name
         case duration
         case tcFormat
+        case format
+        case start
+        case modDate
         case assetClips = "asset-clip"
         case video
         case filterVideo = "filter-video"
@@ -244,10 +437,22 @@ public struct SyncClip: Codable {
 }
 
 public struct MediaRep: Codable {
-    public let kind: String?
-    public let sig: String?
-    public let src: String?
-    public let bookmark: String?
+    public var kind: String?
+    public var sig: String?
+    public var src: String?
+    public var bookmark: String?
+
+    public init(
+        kind: String? = nil,
+        sig: String? = nil,
+        src: String? = nil,
+        bookmark: String? = nil
+    ) {
+        self.kind = kind
+        self.sig = sig
+        self.src = src
+        self.bookmark = bookmark
+    }
     
     enum CodingKeys: String, CodingKey {
         case kind
@@ -257,12 +462,83 @@ public struct MediaRep: Codable {
     }
 }
 
+public struct AssetMetadata: Codable {
+    public var entries: [MetadataEntry]?
+
+    public init(entries: [MetadataEntry]? = nil) {
+        self.entries = entries
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case entries = "md"
+    }
+}
+
+public struct MetadataEntry: Codable {
+    public var key: String?
+    public var value: String?
+    public var array: MetadataArray?
+
+    public init(key: String? = nil, value: String? = nil, array: MetadataArray? = nil) {
+        self.key = key
+        self.value = value
+        self.array = array
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case key
+        case value
+        case array
+    }
+}
+
+public struct MetadataArray: Codable {
+    public var strings: [MetadataString]?
+
+    public init(strings: [MetadataString]? = nil) {
+        self.strings = strings
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case strings = "string"
+    }
+}
+
+public struct MetadataString: Codable {
+    public var content: String?
+
+    public init(content: String? = nil) {
+        self.content = content
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case content = ""
+    }
+}
+
 public struct SmartCollection: Codable {
-    public let name: String?
-    public let match: String?
-    public let matchClip: [MatchClip]?
-    public let matchMedia: [MatchMedia]?
-    public let matchRatings: [MatchRatings]?
+    public var name: String?
+    public var match: String?
+    public var matchClip: [MatchClip]?
+    public var matchMedia: [MatchMedia]?
+    public var matchRatings: [MatchRatings]?
+    public var matchAnalysisType: [MatchAnalysisType]?
+
+    public init(
+        name: String? = nil,
+        match: String? = nil,
+        matchClip: [MatchClip]? = nil,
+        matchMedia: [MatchMedia]? = nil,
+        matchRatings: [MatchRatings]? = nil,
+        matchAnalysisType: [MatchAnalysisType]? = nil
+    ) {
+        self.name = name
+        self.match = match
+        self.matchClip = matchClip
+        self.matchMedia = matchMedia
+        self.matchRatings = matchRatings
+        self.matchAnalysisType = matchAnalysisType
+    }
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -270,12 +546,18 @@ public struct SmartCollection: Codable {
         case matchClip = "match-clip"
         case matchMedia = "match-media"
         case matchRatings = "match-ratings"
+        case matchAnalysisType = "match-analysis-type"
     }
 }
 
 public struct MatchClip: Codable {
-    public let rule: String?
-    public let type: String?
+    public var rule: String?
+    public var type: String?
+
+    public init(rule: String? = nil, type: String? = nil) {
+        self.rule = rule
+        self.type = type
+    }
     
     enum CodingKeys: String, CodingKey {
         case rule
@@ -284,8 +566,13 @@ public struct MatchClip: Codable {
 }
 
 public struct MatchMedia: Codable {
-    public let rule: String?
-    public let type: String?
+    public var rule: String?
+    public var type: String?
+
+    public init(rule: String? = nil, type: String? = nil) {
+        self.rule = rule
+        self.type = type
+    }
     
     enum CodingKeys: String, CodingKey {
         case rule
@@ -294,18 +581,39 @@ public struct MatchMedia: Codable {
 }
 
 public struct MatchRatings: Codable {
-    public let value: String?
+    public var value: String?
+
+    public init(value: String? = nil) {
+        self.value = value
+    }
     
     enum CodingKeys: String, CodingKey {
         case value
     }
 }
 
+public struct MatchAnalysisType: Codable {
+    public var rule: String?
+    public var value: String?
+
+    public init(rule: String? = nil, value: String? = nil) {
+        self.rule = rule
+        self.value = value
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case rule
+        case value
+    }
+}
+
 public struct AdjustVolume: Codable {
-    public let amount: String?
+    public var amount: String?
+    public var param: [ParamElement]?
     
     enum CodingKeys: String, CodingKey {
         case amount
+        case param
     }
 }
 
@@ -330,10 +638,22 @@ public struct AdjustBlend: Codable {
 }
 
 public struct AudioChannelSource: Codable {
-    public let srcCh: String?
-    public let role: String?
-    public let active: String?
-    public let adjustLoudness: AdjustLoudness?
+    public var srcCh: String?
+    public var role: String?
+    public var active: String?
+    public var adjustLoudness: AdjustLoudness?
+
+    public init(
+        srcCh: String? = nil,
+        role: String? = nil,
+        active: String? = nil,
+        adjustLoudness: AdjustLoudness? = nil
+    ) {
+        self.srcCh = srcCh
+        self.role = role
+        self.active = active
+        self.adjustLoudness = adjustLoudness
+    }
     
     enum CodingKeys: String, CodingKey {
         case srcCh

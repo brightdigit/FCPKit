@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+
+<fcpxml version="1.13">
+    <resources>
+        <media id="r1" name="Both" uid="OrOObVTMQxy7+rbY8nP6jQ" modDate="2025-07-14 09:56:55 -0400">
+            <sequence format="r2" duration="7700200/2400s" tcStart="0s" tcFormat="NDF">
+                <spine>
+                    <ref-clip ref="r3" offset="0s" name="Leo" duration="7700000/2400s" useAudioSubroles="1">
+                        <adjust-transform position="-33.9193 0"/>
+                        <ref-clip ref="r5" lane="1" offset="0s" name="Rachel" duration="7700200/2400s" useAudioSubroles="1">
+                            <adjust-crop mode="trim">
+                                <trim-rect left="21.2963"/>
+                            </adjust-crop>
+                            <adjust-transform position="67.5926 0"/>
+                        </ref-clip>
+                    </ref-clip>
+                </spine>
+            </sequence>
+        </media>
+        <format id="r2" name="FFVideoFormat3840x2160p24" frameDuration="100/2400s" width="3840" height="2160" colorSpace="1-1-1 (Rec. 709)"/>
+        <media id="r3" name="Leo" uid="OT9dnfM2SECTeTVpj4gcGQ" modDate="2025-07-02 13:01:55 -0400">
+            <sequence format="r2" duration="288750000/90000s" tcStart="0s" tcFormat="NDF">
+                <spine>
+                    <asset-clip ref="r4" offset="0s" name="riverside_leo_raw-video-cfr_empowerapps_0073" duration="288750000/90000s" tcFormat="NDF" audioRole="dialogue"/>
+                </spine>
+            </sequence>
+        </media>
+        <asset id="r4" name="riverside_leo_raw-video-cfr_empowerapps_0073" uid="1BCE0F0AD4934C0D916753D40ED9738D" start="0s" duration="3208334/1000s" hasVideo="1" format="r2" hasAudio="1" videoSources="1" audioSources="1" audioChannels="1" audioRate="48000">
+            <media-rep kind="original-media" sig="1BCE0F0AD4934C0D916753D40ED9738D" src="file:///Volumes/Scratch/Current.fcpbundle/EAS-202/Original%20Media/riverside_leo_raw-video-cfr_empowerapps_0073.mp4">
+                <bookmark>Ym9va0wEAAAAAAQQMAAAAOFidX4qazIIFQrAdw2nHpvPnMPeEaLU7l2qXQRIWtnCbAMAAAQAAAADAwAAABgAKAcAAAABAQAAVm9sdW1lcwAHAAAAAQEAAFNjcmF0Y2gAEQAAAAEBAABDdXJyZW50LmZjcGJ1bmRsZQAAAAcAAAABAQAARUFTLTIwMgAOAAAAAQEAAE9yaWdpbmFsIE1lZGlhAAAwAAAAAQEAAHJpdmVyc2lkZV9sZW9fcmF3LXZpZGVvLWNmcl9lbXBvd2VyYXBwc18wMDczLm1wNBgAAAABBgAAEAAAACAAAAAwAAAATAAAAFwAAAB0AAAACAAAAAQDAACCZgAAAAAAAAgAAAAEAwAAAgAAAAAAAAAIAAAABAMAAKwAAAAAAAAACAAAAAQDAABzXBoAAAAAAAgAAAAEAwAAl1waAAAAAAAIAAAABAMAAKFcGgAAAAAAGAAAAAEGAADMAAAA3AAAAOwAAAD8AAAADAEAABwBAAAIAAAAAAQAAEHHCYOEARcOGAAAAAECAAABAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAYAAAAAQkAAGZpbGU6Ly8vVm9sdW1lcy9TY3JhdGNoLwgAAAAEAwAAAMBa1OgAAAAIAAAAAAQAAEHDEIUzyAbxJAAAAAEBAAAxMDE2NjQ2My0xNkRDLTQ1RDYtOUMwQy04MkIzREFGOTFBQTUYAAAAAQIAAAEBAAABAAAA7xMAAAEAAAAAAAAAAAAAABAAAAABAQAAL1ZvbHVtZXMvU2NyYXRjaAgAAAABCQAAZmlsZTovLy8MAAAAAQEAAE1hY2ludG9zaCBIRAgAAAAEAwAAACBFjNABAAAIAAAAAAQAAEHG45qFAAAAJAAAAAEBAAAxRDhGOTU2My01OEU2LTQzMjUtQUFGNC0yOTk0MzMzQTI1NzkYAAAAAQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAAAAEAAAABAQAALwAAAGAAAAD+////APAAAAAAAAAHAAAAAiAAALACAAAAAAAABSAAACACAAAAAAAAECAAADACAAAAAAAAESAAAGQCAAAAAAAAEiAAAEQCAAAAAAAAEyAAAFQCAAAAAAAAICAAAJACAAAAAAAABAAAAAMDAAAA8AAABAAAAAMDAAAAAAAABAAAAAMDAAABAAAAHAAAAAEGAAAkAwAAMAMAADwDAAAwAwAAMAMAADADAAAwAwAAqAAAAP7///8BAAAAvAIAAA0AAAAEEAAArAAAAAAAAAAFEAAALAEAAAAAAAAQEAAAXAEAAAAAAABAEAAATAEAAAAAAAAAIAAASAMAAAAAAAACIAAACAIAAAAAAAAFIAAAfAEAAAAAAAAQIAAAIAAAAAAAAAARIAAAvAEAAAAAAAASIAAAnAEAAAAAAAATIAAArAEAAAAAAAAgIAAA6AEAAAAAAAAQ0AAABAAAAAAAAAA=</bookmark>
+            </media-rep>
+        </asset>
+        <media id="r5" name="Rachel" uid="JK2kQHmRRCWp31WRdITS6Q" modDate="2025-07-02 13:02:01 -0400">
+            <sequence format="r6" duration="288757500/90000s" tcStart="0s" tcFormat="NDF">
+                <spine>
+                    <asset-clip ref="r7" offset="0s" name="riverside_rachel_brindle_raw-video-cfr_empowerapps_0072" duration="288757500/90000s" tcFormat="NDF" audioRole="dialogue"/>
+                </spine>
+            </sequence>
+        </media>
+        <format id="r6" name="FFVideoFormat1080p24" frameDuration="100/2400s" width="1920" height="1080" colorSpace="1-1-1 (Rec. 709)"/>
+        <asset id="r7" name="riverside_rachel_brindle_raw-video-cfr_empowerapps_0072" uid="44238BF525D557F8EF2FCED2BA6B18EA" start="0s" duration="3208417/1000s" hasVideo="1" format="r6" hasAudio="1" videoSources="1" audioSources="1" audioChannels="1" audioRate="48000">
+            <media-rep kind="original-media" sig="44238BF525D557F8EF2FCED2BA6B18EA" src="file:///Volumes/Scratch/Current.fcpbundle/EAS-202/Original%20Media/riverside_rachel_brindle_raw-video-cfr_empowerapps_0072.mp4">
+                <bookmark>Ym9va1gEAAAAAAQQMAAAAAmHPAaDDVKyydBGMMt+YKmAaz+rNGYxcnezyMvt9ibIeAMAAAQAAAADAwAAABgAKAcAAAABAQAAVm9sdW1lcwAHAAAAAQEAAFNjcmF0Y2gAEQAAAAEBAABDdXJyZW50LmZjcGJ1bmRsZQAAAAcAAAABAQAARUFTLTIwMgAOAAAAAQEAAE9yaWdpbmFsIE1lZGlhAAA7AAAAAQEAAHJpdmVyc2lkZV9yYWNoZWxfYnJpbmRsZV9yYXctdmlkZW8tY2ZyX2VtcG93ZXJhcHBzXzAwNzIubXA0ABgAAAABBgAAEAAAACAAAAAwAAAATAAAAFwAAAB0AAAACAAAAAQDAACCZgAAAAAAAAgAAAAEAwAAAgAAAAAAAAAIAAAABAMAAKwAAAAAAAAACAAAAAQDAABzXBoAAAAAAAgAAAAEAwAAl1waAAAAAAAIAAAABAMAAO1cGgAAAAAAGAAAAAEGAADYAAAA6AAAAPgAAAAIAQAAGAEAACgBAAAIAAAAAAQAAEHHCYNBNylFGAAAAAECAAABAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAYAAAAAQkAAGZpbGU6Ly8vVm9sdW1lcy9TY3JhdGNoLwgAAAAEAwAAAMBa1OgAAAAIAAAAAAQAAEHDEIUzyAbxJAAAAAEBAAAxMDE2NjQ2My0xNkRDLTQ1RDYtOUMwQy04MkIzREFGOTFBQTUYAAAAAQIAAAEBAAABAAAA7xMAAAEAAAAAAAAAAAAAABAAAAABAQAAL1ZvbHVtZXMvU2NyYXRjaAgAAAABCQAAZmlsZTovLy8MAAAAAQEAAE1hY2ludG9zaCBIRAgAAAAEAwAAACBFjNABAAAIAAAAAAQAAEHG45qFAAAAJAAAAAEBAAAxRDhGOTU2My01OEU2LTQzMjUtQUFGNC0yOTk0MzMzQTI1NzkYAAAAAQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAAAAEAAAABAQAALwAAAGAAAAD+////APAAAAAAAAAHAAAAAiAAALwCAAAAAAAABSAAACwCAAAAAAAAECAAADwCAAAAAAAAESAAAHACAAAAAAAAEiAAAFACAAAAAAAAEyAAAGACAAAAAAAAICAAAJwCAAAAAAAABAAAAAMDAAAA8AAABAAAAAMDAAAAAAAABAAAAAMDAAABAAAAHAAAAAEGAAAwAwAAPAMAAEgDAAA8AwAAPAMAADwDAAA8AwAAqAAAAP7///8BAAAAyAIAAA0AAAAEEAAAuAAAAAAAAAAFEAAAOAEAAAAAAAAQEAAAaAEAAAAAAABAEAAAWAEAAAAAAAAAIAAAVAMAAAAAAAACIAAAFAIAAAAAAAAFIAAAiAEAAAAAAAAQIAAAIAAAAAAAAAARIAAAyAEAAAAAAAASIAAAqAEAAAAAAAATIAAAuAEAAAAAAAAgIAAA9AEAAAAAAAAQ0AAABAAAAAAAAAA=</bookmark>
+            </media-rep>
+        </asset>
+        <media id="r8" name="Multicam Clip" uid="4xHSfYHwTjmZ4Nm7uH08ow" modDate="2025-07-14 09:57:31 -0400">
+            <multicam format="r2" tcStart="0s" tcFormat="NDF">
+                <mc-angle name="Both" angleID="lecA7YF4SLCbdYmLe/clVg">
+                    <ref-clip ref="r1" offset="0s" name="Both" duration="7700200/2400s" useAudioSubroles="1"/>
+                </mc-angle>
+                <mc-angle name="Leo" angleID="s+fk1ijXR0uFzFlLvKQTsw">
+                    <ref-clip ref="r3" offset="0s" name="Leo" duration="7700000/2400s" useAudioSubroles="1"/>
+                </mc-angle>
+                <mc-angle name="Rachel" angleID="fVO8VPhxQse9Cs81UTf3XQ">
+                    <ref-clip ref="r5" offset="0s" name="Rachel" duration="7700200/2400s" useAudioSubroles="1"/>
+                </mc-angle>
+            </multicam>
+        </media>
+    </resources>
+    <library location="file:///Volumes/Scratch/Current.fcpbundle/">
+        <event name="EAS-202" uid="A692704B-EFD1-419E-9DD0-B7206B330B6B">
+            <ref-clip ref="r1" name="Both" duration="7700200/2400s" useAudioSubroles="1" modDate="2025-07-14 09:56:55 -0400"/>
+            <ref-clip ref="r3" name="Leo" duration="288750000/90000s" useAudioSubroles="1" modDate="2025-07-02 13:01:55 -0400"/>
+            <mc-clip ref="r8" name="Multicam Clip" duration="7700200/2400s" modDate="2025-07-14 09:57:31 -0400">
+                <mc-source angleID="lecA7YF4SLCbdYmLe/clVg" srcEnable="all"/>
+            </mc-clip>
+            <ref-clip ref="r5" name="Rachel" duration="288757500/90000s" useAudioSubroles="1" modDate="2025-07-02 13:02:01 -0400"/>
+        </event>
+        <smart-collection name="Projects" match="all">
+            <match-clip rule="is" type="project"/>
+        </smart-collection>
+        <smart-collection name="All Video" match="any">
+            <match-media rule="is" type="videoOnly"/>
+            <match-media rule="is" type="videoWithAudio"/>
+        </smart-collection>
+        <smart-collection name="Audio Only" match="all">
+            <match-media rule="is" type="audioOnly"/>
+        </smart-collection>
+        <smart-collection name="Stills" match="all">
+            <match-media rule="is" type="stills"/>
+        </smart-collection>
+        <smart-collection name="Favorites" match="all">
+            <match-ratings value="favorites"/>
+        </smart-collection>
+    </library>
+</fcpxml>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+
+<fcpxml version="1.14">
+    <resources>
+        <format id="r1" name="FFVideoFormat1080p24" frameDuration="100/2400s" width="1920" height="1080" colorSpace="1-1-1 (Rec. 709)"/>
+        <asset id="r2" name="Left" uid="LEFT-ASSET-UID" start="0s" duration="10s" hasVideo="1" format="r1" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+            <media-rep kind="original-media" sig="E061F5EAC6D99B79B612F65B3A906807" src="file:///Users/leo/Movies/Current.fcpbundle/Typed%20Parity/Original%20Media/Left.mov">
+                <bookmark>Ym9vawQEAAAAAAUQQAAAAIrOCpnWDAQ1vkcNda7wcrtw76vxlb7bo96Z2V+fzmNFAAAAAAAAAAAAAAAAAgAAALQCAAAgAAAAAQIAACo3TPZN/3Ulstwdc5rYpvVwSzQnGx8rXYLEmE/qgkJ/BAAAAAMDAAAAGAAoBQAAAAEBAABVc2VycwAAAAMAAAABAQAAbGVvAAYAAAABAQAATW92aWVzAAARAAAAAQEAAEN1cnJlbnQuZmNwYnVuZGxlAAAADAAAAAEBAABUeXBlZCBQYXJpdHkOAAAAAQEAAE9yaWdpbmFsIE1lZGlhAAAIAAAAAQEAAExlZnQubW92HAAAAAEGAAA4AAAASAAAAFQAAABkAAAAgAAAAJQAAACsAAAACAAAAAQDAADwRwAAAAAAAAgAAAAEAwAAcE0FAAAAAAAIAAAABAMAAJ9NBQAAAAAACAAAAAQDAAB/GlYHAAAAAAgAAAAEAwAAL27ICAAAAAAIAAAABAMAADtuyAgAAAAACAAAAAQDAABqbsgIAAAAABwAAAABBgAA4AAAAPAAAAAAAQAAEAEAACABAAAwAQAAQAEAAAgAAAAABAAAQcgMk6kBsXQYAAAAAQIAAAEAAAAAAAAADwAAAAAAAAAAAAAAAAAAAAAAAAABBQAABAAAAAMDAAAIAAAABAAAAAMDAAAFAAAACAAAAAQDAAAFAAAAAAAAAAQAAAADAwAA9QEAAAgAAAABCQAAZmlsZTovLy8MAAAAAQEAAE1hY2ludG9zaCBIRAgAAAAEAwAAACAlidABAAAIAAAAAAQAAEHIBPjUAAAAJAAAAAEBAAA0MEEzOTc1RC0yQTc3LTRBRjItQjJBOC1ENTgyMEVDMjc0OTYYAAAAAQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAAAAEAAAABAQAALwAAAC8AAAABAQAATlNVUkxCb29rbWFya1F1YXJhbnRpbmVNb3VudGVkTmV0d29ya1ZvbHVtZXNLZXkACAEAAP7///8BAAAAAAAAABUAAAAEEAAAvAAAAAAAAAAFEAAAUAEAAAAAAAAQEAAAhAEAAAAAAABAEAAAdAEAAAAAAABUEAAArAEAAAAAAABVEAAAuAEAAAAAAABWEAAApAEAAAAAAAACIAAAcAIAAAAAAAAFIAAA4AEAAAAAAAAQIAAA8AEAAAAAAAARIAAAJAIAAAAAAAASIAAABAIAAAAAAAATIAAAFAIAAAAAAAAgIAAAUAIAAAAAAAAwIAAApAEAAAAAAAABwAAAxAEAAAAAAAARwAAASAAAAAAAAAASwAAA1AEAAAAAAAAQ0AAALAAAAAAAAACE8AAABAAAAAAAAAB8AgCApAEAAAAAAAA=</bookmark>
+            </media-rep>
+            <metadata>
+                <md key="com.apple.proapps.studio.rawToLogConversion" value="0"/>
+                <md key="com.apple.proapps.studio.cameraISO" value="0"/>
+                <md key="com.apple.proapps.studio.cameraColorTemperature" value="0"/>
+                <md key="com.apple.proapps.spotlight.kMDItemCodecs">
+                    <array>
+                        <string>Lavc62.28.101 libx264</string>
+                        <string>Linear PCM</string>
+                    </array>
+                </md>
+                <md key="com.apple.proapps.mio.ingestDate" value="2026-07-28 14:12:16 -0400"/>
+            </metadata>
+        </asset>
+        <effect id="r3" name="Cross Dissolve" uid="FxPlug:4731E73A-8DAC-4113-9A30-AE85B1761265"/>
+        <effect id="r4" name="Audio Crossfade" uid="FFAudioTransition"/>
+        <asset id="r5" name="Right" uid="RIGHT-ASSET-UID" start="0s" duration="9s" hasVideo="1" format="r6" hasAudio="1" videoSources="1" audioSources="1" audioChannels="1" audioRate="48000">
+            <media-rep kind="original-media" sig="4E5EF5702A7BA9020587FA932A6DA342" src="file:///Users/leo/Movies/Current.fcpbundle/Typed%20Parity/Original%20Media/Right.mov">
+                <bookmark>Ym9vawgEAAAAAAUQQAAAAHhhaDFuYf8Fa3N37q4GZFSJ/cqgN0jZimBpvd+imTQrAAAAAAAAAAAAAAAAAgAAALgCAAAgAAAAAQIAAA9KGk4RdWoA2ApqCrDyAcR5EmGzuyin8Z1VrC9lfqvNBAAAAAMDAAAAGAAoBQAAAAEBAABVc2VycwAAAAMAAAABAQAAbGVvAAYAAAABAQAATW92aWVzAAARAAAAAQEAAEN1cnJlbnQuZmNwYnVuZGxlAAAADAAAAAEBAABUeXBlZCBQYXJpdHkOAAAAAQEAAE9yaWdpbmFsIE1lZGlhAAAJAAAAAQEAAFJpZ2h0Lm1vdgAAABwAAAABBgAAOAAAAEgAAABUAAAAZAAAAIAAAACUAAAArAAAAAgAAAAEAwAA8EcAAAAAAAAIAAAABAMAAHBNBQAAAAAACAAAAAQDAACfTQUAAAAAAAgAAAAEAwAAfxpWBwAAAAAIAAAABAMAAC9uyAgAAAAACAAAAAQDAAA7bsgIAAAAAAgAAAAEAwAAa27ICAAAAAAcAAAAAQYAAOQAAAD0AAAABAEAABQBAAAkAQAANAEAAEQBAAAIAAAAAAQAAEHIDJOpMi/jGAAAAAECAAABAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAQUAAAQAAAADAwAACAAAAAQAAAADAwAABQAAAAgAAAAEAwAABQAAAAAAAAAEAAAAAwMAAPUBAAAIAAAAAQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAAAgJYnQAQAACAAAAAAEAABByAT41AAAACQAAAABAQAANDBBMzk3NUQtMkE3Ny00QUYyLUIyQTgtRDU4MjBFQzI3NDk2GAAAAAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEAAC8AAAAvAAAAAQEAAE5TVVJMQm9va21hcmtRdWFyYW50aW5lTW91bnRlZE5ldHdvcmtWb2x1bWVzS2V5AAgBAAD+////AQAAAAAAAAAVAAAABBAAAMAAAAAAAAAABRAAAFQBAAAAAAAAEBAAAIgBAAAAAAAAQBAAAHgBAAAAAAAAVBAAALABAAAAAAAAVRAAALwBAAAAAAAAVhAAAKgBAAAAAAAAAiAAAHQCAAAAAAAABSAAAOQBAAAAAAAAECAAAPQBAAAAAAAAESAAACgCAAAAAAAAEiAAAAgCAAAAAAAAEyAAABgCAAAAAAAAICAAAFQCAAAAAAAAMCAAAKgBAAAAAAAAAcAAAMgBAAAAAAAAEcAAAEgAAAAAAAAAEsAAANgBAAAAAAAAENAAACwAAAAAAAAAhPAAAAQAAAAAAAAAgAIAgKgBAAAAAAAA</bookmark>
+            </media-rep>
+            <metadata>
+                <md key="com.apple.proapps.studio.rawToLogConversion" value="0"/>
+                <md key="com.apple.proapps.studio.cameraISO" value="0"/>
+                <md key="com.apple.proapps.studio.cameraColorTemperature" value="0"/>
+                <md key="com.apple.proapps.spotlight.kMDItemCodecs">
+                    <array>
+                        <string>Lavc62.28.101 libx264</string>
+                        <string>Linear PCM</string>
+                    </array>
+                </md>
+                <md key="com.apple.proapps.mio.ingestDate" value="2026-07-28 14:12:16 -0400"/>
+            </metadata>
+        </asset>
+        <format id="r6" name="FFVideoFormat720p24" frameDuration="100/2400s" width="1280" height="720" colorSpace="1-1-1 (Rec. 709)"/>
+    </resources>
+    <library location="file:///Users/leo/Movies/Current.fcpbundle/" colorProcessing="wide-hdr">
+        <event name="FCPKit-Sample" uid="544082D7-FB13-4940-8359-145A480EBCC5">
+            <project name="after" uid="4D48E892-46B0-4CD7-A31A-E27CC342297F" modDate="2026-07-28 15:08:17 -0400">
+                <sequence format="r1" duration="18s" tcStart="0s" tcFormat="NDF" renderFormat="FFRenderFormatProRes422HQ" audioLayout="stereo" audioRate="48k">
+                    <spine>
+                        <asset-clip ref="r2" offset="0s" name="Left" duration="22800/2400s" tcFormat="NDF" audioRole="dialogue"/>
+                        <transition name="Cross Dissolve" offset="9s" duration="1s">
+                            <filter-video ref="r3" name="Cross Dissolve">
+                                <data key="effectConfig">YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGlCwwVFhdVJG51bGzTDQ4PEBIUV05TLmtleXNaTlMub2JqZWN0c1YkY2xhc3OhEYACoROAA4AEXXBsdWdpblZlcnNpb24QAdIYGRobWiRjbGFzc25hbWVYJGNsYXNzZXNfEBNOU011dGFibGVEaWN0aW9uYXJ5oxocHVxOU0RpY3Rpb25hcnlYTlNPYmplY3QIERokKTI3SUxRU1lfZm55gIKEhoiKmJqfqrPJzdoAAAAAAAABAQAAAAAAAAAeAAAAAAAAAAAAAAAAAAAA4w==</data>
+                                <param name="Look" key="1" value="11 (Video)"/>
+                                <param name="Amount" key="2" value="50"/>
+                                <param name="Ease" key="50" value="2 (In &amp; Out)"/>
+                                <param name="Ease Amount" key="51" value="0"/>
+                            </filter-video>
+                            <filter-audio ref="r4" name="Audio Crossfade"/>
+                        </transition>
+                        <asset-clip ref="r5" offset="22800/2400s" name="Right" start="1200/2400s" duration="20400/2400s" format="r6" tcFormat="NDF" audioRole="dialogue"/>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+        <smart-collection name="Projects" match="all">
+            <match-clip rule="is" type="project"/>
+        </smart-collection>
+        <smart-collection name="All Video" match="any">
+            <match-media rule="is" type="videoOnly"/>
+            <match-media rule="is" type="videoWithAudio"/>
+        </smart-collection>
+        <smart-collection name="Audio Only" match="all">
+            <match-media rule="is" type="audioOnly"/>
+        </smart-collection>
+        <smart-collection name="Stills" match="all">
+            <match-media rule="is" type="stills"/>
+        </smart-collection>
+        <smart-collection name="Favorites" match="all">
+            <match-ratings value="favorites"/>
+        </smart-collection>
+        <smart-collection name="Missing Analysis" match="all">
+            <match-analysis-type rule="isMissing" value="any"/>
+        </smart-collection>
+    </library>
+</fcpxml>

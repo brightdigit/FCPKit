@@ -1,0 +1,1 @@
+- [Corrections log directive](corrections-log-directive.md) — always append corrections/always-never directives to `.claude/CORRECTIONS.md` in the repo (append-only)

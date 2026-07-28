@@ -2,6 +2,25 @@
 
 To ensure comprehensive testing of the FCPKit schema, here are the types of projects you should export from Final Cut Pro:
 
+## Automated Schema-Completeness Loop
+
+Run the Swift differential harness against the checked-in exports:
+
+```sh
+swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
+  --markdown docs/reports/SCHEMA_COMPLETENESS_REPORT.md \
+  --json docs/reports/SCHEMA_COMPLETENESS_REPORT.json
+```
+
+The command decodes each file through `FCPXMLParser`, re-encodes it through XMLCoder, normalizes resource references and volatile data, and reports structural elements, attributes, and text that the Codable model dropped. The generated Markdown and JSON reports are the prioritized input for the existing "identify missing elements -> add Codable types" loop.
+
+As of July 2026, Final Cut Pro 12.0 exports FCPXML 1.14. Apple confirms the version in the [Final Cut Pro release notes](https://support.apple.com/en-us/102825), although the [Apple Developer DTD page](https://developer.apple.com/documentation/professional-video-applications/document-type-definition) still documents FCPXML 1.10. The current fixtures remain valid 1.13 samples, but new feature-isolation exports should use the latest available version and record it with the sample.
+
+`MulticamXMLBuilder` constructs multicam documents through the typed Codable
+model. Prefer schema-completeness and feature-pair diffs when expanding the
+supported vocabulary; do not reintroduce raw XML templates for covered
+structures.
+
 ## ✅ Already Tested (Included in FCPKit)
 
 ### **Interview.fcpxml** - Multicam Interview Project
@@ -138,7 +157,7 @@ To ensure comprehensive testing of the FCPKit schema, here are the types of proj
 ## Export Settings
 
 - Use **File > Export > Final Cut Pro XML...**
-- Export version: **Latest (1.13 or newer)**
+- Export version: **Latest (currently 1.14)**
 - Include all metadata and markers
 - Export complete project structure
 

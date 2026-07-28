@@ -1,0 +1,45 @@
+{
+  "feature": "transitions",
+  "fcpxmlVersion": "1.14",
+  "finalCutVersion": "12.3",
+  "finalCutBuild": "450152",
+  "finalCutApp": "Final Cut Pro Creator Studio.app",
+  "macOSVersion": "27.0",
+  "macOSBuild": "26A5388g",
+  "hardware": "MacBook Air (Mac17,4), Apple M5, arm64",
+  "exportedAt": "2026-07-28T15:03:00-04:00",
+  "baselineState": "Project timeline with adjacent Left and Right asset-clips and a hard cut; no transition.",
+  "changedAction": "Added default Cross Dissolve at the edit point between Left and Right; no other intentional timeline changes.",
+  "exportWarnings": [],
+  "mediaProvenance": {
+    "left": {
+      "name": "Left",
+      "sourceIntent": "/Users/Shared/FCPKitMedia/Left.mov",
+      "exportedSrc": "file:///Users/leo/Movies/Current.fcpbundle/Typed%20Parity/Original%20Media/Left.mov",
+      "dimensions": "1920x1080",
+      "frameRate": 24,
+      "duration": "10s",
+      "audioChannels": 2,
+      "audioSampleRate": 48000,
+      "content": "Solid blue synthetic test pattern with tone audio"
+    },
+    "right": {
+      "name": "Right",
+      "sourceIntent": "/Users/Shared/FCPKitMedia/Right.mov",
+      "exportedSrc": "file:///Users/leo/Movies/Current.fcpbundle/Typed%20Parity/Original%20Media/Right.mov",
+      "dimensions": "1280x720",
+      "frameRate": 24,
+      "duration": "9s",
+      "audioChannels": 1,
+      "audioSampleRate": 48000,
+      "content": "Solid orange synthetic test pattern with tone audio"
+    }
+  },
+  "privacyNotes": "Exports reference library-managed copies under the local Movies Current.fcpbundle path. Media is synthetic test footage only; no client or personal subject matter.",
+  "artifacts": {
+    "before": "before.fcpxml",
+    "after": "after.fcpxml",
+    "diffMarkdown": "diff.md",
+    "diffJson": "diff.json"
+  }
+}

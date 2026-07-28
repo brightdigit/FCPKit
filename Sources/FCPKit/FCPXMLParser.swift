@@ -30,7 +30,7 @@ public class FCPXMLParser {
         let encoder = XMLEncoder()
         encoder.dateEncodingStrategy = .iso8601
         encoder.keyEncodingStrategy = .useDefaultKeys
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        encoder.outputFormatting = [.prettyPrinted]
         return try encoder.encode(fcpxml, withRootKey: "fcpxml")
     }
     
@@ -53,6 +53,7 @@ public enum FCPXMLError: Error, LocalizedError {
     case encodingFailed
     case decodingFailed(String)
     case fileNotFound
+    case unsupportedVersion(String)
     
     public var errorDescription: String? {
         switch self {
@@ -64,6 +65,8 @@ public enum FCPXMLError: Error, LocalizedError {
             return "Failed to decode FCPXML: \(message)"
         case .fileNotFound:
             return "FCPXML file not found"
+        case .unsupportedVersion(let version):
+            return "Malformed or unsupported FCPXML version declaration: \(version)"
         }
     }
 }
