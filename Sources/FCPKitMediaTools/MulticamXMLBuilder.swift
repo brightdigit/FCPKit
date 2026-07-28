@@ -1,12 +1,13 @@
-import Foundation
 import CoreMedia
+import Foundation
+import FCPKit
 
-/// Builds FCPXML content directly as XML strings for multicam projects
+/// Builds multicam FCPXML documents through the typed FCPKit model.
 public class MulticamXMLBuilder {
-    
+
     public init() {}
-    
-    /// Generates a complete multicam FCPXML document from two video files
+
+    /// Generates a complete multicam FCPXML document from two video files.
     /// - Parameters:
     ///   - leftSideVideo: Metadata for left side video
     ///   - rightSideVideo: Metadata for right side video
@@ -23,114 +24,308 @@ public class MulticamXMLBuilder {
         rightSideVideoLeftTrim: Double = 21.2963,
         rightSideVideoOffset: Double = 67.5926
     ) -> String {
-        
+        let document = generateMulticamDocument(
+            leftSideVideo: leftSideVideo,
+            rightSideVideo: rightSideVideo,
+            projectName: projectName,
+            leftSideVideoOffset: leftSideVideoOffset,
+            rightSideVideoLeftTrim: rightSideVideoLeftTrim,
+            rightSideVideoOffset: rightSideVideoOffset
+        )
+        do {
+            return try FCPXMLParser().encodeToString(document)
+        } catch {
+            preconditionFailure("Failed to encode multicam FCPXML: \(error)")
+        }
+    }
+
+    /// Builds the typed multicam document used for encoding and tests.
+    public func generateMulticamDocument(
+        leftSideVideo: VideoMetadata,
+        rightSideVideo: VideoMetadata,
+        projectName: String = "Multicam Project",
+        leftSideVideoOffset: Double = -33.9193,
+        rightSideVideoLeftTrim: Double = 21.2963,
+        rightSideVideoOffset: Double = 67.5926
+    ) -> FCPXML {
         let currentTime = FCPXMLUtilities.currentTimestamp()
-        let maxDuration = leftSideVideo.duration > rightSideVideo.duration ? leftSideVideo.duration : rightSideVideo.duration
-        
-        // Generate unique IDs
+        let maxDurationTime =
+            leftSideVideo.duration > rightSideVideo.duration
+            ? leftSideVideo.duration
+            : rightSideVideo.duration
+
+        let leftDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration)
+        let rightDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration)
+        let maxDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(maxDurationTime)
+
+        let leftName = leftSideVideo.url.deletingPathExtension().lastPathComponent
+        let rightName = rightSideVideo.url.deletingPathExtension().lastPathComponent
+
         let bothUID = FCPXMLUtilities.generateUID()
-        let leftSideVideoUID = FCPXMLUtilities.generateUID()
-        let rightSideVideoUID = FCPXMLUtilities.generateUID()
+        let leftMediaUID = FCPXMLUtilities.generateUID()
+        let rightMediaUID = FCPXMLUtilities.generateUID()
         let multicamUID = FCPXMLUtilities.generateUID()
         let eventUID = FCPXMLUtilities.generateUID()
-        
-        let angle1ID = FCPXMLUtilities.generateUID()
-        let angle2ID = FCPXMLUtilities.generateUID()
-        let angle3ID = FCPXMLUtilities.generateUID()
-        
-        // Generate asset signatures
-        let leftSideVideoSig = FCPXMLUtilities.generateAssetSignature(from: leftSideVideo)
-        let rightSideVideoSig = FCPXMLUtilities.generateAssetSignature(from: rightSideVideo)
-        
-        let leftSideVideoName = leftSideVideo.url.deletingPathExtension().lastPathComponent
-        let rightSideVideoName = rightSideVideo.url.deletingPathExtension().lastPathComponent
-        
-        let xml = """
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE fcpxml>
-        
-        <fcpxml version="1.13">
-            <resources>
-                <media id="r1" name="Both" uid="\(bothUID)" modDate="\(currentTime)">
-                    <sequence format="r2" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(maxDuration))" tcStart="0s" tcFormat="NDF">
-                        <spine>
-                            <ref-clip ref="r3" offset="0s" name="\(leftSideVideoName)" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration))" useAudioSubroles="1">
-                                <adjust-transform position="\(leftSideVideoOffset) 0"/>
-                                <ref-clip ref="r5" lane="1" offset="0s" name="\(rightSideVideoName)" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration))" useAudioSubroles="1">
-                                    <adjust-crop mode="trim">
-                                        <trim-rect left="\(rightSideVideoLeftTrim)"/>
-                                    </adjust-crop>
-                                    <adjust-transform position="\(rightSideVideoOffset) 0"/>
-                                </ref-clip>
-                            </ref-clip>
-                        </spine>
-                    </sequence>
-                </media>
-                <format id="r2" name="\(FCPXMLUtilities.generateFormatName(dimensions: leftSideVideo.dimensions, frameRate: leftSideVideo.frameRate))" frameDuration="\(FCPXMLUtilities.frameDurationFromFrameRate(leftSideVideo.frameRate))" width="\(Int(leftSideVideo.dimensions.width))" height="\(Int(leftSideVideo.dimensions.height))" colorSpace="1-1-1 (Rec. 709)"/>
-                <media id="r3" name="\(leftSideVideoName)" uid="\(leftSideVideoUID)" modDate="\(currentTime)">
-                    <sequence format="r2" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration))" tcStart="0s" tcFormat="NDF">
-                        <spine>
-                            <asset-clip ref="r4" offset="0s" name="\(leftSideVideoName)" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration))" tcFormat="NDF" audioRole="dialogue"/>
-                        </spine>
-                    </sequence>
-                </media>
-                <asset id="r4" name="\(leftSideVideoName)" uid="\(leftSideVideoSig)" start="0s" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration))" hasVideo="1" format="r2" hasAudio="1" videoSources="1" audioSources="1" audioChannels="\(leftSideVideo.audioChannels ?? 1)" audioRate="\(Int(leftSideVideo.audioSampleRate ?? 48000))">
-                    <media-rep kind="original-media" sig="\(leftSideVideoSig)" src="\(FCPXMLUtilities.formatFileURL(leftSideVideo.url))"/>
-                </asset>
-                <media id="r5" name="\(rightSideVideoName)" uid="\(rightSideVideoUID)" modDate="\(currentTime)">
-                    <sequence format="r6" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration))" tcStart="0s" tcFormat="NDF">
-                        <spine>
-                            <asset-clip ref="r7" offset="0s" name="\(rightSideVideoName)" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration))" tcFormat="NDF" audioRole="dialogue"/>
-                        </spine>
-                    </sequence>
-                </media>
-                <format id="r6" name="\(FCPXMLUtilities.generateFormatName(dimensions: rightSideVideo.dimensions, frameRate: rightSideVideo.frameRate))" frameDuration="\(FCPXMLUtilities.frameDurationFromFrameRate(rightSideVideo.frameRate))" width="\(Int(rightSideVideo.dimensions.width))" height="\(Int(rightSideVideo.dimensions.height))" colorSpace="1-1-1 (Rec. 709)"/>
-                <asset id="r7" name="\(rightSideVideoName)" uid="\(rightSideVideoSig)" start="0s" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration))" hasVideo="1" format="r6" hasAudio="1" videoSources="1" audioSources="1" audioChannels="\(rightSideVideo.audioChannels ?? 1)" audioRate="\(Int(rightSideVideo.audioSampleRate ?? 48000))">
-                    <media-rep kind="original-media" sig="\(rightSideVideoSig)" src="\(FCPXMLUtilities.formatFileURL(rightSideVideo.url))"/>
-                </asset>
-                <media id="r8" name="Multicam Clip" uid="\(multicamUID)" modDate="\(currentTime)">
-                    <multicam format="r2" tcStart="0s" tcFormat="NDF">
-                        <mc-angle name="Both" angleID="\(angle1ID)">
-                            <ref-clip ref="r1" offset="0s" name="Both" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(maxDuration))" useAudioSubroles="1"/>
-                        </mc-angle>
-                        <mc-angle name="\(leftSideVideoName)" angleID="\(angle2ID)">
-                            <ref-clip ref="r3" offset="0s" name="\(leftSideVideoName)" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration))" useAudioSubroles="1"/>
-                        </mc-angle>
-                        <mc-angle name="\(rightSideVideoName)" angleID="\(angle3ID)">
-                            <ref-clip ref="r5" offset="0s" name="\(rightSideVideoName)" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration))" useAudioSubroles="1"/>
-                        </mc-angle>
-                    </multicam>
-                </media>
-            </resources>
-            <library location="file:///Users/Shared/Generated.fcpbundle/">
-                <event name="\(projectName)" uid="\(eventUID)">
-                    <ref-clip ref="r1" name="Both" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(maxDuration))" useAudioSubroles="1" modDate="\(currentTime)"/>
-                    <ref-clip ref="r3" name="\(leftSideVideoName)" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration))" useAudioSubroles="1" modDate="\(currentTime)"/>
-                    <mc-clip ref="r8" name="Multicam Clip" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(maxDuration))" modDate="\(currentTime)">
-                        <mc-source angleID="\(angle1ID)" srcEnable="all"/>
-                    </mc-clip>
-                    <ref-clip ref="r5" name="\(rightSideVideoName)" duration="\(FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration))" useAudioSubroles="1" modDate="\(currentTime)"/>
-                </event>
-                <smart-collection name="Projects" match="all">
-                    <match-clip rule="is" type="project"/>
-                </smart-collection>
-                <smart-collection name="All Video" match="any">
-                    <match-media rule="is" type="videoOnly"/>
-                    <match-media rule="is" type="videoWithAudio"/>
-                </smart-collection>
-                <smart-collection name="Audio Only" match="all">
-                    <match-media rule="is" type="audioOnly"/>
-                </smart-collection>
-                <smart-collection name="Stills" match="all">
-                    <match-media rule="is" type="stills"/>
-                </smart-collection>
-                <smart-collection name="Favorites" match="all">
-                    <match-ratings value="favorites"/>
-                </smart-collection>
-            </library>
-        </fcpxml>
-        """
-        
-        return xml
+        let angleBothID = FCPXMLUtilities.generateUID()
+        let angleLeftID = FCPXMLUtilities.generateUID()
+        let angleRightID = FCPXMLUtilities.generateUID()
+
+        let leftSig = FCPXMLUtilities.generateAssetSignature(from: leftSideVideo)
+        let rightSig = FCPXMLUtilities.generateAssetSignature(from: rightSideVideo)
+
+        let leftFormatName = FCPXMLUtilities.generateFormatName(
+            dimensions: leftSideVideo.dimensions,
+            frameRate: leftSideVideo.frameRate
+        )
+        let rightFormatName = FCPXMLUtilities.generateFormatName(
+            dimensions: rightSideVideo.dimensions,
+            frameRate: rightSideVideo.frameRate
+        )
+
+        return FCPXML(
+            version: FCPXMLVersion.supportedGenerationVersion.rawValue,
+            resources: Resources(
+                assets: [
+                    Asset(
+                        id: "r4",
+                        name: leftName,
+                        uid: leftSig,
+                        start: "0s",
+                        duration: leftDuration,
+                        format: "r2",
+                        hasVideo: leftSideVideo.hasVideo ? "1" : "0",
+                        hasAudio: leftSideVideo.hasAudio ? "1" : "0",
+                        audioChannels: "\(leftSideVideo.audioChannels ?? 1)",
+                        audioRate: "\(Int(leftSideVideo.audioSampleRate ?? 48_000))",
+                        videoSources: "1",
+                        audioSources: "1",
+                        mediaRep: [
+                            MediaRep(
+                                kind: "original-media",
+                                sig: leftSig,
+                                src: FCPXMLUtilities.formatFileURL(leftSideVideo.url)
+                            ),
+                        ]
+                    ),
+                    Asset(
+                        id: "r7",
+                        name: rightName,
+                        uid: rightSig,
+                        start: "0s",
+                        duration: rightDuration,
+                        format: "r6",
+                        hasVideo: rightSideVideo.hasVideo ? "1" : "0",
+                        hasAudio: rightSideVideo.hasAudio ? "1" : "0",
+                        audioChannels: "\(rightSideVideo.audioChannels ?? 1)",
+                        audioRate: "\(Int(rightSideVideo.audioSampleRate ?? 48_000))",
+                        videoSources: "1",
+                        audioSources: "1",
+                        mediaRep: [
+                            MediaRep(
+                                kind: "original-media",
+                                sig: rightSig,
+                                src: FCPXMLUtilities.formatFileURL(rightSideVideo.url)
+                            ),
+                        ]
+                    ),
+                ],
+                formats: [
+                    Format(
+                        id: "r2",
+                        name: leftFormatName,
+                        frameDuration: FCPXMLUtilities.frameDurationFromFrameRate(leftSideVideo.frameRate),
+                        width: "\(Int(leftSideVideo.dimensions.width))",
+                        height: "\(Int(leftSideVideo.dimensions.height))",
+                        colorSpace: "1-1-1 (Rec. 709)"
+                    ),
+                    Format(
+                        id: "r6",
+                        name: rightFormatName,
+                        frameDuration: FCPXMLUtilities.frameDurationFromFrameRate(rightSideVideo.frameRate),
+                        width: "\(Int(rightSideVideo.dimensions.width))",
+                        height: "\(Int(rightSideVideo.dimensions.height))",
+                        colorSpace: "1-1-1 (Rec. 709)"
+                    ),
+                ],
+                media: [
+                    Media(
+                        id: "r1",
+                        name: "Both",
+                        uid: bothUID,
+                        modDate: currentTime,
+                        sequence: Sequence(
+                            format: "r2",
+                            duration: maxDuration,
+                            tcStart: "0s",
+                            tcFormat: "NDF",
+                            spine: Spine(refClips: [
+                                RefClip(
+                                    ref: "r3",
+                                    offset: "0s",
+                                    name: leftName,
+                                    duration: leftDuration,
+                                    useAudioSubroles: "1",
+                                    adjustTransform: AdjustTransform(position: "\(leftSideVideoOffset) 0"),
+                                    refClips: [
+                                        RefClip(
+                                            ref: "r5",
+                                            offset: "0s",
+                                            name: rightName,
+                                            duration: rightDuration,
+                                            lane: "1",
+                                            useAudioSubroles: "1",
+                                            adjustTransform: AdjustTransform(position: "\(rightSideVideoOffset) 0"),
+                                            adjustCrop: AdjustCrop(
+                                                mode: "trim",
+                                                trimRect: TrimRect(left: "\(rightSideVideoLeftTrim)")
+                                            )
+                                        ),
+                                    ]
+                                ),
+                            ])
+                        )
+                    ),
+                    Media(
+                        id: "r3",
+                        name: leftName,
+                        uid: leftMediaUID,
+                        modDate: currentTime,
+                        sequence: Sequence(
+                            format: "r2",
+                            duration: leftDuration,
+                            tcStart: "0s",
+                            tcFormat: "NDF",
+                            spine: Spine(assetClips: [
+                                AssetClip(
+                                    ref: "r4",
+                                    name: leftName,
+                                    duration: leftDuration,
+                                    tcFormat: "NDF",
+                                    audioRole: "dialogue",
+                                    offset: "0s"
+                                ),
+                            ])
+                        )
+                    ),
+                    Media(
+                        id: "r5",
+                        name: rightName,
+                        uid: rightMediaUID,
+                        modDate: currentTime,
+                        sequence: Sequence(
+                            format: "r6",
+                            duration: rightDuration,
+                            tcStart: "0s",
+                            tcFormat: "NDF",
+                            spine: Spine(assetClips: [
+                                AssetClip(
+                                    ref: "r7",
+                                    name: rightName,
+                                    duration: rightDuration,
+                                    tcFormat: "NDF",
+                                    audioRole: "dialogue",
+                                    offset: "0s"
+                                ),
+                            ])
+                        )
+                    ),
+                    Media(
+                        id: "r8",
+                        name: "Multicam Clip",
+                        uid: multicamUID,
+                        modDate: currentTime,
+                        multicam: Multicam(
+                            format: "r2",
+                            tcStart: "0s",
+                            tcFormat: "NDF",
+                            mcAngles: [
+                                MCAngle(
+                                    name: "Both",
+                                    angleID: angleBothID,
+                                    refClips: [
+                                        RefClip(
+                                            ref: "r1",
+                                            offset: "0s",
+                                            name: "Both",
+                                            duration: maxDuration,
+                                            useAudioSubroles: "1"
+                                        ),
+                                    ]
+                                ),
+                                MCAngle(
+                                    name: leftName,
+                                    angleID: angleLeftID,
+                                    refClips: [
+                                        RefClip(
+                                            ref: "r3",
+                                            offset: "0s",
+                                            name: leftName,
+                                            duration: leftDuration,
+                                            useAudioSubroles: "1"
+                                        ),
+                                    ]
+                                ),
+                                MCAngle(
+                                    name: rightName,
+                                    angleID: angleRightID,
+                                    refClips: [
+                                        RefClip(
+                                            ref: "r5",
+                                            offset: "0s",
+                                            name: rightName,
+                                            duration: rightDuration,
+                                            useAudioSubroles: "1"
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        )
+                    ),
+                ]
+            ),
+            library: Library(
+                location: "file:///Users/Shared/Generated.fcpbundle/",
+                events: [
+                    Event(
+                        name: projectName,
+                        uid: eventUID,
+                        refClips: [
+                            RefClip(
+                                ref: "r1",
+                                name: "Both",
+                                duration: maxDuration,
+                                modDate: currentTime,
+                                useAudioSubroles: "1"
+                            ),
+                            RefClip(
+                                ref: "r3",
+                                name: leftName,
+                                duration: leftDuration,
+                                modDate: currentTime,
+                                useAudioSubroles: "1"
+                            ),
+                            RefClip(
+                                ref: "r5",
+                                name: rightName,
+                                duration: rightDuration,
+                                modDate: currentTime,
+                                useAudioSubroles: "1"
+                            ),
+                        ],
+                        mcClips: [
+                            MCClip(
+                                ref: "r8",
+                                name: "Multicam Clip",
+                                duration: maxDuration,
+                                modDate: currentTime,
+                                mcSources: [
+                                    MCSource(angleID: angleBothID, srcEnable: "all"),
+                                ]
+                            ),
+                        ]
+                    ),
+                ]
+            )
+        )
     }
 }

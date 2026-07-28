@@ -16,7 +16,10 @@ The command decodes each file through `FCPXMLParser`, re-encodes it through XMLC
 
 As of July 2026, Final Cut Pro 12.0 exports FCPXML 1.14. Apple confirms the version in the [Final Cut Pro release notes](https://support.apple.com/en-us/102825), although the [Apple Developer DTD page](https://developer.apple.com/documentation/professional-video-applications/document-type-definition) still documents FCPXML 1.10. The current fixtures remain valid 1.13 samples, but new feature-isolation exports should use the latest available version and record it with the sample.
 
-`MulticamXMLBuilder` remains a separate raw-string generator rather than a client of the Codable model. This phase intentionally does not reconcile that fork; the completeness report provides the evidence needed to decide whether the model is ready to become the generation source of truth.
+`MulticamXMLBuilder` constructs multicam documents through the typed Codable
+model. Prefer schema-completeness and feature-pair diffs when expanding the
+supported vocabulary; do not reintroduce raw XML templates for covered
+structures.
 
 ## ✅ Already Tested (Included in FCPKit)
 

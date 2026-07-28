@@ -13,9 +13,11 @@ and relationships.
 
 ## Verified Baseline
 
-As of July 17, 2026, the verified implementation baseline is commit `3fc669a`.
-The Swift test suite passes 42 tests. The schema-completeness workflow reports
-no measured structural loss in the three checked-in FCPXML 1.13 exports:
+As of July 28, 2026, the typed-generation vertical slice and Final Cut import
+gate are complete. `MulticamXMLBuilder` constructs documents through the typed
+Codable model (no raw XML templates, no generated smart collections). The
+schema-completeness workflow reports no measured structural loss in the three
+checked-in FCPXML 1.13 exports:
 
 | Files | Dropped elements | Dropped attributes | Dropped text | Total |
 | ---: | ---: | ---: | ---: | ---: |
@@ -42,62 +44,57 @@ establishes the current compatibility policy:
 - Preserving arbitrary unknown XML, namespaces, or unknown child ordering in a
   sidecar representation is out of scope for this phase.
 
+Gate evidence (accepted deltas, no private paths):
+[docs/manual/typed-generation-gate.md](docs/manual/typed-generation-gate.md).
+
 ## Completed Foundation
 
-Milestones 1 through 7 and the diagnostic foundation of Milestone 8 are
-complete:
+| Milestone | Outcome |
+| --- | --- |
+| 1 | Deterministic schema-completeness snapshots, normalization tests, and CI loss threshold |
+| 2 | Transition payload decoding, mutation, and encoding |
+| 3 | Recursive parameters, animations, keyframes, and fades |
+| 4 | Mutable title text and styling with stable references |
+| 5 | Nested timeline containers, timing, transforms, crop, and conform behavior |
+| 6 | Library multicam, sync clips, roles, and audio structures |
+| 7 | Raw-pair comparison with Markdown, JSON, normalization, and path filtering |
+| 8 | Supported-schema policy, loss diagnostics, typed generation, Final Cut import gate, typed `MulticamXMLBuilder` |
 
-| Milestone | Outcome | Commit |
-| --- | --- | --- |
-| 1 | Deterministic schema-completeness snapshots, normalization tests, and CI loss threshold | `78a9ff7` |
-| 2 | Transition payload decoding, mutation, and encoding | `9f25350` |
-| 3 | Recursive parameters, animations, keyframes, and fades | `92d2996` |
-| 4 | Mutable title text and styling with stable references | `3c913e1` |
-| 5 | Nested timeline containers, timing, transforms, crop, and conform behavior | `795db6a` |
-| 6 | Library multicam, sync clips, roles, and audio structures | `e87285f` |
-| 7 | Raw-pair comparison with Markdown, JSON, normalization, and path filtering | `98177ed` |
-| 8 foundation | Supported-schema policy and reusable round-trip loss diagnostics | `3fc669a` |
+## Active Milestone: Versioning and Validation
 
-The next milestone must build on this evidence rather than reopening completed
-schema-loss work without a new fixture or focused regression.
+Apple primary sources rechecked July 28, 2026:
 
-## Active Milestone: Typed Generation Vertical Slice
+- [Final Cut Pro release notes](https://support.apple.com/en-us/102825) document
+  FCPXML 1.14 (Final Cut Pro 12.x).
+- Apple's public developer FCPXML reference still centers older DTD material;
+  current DTDs ship inside the Final Cut Pro app bundle
+  (`Interchange.framework` resources). Do not change “latest version” product
+  claims without a checked-in original 1.14 fixture and provenance.
 
-The automated portion is complete. Application code can now construct the core
-project and multicam graph through public, schema-shaped initializers and
-mutate supported nested values while stable document and resource identities
-remain immutable.
+Library groundwork in place:
 
-Verified automated evidence:
+- `FCPXMLVersion` / `FCPXMLVersionCompatibility` classify declared versions as
+  supported (`1.13`), older, newer, or malformed.
+- Default parse remains best-effort for older/newer documents.
+- `parseRequiringWellFormedVersion` rejects malformed version strings only.
+- Typed generation emits `FCPXMLVersion.supportedGenerationVersion` (`1.13`).
 
-- A public-client test (`import FCPKit`, without `@testable`) constructs and
-  round-trips an FCPXML 1.13 format, asset/media representation, library, event,
-  project, sequence, spine, and asset clip with stable timing and references.
-- Nested value-semantic mutation renames the project without changing resource
-  IDs, UIDs, timing, media paths, or references.
-- A typed multicam graph has zero normalized symmetric findings against one
-  unchanged `MulticamXMLBuilder` output, including media, crop, transforms,
-  angles, sources, relationships, and smart collections.
-- The full suite passes 42 tests and the three real FCPXML 1.13 fixtures remain
-  at zero measured round-trip loss.
+Still required to finish this milestone:
 
-The Final Cut Pro gate remains pending. Follow the decision-complete
-[manual artifact checklist](docs/manual/final-cut-artifacts.md) to generate the
-typed input, import and re-export it, preserve the `.fcpxmld` bundle, and return
-the structural diff and environment metadata. Do not migrate or remove
-`MulticamXMLBuilder` until that gate passes.
+1. Add original, uncleaned FCPXML 1.14 exports with Final Cut version and
+   provenance recorded (human export; see checklist below).
+2. Add validation against an authoritative DTD or equivalent structural rules
+   where current Apple material is available.
+3. Report validation failures with actionable structural paths.
 
 Acceptance criteria:
 
-- Application code can create the minimal project without assembling XML
-  strings or relying on internal/memberwise initializers.
-- The typed document encodes and parses back without structural loss.
-- Resource IDs and all references resolve consistently.
-- Timing and hierarchy survive both construction and mutation tests.
-- The model-generated file imports successfully into Final Cut Pro and its
-  re-export has no unexplained structural delta.
-- `MulticamXMLBuilder` is not migrated or removed until typed parity and the
-  manual import gate are complete.
+- Callers can inspect the parsed version and understand compatibility or
+  validation failures.
+- Generated documents declare a deliberate supported version.
+- Both 1.13 and 1.14 behavior are backed by intact real fixtures.
+- Version and validation errors identify the affected document path whenever
+  possible.
 
 ## Parallel Evidence Work: Real Feature Pairs
 
@@ -136,63 +133,26 @@ swift run fcpxml-diff compare \
 Use `--path /fcpxml/...` only to focus the displayed subtree. Path filtering
 must not change normalization behavior.
 
-## Next Milestone: Versioning and Validation
+## Ready for Human
 
-Begin explicit multi-version work after the typed-generation vertical slice:
+These steps require Final Cut Pro and cannot be completed unattended:
 
-1. Add original, uncleaned FCPXML 1.14 exports with their Final Cut Pro version
-   and provenance recorded.
-2. Recheck current primary Apple sources before changing any supported or
-   latest-version claim.
-3. Define and test parser behavior for supported, older, newer, and malformed
-   FCPXML versions. A version declaration alone must not imply complete schema
-   coverage.
-4. Add validation against an authoritative DTD or equivalent structural rules
-   where current Apple material is available.
-5. Report validation failures with actionable structural paths.
-
-Acceptance criteria:
-
-- Callers can inspect the parsed version and understand compatibility or
-  validation failures.
-- Generated documents declare a deliberate supported version.
-- Both 1.13 and 1.14 behavior are backed by intact real fixtures.
-- Version and validation errors identify the affected document path whenever
-  possible.
-
-## Later Milestone: Builder Consolidation
-
-Only after typed generation passes structural and Final Cut import testing:
-
-1. Move `MulticamXMLBuilder` behavior incrementally onto typed construction.
-2. Retain a normalized regression fixture at each migration step.
-3. Centralize resource-ID and reference assignment in library code.
-4. Remove raw XML generation only when typed output has feature parity and is
-   accepted by Final Cut Pro.
-
-The completed API must support application-level creation and modification
-without requiring callers to assemble XML strings.
+1. Export the first transition feature pair
+   ([checklist](docs/manual/final-cut-artifacts.md#ready-for-human-transition-feature-pair)).
+2. Export one original FCPXML 1.14 document with provenance
+   ([checklist](docs/manual/final-cut-artifacts.md#ready-for-human-original-fcpxml-114-export)).
+3. Optionally record `finalCutVersion` on any local gate metadata retained
+   outside the repo.
 
 ## Documentation Accuracy
 
-Public documentation must be reconciled with the supported-schema policy. In
-particular, remove claims of complete FCPXML or complete version coverage,
-update stale test counts, document best-effort editing and loss diagnostics,
-and add typed-generation examples only after those APIs exist.
+Public documentation must stay aligned with the supported-schema policy. Avoid
+claims of complete FCPXML or complete version coverage. Prefer fixture evidence,
+diagnostics, and explicit version compatibility APIs.
 
 `ROADMAP_HANDOFF.md` is a historical handoff, not a second live roadmap. Future
 status updates should be made here rather than maintaining competing current
 state sections.
-
-## Immediate Work Queue
-
-1. Complete the manual Final Cut import and re-export acceptance check using
-   [the artifact checklist](docs/manual/final-cut-artifacts.md).
-2. Collect the first real transition feature pair when Final Cut is available.
-3. Add FCPXML 1.14 fixture evidence and explicit version behavior.
-4. Add authoritative validation with path-oriented diagnostics.
-5. Migrate the raw multicam builder incrementally after all gates pass.
-6. Reconcile README and API documentation with the supported-schema policy.
 
 ## Definition of Done for Model Features
 

@@ -1,5 +1,9 @@
 # FCPKit Roadmap Handoff
 
+> Historical handoff document. For current status and remaining work, use
+> [`NEXT_STEPS.md`](NEXT_STEPS.md). Do not maintain competing “current state”
+> sections here.
+
 ## Current State
 
 Milestones 1 through 7 in `NEXT_STEPS.md` remain complete. The supported-schema

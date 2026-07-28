@@ -29,17 +29,19 @@ and can be intentionally read, changed, and encoded.
 - `Sources/FCPKit/FCPXML.swift`, `FCPXMLExtended.swift`, and
   `FCPXMLMissingElements.swift` contain the XMLCoder-backed Codable model.
 - `Sources/FCPKit/FCPXMLParser.swift` is the public decode/encode entry point.
-- `Sources/FCPKitMediaTools/MulticamXMLBuilder.swift` currently generates the
-  split-screen interview document with raw string templating. This is an
-  intentional, unresolved fork from the Codable model.
+- `Sources/FCPKitMediaTools/MulticamXMLBuilder.swift` generates split-screen
+  multicam documents through the typed Codable model (no raw XML templates).
+  Final Cut import/re-export gate evidence lives in
+  `docs/manual/typed-generation-gate.md`.
 - `Sources/FCPXMLDiff/` and `Sources/FCPXMLDiffCLI/` provide the structural
   differential harness and the `fcpxml-diff` executable.
 - `Tests/FCPKitTests/TestData/` contains real Final Cut Pro exports used as
   schema evidence and regression fixtures.
 
-Do not reconcile the Codable-model/raw-string-builder fork as incidental
-cleanup. Differential results should first establish whether the model is
-complete and expressive enough to become the generation source of truth.
+Typed generation is the source of truth for new multicam documents. Continue
+using structural diffs, fixtures, and Final Cut gates before expanding
+generation coverage; do not reintroduce raw XML templates for supported
+vocabulary.
 
 ## Known Model Risk
 

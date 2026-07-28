@@ -1,9 +1,8 @@
 # Final Cut Pro Manual Artifact Checklist
 
-The automated typed-generation checks prove public construction, mutation,
-round-tripping, and normalized parity with the current raw multicam builder.
-They do not prove that Final Cut Pro accepts or preserves the generated file.
-Complete this checklist on a Mac with Final Cut Pro before closing that gate.
+Typed multicam generation has passed the Final Cut Pro import/re-export gate.
+See [typed-generation-gate.md](typed-generation-gate.md) for the accepted
+result and delta taxonomy. Remaining items below are human-only evidence work.
 
 ## Safe Test Media
 
@@ -24,92 +23,17 @@ library locations, user metadata, notes, keywords, bookmarks, and opaque data.
 Do not edit the returned export to remove private data; instead regenerate it
 from safe media and a generic macOS account or shared path.
 
-## Typed-Generation Import Gate
+## Typed-Generation Import Gate (Complete)
 
-Produce the exact typed document exercised by
-`TypedGenerationTests.testTypedMulticamMatchesRawBuilderAfterNormalization`:
+Completed July 28, 2026. Typed multicam FCPXML `1.13` imported successfully and
+re-exported as `1.13`. Core structure (Both/Left/Right/Multicam, transforms,
+crop, angle IDs) survived. Accepted rewrite deltas are listed in
+[typed-generation-gate.md](typed-generation-gate.md).
 
-- FCPXML version: `1.13`.
-- Event: `Typed Parity`.
-- Media names: `Left`, `Right`, `Both`, and `Multicam Clip`.
-- Resource IDs and references: `r1` through `r8` as constructed in the test.
-- Left transform position: `-33.9193 0`.
-- Right trim-left value: `21.2963`.
-- Right transform position: `67.5926 0`.
-- Library location: `file:///Users/Shared/Generated.fcpbundle/`.
-- Preserve the generated angle IDs and all generated `uid`, `sig`, and
-  `modDate` values in the submitted typed input.
+Generated documents no longer emit `smart-collection` elements. Local media and
+`.fcpxmld` re-exports stay off-repo.
 
-Save the generated input as `typed-multicam-input.fcpxml` without hand-editing
-it. Alongside it, create `typed-multicam-metadata.json` containing:
-
-```json
-{
-  "artifact": "typed-multicam-input.fcpxml",
-  "generatorCommit": "<full git commit>",
-  "generatedAt": "<ISO-8601 timestamp with time zone>",
-  "fcpxmlVersion": "1.13",
-  "finalCutVersion": "<version and build>",
-  "macOSVersion": "<version and build>",
-  "hardware": "<Mac model and architecture>",
-  "leftMedia": {
-    "path": "/Users/Shared/FCPKitMedia/Left.mov",
-    "dimensions": "1920x1080",
-    "frameRate": 24,
-    "duration": "240/24s",
-    "audioChannels": 2,
-    "audioSampleRate": 48000
-  },
-  "rightMedia": {
-    "path": "/Users/Shared/FCPKitMedia/Right.mov",
-    "dimensions": "1280x720",
-    "frameRate": 24,
-    "duration": "216/24s",
-    "audioChannels": 1,
-    "audioSampleRate": 48000
-  }
-}
-```
-
-### Import and Re-export
-
-- In Final Cut Pro, choose **File → Import → XML** and select
-  `typed-multicam-input.fcpxml`.
-- Record whether the import succeeds. Capture every warning verbatim and take a
-  screenshot of the result. If it fails, preserve the input and record the
-  exact error; do not repair the XML by hand.
-- Select the imported library or project, then choose **File → Export XML**.
-  Apple's current workflow is documented in
-  [Use XML to transfer projects in Final Cut Pro](https://support.apple.com/en-gb/guide/final-cut-pro/verdbd66ae/mac).
-- Select FCPXML `1.13` when the export dialog offers it. If it is unavailable,
-  record every offered version and the version selected.
-- Record the export dialog's metadata view, destination, and all warnings.
-- Preserve the untouched `.fcpxmld` re-export bundle. Do not rename or modify
-  files inside it.
-- For structural comparison, use the bundle's root `Info.fcpxml` payload while
-  retaining the complete bundle. See Apple's
-  [FCPXML Bundle Reference](https://developer.apple.com/documentation/professional-video-applications/fcpxml-bundle-reference).
-- Compare the original typed input with the untouched root payload:
-
-```sh
-swift run fcpxml-diff compare \
-  typed-multicam-input.fcpxml \
-  typed-multicam-reexport.fcpxmld/Info.fcpxml \
-  --markdown typed-multicam-diff.md \
-  --json typed-multicam-diff.json
-```
-
-Return all of the following together:
-
-- `typed-multicam-input.fcpxml`.
-- The untouched `typed-multicam-reexport.fcpxmld` bundle.
-- `typed-multicam-metadata.json`, completed with Final Cut Pro, macOS, build,
-  hardware, media, and generation metadata.
-- The import result, screenshots, metadata view, and exact warning or error
-  text.
-- `typed-multicam-diff.md` and `typed-multicam-diff.json`.
-
-## Later Artifact: Transition Feature Pair
+## Ready for Human: Transition Feature Pair
 
 - Start from a new generic project using safe test media.
 - Export `before.fcpxml` with no transition at the recorded edit point.
@@ -123,7 +47,7 @@ Return all of the following together:
   provenance.
 - Run `fcpxml-diff compare` and return both Markdown and JSON output.
 
-## Later Artifact: Original FCPXML 1.14 Export
+## Ready for Human: Original FCPXML 1.14 Export
 
 - Create a new generic library and project in the current Final Cut Pro using
   only the safe test media described above.
