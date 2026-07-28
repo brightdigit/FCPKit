@@ -98,6 +98,16 @@ let parser = FCPXMLParser()
 try parser.write(document, to: URL(fileURLWithPath: "output.fcpxml"))
 ```
 
+Mutate an existing spine `asset-clip` with the FeaturePairs-shaped helpers:
+
+```swift
+var clip: AssetClip = /* from document */
+clip.addMarker(name: "Cue", at: "5s")
+clip.assignMusicRole()
+try clip.setConstantSpeed(percent: 50, mediaDuration: "10s")
+// Update parent sequence.duration when timeline length must change.
+```
+
 Multicam split-screen documents can also be built from two `VideoMetadata`
 values via `FCPKitMediaTools.MulticamXMLBuilder` (typed encode; no smart
 collections).

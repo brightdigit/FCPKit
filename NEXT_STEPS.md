@@ -14,10 +14,11 @@ and relationships.
 ## Verified Baseline
 
 As of July 28, 2026, typed generation, Final Cut import gate, FeaturePairs
-isolation exports, AssetClip `timeMap`, common FCPXML 1.14 round-trip fields,
-DTD validation via `fcpxml-diff validate`, and a promoted 1.14 `TestData`
-fixture are in place. Schema-completeness reports no measured structural loss
-across the checked-in fixtures (1.13 + 1.14):
+isolation exports, AssetClip `timeMap`, ergonomic clip helpers
+(`addMarker` / `assignMusicRole` / `setConstantSpeed`), common FCPXML 1.14
+round-trip fields, DTD validation via `fcpxml-diff validate`, and a promoted
+1.14 `TestData` fixture are in place. Schema-completeness reports no measured
+structural loss across the checked-in fixtures (1.13 + 1.14):
 
 | Files | Dropped elements | Dropped attributes | Dropped text | Total |
 | ---: | ---: | ---: | ---: | ---: |
@@ -54,6 +55,7 @@ Gate evidence:
 | 1–7 | Schema completeness, transitions, params, titles, nested timelines, multicam/roles, raw-pair diff |
 | 8 | Supported-schema policy, diagnostics, typed generation, Final Cut import gate, typed `MulticamXMLBuilder` |
 | 9 (partial) | Version APIs, DTD validate CLI, 1.14 fixture + FeaturePairs round-trip vocabulary |
+| Clip helpers | `AssetClip.addMarker` / `assignMusicRole` / `setConstantSpeed` match FeaturePairs signals; title-style and speed-ramp stay optional human recipes only |
 
 ## Versioning and Validation
 
@@ -79,6 +81,10 @@ All planned isolation pairs are under `Tests/FCPKitTests/FeaturePairs/`:
 | `roles` | Music via `audio-channel-source` (`music.music-1`) |
 | `titles` | Default Basic Title + text-style |
 | `retiming` | Constant 50% slow (`timeMap` on `asset-clip`) |
+
+App-facing helpers for the three clip mutations above live on `AssetClip`
+(`AssetClipEditing.swift`). Title-style and speed-ramp remain optional human
+recipes only ([easy-export-recipes.md](docs/manual/easy-export-recipes.md)).
 
 Specs: [docs/manual/final-cut-artifacts.md](docs/manual/final-cut-artifacts.md).
 
