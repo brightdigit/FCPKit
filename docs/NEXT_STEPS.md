@@ -33,6 +33,17 @@ of complete FCPXML 1.13/1.14 coverage. XMLCoder silently ignores unmodeled
 content, so parsing without an error is not sufficient evidence of support.
 DTD validation similarly proves DTD conformance, not full semantic coverage.
 
+**The completeness gate is also order-blind, and a confirmed round-trip defect
+hides behind it.** `Inventory` in `Sources/FCPXMLDiff/FCPXMLDiffEngine.swift`
+keys a multiset by ancestor path with no sibling ordering, so a reordered spine
+scores zero loss. `Spine` (`Sources/FCPKit/FCPXML.swift:297`) stores children as
+14 parallel arrays, while the DTD declares
+`<!ELEMENT spine (%clip_item; | transition)*>` — one ordered sequence. The
+`transitions` FeaturePair is `asset-clip, transition, asset-clip` on disk and
+re-encodes as `asset-clip, asset-clip, transition`, which Final Cut rejects.
+Evidence and analysis:
+[planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md).
+
 [ADR 0001](adr/0001-supported-schema-and-best-effort-editing.md)
 establishes the current compatibility policy:
 
@@ -47,6 +58,22 @@ establishes the current compatibility policy:
 
 Gate evidence:
 [manual/typed-generation-gate.md](manual/typed-generation-gate.md).
+
+## Proposed Next Milestone: v0.1.0
+
+A design proposal for the first working version is under review — **not yet
+accepted, no implementation started**:
+
+- [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
+  — the proposal: ordered content models, strong value types (`FCPTime` and
+  friends), a resultBuilder authoring DSL, and a read-only ScriptingBridge
+  inspector, sequenced into nine steps.
+- [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
+  — the supporting evidence: the spine ordering defect, verified XMLCoder
+  ordering behavior, the read-only Final Cut sdef, 1.14 DTD reference notes,
+  documentation inaccuracies, and the alternatives that were rejected.
+
+Open questions are listed at the end of the findings document.
 
 ## Completed Foundation
 
