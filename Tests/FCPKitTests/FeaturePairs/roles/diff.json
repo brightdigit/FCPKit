@@ -1,0 +1,35 @@
+{
+  "afterFCPXMLVersion" : "1.14",
+  "afterPath" : "Tests/FCPKitTests/FeaturePairs/roles/after.fcpxml",
+  "beforeFCPXMLVersion" : "1.14",
+  "beforePath" : "Tests/FCPKitTests/FeaturePairs/roles/before.fcpxml",
+  "findings" : [
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/audio-channel-source/@role"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/audio-channel-source/@srcCh"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/audio-channel-source"
+    },
+    {
+      "count" : 1,
+      "kind" : "changedAttribute",
+      "path" : "/fcpxml/library/event/project/@name"
+    }
+  ],
+  "formatVersion" : 1,
+  "normalization" : [
+    "Resource identifiers matching r1...rN are replaced with pair-stable symbolic references.",
+    "uid, sig, and modDate attribute values are replaced with a volatile placeholder.",
+    "bookmark and data[key=effectConfig] text is replaced with an opaque placeholder.",
+    "Formatting-only whitespace and attribute ordering are ignored."
+  ]
+}

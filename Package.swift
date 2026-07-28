@@ -60,6 +60,9 @@ let package = Package(
         .testTarget(
             name: "FCPKitTests",
             dependencies: ["FCPKit", "FCPKitMediaTools", "FCPXMLDiff", "XMLCoder"],
+            exclude: [
+                "FeaturePairs",
+            ],
             resources: [
                 .copy("TestData")
             ]

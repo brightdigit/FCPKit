@@ -1,0 +1,30 @@
+{
+  "feature": "retiming",
+  "fcpxmlVersion": "1.14",
+  "finalCutVersion": "12.3",
+  "finalCutBuild": "450152",
+  "finalCutApp": "Final Cut Pro Creator Studio.app",
+  "macOSVersion": "27.0",
+  "macOSBuild": "26A5388g",
+  "hardware": "MacBook Air (Mac17,4), Apple M5, arm64",
+  "exportedAt": "2026-07-28T15:22:33-04:00",
+  "baselineState": "Project timeline with one Left clip at normal 100% speed (no timeMap).",
+  "changedAction": "Set constant 50% slow motion (export shows timeMap mapping 20s timeline to 10s media, clip duration 20s).",
+  "exportWarnings": [],
+  "sharedBeforeSource": "Desktop before.fcpxmld (also used by markers/roles/titles pairs)",
+  "mediaProvenance": {
+    "left": {
+      "name": "Left",
+      "sourceIntent": "/Users/Shared/FCPKitMedia/Left.mov",
+      "exportedSrc": "file:///Users/leo/Movies/Current.fcpbundle/Typed%20Parity/Original%20Media/Left.mov",
+      "content": "Solid blue synthetic test pattern with tone audio"
+    }
+  },
+  "privacyNotes": "Exports reference library-managed copies under the local Movies Current.fcpbundle path. Media is synthetic test footage only.",
+  "artifacts": {
+    "before": "before.fcpxml",
+    "after": "after.fcpxml",
+    "diffMarkdown": "diff.md",
+    "diffJson": "diff.json"
+  }
+}

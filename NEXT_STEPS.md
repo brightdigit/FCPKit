@@ -98,31 +98,21 @@ Acceptance criteria:
 
 ## Parallel Evidence Work: Real Feature Pairs
 
-The `fcpxml-diff compare` workflow is implemented. The first real pair is
-checked in:
+All planned isolation pairs are checked in under
+`Tests/FCPKitTests/FeaturePairs/` (FCPXML 1.14):
 
-- Transitions: `Tests/FCPKitTests/FeaturePairs/transitions/` (FCPXML 1.14,
-  Cross Dissolve defaults)
+| Pair | Changed action |
+| --- | --- |
+| `transitions` | Default Cross Dissolve between Left/Right |
+| `markers` | Standard marker `Cue` at 5s |
+| `roles` | Music via `audio-channel-source` (`music.music-1`) |
+| `titles` | Default Basic Title + text-style |
+| `retiming` | Constant 50% slow (`timeMap`) |
 
-Still collect, in order:
+Specs and accepted signals:
+[docs/manual/final-cut-artifacts.md](docs/manual/final-cut-artifacts.md).
 
-1. Markers.
-2. Roles and audio subroles.
-3. Titles and `text-style` properties.
-4. Retiming and speed ramps.
-
-Store each untouched pair under:
-
-```text
-Tests/FCPKitTests/FeaturePairs/<feature-name>/
-├── before.fcpxml
-├── after.fcpxml
-└── metadata.json
-```
-
-`metadata.json` records `finalCutVersion`, `fcpxmlVersion`, `baselineState`, and
-`changedAction`. Each pair must differ by one precisely recorded Final Cut
-action. Do not hand-clean volatile values, paths, or opaque payloads.
+Optional later pairs: titles style-only tweak; speed ramp (50%→100%).
 
 Compare a pair with:
 
@@ -141,14 +131,13 @@ must not change normalization behavior.
 
 These steps require Final Cut Pro and cannot be completed unattended:
 
-1. Export the next feature pair (markers)
-   ([checklist pattern](docs/manual/final-cut-artifacts.md)).
-2. Export one original FCPXML 1.14 document with provenance for `TestData`
+1. Export one original FCPXML 1.14 document with provenance for `TestData`
    ([checklist](docs/manual/final-cut-artifacts.md#ready-for-human-original-fcpxml-114-export)).
-   The transition pair is already 1.14 evidence for feature isolation, but a
-   dedicated original fixture is still wanted for schema-completeness.
-3. Optionally record `finalCutVersion` on any local gate metadata retained
+   Feature pairs are isolation evidence; a dedicated original fixture is still
+   wanted for schema-completeness.
+2. Optionally record `finalCutVersion` on any local gate metadata retained
    outside the repo.
+3. Optional follow-up pairs: title style-only change; speed ramp.
 
 ## Documentation Accuracy
 
