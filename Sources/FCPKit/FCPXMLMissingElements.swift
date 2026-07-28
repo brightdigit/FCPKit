@@ -10,8 +10,9 @@ public struct Title: Codable {
     public let start: String?
     public let duration: String?
     public let lane: String?
-    public let text: [TextElement]?
-    public let textStyleDef: [TextStyleDef]?
+    public var param: [ParamElement]?
+    public var text: [TextElement]?
+    public var textStyleDef: [TextStyleDef]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -20,13 +21,14 @@ public struct Title: Codable {
         case start
         case duration
         case lane
+        case param
         case text
         case textStyleDef = "text-style-def"
     }
 }
 
 public struct TextElement: Codable {
-    public let textStyle: [TextStyle]?
+    public var textStyle: [TextStyle]?
     
     enum CodingKeys: String, CodingKey {
         case textStyle = "text-style"
@@ -35,12 +37,15 @@ public struct TextElement: Codable {
 
 public struct TextStyle: Codable {
     public let ref: String?
-    public let font: String?
-    public let fontSize: String?
-    public let fontFace: String?
-    public let fontColor: String?
-    public let alignment: String?
-    public let content: String?
+    public var font: String?
+    public var fontSize: String?
+    public var fontFace: String?
+    public var fontColor: String?
+    public var bold: String?
+    public var kerning: String?
+    public var alignment: String?
+    public var param: [ParamElement]?
+    public var content: String?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -48,14 +53,17 @@ public struct TextStyle: Codable {
         case fontSize
         case fontFace
         case fontColor
+        case bold
+        case kerning
         case alignment
+        case param
         case content = ""
     }
 }
 
 public struct TextStyleDef: Codable {
     public let id: String?
-    public let textStyle: TextStyle?
+    public var textStyle: TextStyle?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -69,7 +77,7 @@ public struct FilterAudio: Codable {
     public let ref: String?
     public let name: String?
     public let enabled: String?
-    public let param: [ParamElement]?
+    public var param: [ParamElement]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -88,6 +96,8 @@ public struct Transition: Codable {
     public let alignment: String?
     public let name: String?
     public let start: String?
+    public var filterVideo: [FilterVideo]?
+    public var filterAudio: [FilterAudio]?
     
     enum CodingKeys: String, CodingKey {
         case ref
@@ -96,6 +106,8 @@ public struct Transition: Codable {
         case alignment
         case name
         case start
+        case filterVideo = "filter-video"
+        case filterAudio = "filter-audio"
     }
 }
 
@@ -124,11 +136,25 @@ public struct Generator: Codable {
 // MARK: - Marker and Metadata Elements
 
 public struct Marker: Codable {
-    public let start: String?
-    public let duration: String?
-    public let value: String?
-    public let note: String?
-    public let completed: String?
+    public var start: String?
+    public var duration: String?
+    public var value: String?
+    public var note: String?
+    public var completed: String?
+
+    public init(
+        start: String? = nil,
+        duration: String? = nil,
+        value: String? = nil,
+        note: String? = nil,
+        completed: String? = nil
+    ) {
+        self.start = start
+        self.duration = duration
+        self.value = value
+        self.note = note
+        self.completed = completed
+    }
     
     enum CodingKeys: String, CodingKey {
         case start
@@ -259,13 +285,31 @@ public struct Motion: Codable {
 
 public struct Keyframe: Codable {
     public let time: String?
-    public let value: String?
+    public var value: String?
     public let interp: String?
     
     enum CodingKeys: String, CodingKey {
         case time
         case value
         case interp
+    }
+}
+
+public struct KeyframeAnimation: Codable {
+    public var keyframes: [Keyframe]?
+
+    enum CodingKeys: String, CodingKey {
+        case keyframes = "keyframe"
+    }
+}
+
+public struct Fade: Codable {
+    public let type: String?
+    public var duration: String?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case duration
     }
 }
 

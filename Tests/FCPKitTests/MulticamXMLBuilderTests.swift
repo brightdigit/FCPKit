@@ -1,12 +1,12 @@
-import XCTest
-import CoreMedia
 import AVFoundation
+import CoreMedia
+import FCPKit
+import XCTest
 @testable import FCPKitMediaTools
 
 final class MulticamXMLBuilderTests: XCTestCase {
-    
-    func testDefaultValuesMatchExpectedXML() throws {
-        // Create test video metadata
+
+    func testDefaultValuesMatchExpectedStructure() throws {
         let leftVideo = VideoMetadata(
             url: URL(fileURLWithPath: "/test/Leo.mp4"),
             duration: CMTime(value: 7700000, timescale: 2400),
@@ -17,7 +17,7 @@ final class MulticamXMLBuilderTests: XCTestCase {
             audioChannels: 1,
             audioSampleRate: 48000
         )
-        
+
         let rightVideo = VideoMetadata(
             url: URL(fileURLWithPath: "/test/Rachel.mp4"),
             duration: CMTime(value: 7700200, timescale: 2400),
@@ -28,29 +28,26 @@ final class MulticamXMLBuilderTests: XCTestCase {
             audioChannels: 1,
             audioSampleRate: 48000
         )
-        
-        let builder = MulticamXMLBuilder()
-        let xml = builder.generateMulticamFCPXML(
+
+        let document = MulticamXMLBuilder().generateMulticamDocument(
             leftSideVideo: leftVideo,
             rightSideVideo: rightVideo,
             projectName: "Test Project"
         )
-        
-        // Verify the hardcoded values appear in the output
-        XCTAssertTrue(xml.contains("<adjust-transform position=\"-33.9193 0\"/>"), 
-                     "Left side video offset should be -33.9193")
-        XCTAssertTrue(xml.contains("<trim-rect left=\"21.2963\"/>"), 
-                     "Right side video left trim should be 21.2963")
-        XCTAssertTrue(xml.contains("<adjust-transform position=\"67.5926 0\"/>"), 
-                     "Right side video offset should be 67.5926")
-        
-        // Verify video names are used correctly
-        XCTAssertTrue(xml.contains("name=\"Leo\""))
-        XCTAssertTrue(xml.contains("name=\"Rachel\""))
+
+        let both = try XCTUnwrap(document.resources?.media?.first(where: { $0.id == "r1" }))
+        let leftClip = try XCTUnwrap(both.sequence?.spine?.refClips?.first)
+        XCTAssertEqual(leftClip.name, "Leo")
+        XCTAssertEqual(leftClip.adjustTransform?.position, "-33.9193 0")
+        let rightClip = try XCTUnwrap(leftClip.refClips?.first)
+        XCTAssertEqual(rightClip.name, "Rachel")
+        XCTAssertEqual(rightClip.adjustTransform?.position, "67.5926 0")
+        XCTAssertEqual(rightClip.adjustCrop?.trimRect?.left, "21.2963")
+        XCTAssertNil(document.library?.smartCollections)
+        XCTAssertEqual(document.version, "1.13")
     }
-    
+
     func testCustomValuesAreAppliedCorrectly() throws {
-        // Create test video metadata
         let leftVideo = VideoMetadata(
             url: URL(fileURLWithPath: "/test/LeftVideo.mp4"),
             duration: CMTime(value: 1000000, timescale: 2400),
@@ -61,7 +58,7 @@ final class MulticamXMLBuilderTests: XCTestCase {
             audioChannels: 2,
             audioSampleRate: 48000
         )
-        
+
         let rightVideo = VideoMetadata(
             url: URL(fileURLWithPath: "/test/RightVideo.mp4"),
             duration: CMTime(value: 1000000, timescale: 2400),
@@ -72,9 +69,8 @@ final class MulticamXMLBuilderTests: XCTestCase {
             audioChannels: 2,
             audioSampleRate: 48000
         )
-        
-        let builder = MulticamXMLBuilder()
-        let xml = builder.generateMulticamFCPXML(
+
+        let document = MulticamXMLBuilder().generateMulticamDocument(
             leftSideVideo: leftVideo,
             rightSideVideo: rightVideo,
             projectName: "Custom Test",
@@ -82,17 +78,27 @@ final class MulticamXMLBuilderTests: XCTestCase {
             rightSideVideoLeftTrim: 30.0,
             rightSideVideoOffset: 100.0
         )
-        
-        // Verify custom values appear in the output
-        XCTAssertTrue(xml.contains("<adjust-transform position=\"-50.0 0\"/>"), 
-                     "Custom left side video offset should be -50.0")
-        XCTAssertTrue(xml.contains("<trim-rect left=\"30.0\"/>"), 
-                     "Custom right side video left trim should be 30.0")
-        XCTAssertTrue(xml.contains("<adjust-transform position=\"100.0 0\"/>"), 
-                     "Custom right side video offset should be 100.0")
-        
-        // Verify video names are used correctly
-        XCTAssertTrue(xml.contains("name=\"LeftVideo\""))
-        XCTAssertTrue(xml.contains("name=\"RightVideo\""))
+
+        let both = try XCTUnwrap(document.resources?.media?.first(where: { $0.id == "r1" }))
+        let leftClip = try XCTUnwrap(both.sequence?.spine?.refClips?.first)
+        XCTAssertEqual(leftClip.name, "LeftVideo")
+        XCTAssertEqual(leftClip.adjustTransform?.position, "-50.0 0")
+        let rightClip = try XCTUnwrap(leftClip.refClips?.first)
+        XCTAssertEqual(rightClip.name, "RightVideo")
+        XCTAssertEqual(rightClip.adjustTransform?.position, "100.0 0")
+        XCTAssertEqual(rightClip.adjustCrop?.trimRect?.left, "30.0")
+
+        let xml = MulticamXMLBuilder().generateMulticamFCPXML(
+            leftSideVideo: leftVideo,
+            rightSideVideo: rightVideo,
+            projectName: "Custom Test",
+            leftSideVideoOffset: -50.0,
+            rightSideVideoLeftTrim: 30.0,
+            rightSideVideoOffset: 100.0
+        )
+        XCTAssertFalse(xml.contains("smart-collection"))
+        let parsed = try FCPXMLParser().parse(xmlString: xml)
+        XCTAssertEqual(parsed.library?.events?.first?.name, "Custom Test")
+        XCTAssertEqual(parsed.resources?.media?.count, 4)
     }
 }

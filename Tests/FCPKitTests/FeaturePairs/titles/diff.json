@@ -1,0 +1,140 @@
+{
+  "afterFCPXMLVersion" : "1.14",
+  "afterPath" : "Tests/FCPKitTests/FeaturePairs/titles/after.fcpxml",
+  "beforeFCPXMLVersion" : "1.14",
+  "beforePath" : "Tests/FCPKitTests/FeaturePairs/titles/before.fcpxml",
+  "findings" : [
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/@lane"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/@offset"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/@start"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text-style-def/@id"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text-style-def/text-style/@alignment"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text-style-def/text-style/@font"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text-style-def/text-style/@fontColor"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text-style-def/text-style/@fontFace"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text-style-def/text-style/@fontSize"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text/text-style/@ref"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/resources/effect/@id"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/resources/effect/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/resources/effect/@uid"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text-style-def"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text-style-def/text-style"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text/text-style"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/resources/effect"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedText",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/title/text/text-style/#text"
+    },
+    {
+      "count" : 1,
+      "kind" : "changedAttribute",
+      "path" : "/fcpxml/library/event/project/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "changedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/@duration"
+    }
+  ],
+  "formatVersion" : 1,
+  "normalization" : [
+    "Resource identifiers matching r1...rN are replaced with pair-stable symbolic references.",
+    "uid, sig, and modDate attribute values are replaced with a volatile placeholder.",
+    "bookmark and data[key=effectConfig] text is replaced with an opaque placeholder.",
+    "Formatting-only whitespace and attribute ordering are ignored."
+  ]
+}

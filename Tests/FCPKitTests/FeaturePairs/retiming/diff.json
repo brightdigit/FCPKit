@@ -1,0 +1,55 @@
+{
+  "afterFCPXMLVersion" : "1.14",
+  "afterPath" : "Tests/FCPKitTests/FeaturePairs/retiming/after.fcpxml",
+  "beforeFCPXMLVersion" : "1.14",
+  "beforePath" : "Tests/FCPKitTests/FeaturePairs/retiming/before.fcpxml",
+  "findings" : [
+    {
+      "count" : 2,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/timeMap/timept/@interp"
+    },
+    {
+      "count" : 2,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/timeMap/timept/@time"
+    },
+    {
+      "count" : 2,
+      "kind" : "addedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/timeMap/timept/@value"
+    },
+    {
+      "count" : 2,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/timeMap/timept"
+    },
+    {
+      "count" : 1,
+      "kind" : "addedElement",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/timeMap"
+    },
+    {
+      "count" : 1,
+      "kind" : "changedAttribute",
+      "path" : "/fcpxml/library/event/project/@name"
+    },
+    {
+      "count" : 1,
+      "kind" : "changedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/@duration"
+    },
+    {
+      "count" : 1,
+      "kind" : "changedAttribute",
+      "path" : "/fcpxml/library/event/project/sequence/spine/asset-clip/@duration"
+    }
+  ],
+  "formatVersion" : 1,
+  "normalization" : [
+    "Resource identifiers matching r1...rN are replaced with pair-stable symbolic references.",
+    "uid, sig, and modDate attribute values are replaced with a volatile placeholder.",
+    "bookmark and data[key=effectConfig] text is replaced with an opaque placeholder.",
+    "Formatting-only whitespace and attribute ordering are ignored."
+  ]
+}
