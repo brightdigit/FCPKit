@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:prototype}",
+            "name": "Debug fcpxml-generator",
+            "target": "fcpxml-generator",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug fcpxml-generator"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:prototype}",
+            "name": "Release fcpxml-generator",
+            "target": "fcpxml-generator",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release fcpxml-generator"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:prototype}",
+            "name": "Debug fcpxml-diff",
+            "target": "fcpxml-diff",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug fcpxml-diff"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:prototype}",
+            "name": "Release fcpxml-diff",
+            "target": "fcpxml-diff",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release fcpxml-diff"
+        }
+    ]
+}
