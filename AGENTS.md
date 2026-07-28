@@ -84,9 +84,9 @@ Run the schema-completeness report with:
 
 ```sh
 swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
-  --markdown SCHEMA_COMPLETENESS_REPORT.md \
-  --json SCHEMA_COMPLETENESS_REPORT.json \
-  --fail-if-total-exceeds 0
+ --markdown docs/reports/SCHEMA_COMPLETENESS_REPORT.md \
+ --json docs/reports/SCHEMA_COMPLETENESS_REPORT.json \
+ --fail-if-total-exceeds 0
 ```
 
 The failure threshold makes increases fail with exit status 1 while allowing
@@ -155,6 +155,18 @@ Generated reports are diagnostic artifacts, not proof by themselves. The
 desired trajectory is fewer unexplained deltas plus stronger read/mutate/write
 APIs. A zero-delta fixture set is useful only if normalization is narrow enough
 that meaningful differences remain visible.
+
+## Documentation layout
+
+Keep the repo root limited to `README.md` and `AGENTS.md`. Everything else
+belongs under `docs/`:
+
+- `docs/NEXT_STEPS.md` — living engineering roadmap
+- `docs/adr/` — architectural decision records
+- `docs/agents/` — agent workflow (issues, triage, domain)
+- `docs/manual/` — human Final Cut Pro procedures and export guidance
+- `docs/reports/` — generated diagnostic artifacts (regenerate; do not hand-edit)
+- `docs/archive/` — historical handoffs and superseded planning docs
 
 ## Agent skills
 

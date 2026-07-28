@@ -8,8 +8,8 @@ Run the Swift differential harness against the checked-in exports:
 
 ```sh
 swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
-  --markdown SCHEMA_COMPLETENESS_REPORT.md \
-  --json SCHEMA_COMPLETENESS_REPORT.json
+  --markdown docs/reports/SCHEMA_COMPLETENESS_REPORT.md \
+  --json docs/reports/SCHEMA_COMPLETENESS_REPORT.json
 ```
 
 The command decodes each file through `FCPXMLParser`, re-encodes it through XMLCoder, normalizes resource references and volatile data, and reports structural elements, attributes, and text that the Codable model dropped. The generated Markdown and JSON reports are the prioritized input for the existing "identify missing elements -> add Codable types" loop.

@@ -169,7 +169,7 @@ swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
 Checked-in real exports live under `Tests/FCPKitTests/TestData/` (FCPXML 1.13).
 A zero-loss report is a regression signal for those fixtures, not proof of
 complete schema coverage. Roadmap and remaining human evidence work are in
-[`NEXT_STEPS.md`](NEXT_STEPS.md).
+[`docs/NEXT_STEPS.md`](docs/NEXT_STEPS.md).
 
 ## License
 

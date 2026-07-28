@@ -24,16 +24,16 @@ structural loss across the checked-in fixtures (1.13 + 1.14):
 | ---: | ---: | ---: | ---: | ---: |
 | 4 | 0 | 0 | 0 | 0 |
 
-The generated evidence is in `SCHEMA_COMPLETENESS_REPORT.md` and
-`SCHEMA_COMPLETENESS_REPORT.json`. Regenerate these artifacts through the CLI;
-never edit them by hand.
+The generated evidence is in `docs/reports/SCHEMA_COMPLETENESS_REPORT.md` and
+`docs/reports/SCHEMA_COMPLETENESS_REPORT.json`. Regenerate these artifacts
+through the CLI; never edit them by hand.
 
 Zero loss is a regression signal for the tested fixture vocabulary, not proof
 of complete FCPXML 1.13/1.14 coverage. XMLCoder silently ignores unmodeled
 content, so parsing without an error is not sufficient evidence of support.
 DTD validation similarly proves DTD conformance, not full semantic coverage.
 
-[ADR 0001](docs/adr/0001-supported-schema-and-best-effort-editing.md)
+[ADR 0001](adr/0001-supported-schema-and-best-effort-editing.md)
 establishes the current compatibility policy:
 
 - The typed Codable model is authoritative for the explicitly tested
@@ -46,7 +46,7 @@ establishes the current compatibility policy:
   sidecar representation is out of scope for this phase.
 
 Gate evidence:
-[docs/manual/typed-generation-gate.md](docs/manual/typed-generation-gate.md).
+[manual/typed-generation-gate.md](manual/typed-generation-gate.md).
 
 ## Completed Foundation
 
@@ -84,16 +84,16 @@ All planned isolation pairs are under `Tests/FCPKitTests/FeaturePairs/`:
 
 App-facing helpers for the three clip mutations above live on `AssetClip`
 (`AssetClipEditing.swift`). Title-style and speed-ramp remain optional human
-recipes only ([easy-export-recipes.md](docs/manual/easy-export-recipes.md)).
+recipes only ([easy-export-recipes.md](manual/easy-export-recipes.md)).
 
-Specs: [docs/manual/final-cut-artifacts.md](docs/manual/final-cut-artifacts.md).
+Specs: [manual/final-cut-artifacts.md](manual/final-cut-artifacts.md).
 
 ## Ready for Human
 
 These steps require Final Cut Pro and cannot be completed unattended.
 AppleScript cannot automate exports.
 
-**Child-simple recipes:** [docs/manual/easy-export-recipes.md](docs/manual/easy-export-recipes.md)
+**Child-simple recipes:** [manual/easy-export-recipes.md](manual/easy-export-recipes.md)
 
 1. Optional follow-up pairs from that guide: title style only; speed ramp.
 2. Import/re-export gate when generation APIs expand again.
@@ -107,7 +107,7 @@ Public documentation must stay aligned with the supported-schema policy. Avoid
 claims of complete FCPXML or complete version coverage. Prefer fixture evidence,
 diagnostics, and explicit version compatibility APIs.
 
-`ROADMAP_HANDOFF.md` is a historical handoff, not a second live roadmap.
+`archive/ROADMAP_HANDOFF.md` is a historical handoff, not a second live roadmap.
 
 ## Definition of Done for Model Features
 
@@ -130,8 +130,8 @@ Before committing a model milestone, run:
 ```sh
 swift test
 swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
-  --markdown SCHEMA_COMPLETENESS_REPORT.md \
-  --json SCHEMA_COMPLETENESS_REPORT.json \
+  --markdown docs/reports/SCHEMA_COMPLETENESS_REPORT.md \
+  --json docs/reports/SCHEMA_COMPLETENESS_REPORT.json \
   --fail-if-total-exceeds 0
 ```
 

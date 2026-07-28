@@ -1,12 +1,12 @@
 # FCPKit Roadmap Handoff
 
 > Historical handoff document. For current status and remaining work, use
-> [`NEXT_STEPS.md`](NEXT_STEPS.md). Do not maintain competing “current state”
-> sections here.
+> [`../NEXT_STEPS.md`](../NEXT_STEPS.md). Do not maintain competing “current
+> state” sections here.
 
 ## Current State
 
-Milestones 1 through 7 in `NEXT_STEPS.md` remain complete. The supported-schema
+Milestones 1 through 7 in `docs/NEXT_STEPS.md` remain complete. The supported-schema
 and best-effort editing decision is recorded, and the first loss diagnostics
 API is implemented locally but not yet committed.
 
@@ -61,7 +61,7 @@ Current uncommitted files:
 - `Tests/FCPKitTests/FCPXMLDiffTests.swift` adds two diagnostics tests.
 - `docs/adr/0001-supported-schema-and-best-effort-editing.md` records the
   product decision.
-- `NEXT_STEPS.md` and this document reflect the revised roadmap.
+- `docs/NEXT_STEPS.md` and this document reflect the revised roadmap.
 
 ## Immediate Next Step: Typed Generation Vertical Slice
 
@@ -150,8 +150,8 @@ Before committing any model milestone, run:
 ```sh
 swift test
 swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
-  --markdown SCHEMA_COMPLETENESS_REPORT.md \
-  --json SCHEMA_COMPLETENESS_REPORT.json \
+  --markdown docs/reports/SCHEMA_COMPLETENESS_REPORT.md \
+  --json docs/reports/SCHEMA_COMPLETENESS_REPORT.json \
   --fail-if-total-exceeds 0
 ```
 
@@ -169,7 +169,7 @@ schema-completeness: 3 files, 0 dropped elements, 0 dropped attributes,
 
 ## Guardrails
 
-- Read `AGENTS.md` and `NEXT_STEPS.md` before making changes.
+- Read `AGENTS.md` and `docs/NEXT_STEPS.md` before making changes.
 - Preserve original real exports and their FCPXML versions.
 - Treat decode success as insufficient; require read, mutate, encode, and
   structural round-trip evidence.
