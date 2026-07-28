@@ -56,6 +56,7 @@ public struct Asset: Codable {
     public var videoSources: String?
     public var audioSources: String?
     public var mediaRep: [MediaRep]?
+    public var metadata: AssetMetadata?
 
     public init(
         id: String,
@@ -72,7 +73,8 @@ public struct Asset: Codable {
         videoRate: String? = nil,
         videoSources: String? = nil,
         audioSources: String? = nil,
-        mediaRep: [MediaRep]? = nil
+        mediaRep: [MediaRep]? = nil,
+        metadata: AssetMetadata? = nil
     ) {
         self.id = id
         self.name = name
@@ -89,6 +91,7 @@ public struct Asset: Codable {
         self.videoSources = videoSources
         self.audioSources = audioSources
         self.mediaRep = mediaRep
+        self.metadata = metadata
     }
     
     enum CodingKeys: String, CodingKey {
@@ -107,6 +110,7 @@ public struct Asset: Codable {
         case videoSources
         case audioSources
         case mediaRep = "media-rep"
+        case metadata
     }
 }
 
@@ -160,21 +164,25 @@ public struct Effect: Codable {
 
 public struct Library: Codable {
     public var location: String?
+    public var colorProcessing: String?
     public var events: [Event]?
     public var smartCollections: [SmartCollection]?
 
     public init(
         location: String? = nil,
+        colorProcessing: String? = nil,
         events: [Event]? = nil,
         smartCollections: [SmartCollection]? = nil
     ) {
         self.location = location
+        self.colorProcessing = colorProcessing
         self.events = events
         self.smartCollections = smartCollections
     }
     
     enum CodingKeys: String, CodingKey {
         case location
+        case colorProcessing
         case events = "event"
         case smartCollections = "smart-collection"
     }
@@ -251,6 +259,7 @@ public struct Sequence: Codable {
     public var tcFormat: String?
     public var audioLayout: String?
     public var audioRate: String?
+    public var renderFormat: String?
     public var spine: Spine?
 
     public init(
@@ -260,6 +269,7 @@ public struct Sequence: Codable {
         tcFormat: String? = nil,
         audioLayout: String? = nil,
         audioRate: String? = nil,
+        renderFormat: String? = nil,
         spine: Spine? = nil
     ) {
         self.format = format
@@ -268,6 +278,7 @@ public struct Sequence: Codable {
         self.tcFormat = tcFormat
         self.audioLayout = audioLayout
         self.audioRate = audioRate
+        self.renderFormat = renderFormat
         self.spine = spine
     }
     
@@ -278,6 +289,7 @@ public struct Sequence: Codable {
         case tcFormat
         case audioLayout
         case audioRate
+        case renderFormat
         case spine
     }
 }
@@ -416,6 +428,7 @@ public struct AssetClip: Codable {
     public var video: [Video]?
     public var adjustTransform: AdjustTransform?
     public var adjustCrop: AdjustCrop?
+    public var timeMap: TimeMap?
 
     public init(
         ref: String? = nil,
@@ -448,7 +461,8 @@ public struct AssetClip: Codable {
         assetClips: [AssetClip]? = nil,
         video: [Video]? = nil,
         adjustTransform: AdjustTransform? = nil,
-        adjustCrop: AdjustCrop? = nil
+        adjustCrop: AdjustCrop? = nil,
+        timeMap: TimeMap? = nil
     ) {
         self.ref = ref
         self.name = name
@@ -481,6 +495,7 @@ public struct AssetClip: Codable {
         self.video = video
         self.adjustTransform = adjustTransform
         self.adjustCrop = adjustCrop
+        self.timeMap = timeMap
     }
     
     enum CodingKeys: String, CodingKey {
@@ -515,6 +530,7 @@ public struct AssetClip: Codable {
         case video
         case adjustTransform = "adjust-transform"
         case adjustCrop = "adjust-crop"
+        case timeMap
     }
 }
 

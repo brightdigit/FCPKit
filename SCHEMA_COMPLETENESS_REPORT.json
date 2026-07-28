@@ -16,6 +16,18 @@
       }
     },
     {
+      "fcpxmlVersion" : "1.14",
+      "findings" : [
+
+      ],
+      "path" : "Tests/FCPKitTests/TestData/FCPKit-Sample-1.14.fcpxml",
+      "summary" : {
+        "droppedAttributes" : 0,
+        "droppedElements" : 0,
+        "droppedText" : 0
+      }
+    },
+    {
       "fcpxmlVersion" : "1.13",
       "findings" : [
 

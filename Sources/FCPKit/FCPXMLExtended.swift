@@ -309,7 +309,11 @@ public struct ConformRate: Codable {
 }
 
 public struct TimeMap: Codable {
-    public let timepts: [Timept]?
+    public var timepts: [Timept]?
+
+    public init(timepts: [Timept]? = nil) {
+        self.timepts = timepts
+    }
     
     enum CodingKeys: String, CodingKey {
         case timepts = "timept"
@@ -317,9 +321,15 @@ public struct TimeMap: Codable {
 }
 
 public struct Timept: Codable {
-    public let time: String?
-    public let value: String?
-    public let interp: String?
+    public var time: String?
+    public var value: String?
+    public var interp: String?
+
+    public init(time: String? = nil, value: String? = nil, interp: String? = nil) {
+        self.time = time
+        self.value = value
+        self.interp = interp
+    }
     
     enum CodingKeys: String, CodingKey {
         case time
@@ -452,25 +462,82 @@ public struct MediaRep: Codable {
     }
 }
 
+public struct AssetMetadata: Codable {
+    public var entries: [MetadataEntry]?
+
+    public init(entries: [MetadataEntry]? = nil) {
+        self.entries = entries
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case entries = "md"
+    }
+}
+
+public struct MetadataEntry: Codable {
+    public var key: String?
+    public var value: String?
+    public var array: MetadataArray?
+
+    public init(key: String? = nil, value: String? = nil, array: MetadataArray? = nil) {
+        self.key = key
+        self.value = value
+        self.array = array
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case key
+        case value
+        case array
+    }
+}
+
+public struct MetadataArray: Codable {
+    public var strings: [MetadataString]?
+
+    public init(strings: [MetadataString]? = nil) {
+        self.strings = strings
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case strings = "string"
+    }
+}
+
+public struct MetadataString: Codable {
+    public var content: String?
+
+    public init(content: String? = nil) {
+        self.content = content
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case content = ""
+    }
+}
+
 public struct SmartCollection: Codable {
     public var name: String?
     public var match: String?
     public var matchClip: [MatchClip]?
     public var matchMedia: [MatchMedia]?
     public var matchRatings: [MatchRatings]?
+    public var matchAnalysisType: [MatchAnalysisType]?
 
     public init(
         name: String? = nil,
         match: String? = nil,
         matchClip: [MatchClip]? = nil,
         matchMedia: [MatchMedia]? = nil,
-        matchRatings: [MatchRatings]? = nil
+        matchRatings: [MatchRatings]? = nil,
+        matchAnalysisType: [MatchAnalysisType]? = nil
     ) {
         self.name = name
         self.match = match
         self.matchClip = matchClip
         self.matchMedia = matchMedia
         self.matchRatings = matchRatings
+        self.matchAnalysisType = matchAnalysisType
     }
     
     enum CodingKeys: String, CodingKey {
@@ -479,6 +546,7 @@ public struct SmartCollection: Codable {
         case matchClip = "match-clip"
         case matchMedia = "match-media"
         case matchRatings = "match-ratings"
+        case matchAnalysisType = "match-analysis-type"
     }
 }
 
@@ -524,6 +592,21 @@ public struct MatchRatings: Codable {
     }
 }
 
+public struct MatchAnalysisType: Codable {
+    public var rule: String?
+    public var value: String?
+
+    public init(rule: String? = nil, value: String? = nil) {
+        self.rule = rule
+        self.value = value
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case rule
+        case value
+    }
+}
+
 public struct AdjustVolume: Codable {
     public var amount: String?
     public var param: [ParamElement]?
@@ -555,10 +638,22 @@ public struct AdjustBlend: Codable {
 }
 
 public struct AudioChannelSource: Codable {
-    public let srcCh: String?
-    public let role: String?
-    public let active: String?
-    public let adjustLoudness: AdjustLoudness?
+    public var srcCh: String?
+    public var role: String?
+    public var active: String?
+    public var adjustLoudness: AdjustLoudness?
+
+    public init(
+        srcCh: String? = nil,
+        role: String? = nil,
+        active: String? = nil,
+        adjustLoudness: AdjustLoudness? = nil
+    ) {
+        self.srcCh = srcCh
+        self.role = role
+        self.active = active
+        self.adjustLoudness = adjustLoudness
+    }
     
     enum CodingKeys: String, CodingKey {
         case srcCh

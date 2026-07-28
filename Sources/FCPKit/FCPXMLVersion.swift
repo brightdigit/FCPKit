@@ -21,6 +21,7 @@ public struct FCPXMLVersion: RawRepresentable, Hashable, Sendable, Codable {
     /// Fixture versions currently covered by schema-completeness evidence.
     public static let testedFixtureVersions: Set<FCPXMLVersion> = [
         FCPXMLVersion("1.13"),
+        FCPXMLVersion("1.14"),
     ]
 }
 

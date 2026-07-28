@@ -136,11 +136,25 @@ public struct Generator: Codable {
 // MARK: - Marker and Metadata Elements
 
 public struct Marker: Codable {
-    public let start: String?
-    public let duration: String?
-    public let value: String?
-    public let note: String?
-    public let completed: String?
+    public var start: String?
+    public var duration: String?
+    public var value: String?
+    public var note: String?
+    public var completed: String?
+
+    public init(
+        start: String? = nil,
+        duration: String? = nil,
+        value: String? = nil,
+        note: String? = nil,
+        completed: String? = nil
+    ) {
+        self.start = start
+        self.duration = duration
+        self.value = value
+        self.note = note
+        self.completed = completed
+    }
     
     enum CodingKeys: String, CodingKey {
         case start

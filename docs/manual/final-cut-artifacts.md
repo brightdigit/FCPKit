@@ -109,18 +109,22 @@ Expected XML signal: retiming / `timeMap` / rate attributes on the clip (exact e
 
 A later pair can isolate a **speed ramp** (before = 50% constant; after = ramp 50%→100%).
 
-## Ready for Human: Original FCPXML 1.14 Export
+## Ready for Human
+
+These steps still require Final Cut Pro. AppleScript cannot automate them
+(the Final Cut scripting dictionary exposes library/event/project/`get` only).
+
+1. Optional follow-up isolation pairs: title style-only change; speed ramp
+   (50%→100%). Specs remain under Feature Pair Specs above.
+2. Import/re-export gate whenever typed generation surface expands again.
+3. Re-export fixtures after Final Cut upgrades that change FCPXML behavior.
+4. Privacy review when new exports leave Shared/generic media paths.
+
+## FCPXML 1.14 TestData Fixture
+
+Promoted from `FeaturePairs/markers/before.fcpxml` as
+`Tests/FCPKitTests/TestData/FCPKit-Sample-1.14.fcpxml` with adjacent
+`FCPKit-Sample-1.14.metadata.json`. This is schema-completeness evidence for
+declared 1.14, not complete 1.14 coverage.
 
 
-- Create a new generic library and project in the current Final Cut Pro using
-  only the safe test media described above.
-- Export directly as FCPXML `1.14`; do not convert an older document or edit the
-  version attribute.
-- If Final Cut returns an `.fcpxmld` bundle, preserve the whole bundle and use
-  its root `Info.fcpxml` for analysis.
-- Record Final Cut Pro version and build, macOS version and build, hardware,
-  export date, selected FCPXML version, metadata view, and every warning.
-- Preserve the original export untouched. Record provenance in an adjacent
-  metadata file and complete a privacy review before adding it to `TestData`.
-- Run schema completeness against the original artifact and return its
-  Markdown and JSON reports without changing the accepted baseline.

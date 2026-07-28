@@ -100,11 +100,13 @@ description of the single changed Final Cut setting with every pair.
 
 ## Schema Versions
 
-The checked-in real exports are FCPXML 1.13. As verified in July 2026, Final Cut
-Pro 12.0 exports FCPXML 1.14. Apple's Final Cut Pro release notes are currently
-the evidence for 1.14, while its public developer DTD page still exposes older
-documentation. Recheck current primary Apple sources before changing claims
-about the latest version; do not rely on model memory.
+The checked-in real exports include FCPXML 1.13 fixtures and a promoted
+FCPXML 1.14 sample (`FCPKit-Sample-1.14.fcpxml`). As verified in July 2026,
+Final Cut Pro 12.x exports FCPXML 1.14. Apple's Final Cut Pro release notes are
+currently the evidence for 1.14, while its public developer DTD page still
+exposes older documentation. Recheck current primary Apple sources before
+changing claims about the latest version; do not rely on model memory.
+Generation still defaults to 1.13.
 
 Version differences must not be flattened accidentally. Prefer explicit,
 tested compatibility behavior and retain the version attached to each fixture.

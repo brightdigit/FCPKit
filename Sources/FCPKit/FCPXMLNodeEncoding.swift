@@ -21,7 +21,7 @@ extension Resources: DynamicNodeEncoding {
 
 extension Asset: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-        fcpNodeEncoding(for: key, elementKeys: ["media-rep"])
+        fcpNodeEncoding(for: key, elementKeys: ["media-rep", "metadata"])
     }
 }
 
@@ -78,7 +78,7 @@ extension AssetClip: DynamicNodeEncoding {
             "audio-channel-source", "marker", "rating", "chapter-marker",
             "filter-audio", "filter-video",
             "title",
-            "asset-clip", "video", "adjust-transform", "adjust-crop",
+            "asset-clip", "video", "adjust-transform", "adjust-crop", "timeMap",
         ])
     }
 }
@@ -199,7 +199,9 @@ extension MediaRep: DynamicNodeEncoding {
 
 extension SmartCollection: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-        fcpNodeEncoding(for: key, elementKeys: ["match-clip", "match-media", "match-ratings"])
+        fcpNodeEncoding(for: key, elementKeys: [
+            "match-clip", "match-media", "match-ratings", "match-analysis-type",
+        ])
     }
 }
 
@@ -213,6 +215,34 @@ extension MatchMedia: DynamicNodeEncoding {
 
 extension MatchRatings: DynamicNodeEncoding {
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}
+
+extension MatchAnalysisType: DynamicNodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}
+
+extension AssetMetadata: DynamicNodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+        fcpNodeEncoding(for: key, elementKeys: ["md"])
+    }
+}
+
+extension MetadataEntry: DynamicNodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+        fcpNodeEncoding(for: key, elementKeys: ["array"])
+    }
+}
+
+extension MetadataArray: DynamicNodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+        fcpNodeEncoding(for: key, elementKeys: ["string"])
+    }
+}
+
+extension MetadataString: DynamicNodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+        key.stringValue.isEmpty ? .element : .attribute
+    }
 }
 
 extension AdjustVolume: DynamicNodeEncoding {

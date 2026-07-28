@@ -26,6 +26,8 @@ struct FCPXMLDiffCommand {
         case "compare":
             try runCompare(arguments)
             return true
+        case "validate":
+            return try runValidate(arguments)
         default:
             throw CommandError.usage
         }
@@ -141,6 +143,51 @@ struct FCPXMLDiffCommand {
         }
     }
 
+    private static func runValidate(_ arguments: [String]) throws -> Bool {
+        var inputs: [String] = []
+        var markdownPath: String?
+        var jsonPath: String?
+        var dtdPath: String?
+        var index = 0
+        while index < arguments.count {
+            switch arguments[index] {
+            case "--markdown", "--json", "--dtd":
+                let option = arguments[index]
+                index += 1
+                guard index < arguments.count else { throw CommandError.usage }
+                if option == "--markdown" { markdownPath = arguments[index] }
+                if option == "--json" { jsonPath = arguments[index] }
+                if option == "--dtd" { dtdPath = arguments[index] }
+            default:
+                inputs.append(arguments[index])
+            }
+            index += 1
+        }
+        guard inputs.count == 1 else { throw CommandError.usage }
+        let inputPath = inputs[0]
+        let inputURL = URL(fileURLWithPath: inputPath)
+        guard FileManager.default.fileExists(atPath: inputURL.path) else {
+            throw CommandError.missingInput(inputPath)
+        }
+        let data = try Data(contentsOf: inputURL)
+        let dtdURL = dtdPath.map { URL(fileURLWithPath: $0) }
+        let report = try FCPXMLDTDValidator().validate(
+            data: data,
+            sourcePath: inputPath,
+            dtdURL: dtdURL
+        )
+        let renderer = FCPXMLValidationReportRenderer()
+        let markdown = renderer.markdown(report)
+        print(markdown, terminator: "")
+        if let markdownPath {
+            try Data(markdown.utf8).write(to: URL(fileURLWithPath: markdownPath), options: .atomic)
+        }
+        if let jsonPath {
+            try renderer.jsonData(report).write(to: URL(fileURLWithPath: jsonPath), options: .atomic)
+        }
+        return report.isValid
+    }
+
     private static func collectFiles(_ paths: [String]) throws -> [URL] {
         var results: [URL] = []
         for path in paths {
@@ -176,7 +223,11 @@ private enum CommandError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .usage:
-            return "usage: fcpxml-diff schema-completeness <file-or-directory>... [--markdown path] [--json path] [--fail-if-total-exceeds count]\n       fcpxml-diff compare <before.fcpxml> <after.fcpxml> [--path structural-path] [--markdown path] [--json path]"
+            return """
+            usage: fcpxml-diff schema-completeness <file-or-directory>... [--markdown path] [--json path] [--fail-if-total-exceeds count]
+                   fcpxml-diff compare <before.fcpxml> <after.fcpxml> [--path structural-path] [--markdown path] [--json path]
+                   fcpxml-diff validate <file.fcpxml> [--dtd path] [--markdown path] [--json path]
+            """
         case .noInputFiles:
             return "no .fcpxml input files found"
         case .missingInput(let path):
