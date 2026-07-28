@@ -33,19 +33,18 @@ crop, angle IDs) survived. Accepted rewrite deltas are listed in
 Generated documents no longer emit `smart-collection` elements. Local media and
 `.fcpxmld` re-exports stay off-repo.
 
-## Ready for Human: Transition Feature Pair
+## Transition Feature Pair (Collected)
 
-- Start from a new generic project using safe test media.
-- Export `before.fcpxml` with no transition at the recorded edit point.
-- Change exactly one Final Cut setting: add the chosen transition without
-  changing its defaults or any other timeline state.
-- Export `after.fcpxml` using the same FCPXML version.
-- Preserve both exports untouched under
-  `Tests/FCPKitTests/FeaturePairs/transitions/` only after privacy review.
-- Add `metadata.json` with `finalCutVersion`, `finalCutBuild`, `macOSVersion`,
-  `fcpxmlVersion`, `baselineState`, `changedAction`, export warnings, and media
-  provenance.
-- Run `fcpxml-diff compare` and return both Markdown and JSON output.
+Collected July 28, 2026 under
+[`Tests/FCPKitTests/FeaturePairs/transitions/`](../../Tests/FCPKitTests/FeaturePairs/transitions/).
+
+- FCPXML `1.14` from Final Cut Pro Creator Studio 12.3 (build 450152)
+- `before.fcpxml`: adjacent Left/Right hard cut
+- `after.fcpxml`: default Cross Dissolve at that edit point
+- `metadata.json`, `diff.md`, and `diff.json` included
+
+Remaining feature pairs still needed: markers, roles, titles/`text-style`,
+retiming.
 
 ## Ready for Human: Original FCPXML 1.14 Export
 

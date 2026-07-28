@@ -98,14 +98,18 @@ Acceptance criteria:
 
 ## Parallel Evidence Work: Real Feature Pairs
 
-The `fcpxml-diff compare` workflow is implemented, but real minimal Final Cut
-exports still need to be collected manually. Collect them in this order:
+The `fcpxml-diff compare` workflow is implemented. The first real pair is
+checked in:
 
-1. Transitions and transition parameters.
-2. Markers.
-3. Roles and audio subroles.
-4. Titles and `text-style` properties.
-5. Retiming and speed ramps.
+- Transitions: `Tests/FCPKitTests/FeaturePairs/transitions/` (FCPXML 1.14,
+  Cross Dissolve defaults)
+
+Still collect, in order:
+
+1. Markers.
+2. Roles and audio subroles.
+3. Titles and `text-style` properties.
+4. Retiming and speed ramps.
 
 Store each untouched pair under:
 
@@ -137,10 +141,12 @@ must not change normalization behavior.
 
 These steps require Final Cut Pro and cannot be completed unattended:
 
-1. Export the first transition feature pair
-   ([checklist](docs/manual/final-cut-artifacts.md#ready-for-human-transition-feature-pair)).
-2. Export one original FCPXML 1.14 document with provenance
+1. Export the next feature pair (markers)
+   ([checklist pattern](docs/manual/final-cut-artifacts.md)).
+2. Export one original FCPXML 1.14 document with provenance for `TestData`
    ([checklist](docs/manual/final-cut-artifacts.md#ready-for-human-original-fcpxml-114-export)).
+   The transition pair is already 1.14 evidence for feature isolation, but a
+   dedicated original fixture is still wanted for schema-completeness.
 3. Optionally record `finalCutVersion` on any local gate metadata retained
    outside the repo.
 
