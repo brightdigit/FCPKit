@@ -85,13 +85,15 @@ Specs: [docs/manual/final-cut-artifacts.md](docs/manual/final-cut-artifacts.md).
 ## Ready for Human
 
 These steps require Final Cut Pro and cannot be completed unattended.
-AppleScript cannot automate exports (dictionary is library/event/project/`get`
-only).
+AppleScript cannot automate exports.
 
-1. Optional follow-up pairs: title style-only change; speed ramp.
+**Child-simple recipes:** [docs/manual/easy-export-recipes.md](docs/manual/easy-export-recipes.md)
+
+1. Optional follow-up pairs from that guide: title style only; speed ramp.
 2. Import/re-export gate when generation APIs expand again.
 3. Re-export after Final Cut upgrades that change FCPXML output.
 4. Privacy review for any new exports that leave Shared/generic paths.
+
 
 ## Documentation Accuracy
 

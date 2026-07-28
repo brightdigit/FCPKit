@@ -111,14 +111,18 @@ A later pair can isolate a **speed ramp** (before = 50% constant; after = ramp 5
 
 ## Ready for Human
 
-These steps still require Final Cut Pro. AppleScript cannot automate them
-(the Final Cut scripting dictionary exposes library/event/project/`get` only).
+These steps still require Final Cut Pro. AppleScript cannot automate them.
 
-1. Optional follow-up isolation pairs: title style-only change; speed ramp
-   (50%→100%). Specs remain under Feature Pair Specs above.
+**Simple click-by-click recipes** (read this first):
+[easy-export-recipes.md](easy-export-recipes.md)
+
+1. Optional follow-up isolation pairs from that guide:
+   - Recipe A — title style only (font size → 72)
+   - Recipe B — speed ramp (50% → 100%)
 2. Import/re-export gate whenever typed generation surface expands again.
 3. Re-export fixtures after Final Cut upgrades that change FCPXML behavior.
 4. Privacy review when new exports leave Shared/generic media paths.
+
 
 ## FCPXML 1.14 TestData Fixture
 
