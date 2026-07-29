@@ -28,3 +28,4 @@ Running log of user corrections and standing always/never directives for this re
 - 2026-07-29: Never claim cross-platform support from reasoning or a macOS-only build — verify in the actual target environment (Docker container matching CI) before asserting it works.
 - 2026-07-29: When copying BrightDigit package scaffolding, use the most recently maintained sibling repo as the template (currently SyndiKit).
 - 2026-07-29: Prefer opening a PR over merging; leave work in a reviewable state that a new conversation can pick up.
+- 2026-07-29: When verifying Linux/wasm builds in Docker, pass `--platform linux/amd64` to match CI — a Docker tag can ship different Swift builds per architecture, so an arm64 pass proves nothing about CI.

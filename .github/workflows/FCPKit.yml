@@ -109,10 +109,16 @@ jobs:
           # URL is pinned to a fixed snapshot date, so the two drift apart and the
           # SDK's prebuilt Swift.swiftmodule fails to load — "compiled module was
           # created by an older/newer version of the compiler" — inside XMLCoder,
-          # before reaching any FCPKit source. The mismatch went both directions
-          # depending on which nightly a given runner had cached, so no pinned SDK
-          # date is stably correct. Re-enable by removing the repo variable once the
-          # container and SDK can be pinned together (or a stable 6.4 release exists).
+          # before reaching any FCPKit source.
+          #
+          # The decisive detail: that tag ships *different Swift builds per
+          # architecture*. arm64 carries Swift 80702ec.., amd64 (what GitHub runners
+          # use) carries ef761e56.., which is older than the 06-15 SDK. So the same
+          # tag with the same SDK builds on an Apple-silicon Mac and fails on CI —
+          # verified by running CI's exact amd64 digest locally. Digest-pinning does
+          # not help: pinning the amd64 digest pins the broken pairing. Re-enable by
+          # removing the repo variable once a stable 6.4 release exists (or the
+          # container and SDK can be pinned in lockstep).
           # FCPKit's own wasm blockers are already fixed: DTD validation is gated
           # behind #if !os(WASI) and atomic writes route through a helper.
           if [[ "${{ vars.ENABLE_WASM }}" != "false" ]]; then
