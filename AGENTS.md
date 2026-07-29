@@ -49,15 +49,29 @@ XMLCoder silently ignores XML elements and attributes that the Codable structs
 do not represent. Decode followed by encode is therefore lossy even when decode
 succeeds. Treat that loss as a schema-completeness signal.
 
-A concrete known example is `Transition` in
-`FCPXMLMissingElements.swift`: it models only `ref`, `offset`, `duration`,
-`alignment`, `name`, and `start`. Real transitions can include nested
-`filter-video`, `param`, `data`, and `filter-audio` content. The Cross Dissolve
-in `Tests/FCPKitTests/TestData/UntitledXML.fcpxml` includes a nested
-`filter-video`/`param`/`effectConfig` payload that the current model drops.
+A second, subtler loss mode is **child ordering**, and the schema-completeness
+gate cannot see it. `Inventory` in `Sources/FCPXMLDiff/FCPXMLDiffEngine.swift`
+keys a multiset by ancestor path with no sibling ordering, so a reordered spine
+reports zero loss.
+
+The live example is `Spine` in `Sources/FCPKit/FCPXML.swift:297`: it stores
+children as 14 parallel arrays, while the DTD declares
+`<!ELEMENT spine (%clip_item; | transition)*>` — a single ordered heterogeneous
+sequence. `Tests/FCPKitTests/FeaturePairs/transitions/after.fcpxml` is
+`asset-clip, transition, asset-clip` on disk and re-encodes as
+`asset-clip, asset-clip, transition`, which Final Cut rejects. Analysis:
+[docs/planning/v0.1.0-investigation-findings.md](docs/planning/v0.1.0-investigation-findings.md).
+Accepted fix and create-first scope:
+[docs/adr/0002-create-first-ordered-typed-model.md](docs/adr/0002-create-first-ordered-typed-model.md).
+
+Note that XMLCoder emits child elements in `CodingKeys` declaration order (it
+sorts only under `.sortedKeys`, which `FCPXMLParser` does not set). Ordered DTD
+content models therefore depend on `CodingKeys` order being transcribed from the
+DTD — an invariant currently untested.
 
 Do not infer completeness from README claims. Use real fixtures, structural
-round-trip diffs, focused access assertions, and tests.
+round-trip diffs, focused access assertions, and tests. Zero measured loss is
+not proof that a document round-trips correctly.
 
 ## Differential Workflow
 
@@ -141,9 +155,14 @@ When adding a real export fixture:
 
 ## Engineering Direction
 
-Favor the existing Swift, FCPKit, XMLCoder, and Swift Testing stack. The
-differential tooling belongs in Swift because it must exercise the same model
-and encoder used by downstream apps.
+Favor the existing Swift, FCPKit, and XMLCoder stack. The differential tooling
+belongs in Swift because it must exercise the same model and encoder used by
+downstream apps.
+
+The test suite is **XCTest**, not Swift Testing — all nine files under
+`Tests/FCPKitTests/` use `XCTestCase`. Write new tests in XCTest for now;
+mixing frameworks mid-migration is worse than either alone. A wholesale
+migration is proposed for after v0.1.0.
 
 Keep model additions faithful to XML ordering and XMLCoder node-encoding rules.
 Avoid convenience abstractions that prevent lossless representation. Where the
@@ -165,6 +184,8 @@ belongs under `docs/`:
 - `docs/adr/` — architectural decision records
 - `docs/agents/` — agent workflow (issues, triage, domain)
 - `docs/manual/` — human Final Cut Pro procedures and export guidance
+- `docs/planning/` — proposals under review, not yet accepted; promote to an
+  ADR when a decision is taken, or move to `docs/archive/` if superseded
 - `docs/reports/` — generated diagnostic artifacts (regenerate; do not hand-edit)
 - `docs/archive/` — historical handoffs and superseded planning docs
 

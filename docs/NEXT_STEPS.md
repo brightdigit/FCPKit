@@ -33,6 +33,17 @@ of complete FCPXML 1.13/1.14 coverage. XMLCoder silently ignores unmodeled
 content, so parsing without an error is not sufficient evidence of support.
 DTD validation similarly proves DTD conformance, not full semantic coverage.
 
+**The completeness gate is also order-blind, and a confirmed round-trip defect
+hides behind it.** `Inventory` in `Sources/FCPXMLDiff/FCPXMLDiffEngine.swift`
+keys a multiset by ancestor path with no sibling ordering, so a reordered spine
+scores zero loss. `Spine` (`Sources/FCPKit/FCPXML.swift:297`) stores children as
+14 parallel arrays, while the DTD declares
+`<!ELEMENT spine (%clip_item; | transition)*>` — one ordered sequence. The
+`transitions` FeaturePair is `asset-clip, transition, asset-clip` on disk and
+re-encodes as `asset-clip, asset-clip, transition`, which Final Cut rejects.
+Evidence and analysis:
+[planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md).
+
 [ADR 0001](adr/0001-supported-schema-and-best-effort-editing.md)
 establishes the current compatibility policy:
 
@@ -47,6 +58,56 @@ establishes the current compatibility policy:
 
 Gate evidence:
 [manual/typed-generation-gate.md](manual/typed-generation-gate.md).
+
+## Accepted Next Milestone: v0.1.0
+
+[ADR 0002](adr/0002-create-first-ordered-typed-model.md) accepts the create-first,
+ordered, typed working version. **Implementation has not started.** Create-from-scratch
+authoring is the acceptance bar; editing existing exports stays best-effort
+([ADR 0001](adr/0001-supported-schema-and-best-effort-editing.md)).
+
+### Resume later (reading order)
+
+1. [ADR 0002](adr/0002-create-first-ordered-typed-model.md) — accepted decisions
+2. [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
+   — full plan; **§3 is the locked `FCPKitDSL` surface**
+3. [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
+   — evidence, rejected alternatives, resolved questions, deferred DSL grill list (§10)
+4. [planning/v0.1.0-issues.md](planning/v0.1.0-issues.md) — GitHub issues #4–#14
+5. [planning/v0.1.0-worktree-plan.md](planning/v0.1.0-worktree-plan.md) — parallel lanes
+6. This section — where to code next
+
+**Worktrees:** This planning branch is `swift-package-plan`. Implementation evolves
+`v0.1.x` (sibling worktree). Before Step 0 code: merge or cherry-pick these planning/ADR
+commits onto `v0.1.x` (or continue implementing here only if that branch is intentionally
+repurposed — default is **code on `v0.1.x` with docs present**). Then follow the
+[worktree plan](planning/v0.1.0-worktree-plan.md): `v0.1-scaffold` for [#4](https://github.com/brightdigit/FCPKit/issues/4),
+`v0.1.x` for the model chain starting at [#5](https://github.com/brightdigit/FCPKit/issues/5),
+`v0.1-scripting` for [#12](https://github.com/brightdigit/FCPKit/issues/12) after Step 1.
+
+**Frontier (ready now):**
+
+- [#4](https://github.com/brightdigit/FCPKit/issues/4) — BrightDigit Swift package scaffolding
+  (CI, lint/format, package hygiene)
+- [#5](https://github.com/brightdigit/FCPKit/issues/5) — Step 0: XMLCoder ordering guardrails +
+  Spine choice spike + `XCTExpectFailure` on
+  `Tests/FCPKitTests/FeaturePairs/transitions/after.fcpxml`
+
+DSL code is Step 6 / [#11](https://github.com/brightdigit/FCPKit/issues/11) (`FCPKitDSL` product).
+
+**Still open (design, not blocking Steps 0–5):** markers / roles / retiming modifier shapes;
+time literals (`10s`); `RefClip` / `<media>` authoring; exact transition-overlap algorithm
+write-up; preset catalog membership; `URL` vs `filePath` spelling. Listed under findings §10.
+
+- [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
+  — accepted plan: ordered content models, strong value types (`FCPTime` and
+  friends), **`FCPKitDSL`** (`Document` + result builders), and a read-only
+  ScriptingBridge inspector, sequenced into Steps 0–8. DSL surface grilled
+  2026-07-28 (§3).
+- [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
+  — supporting evidence and the resolved decision table.
+- [planning/v0.1.0-issues.md](planning/v0.1.0-issues.md) — tracker map for #4–#14.
+- [planning/v0.1.0-worktree-plan.md](planning/v0.1.0-worktree-plan.md) — parallel lanes.
 
 ## Completed Foundation
 
