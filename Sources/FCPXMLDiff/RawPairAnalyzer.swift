@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  RawPairAnalyzer.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,27 +27,34 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+public struct RawPairAnalyzer: Sendable {
+  private let parser = XMLTreeParser()
+  private let engine = FCPXMLDiffEngine()
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public init() {}
+
+  public func analyze(
+    beforeData: Data,
+    afterData: Data,
+    beforePath: String = "before.fcpxml",
+    afterPath: String = "after.fcpxml",
+    pathFilter: String? = nil
+  ) throws -> RawPairReport {
+    let before = try parser.parse(beforeData)
+    let after = try parser.parse(afterData)
+    let findings = engine.compare(before, after, mode: .symmetric).filter {
+      guard let pathFilter else { return true }
+      return $0.path.hasPrefix(pathFilter)
+    }
+    return RawPairReport(
+      beforePath: beforePath,
+      afterPath: afterPath,
+      beforeFCPXMLVersion: before.attributes["version"],
+      afterFCPXMLVersion: after.attributes["version"],
+      pathFilter: pathFilter,
+      findings: findings
+    )
   }
 }

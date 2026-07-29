@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  XMLTreeParserError.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,27 +27,18 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+public enum XMLTreeParserError: Error, LocalizedError {
+  case invalidDocument(String)
+  case missingRootElement
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public var errorDescription: String? {
+    switch self {
+    case .invalidDocument(let message):
+      return "Invalid XML document: \(message)"
+    case .missingRootElement:
+      return "XML document does not contain a root element"
+    }
   }
 }

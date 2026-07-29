@@ -29,34 +29,6 @@
 
 import Foundation
 
-public enum FCPXMLDifferenceKind: String, Codable, CaseIterable, Sendable {
-  case droppedElement
-  case droppedAttribute
-  case droppedText
-  case addedElement
-  case addedAttribute
-  case addedText
-  case changedAttribute
-  case changedText
-}
-
-public struct FCPXMLDifference: Codable, Equatable, Sendable {
-  public let kind: FCPXMLDifferenceKind
-  public let path: String
-  public let count: Int
-
-  public init(kind: FCPXMLDifferenceKind, path: String, count: Int) {
-    self.kind = kind
-    self.path = path
-    self.count = count
-  }
-}
-
-public enum FCPXMLDiffMode: Sendable {
-  case completeness
-  case symmetric
-}
-
 public struct FCPXMLDiffEngine: Sendable {
   private let normalizer = FCPXMLNormalizer()
 

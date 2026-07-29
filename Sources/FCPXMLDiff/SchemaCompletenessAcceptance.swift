@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  SchemaCompletenessAcceptance.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -30,24 +30,15 @@
 import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+public struct SchemaCompletenessAcceptance: Equatable, Sendable {
+  public let maximumTotalLoss: Int
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public init(maximumTotalLoss: Int) {
+    precondition(maximumTotalLoss >= 0, "maximumTotalLoss must not be negative")
+    self.maximumTotalLoss = maximumTotalLoss
+  }
+
+  public func accepts(_ report: SchemaCompletenessReport) -> Bool {
+    report.totals.total <= maximumTotalLoss
   }
 }

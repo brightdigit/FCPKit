@@ -1,5 +1,5 @@
 //
-//  DTDValidation.swift
+//  FCPXMLDTDValidator.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,94 +28,6 @@
 //
 
 import Foundation
-
-/// Result of validating an FCPXML document against an Apple FCPXML DTD.
-public struct FCPXMLValidationReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let sourcePath: String
-  public let fcpxmlVersion: String?
-  public let dtdPath: String
-  public let isValid: Bool
-  public let issues: [FCPXMLValidationIssue]
-
-  public init(
-    sourcePath: String,
-    fcpxmlVersion: String?,
-    dtdPath: String,
-    isValid: Bool,
-    issues: [FCPXMLValidationIssue]
-  ) {
-    formatVersion = 1
-    self.sourcePath = sourcePath
-    self.fcpxmlVersion = fcpxmlVersion
-    self.dtdPath = dtdPath
-    self.isValid = isValid
-    self.issues = issues
-  }
-}
-
-public struct FCPXMLValidationIssue: Codable, Equatable, Sendable {
-  public let path: String?
-  public let message: String
-
-  public init(path: String?, message: String) {
-    self.path = path
-    self.message = message
-  }
-}
-
-public enum FCPXMLValidationError: Error, LocalizedError, Equatable {
-  case dtdNotFound(version: String)
-  case xmllintUnavailable
-  case invalidDocument(FCPXMLValidationReport)
-
-  public var errorDescription: String? {
-    switch self {
-    case .dtdNotFound(let version):
-      return "No FCPXML DTD found for version \(version)"
-    case .xmllintUnavailable:
-      return "xmllint is not available on PATH"
-    case .invalidDocument(let report):
-      let details = report.issues.map(\.message).joined(separator: "; ")
-      return "FCPXML failed DTD validation: \(details)"
-    }
-  }
-}
-
-/// Locates Apple FCPXML DTDs bundled with Final Cut Pro when present.
-public struct FCPXMLDTDLocator: Sendable {
-  public var searchRoots: [URL]
-
-  public init(searchRoots: [URL] = FCPXMLDTDLocator.defaultSearchRoots()) {
-    self.searchRoots = searchRoots
-  }
-
-  public static func defaultSearchRoots() -> [URL] {
-    let applications = URL(fileURLWithPath: "/Applications", isDirectory: true)
-    let names = [
-      "Final Cut Pro Creator Studio.app",
-      "Final Cut Pro.app",
-    ]
-    return names.map {
-      applications
-        .appendingPathComponent($0, isDirectory: true)
-        .appendingPathComponent(
-          "Contents/Frameworks/Interchange.framework/Versions/A/Resources", isDirectory: true)
-    }
-  }
-
-  public func dtdURL(forVersion version: String) -> URL? {
-    let sanitized = version.replacingOccurrences(of: ".", with: "_")
-    let fileName = "FCPXMLv\(sanitized).dtd"
-    for root in searchRoots {
-      let candidate = root.appendingPathComponent(fileName)
-      if FileManager.default.fileExists(atPath: candidate.path) {
-        return candidate
-      }
-    }
-    return nil
-  }
-}
 
 /// Validates FCPXML documents against Apple DTDs using `xmllint`.
 public struct FCPXMLDTDValidator: Sendable {
@@ -251,39 +163,5 @@ public struct FCPXMLDTDValidator: Sendable {
       }
     }
     return nil
-  }
-}
-
-public struct FCPXMLValidationReportRenderer: Sendable {
-  public init() {}
-
-  public func markdown(_ report: FCPXMLValidationReport) -> String {
-    var lines: [String] = []
-    lines.append("# FCPXML DTD Validation")
-    lines.append("")
-    lines.append("Source: `\(report.sourcePath)`")
-    lines.append("Declared version: `\(report.fcpxmlVersion ?? "unknown")`")
-    lines.append("DTD: `\(report.dtdPath)`")
-    lines.append("Valid: **\(report.isValid ? "yes" : "no")**")
-    lines.append("")
-    if report.issues.isEmpty {
-      lines.append("No validation issues.")
-    } else {
-      lines.append("| Path | Message |")
-      lines.append("| --- | --- |")
-      for issue in report.issues {
-        let path = issue.path ?? ""
-        let message = issue.message.replacingOccurrences(of: "|", with: "\\|")
-        lines.append("| `\(path)` | \(message) |")
-      }
-    }
-    lines.append("")
-    return lines.joined(separator: "\n")
-  }
-
-  public func jsonData(_ report: FCPXMLValidationReport) throws -> Data {
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-    return try encoder.encode(report)
   }
 }

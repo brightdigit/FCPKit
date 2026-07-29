@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  FCPXMLValidationError.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,27 +27,22 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+public enum FCPXMLValidationError: Error, LocalizedError, Equatable {
+  case dtdNotFound(version: String)
+  case xmllintUnavailable
+  case invalidDocument(FCPXMLValidationReport)
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public var errorDescription: String? {
+    switch self {
+    case .dtdNotFound(let version):
+      return "No FCPXML DTD found for version \(version)"
+    case .xmllintUnavailable:
+      return "xmllint is not available on PATH"
+    case .invalidDocument(let report):
+      let details = report.issues.map(\.message).joined(separator: "; ")
+      return "FCPXML failed DTD validation: \(details)"
+    }
   }
 }

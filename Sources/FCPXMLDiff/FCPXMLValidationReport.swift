@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  FCPXMLValidationReport.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,27 +27,29 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
+/// Result of validating an FCPXML document against an Apple FCPXML DTD.
+public struct FCPXMLValidationReport: Codable, Equatable, Sendable {
   public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+  public let sourcePath: String
+  public let fcpxmlVersion: String?
+  public let dtdPath: String
+  public let isValid: Bool
+  public let issues: [FCPXMLValidationIssue]
 
   public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
+    sourcePath: String,
+    fcpxmlVersion: String?,
+    dtdPath: String,
+    isValid: Bool,
+    issues: [FCPXMLValidationIssue]
   ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+    formatVersion = 1
+    self.sourcePath = sourcePath
+    self.fcpxmlVersion = fcpxmlVersion
+    self.dtdPath = dtdPath
+    self.isValid = isValid
+    self.issues = issues
   }
 }

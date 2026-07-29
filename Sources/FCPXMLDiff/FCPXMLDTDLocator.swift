@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  FCPXMLDTDLocator.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,27 +27,39 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+/// Locates Apple FCPXML DTDs bundled with Final Cut Pro when present.
+public struct FCPXMLDTDLocator: Sendable {
+  public var searchRoots: [URL]
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public init(searchRoots: [URL] = FCPXMLDTDLocator.defaultSearchRoots()) {
+    self.searchRoots = searchRoots
+  }
+
+  public static func defaultSearchRoots() -> [URL] {
+    let applications = URL(fileURLWithPath: "/Applications", isDirectory: true)
+    let names = [
+      "Final Cut Pro Creator Studio.app",
+      "Final Cut Pro.app",
+    ]
+    return names.map {
+      applications
+        .appendingPathComponent($0, isDirectory: true)
+        .appendingPathComponent(
+          "Contents/Frameworks/Interchange.framework/Versions/A/Resources", isDirectory: true)
+    }
+  }
+
+  public func dtdURL(forVersion version: String) -> URL? {
+    let sanitized = version.replacingOccurrences(of: ".", with: "_")
+    let fileName = "FCPXMLv\(sanitized).dtd"
+    for root in searchRoots {
+      let candidate = root.appendingPathComponent(fileName)
+      if FileManager.default.fileExists(atPath: candidate.path) {
+        return candidate
+      }
+    }
+    return nil
   }
 }

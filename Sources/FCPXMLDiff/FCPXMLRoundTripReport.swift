@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  FCPXMLRoundTripReport.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -30,24 +30,28 @@
 import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
+/// Reports structural content that the typed model does not retain across an
+/// XML decode/encode cycle.
+public struct FCPXMLRoundTripReport: Codable, Equatable, Sendable {
   public let formatVersion: Int
+  public let sourcePath: String
+  public let fcpxmlVersion: String?
   public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+  public let summary: SchemaCompletenessSummary
+  public let findings: [FCPXMLDifference]
+
+  public var hasLoss: Bool { summary.total > 0 }
 
   public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
+    sourcePath: String,
+    fcpxmlVersion: String?,
+    findings: [FCPXMLDifference]
   ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+    formatVersion = 1
+    self.sourcePath = sourcePath
+    self.fcpxmlVersion = fcpxmlVersion
+    normalization = FCPXMLNormalizer.rules
+    summary = SchemaCompletenessSummary(findings: findings)
+    self.findings = findings
   }
 }

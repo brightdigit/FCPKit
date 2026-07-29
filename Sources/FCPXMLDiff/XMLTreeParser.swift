@@ -1,5 +1,5 @@
 //
-//  XMLTree.swift
+//  XMLTreeParser.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,44 +28,6 @@
 //
 
 import Foundation
-
-// On Linux, XMLParser lives in FoundationXML rather than Foundation.
-#if canImport(FoundationXML)
-  import FoundationXML
-#endif
-
-public struct XMLTreeNode: Equatable, Sendable {
-  public var name: String
-  public var attributes: [String: String]
-  public var text: String
-  public var children: [XMLTreeNode]
-
-  public init(
-    name: String,
-    attributes: [String: String] = [:],
-    text: String = "",
-    children: [XMLTreeNode] = []
-  ) {
-    self.name = name
-    self.attributes = attributes
-    self.text = text
-    self.children = children
-  }
-}
-
-public enum XMLTreeParserError: Error, LocalizedError {
-  case invalidDocument(String)
-  case missingRootElement
-
-  public var errorDescription: String? {
-    switch self {
-    case .invalidDocument(let message):
-      return "Invalid XML document: \(message)"
-    case .missingRootElement:
-      return "XML document does not contain a root element"
-    }
-  }
-}
 
 public struct XMLTreeParser: Sendable {
   public init() {}

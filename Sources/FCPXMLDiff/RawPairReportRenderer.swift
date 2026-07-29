@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  RawPairReportRenderer.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,27 +27,39 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+public struct RawPairReportRenderer: Sendable {
+  public init() {}
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public func jsonData(_ report: RawPairReport) throws -> Data {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+    return try encoder.encode(report)
+  }
+
+  public func markdown(_ report: RawPairReport) -> String {
+    var lines = [
+      "# FCPXML Raw-Pair Diff",
+      "",
+      "Before: `\(report.beforePath)` (FCPXML `\(report.beforeFCPXMLVersion ?? "unknown")`)",
+      "After: `\(report.afterPath)` (FCPXML `\(report.afterFCPXMLVersion ?? "unknown")`)",
+      "",
+    ]
+    if let pathFilter = report.pathFilter {
+      lines += ["Path filter: `\(pathFilter)`", ""]
+    }
+    if report.findings.isEmpty {
+      lines.append("No structural differences detected.")
+    } else {
+      lines += [
+        "| Count | Kind | Structural path |",
+        "| ---: | --- | --- |",
+      ]
+      lines += report.findings.map {
+        "| \($0.count) | `\($0.kind.rawValue)` | `\($0.path)` |"
+      }
+    }
+    return lines.joined(separator: "\n") + "\n"
   }
 }

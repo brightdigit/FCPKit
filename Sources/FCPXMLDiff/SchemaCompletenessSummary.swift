@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  SchemaCompletenessSummary.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -30,24 +30,16 @@
 import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+public struct SchemaCompletenessSummary: Codable, Equatable, Sendable {
+  public let droppedElements: Int
+  public let droppedAttributes: Int
+  public let droppedText: Int
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public var total: Int { droppedElements + droppedAttributes + droppedText }
+
+  public init(findings: [FCPXMLDifference]) {
+    droppedElements = findings.filter { $0.kind == .droppedElement }.reduce(0) { $0 + $1.count }
+    droppedAttributes = findings.filter { $0.kind == .droppedAttribute }.reduce(0) { $0 + $1.count }
+    droppedText = findings.filter { $0.kind == .droppedText }.reduce(0) { $0 + $1.count }
   }
 }

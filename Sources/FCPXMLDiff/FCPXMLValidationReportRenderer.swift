@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  FCPXMLValidationReportRenderer.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,27 +27,38 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+public struct FCPXMLValidationReportRenderer: Sendable {
+  public init() {}
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public func markdown(_ report: FCPXMLValidationReport) -> String {
+    var lines: [String] = []
+    lines.append("# FCPXML DTD Validation")
+    lines.append("")
+    lines.append("Source: `\(report.sourcePath)`")
+    lines.append("Declared version: `\(report.fcpxmlVersion ?? "unknown")`")
+    lines.append("DTD: `\(report.dtdPath)`")
+    lines.append("Valid: **\(report.isValid ? "yes" : "no")**")
+    lines.append("")
+    if report.issues.isEmpty {
+      lines.append("No validation issues.")
+    } else {
+      lines.append("| Path | Message |")
+      lines.append("| --- | --- |")
+      for issue in report.issues {
+        let path = issue.path ?? ""
+        let message = issue.message.replacingOccurrences(of: "|", with: "\\|")
+        lines.append("| `\(path)` | \(message) |")
+      }
+    }
+    lines.append("")
+    return lines.joined(separator: "\n")
+  }
+
+  public func jsonData(_ report: FCPXMLValidationReport) throws -> Data {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    return try encoder.encode(report)
   }
 }

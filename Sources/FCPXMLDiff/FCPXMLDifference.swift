@@ -1,5 +1,5 @@
 //
-//  SchemaCompletenessReport.swift
+//  FCPXMLDifference.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,27 +27,16 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
-public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-  public let formatVersion: Int
-  public let normalization: [String]
-  public let totals: SchemaCompletenessSummary
-  public let aggregateFindings: [FCPXMLDifference]
-  public let files: [SchemaCompletenessFileReport]
+public struct FCPXMLDifference: Codable, Equatable, Sendable {
+  public let kind: FCPXMLDifferenceKind
+  public let path: String
+  public let count: Int
 
-  public init(
-    formatVersion: Int,
-    normalization: [String],
-    totals: SchemaCompletenessSummary,
-    aggregateFindings: [FCPXMLDifference],
-    files: [SchemaCompletenessFileReport]
-  ) {
-    self.formatVersion = formatVersion
-    self.normalization = normalization
-    self.totals = totals
-    self.aggregateFindings = aggregateFindings
-    self.files = files
+  public init(kind: FCPXMLDifferenceKind, path: String, count: Int) {
+    self.kind = kind
+    self.path = path
+    self.count = count
   }
 }
