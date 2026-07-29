@@ -1,2 +1,2 @@
-- [Corrections log directive](corrections-log-directive.md) — always append corrections/always-never directives to `.claude/CORRECTIONS.md` in the repo (append-only)
+- [Corrections log directive](corrections-log-directive.md) — log corrections/always-never directives in `.claude/agent-notes.md`; read that file first every session
 - [v0.1.0 plan & DSL](v0.1.0-plan-and-dsl.md) — ADR 0002 accepted; FCPKitDSL surface locked; resume on Step 0 via `v0.1.x` after docs merged

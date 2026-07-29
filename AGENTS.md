@@ -213,9 +213,28 @@ Default five-role vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `
 
 Single-context — one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
 
-## Agent memory & corrections
+## Memory & Corrections Convention
 
-Persistent notes for agents live in the repo (committed and shared), not in any machine-local directory:
+Persistent notes for agents live in the repo (committed and shared), not in any machine-local
+directory.
 
-- **`.claude/CORRECTIONS.md`** — append-only log; the source of truth for user corrections and explicit always/never directives. Whenever the user corrects an agent or gives an "always"/"never" directive, append one concise dated line. Never rewrite, reorder, or delete prior entries.
-- **`.claude/memory/MEMORY.md`** — index of persistent memories; read it, then the linked files under `.claude/memory/`.
+**`.claude/agent-notes.md` is the source of truth for how to work in this repo. Read it first,
+at the start of every session, before doing any work.** It is the running log of user corrections
+and standing always/never directives, and it takes precedence over guidance elsewhere in this file
+when the two disagree.
+
+Maintaining it:
+
+- Append one line per directive **proactively** — without being asked — whenever the user corrects
+  you or gives an "always"/"never" instruction. Record the literal meaning, not an interpretation.
+- Newest lines at the bottom; one line per entry; prefix each with the date (YYYY-MM-DD).
+- When a directive supersedes an earlier one, **update or remove the stale line** rather than
+  leaving both, so the log always reads as the current rule set.
+
+Also:
+
+- **`.claude/memory/MEMORY.md`** — index of persistent memories; read it, then the linked files
+  under `.claude/memory/`.
+
+(`.claude/CORRECTIONS.md` was merged into `.claude/agent-notes.md` on 2026-07-29 and no longer
+exists. Its strictly-append-only rule is superseded by the update-stale-lines rule above.)
