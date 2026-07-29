@@ -106,5 +106,4 @@ extension AssetClip {
       Timept(time: timelineDuration, value: mediaDuration, interp: "smooth2"),
     ])
   }
-
 }

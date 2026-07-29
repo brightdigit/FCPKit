@@ -102,8 +102,11 @@ function_body_length:
   - 76
 function_parameter_count: 8
 line_length:
-  - 108
-  - 200
+  warning: 108
+  error: 200
+  # FCPXML fixtures are embedded as multi-line string literals. Their length is
+  # XML content, not Swift line length.
+  ignores_multiline_strings: true
 closure_body_length:
   - 50
   - 60
@@ -125,6 +128,9 @@ excluded:
   - Package.swift
 indentation_width:
   indentation_width: 2
+  # FCPXML fixtures are embedded as multi-line string literals. Reindenting them
+  # to satisfy Swift indentation rules would corrupt the test data.
+  include_multiline_strings: false
 file_name:
     severity: error
 fatal_error_message:
