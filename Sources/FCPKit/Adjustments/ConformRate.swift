@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct ConformRate: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case srcFrameRate
     case scaleEnabled
   }

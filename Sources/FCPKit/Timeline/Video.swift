@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct Video: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case ref
     case lane
     case offset

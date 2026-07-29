@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct TextElement: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case textStyle = "text-style"
   }
 

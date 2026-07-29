@@ -3,7 +3,7 @@ import FCPXMLDiff
 import Foundation
 import XCTest
 
-final class AssetClipEditingTests: XCTestCase {
+internal final class AssetClipEditingTests: XCTestCase {
   private func featurePairURL(_ feature: String, file name: String) -> URL {
     URL(fileURLWithPath: #filePath)
       .deletingLastPathComponent()
@@ -26,7 +26,7 @@ final class AssetClipEditingTests: XCTestCase {
     document.library?.events?[0].projects?[0].sequence?.spine?.assetClips?[0] = clip
   }
 
-  func testAddMarkerMatchesFeaturePairAfter() throws {
+  internal func testAddMarkerMatchesFeaturePairAfter() throws {
     var document = try loadDocument("markers", file: "before.fcpxml")
     var clip = try spineClip(&document)
     clip.addMarker(name: "Cue", at: "5s")
@@ -49,7 +49,7 @@ final class AssetClipEditingTests: XCTestCase {
     XCTAssertFalse(try FCPXMLRoundTripAnalyzer().analyze(data: encoded).hasLoss)
   }
 
-  func testAssignMusicRoleMatchesFeaturePairAfter() throws {
+  internal func testAssignMusicRoleMatchesFeaturePairAfter() throws {
     var document = try loadDocument("roles", file: "before.fcpxml")
     var clip = try spineClip(&document)
     clip.assignMusicRole()
@@ -75,7 +75,7 @@ final class AssetClipEditingTests: XCTestCase {
     XCTAssertFalse(try FCPXMLRoundTripAnalyzer().analyze(data: encoded).hasLoss)
   }
 
-  func testSetConstantSpeedMatchesFeaturePairAfter() throws {
+  internal func testSetConstantSpeedMatchesFeaturePairAfter() throws {
     var document = try loadDocument("retiming", file: "before.fcpxml")
     var clip = try spineClip(&document)
     try clip.setConstantSpeed(percent: 50, mediaDuration: "10s")
@@ -106,7 +106,7 @@ final class AssetClipEditingTests: XCTestCase {
     XCTAssertFalse(try FCPXMLRoundTripAnalyzer().analyze(data: encoded).hasLoss)
   }
 
-  func testSetConstantSpeedRejectsNonPositivePercent() {
+  internal func testSetConstantSpeedRejectsNonPositivePercent() {
     var clip = AssetClip(ref: "r2", duration: "10s")
     XCTAssertThrowsError(try clip.setConstantSpeed(percent: 0, mediaDuration: "10s")) { error in
       XCTAssertEqual(error as? AssetClipEditingError, .invalidSpeedPercent(0))

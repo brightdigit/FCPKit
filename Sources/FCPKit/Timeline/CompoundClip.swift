@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct CompoundClip: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case ref
     case offset
     case name

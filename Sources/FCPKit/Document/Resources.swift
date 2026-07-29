@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct Resources: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case assets = "asset"
     case formats = "format"
     case effects = "effect"

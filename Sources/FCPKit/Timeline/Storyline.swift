@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct Storyline: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case lane
     case offset
     case format

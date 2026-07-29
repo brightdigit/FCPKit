@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct AssetMetadata: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case entries = "md"
   }
 

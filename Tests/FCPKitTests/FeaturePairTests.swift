@@ -3,7 +3,7 @@ import FCPXMLDiff
 import Foundation
 import XCTest
 
-final class FeaturePairTests: XCTestCase {
+internal final class FeaturePairTests: XCTestCase {
   private func featurePairURL(_ feature: String, file name: String) -> URL {
     URL(fileURLWithPath: #filePath)
       .deletingLastPathComponent()
@@ -26,7 +26,7 @@ final class FeaturePairTests: XCTestCase {
     XCTAssertFalse(report.hasLoss, "Unexpected round-trip loss: \(report)", file: file, line: line)
   }
 
-  func testMarkersFeaturePairRoundTripsAndMutates() throws {
+  internal func testMarkersFeaturePairRoundTripsAndMutates() throws {
     var (document, data) = try loadAfter("markers")
     try assertNoRoundTripLoss(data)
 
@@ -53,7 +53,7 @@ final class FeaturePairTests: XCTestCase {
     try assertNoRoundTripLoss(encoded)
   }
 
-  func testRolesFeaturePairRoundTripsAndMutates() throws {
+  internal func testRolesFeaturePairRoundTripsAndMutates() throws {
     var (document, data) = try loadAfter("roles")
     try assertNoRoundTripLoss(data)
 
@@ -81,7 +81,7 @@ final class FeaturePairTests: XCTestCase {
     try assertNoRoundTripLoss(encoded)
   }
 
-  func testTitlesFeaturePairRoundTripsAndMutates() throws {
+  internal func testTitlesFeaturePairRoundTripsAndMutates() throws {
     var (document, data) = try loadAfter("titles")
     try assertNoRoundTripLoss(data)
 
@@ -112,7 +112,7 @@ final class FeaturePairTests: XCTestCase {
     try assertNoRoundTripLoss(encoded)
   }
 
-  func testRetimingFeaturePairRoundTripsAndMutates() throws {
+  internal func testRetimingFeaturePairRoundTripsAndMutates() throws {
     var (document, data) = try loadAfter("retiming")
     try assertNoRoundTripLoss(data)
 
@@ -143,7 +143,7 @@ final class FeaturePairTests: XCTestCase {
     try assertNoRoundTripLoss(encoded)
   }
 
-  func testCommon114AttributesSurviveMarkersAfter() throws {
+  internal func testCommon114AttributesSurviveMarkersAfter() throws {
     let (document, data) = try loadAfter("markers")
     try assertNoRoundTripLoss(data)
     XCTAssertEqual(document.version, "1.14")

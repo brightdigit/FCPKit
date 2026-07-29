@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct MCSource: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case angleID
     case srcEnable
   }

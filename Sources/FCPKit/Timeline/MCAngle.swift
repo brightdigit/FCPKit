@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct MCAngle: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case name
     case angleID
     case gaps = "gap"

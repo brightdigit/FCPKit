@@ -9,8 +9,8 @@ import XCTest
   import AVFoundation
   import CoreMedia
 
-  final class TypedGenerationTests: XCTestCase {
-    func testPublicAPIConstructsRoundTripsAndMutatesMinimalProject() throws {
+  internal final class TypedGenerationTests: XCTestCase {
+    internal func testPublicAPIConstructsRoundTripsAndMutatesMinimalProject() throws {
       var document = FCPXML(
         version: "1.13",
         resources: Resources(
@@ -129,7 +129,7 @@ import XCTest
         decoded.resources?.assets?.first?.mediaRep?.first?.src)
     }
 
-    func testTypedMulticamBuilderRoundTripsAndPreservesStructure() throws {
+    internal func testTypedMulticamBuilderRoundTripsAndPreservesStructure() throws {
       let left = VideoMetadata(
         url: URL(fileURLWithPath: "/Users/Shared/FCPKitMedia/Left.mov"),
         duration: CMTime(value: 240, timescale: 24),

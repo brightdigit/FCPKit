@@ -2,8 +2,8 @@ import XCTest
 
 @testable import FCPKit
 
-final class RealFCPXMLTests: XCTestCase {
-  func testParseInterviewFCPXMLFile() throws {
+internal final class RealFCPXMLTests: XCTestCase {
+  internal func testParseInterviewFCPXMLFile() throws {
     let bundle = Bundle.module
     guard
       let fileURL = bundle.url(
@@ -47,7 +47,7 @@ final class RealFCPXMLTests: XCTestCase {
     print("✅ Found \(smartCollections.count) smart collections")
   }
 
-  func testParseUntitledXMLFCPXMLFile() throws {
+  internal func testParseUntitledXMLFCPXMLFile() throws {
     let bundle = Bundle.module
     guard
       let fileURL = bundle.url(
@@ -75,7 +75,7 @@ final class RealFCPXMLTests: XCTestCase {
     print("✅ Found \(resources.formats?.count ?? 0) format definitions")
   }
 
-  func testCrossDissolveCanBeReadMutatedAndRoundTripped() throws {
+  internal func testCrossDissolveCanBeReadMutatedAndRoundTripped() throws {
     let fileURL = try XCTUnwrap(
       Bundle.module.url(
         forResource: "UntitledXML",
@@ -121,7 +121,7 @@ final class RealFCPXMLTests: XCTestCase {
     XCTAssertEqual(reparsedTransition.filterAudio?.first?.name, "Audio Crossfade")
   }
 
-  func testSharedParametersAnimationsAndFadesCanBeReadAndMutated() throws {
+  internal func testSharedParametersAnimationsAndFadesCanBeReadAndMutated() throws {
     let fileURL = try XCTUnwrap(
       Bundle.module.url(
         forResource: "UntitledXML",
@@ -180,7 +180,7 @@ final class RealFCPXMLTests: XCTestCase {
     XCTAssertEqual(changedVolume.keyframeAnimation?.keyframes?.count, 3)
   }
 
-  func testTitleTextAndStyleCanBeMutatedWithoutBreakingReferences() throws {
+  internal func testTitleTextAndStyleCanBeMutatedWithoutBreakingReferences() throws {
     let fileURL = try XCTUnwrap(
       Bundle.module.url(
         forResource: "UntitledXML",
@@ -236,7 +236,7 @@ final class RealFCPXMLTests: XCTestCase {
     XCTAssertEqual(changedTitle.textStyleDef?[0].textStyle?.kerning, "-1.7751")
   }
 
-  func testNestedTimelineMutationPreservesSiblingReferencesAndTiming() throws {
+  internal func testNestedTimelineMutationPreservesSiblingReferencesAndTiming() throws {
     let fileURL = try XCTUnwrap(
       Bundle.module.url(
         forResource: "UntitledXML",
@@ -279,7 +279,7 @@ final class RealFCPXMLTests: XCTestCase {
     return try XCTUnwrap(media.sequence?.spine?.transitions?.first)
   }
 
-  func testFCPXMLElementCoverage() throws {
+  internal func testFCPXMLElementCoverage() throws {
     let bundle = Bundle.module
 
     // Test Interview FCPXML elements
@@ -324,7 +324,7 @@ final class RealFCPXMLTests: XCTestCase {
     print("✅ UntitledXML file: sync clips, transforms, filters, time mapping")
   }
 
-  func testParseBothMulticamFCPXMLFile() throws {
+  internal func testParseBothMulticamFCPXMLFile() throws {
     let bundle = Bundle.module
     guard
       let fileURL = bundle.url(

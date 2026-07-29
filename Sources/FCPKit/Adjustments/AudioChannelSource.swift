@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct AudioChannelSource: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case srcCh
     case role
     case active

@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct TimeMap: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case timepts = "timept"
   }
 

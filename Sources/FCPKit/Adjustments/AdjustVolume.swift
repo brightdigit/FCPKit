@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct AdjustVolume: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case amount
     case param
   }

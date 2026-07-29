@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct Keyframe: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case time
     case value
     case interp

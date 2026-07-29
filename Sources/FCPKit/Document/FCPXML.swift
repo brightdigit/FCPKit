@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct FCPXML: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case version
     case resources
     case library

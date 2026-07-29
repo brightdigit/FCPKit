@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct MetadataArray: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case strings = "string"
   }
 

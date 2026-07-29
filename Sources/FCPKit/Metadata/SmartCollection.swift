@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct SmartCollection: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case name
     case match
     case matchClip = "match-clip"

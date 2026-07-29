@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct SyncClip: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case offset
     case name
     case duration

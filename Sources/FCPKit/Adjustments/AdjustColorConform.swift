@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct AdjustColorConform: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case enabled
     case autoOrManual
     case conformType

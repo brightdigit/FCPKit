@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct ChapterMarker: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case start
     case duration
     case value

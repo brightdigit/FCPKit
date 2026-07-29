@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct MediaRep: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case kind
     case sig
     case src

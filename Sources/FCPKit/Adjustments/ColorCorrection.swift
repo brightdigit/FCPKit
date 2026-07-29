@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct ColorCorrection: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case name
     case ref
     case param

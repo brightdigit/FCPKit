@@ -4,11 +4,11 @@ import XMLCoder
 
 @testable import FCPKit
 
-final class FCPXMLDiffTests: XCTestCase {
+internal final class FCPXMLDiffTests: XCTestCase {
   private let parser = XMLTreeParser()
   private let engine = FCPXMLDiffEngine()
 
-  func testNormalizerSuppressesChurnAndSurfacesStructuralDelta() throws {
+  internal func testNormalizerSuppressesChurnAndSurfacesStructuralDelta() throws {
     let left = try tree(
       """
       <fcpxml version="1.13">
@@ -78,7 +78,7 @@ final class FCPXMLDiffTests: XCTestCase {
       })
   }
 
-  func testInsertedResourceDoesNotChangeLaterReferences() throws {
+  internal func testInsertedResourceDoesNotChangeLaterReferences() throws {
     let left = try tree(
       """
       <fcpxml version="1.13">
@@ -107,7 +107,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertFalse(differences.contains { $0.kind == .changedAttribute })
   }
 
-  func testDeletedAndReorderedResourcesDoNotChangeSurvivingReferences() throws {
+  internal func testDeletedAndReorderedResourcesDoNotChangeSurvivingReferences() throws {
     let left = try tree(
       """
       <fcpxml><resources>
@@ -130,7 +130,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertFalse(differences.contains { $0.kind == .changedAttribute })
   }
 
-  func testRepeatedSiblingsAreMatchedAsMultisets() throws {
+  internal func testRepeatedSiblingsAreMatchedAsMultisets() throws {
     let left = try tree("<root><param value=\"a\"/><param value=\"b\"/><param value=\"b\"/></root>")
     let right = try tree(
       "<root><param value=\"b\"/><param value=\"c\"/><param value=\"b\"/></root>")
@@ -142,14 +142,14 @@ final class FCPXMLDiffTests: XCTestCase {
       ])
   }
 
-  func testAttributeOrderEmptyElementsAndHeterogeneousChildrenAreStable() throws {
+  internal func testAttributeOrderEmptyElementsAndHeterogeneousChildrenAreStable() throws {
     let left = try tree("<root b=\"2\" a=\"1\"><empty/><a/><b/><a/></root>")
     let right = try tree("<root a=\"1\" b=\"2\"><empty></empty><a/><b/><a/></root>")
 
     XCTAssertEqual(engine.compare(left, right, mode: .symmetric), [])
   }
 
-  func testMixedTextChangesRemainVisible() throws {
+  internal func testMixedTextChangesRemainVisible() throws {
     let left = try tree("<root>before<em>middle</em>after</root>")
     let right = try tree("<root>before<em>middle</em>changed</root>")
 
@@ -160,7 +160,7 @@ final class FCPXMLDiffTests: XCTestCase {
       ])
   }
 
-  func testOpaqueMaskingKeepsElementPathsAndAttributesSignificant() throws {
+  internal func testOpaqueMaskingKeepsElementPathsAndAttributesSignificant() throws {
     let left = try tree(
       """
       <root><bookmark kind="security">OLD</bookmark><data key="effectConfig" version="1">OLD</data></root>
@@ -186,7 +186,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertTrue(missingDifferences.contains { $0.path == "/root/data/@key" })
   }
 
-  func testRemovedVolatileAttributeIsStillReportedAsModelLoss() throws {
+  internal func testRemovedVolatileAttributeIsStillReportedAsModelLoss() throws {
     let original = try tree("<root uid=\"volatile-value\"/>")
     let encoded = try tree("<root/>")
 
@@ -197,7 +197,7 @@ final class FCPXMLDiffTests: XCTestCase {
       ])
   }
 
-  func testCompleteSyntheticModelHasNoRoundTripLoss() throws {
+  internal func testCompleteSyntheticModelHasNoRoundTripLoss() throws {
     let xml = """
       <fcpxml version="1.13">
           <resources>
@@ -229,7 +229,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertEqual(differences, [])
   }
 
-  func testRealTransitionPayloadRoundTripsWithoutStructuralLoss() throws {
+  internal func testRealTransitionPayloadRoundTripsWithoutStructuralLoss() throws {
     let url = try XCTUnwrap(
       Bundle.module.url(
         forResource: "UntitledXML",
@@ -244,7 +244,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertFalse(findings.contains { $0.path.contains("/transition/") })
   }
 
-  func testObservedHeterogeneousParameterChildOrderSurvivesRoundTrip() throws {
+  internal func testObservedHeterogeneousParameterChildOrderSurvivesRoundTrip() throws {
     let url = try XCTUnwrap(
       Bundle.module.url(
         forResource: "UntitledXML",
@@ -275,7 +275,7 @@ final class FCPXMLDiffTests: XCTestCase {
       ])
   }
 
-  func testReportRenderingIsDeterministic() throws {
+  internal func testReportRenderingIsDeterministic() throws {
     let report = SchemaCompletenessReport(
       formatVersion: 1,
       normalization: ["rule"],
@@ -293,7 +293,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertEqual(try renderer.jsonData(report), try renderer.jsonData(report))
   }
 
-  func testCheckedInFixtureBaselineAndRepresentativePaths() throws {
+  internal func testCheckedInFixtureBaselineAndRepresentativePaths() throws {
     let urls = ["Both-Multicam", "Interview", "UntitledXML"].map {
       Bundle.module.url(forResource: $0, withExtension: "fcpxml", subdirectory: "TestData")!
     }
@@ -326,7 +326,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertEqual(try renderer.jsonData(report), try renderer.jsonData(report))
   }
 
-  func testCompletenessAcceptanceRejectsOnlyTotalsAboveBaseline() {
+  internal func testCompletenessAcceptanceRejectsOnlyTotalsAboveBaseline() {
     let acceptance = SchemaCompletenessAcceptance(maximumTotalLoss: 10)
     let accepted = report(with: 10)
     let rejected = report(with: 11)
@@ -335,7 +335,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertFalse(acceptance.accepts(rejected))
   }
 
-  func testRawPairReportsAddedRemovedAndChangedStructures() throws {
+  internal func testRawPairReportsAddedRemovedAndChangedStructures() throws {
     let before = Data(
       """
       <fcpxml version="1.13"><library><event name="Before"><marker value="old"/><note>gone</note></event></library></fcpxml>
@@ -360,7 +360,7 @@ final class FCPXMLDiffTests: XCTestCase {
       report.findings.contains { $0.kind == .addedElement && $0.path.hasSuffix("/keyword") })
   }
 
-  func testRawPairNormalizationIdentityFilteringAndRenderingAreDeterministic() throws {
+  internal func testRawPairNormalizationIdentityFilteringAndRenderingAreDeterministic() throws {
     let before = Data(
       "<fcpxml version=\"1.13\" uid=\"old\"><resources><format id=\"r1\"/></resources><library format=\"r1\"><marker value=\"old\"/></library></fcpxml>"
         .utf8)
@@ -387,7 +387,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertEqual(identical.findings, [])
   }
 
-  func testRoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInput() throws {
+  internal func testRoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInput() throws {
     let xml = Data(
       """
       <fcpxml version="1.13">
@@ -422,7 +422,7 @@ final class FCPXMLDiffTests: XCTestCase {
       })
   }
 
-  func testRoundTripAnalyzerCanCheckAnEditedEncodedDocument() throws {
+  internal func testRoundTripAnalyzerCanCheckAnEditedEncodedDocument() throws {
     let original = Data(
       """
       <fcpxml version="1.13"><resources><format id="r1"/></resources>
@@ -449,7 +449,7 @@ final class FCPXMLDiffTests: XCTestCase {
     XCTAssertEqual(report.fcpxmlVersion, "1.13")
   }
 
-  func testEveryModelTypeDeclaresNodeEncoding() {
+  internal func testEveryModelTypeDeclaresNodeEncoding() {
     let attributeOnlyTypes: [any DynamicNodeEncoding.Type] = [
       Format.self, Effect.self, Clip.self, Gap.self, Keyword.self,
       MCSource.self, ParamElement.self, ConformRate.self, Timept.self,

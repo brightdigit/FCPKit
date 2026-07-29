@@ -1,8 +1,8 @@
 import FCPKit
 import XCTest
 
-final class FCPXMLVersionTests: XCTestCase {
-  func testCompatibilityClassifiesSupportedOlderNewerAndMalformed() {
+internal final class FCPXMLVersionTests: XCTestCase {
+  internal func testCompatibilityClassifiesSupportedOlderNewerAndMalformed() {
     let parser = FCPXMLParser()
 
     XCTAssertEqual(parser.compatibility(ofVersion: "1.13"), .supported)
@@ -15,7 +15,7 @@ final class FCPXMLVersionTests: XCTestCase {
     XCTAssertEqual(parser.compatibility(ofVersion: "1.13-beta"), .malformed)
   }
 
-  func testParseWithCompatibilityReportsDocumentVersion() throws {
+  internal func testParseWithCompatibilityReportsDocumentVersion() throws {
     let xml = """
       <?xml version="1.0" encoding="UTF-8"?>
       <fcpxml version="1.13">
@@ -30,7 +30,7 @@ final class FCPXMLVersionTests: XCTestCase {
     XCTAssertEqual(result.document.versionCompatibility, .supported)
   }
 
-  func testParseRequiringWellFormedVersionRejectsMalformed() throws {
+  internal func testParseRequiringWellFormedVersionRejectsMalformed() throws {
     let xml = """
       <?xml version="1.0" encoding="UTF-8"?>
       <fcpxml version="not-a-version">
@@ -59,7 +59,7 @@ final class FCPXMLVersionTests: XCTestCase {
     XCTAssertEqual(newerDocument.versionCompatibility, .newer)
   }
 
-  func testGenerationBaselineMatchesSupportedVersion() {
+  internal func testGenerationBaselineMatchesSupportedVersion() {
     XCTAssertEqual(FCPXMLVersion.supportedGenerationVersion.rawValue, "1.13")
     XCTAssertTrue(FCPXMLVersion.testedFixtureVersions.contains(.supportedGenerationVersion))
     XCTAssertTrue(FCPXMLVersion.testedFixtureVersions.contains(FCPXMLVersion("1.14")))

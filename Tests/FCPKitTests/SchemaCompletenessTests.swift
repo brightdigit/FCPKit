@@ -2,9 +2,9 @@ import XCTest
 
 @testable import FCPKit
 
-final class SchemaCompletenessTests: XCTestCase {
+internal final class SchemaCompletenessTests: XCTestCase {
   /// Test for elements commonly found in title-heavy projects
-  func testTitleElements() {
+  internal func testTitleElements() {
     let sampleTitleXML = """
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE fcpxml>
@@ -47,7 +47,7 @@ final class SchemaCompletenessTests: XCTestCase {
   }
 
   /// Test for audio-specific elements
-  func testAudioElements() {
+  internal func testAudioElements() {
     let sampleAudioXML = """
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE fcpxml>
@@ -87,7 +87,7 @@ final class SchemaCompletenessTests: XCTestCase {
   }
 
   /// Test for transition elements
-  func testTransitionElements() {
+  internal func testTransitionElements() {
     let sampleTransitionXML = """
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE fcpxml>
@@ -124,7 +124,7 @@ final class SchemaCompletenessTests: XCTestCase {
   }
 
   /// Test for marker and metadata elements
-  func testMarkerElements() {
+  internal func testMarkerElements() {
     let sampleMarkerXML = """
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE fcpxml>
@@ -162,7 +162,7 @@ final class SchemaCompletenessTests: XCTestCase {
   }
 
   /// Test for generator elements (color matte, noise, etc.)
-  func testGeneratorElements() {
+  internal func testGeneratorElements() {
     let sampleGeneratorXML = """
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE fcpxml>

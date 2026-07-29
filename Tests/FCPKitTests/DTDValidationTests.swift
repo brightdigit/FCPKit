@@ -2,8 +2,8 @@ import FCPXMLDiff
 import Foundation
 import XCTest
 
-final class DTDValidationTests: XCTestCase {
-  func testDTDLocatorFindsBundled114WhenFinalCutInstalled() throws {
+internal final class DTDValidationTests: XCTestCase {
+  internal func testDTDLocatorFindsBundled114WhenFinalCutInstalled() throws {
     let locator = FCPXMLDTDLocator()
     guard let dtd = locator.dtdURL(forVersion: "1.14") else {
       throw XCTSkip("Final Cut Pro DTD not installed on this machine")
@@ -12,7 +12,7 @@ final class DTDValidationTests: XCTestCase {
     XCTAssertTrue(FileManager.default.fileExists(atPath: dtd.path))
   }
 
-  func testValidateFeaturePairAgainstLocalDTD() throws {
+  internal func testValidateFeaturePairAgainstLocalDTD() throws {
     let locator = FCPXMLDTDLocator()
     guard let dtd = locator.dtdURL(forVersion: "1.14") else {
       throw XCTSkip("Final Cut Pro DTD not installed on this machine")
@@ -32,7 +32,7 @@ final class DTDValidationTests: XCTestCase {
     XCTAssertTrue(report.isValid, "Unexpected DTD issues: \(report.issues)")
   }
 
-  func testValidateThrowsWhenDTDMissing() throws {
+  internal func testValidateThrowsWhenDTDMissing() throws {
     let emptyLocator = FCPXMLDTDLocator(searchRoots: [
       URL(fileURLWithPath: "/tmp/fcpxml-missing-dtds", isDirectory: true)
     ])

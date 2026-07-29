@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct AdjustCrop: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case mode
     case trimRect = "trim-rect"
   }

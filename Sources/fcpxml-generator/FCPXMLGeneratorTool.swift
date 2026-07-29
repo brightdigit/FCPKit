@@ -37,8 +37,8 @@ import Foundation
   /// The generator extracts metadata from real media files, which requires AVFoundation.
   /// The target still builds everywhere so cross-platform CI stays honest.
   @main
-  struct FCPXMLGeneratorTool {
-    static func main() {
+  internal struct FCPXMLGeneratorTool {
+    internal static func main() {
       FileHandle.standardError.write(
         Data(
           "fcpxml-generator requires AVFoundation and is unavailable on this platform.\n".utf8
@@ -50,8 +50,8 @@ import Foundation
 #else
 
   @main
-  struct FCPXMLGeneratorTool {
-    static func main() async {
+  internal struct FCPXMLGeneratorTool {
+    internal static func main() async {
       let args = CommandLine.arguments
 
       // Check for help flag
@@ -140,7 +140,7 @@ import Foundation
       }
     }
 
-    static func printUsage() {
+    internal static func printUsage() {
       print(
         """
         fcpxml-generator - Generate multicam FCPXML from two video files

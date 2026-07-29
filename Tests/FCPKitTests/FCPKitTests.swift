@@ -2,8 +2,8 @@ import XCTest
 
 @testable import FCPKit
 
-final class FCPKitTests: XCTestCase {
-  let sampleFCPXML = """
+internal final class FCPKitTests: XCTestCase {
+  internal let sampleFCPXML = """
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE fcpxml>
     <fcpxml version="1.10">
@@ -25,7 +25,7 @@ final class FCPKitTests: XCTestCase {
     </fcpxml>
     """
 
-  func testParseBasicFCPXML() throws {
+  internal func testParseBasicFCPXML() throws {
     let parser = FCPXMLParser()
     let fcpxml = try parser.parse(xmlString: sampleFCPXML)
 
@@ -80,7 +80,7 @@ final class FCPKitTests: XCTestCase {
     XCTAssertEqual(clip.duration, "7200s")
   }
 
-  func testEncodeToXML() throws {
+  internal func testEncodeToXML() throws {
     let parser = FCPXMLParser()
     let fcpxml = try parser.parse(xmlString: sampleFCPXML)
     let xmlString = try parser.encodeToString(fcpxml)
@@ -93,7 +93,7 @@ final class FCPKitTests: XCTestCase {
     XCTAssertTrue(xmlString.contains("library"))
   }
 
-  func testRoundTripEncoding() throws {
+  internal func testRoundTripEncoding() throws {
     let parser = FCPXMLParser()
     let originalFCPXML = try parser.parse(xmlString: sampleFCPXML)
     let encodedXML = try parser.encodeToString(originalFCPXML)
@@ -106,7 +106,7 @@ final class FCPKitTests: XCTestCase {
     XCTAssertEqual(originalFCPXML.library?.events?.count, decodedFCPXML.library?.events?.count)
   }
 
-  func testDataElementTextContentRoundTrips() throws {
+  internal func testDataElementTextContentRoundTrips() throws {
     let xml = """
       <fcpxml version="1.13">
           <resources>
@@ -143,14 +143,14 @@ final class FCPKitTests: XCTestCase {
     XCTAssertEqual(reparsedValue, "PAYLOAD")
   }
 
-  func testInvalidXMLHandling() {
+  internal func testInvalidXMLHandling() {
     let parser = FCPXMLParser()
     let invalidXML = "invalid xml content"
 
     XCTAssertThrowsError(try parser.parse(xmlString: invalidXML))
   }
 
-  func testEmptyXMLHandling() {
+  internal func testEmptyXMLHandling() {
     let parser = FCPXMLParser()
     let emptyXML = ""
 

@@ -9,8 +9,8 @@ import XCTest
   import AVFoundation
   import CoreMedia
 
-  final class MulticamXMLBuilderTests: XCTestCase {
-    func testDefaultValuesMatchExpectedStructure() throws {
+  internal final class MulticamXMLBuilderTests: XCTestCase {
+    internal func testDefaultValuesMatchExpectedStructure() throws {
       let leftVideo = VideoMetadata(
         url: URL(fileURLWithPath: "/test/Leo.mp4"),
         duration: CMTime(value: 7_700_000, timescale: 2_400),
@@ -51,7 +51,7 @@ import XCTest
       XCTAssertEqual(document.version, "1.13")
     }
 
-    func testCustomValuesAreAppliedCorrectly() throws {
+    internal func testCustomValuesAreAppliedCorrectly() throws {
       let leftVideo = VideoMetadata(
         url: URL(fileURLWithPath: "/test/LeftVideo.mp4"),
         duration: CMTime(value: 1_000_000, timescale: 2_400),

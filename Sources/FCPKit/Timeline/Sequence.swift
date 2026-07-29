@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct Sequence: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case format
     case duration
     case tcStart

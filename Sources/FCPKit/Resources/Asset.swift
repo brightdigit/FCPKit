@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct Asset: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case id
     case name
     case uid

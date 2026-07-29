@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 public struct Spine: Codable {
-  enum CodingKeys: String, CodingKey {
+  internal enum CodingKeys: String, CodingKey {
     case clips = "clip"
     case gaps = "gap"
     case mcClips = "mc-clip"
