@@ -47,6 +47,14 @@ extension Data {
 
 @main
 internal enum FCPXMLDiffCommand {
+  /// Positional inputs plus the value of each `--flag value` pair.
+  private struct Options {
+    let inputs: [String]
+    let values: [String: String]
+
+    subscript(flag: String) -> String? { values[flag] }
+  }
+
   internal static func main() {
     do {
       let accepted = try run()
@@ -77,37 +85,66 @@ internal enum FCPXMLDiffCommand {
     }
   }
 
-  private static func runSchemaCompleteness(_ arguments: [String]) throws -> Bool {
+  /// Splits `arguments` into positional inputs and `--flag value` pairs.
+  ///
+  /// Every flag in `valueFlags` consumes the argument that follows it; anything
+  /// else is treated as a positional input.
+  /// - Throws: `CommandError.usage` if a flag is missing its value.
+  private static func parseOptions(
+    _ arguments: [String],
+    valueFlags: Set<String>
+  ) throws -> Options {
     var inputs: [String] = []
-    var markdownPath: String?
-    var jsonPath: String?
-    var maximumTotalLoss: Int?
+    var values: [String: String] = [:]
     var index = 0
     while index < arguments.count {
-      switch arguments[index] {
-      case "--markdown":
+      let argument = arguments[index]
+      if valueFlags.contains(argument) {
         index += 1
-        guard index < arguments.count else { throw CommandError.usage }
-        markdownPath = arguments[index]
-      case "--json":
-        index += 1
-        guard index < arguments.count else { throw CommandError.usage }
-        jsonPath = arguments[index]
-      case "--fail-if-total-exceeds":
-        index += 1
-        guard index < arguments.count,
-          let value = Int(arguments[index]),
-          value >= 0
-        else { throw CommandError.usage }
-        maximumTotalLoss = value
-      default:
-        inputs.append(arguments[index])
+        guard index < arguments.count else {
+          throw CommandError.usage
+        }
+        values[argument] = arguments[index]
+      } else {
+        inputs.append(argument)
       }
       index += 1
     }
-    guard !inputs.isEmpty else { throw CommandError.usage }
+    return Options(inputs: inputs, values: values)
+  }
 
-    let fileURLs = try collectFiles(inputs)
+  /// Prints a rendered report and writes the optional `--markdown`/`--json` copies.
+  private static func emit(
+    markdown: String,
+    jsonData: @autoclosure () throws -> Data,
+    options: Options
+  ) throws {
+    print(markdown, terminator: "")
+    if let path = options["--markdown"] {
+      try Data(markdown.utf8).writeAtomicallyIfSupported(to: URL(fileURLWithPath: path))
+    }
+    if let path = options["--json"] {
+      try jsonData().writeAtomicallyIfSupported(to: URL(fileURLWithPath: path))
+    }
+  }
+
+  private static func runSchemaCompleteness(_ arguments: [String]) throws -> Bool {
+    let options = try parseOptions(
+      arguments,
+      valueFlags: ["--markdown", "--json", "--fail-if-total-exceeds"]
+    )
+    guard !options.inputs.isEmpty else {
+      throw CommandError.usage
+    }
+    var maximumTotalLoss: Int?
+    if let raw = options["--fail-if-total-exceeds"] {
+      guard let value = Int(raw), value >= 0 else {
+        throw CommandError.usage
+      }
+      maximumTotalLoss = value
+    }
+
+    let fileURLs = try collectFiles(options.inputs)
     guard !fileURLs.isEmpty else { throw CommandError.noInputFiles }
 
     let currentDirectory = URL(
@@ -119,15 +156,11 @@ internal enum FCPXMLDiffCommand {
       relativeTo: currentDirectory
     )
     let renderer = SchemaCompletenessReportRenderer()
-    let markdown = renderer.markdown(report)
-    print(markdown, terminator: "")
-
-    if let markdownPath {
-      try Data(markdown.utf8).writeAtomicallyIfSupported(to: URL(fileURLWithPath: markdownPath))
-    }
-    if let jsonPath {
-      try renderer.jsonData(report).writeAtomicallyIfSupported(to: URL(fileURLWithPath: jsonPath))
-    }
+    try emit(
+      markdown: renderer.markdown(report),
+      jsonData: try renderer.jsonData(report),
+      options: options
+    )
     guard let maximumTotalLoss else {
       return true
     }
@@ -143,95 +176,56 @@ internal enum FCPXMLDiffCommand {
   }
 
   private static func runCompare(_ arguments: [String]) throws {
-    var inputs: [String] = []
-    var markdownPath: String?
-    var jsonPath: String?
-    var pathFilter: String?
-    var index = 0
-    while index < arguments.count {
-      switch arguments[index] {
-      case "--markdown", "--json", "--path":
-        let option = arguments[index]
-        index += 1
-        guard index < arguments.count else { throw CommandError.usage }
-        if option == "--markdown" { markdownPath = arguments[index] }
-        if option == "--json" { jsonPath = arguments[index] }
-        if option == "--path" { pathFilter = arguments[index] }
-      default:
-        inputs.append(arguments[index])
-      }
-      index += 1
+    let options = try parseOptions(arguments, valueFlags: ["--markdown", "--json", "--path"])
+    guard options.inputs.count == 2 else {
+      throw CommandError.usage
     }
-    guard inputs.count == 2 else { throw CommandError.usage }
-    let beforeURL = URL(fileURLWithPath: inputs[0])
-    let afterURL = URL(fileURLWithPath: inputs[1])
-    guard FileManager.default.fileExists(atPath: beforeURL.path) else {
-      throw CommandError.missingInput(inputs[0])
-    }
-    guard FileManager.default.fileExists(atPath: afterURL.path) else {
-      throw CommandError.missingInput(inputs[1])
-    }
+    let beforeURL = try existingFile(at: options.inputs[0])
+    let afterURL = try existingFile(at: options.inputs[1])
     let report = try RawPairAnalyzer().analyze(
       beforeData: Data(contentsOf: beforeURL),
       afterData: Data(contentsOf: afterURL),
-      beforePath: inputs[0],
-      afterPath: inputs[1],
-      pathFilter: pathFilter
+      beforePath: options.inputs[0],
+      afterPath: options.inputs[1],
+      pathFilter: options["--path"]
     )
     let renderer = RawPairReportRenderer()
-    let markdown = renderer.markdown(report)
-    print(markdown, terminator: "")
-    if let markdownPath {
-      try Data(markdown.utf8).writeAtomicallyIfSupported(to: URL(fileURLWithPath: markdownPath))
-    }
-    if let jsonPath {
-      try renderer.jsonData(report).writeAtomicallyIfSupported(to: URL(fileURLWithPath: jsonPath))
-    }
+    try emit(
+      markdown: renderer.markdown(report),
+      jsonData: try renderer.jsonData(report),
+      options: options
+    )
   }
 
   private static func runValidate(_ arguments: [String]) throws -> Bool {
-    var inputs: [String] = []
-    var markdownPath: String?
-    var jsonPath: String?
-    var dtdPath: String?
-    var index = 0
-    while index < arguments.count {
-      switch arguments[index] {
-      case "--markdown", "--json", "--dtd":
-        let option = arguments[index]
-        index += 1
-        guard index < arguments.count else { throw CommandError.usage }
-        if option == "--markdown" { markdownPath = arguments[index] }
-        if option == "--json" { jsonPath = arguments[index] }
-        if option == "--dtd" { dtdPath = arguments[index] }
-      default:
-        inputs.append(arguments[index])
-      }
-      index += 1
+    let options = try parseOptions(arguments, valueFlags: ["--markdown", "--json", "--dtd"])
+    guard options.inputs.count == 1 else {
+      throw CommandError.usage
     }
-    guard inputs.count == 1 else { throw CommandError.usage }
-    let inputPath = inputs[0]
-    let inputURL = URL(fileURLWithPath: inputPath)
-    guard FileManager.default.fileExists(atPath: inputURL.path) else {
-      throw CommandError.missingInput(inputPath)
-    }
-    let data = try Data(contentsOf: inputURL)
-    let dtdURL = dtdPath.map { URL(fileURLWithPath: $0) }
+    let inputPath = options.inputs[0]
+    let inputURL = try existingFile(at: inputPath)
     let report = try FCPXMLDTDValidator().validate(
-      data: data,
+      data: try Data(contentsOf: inputURL),
       sourcePath: inputPath,
-      dtdURL: dtdURL
+      dtdURL: options["--dtd"].map { URL(fileURLWithPath: $0) }
     )
     let renderer = FCPXMLValidationReportRenderer()
-    let markdown = renderer.markdown(report)
-    print(markdown, terminator: "")
-    if let markdownPath {
-      try Data(markdown.utf8).writeAtomicallyIfSupported(to: URL(fileURLWithPath: markdownPath))
-    }
-    if let jsonPath {
-      try renderer.jsonData(report).writeAtomicallyIfSupported(to: URL(fileURLWithPath: jsonPath))
-    }
+    try emit(
+      markdown: renderer.markdown(report),
+      jsonData: try renderer.jsonData(report),
+      options: options
+    )
     return report.isValid
+  }
+
+  /// Resolves a path to a URL, requiring the file to exist.
+  /// - Throws: `CommandError.missingInput` if no file exists at `path`.
+  private static func existingFile(at path: String) throws -> URL {
+    let url = URL(fileURLWithPath: path)
+    guard FileManager.default.fileExists(atPath: url.path) else {
+      throw CommandError.missingInput(path)
+    }
+    return url
   }
 
   private static func collectFiles(_ paths: [String]) throws -> [URL] {
@@ -259,6 +253,7 @@ internal enum FCPXMLDiffCommand {
   private static func writeError(_ message: String) {
     FileHandle.standardError.write(Data(message.utf8))
   }
+
 }
 
 private enum CommandError: Error, LocalizedError {
