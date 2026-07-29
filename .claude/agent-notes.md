@@ -24,8 +24,9 @@ Running log of user corrections and standing always/never directives for this re
 - 2026-07-17: Keep this log in the repo in an agent-visible folder (`.claude/`), not machine-only, so it is committed and shared.
 - 2026-07-17: Save memories AND corrections in the repo (`.claude/memory/` and this file), never only in the local user memory directory.
 - 2026-07-29: Write new tests in Swift Testing following https://gist.github.com/leogdion/0806c2f41aeb2c77db6a4a846cf13c0f — existing XCTest tests stay as they are; this overrides the older "write new tests in XCTest for now" guidance.
-- 2026-07-29: Gate non-Apple platform support with `#if canImport(...)` (e.g. `FoundationXML`, `CoreMedia`) rather than excluding targets or platforms from CI.
+- 2026-07-29: Gate Apple-only frameworks with `#if canImport(...)` (e.g. `CoreMedia`, `AVFoundation`) rather than excluding targets or platforms from CI.
 - 2026-07-29: Never claim cross-platform support from reasoning or a macOS-only build — verify in the actual target environment (Docker container matching CI) before asserting it works.
 - 2026-07-29: When copying BrightDigit package scaffolding, use the most recently maintained sibling repo as the template (currently SyndiKit).
 - 2026-07-29: Prefer opening a PR over merging; leave work in a reviewable state that a new conversation can pick up.
 - 2026-07-29: When verifying Linux/wasm builds in Docker, pass `--platform linux/amd64` to match CI — a Docker tag can ship different Swift builds per architecture, so an arm64 pass proves nothing about CI.
+- 2026-07-29: Foundation and FoundationXML are available on all OSes.

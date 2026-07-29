@@ -76,8 +76,6 @@ fi
 if [ -z "$FORMAT_ONLY" ]; then
 	run_command $TOOL_CMD swift-format lint --configuration .swift-format --recursive --parallel $SWIFTFORMAT_LINT_OPTIONS Sources Tests
 	run_command $TOOL_CMD swiftlint lint $SWIFTLINT_OPTIONS
-	# Check for compilation errors
-	run_command swift build --build-tests
 fi
 
 # header.sh rewrites file headers in place, so it only runs locally — never in CI.

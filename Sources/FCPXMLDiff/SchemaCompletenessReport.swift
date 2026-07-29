@@ -1,187 +1,217 @@
+//
+//  SchemaCompletenessReport.swift
+//  FCPKit
+//
+//  Created by Leo Dion.
+//  Copyright © 2026 BrightDigit.
+//
+//  Permission is hereby granted, free of charge, to any person
+//  obtaining a copy of this software and associated documentation
+//  files (the "Software"), to deal in the Software without
+//  restriction, including without limitation the rights to use,
+//  copy, modify, merge, publish, distribute, sublicense, and/or
+//  sell copies of the Software, and to permit persons to whom the
+//  Software is furnished to do so, subject to the following
+//  conditions:
+//
+//  The above copyright notice and this permission notice shall be
+//  included in all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+//  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+//  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+//  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+//  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+//  OTHER DEALINGS IN THE SOFTWARE.
+//
+
 import FCPKit
 import Foundation
 
 public struct SchemaCompletenessSummary: Codable, Equatable, Sendable {
-    public let droppedElements: Int
-    public let droppedAttributes: Int
-    public let droppedText: Int
+  public let droppedElements: Int
+  public let droppedAttributes: Int
+  public let droppedText: Int
 
-    public var total: Int { droppedElements + droppedAttributes + droppedText }
+  public var total: Int { droppedElements + droppedAttributes + droppedText }
 
-    public init(findings: [FCPXMLDifference]) {
-        droppedElements = findings.filter { $0.kind == .droppedElement }.reduce(0) { $0 + $1.count }
-        droppedAttributes = findings.filter { $0.kind == .droppedAttribute }.reduce(0) { $0 + $1.count }
-        droppedText = findings.filter { $0.kind == .droppedText }.reduce(0) { $0 + $1.count }
-    }
+  public init(findings: [FCPXMLDifference]) {
+    droppedElements = findings.filter { $0.kind == .droppedElement }.reduce(0) { $0 + $1.count }
+    droppedAttributes = findings.filter { $0.kind == .droppedAttribute }.reduce(0) { $0 + $1.count }
+    droppedText = findings.filter { $0.kind == .droppedText }.reduce(0) { $0 + $1.count }
+  }
 }
 
 public struct SchemaCompletenessAcceptance: Equatable, Sendable {
-    public let maximumTotalLoss: Int
+  public let maximumTotalLoss: Int
 
-    public init(maximumTotalLoss: Int) {
-        precondition(maximumTotalLoss >= 0, "maximumTotalLoss must not be negative")
-        self.maximumTotalLoss = maximumTotalLoss
-    }
+  public init(maximumTotalLoss: Int) {
+    precondition(maximumTotalLoss >= 0, "maximumTotalLoss must not be negative")
+    self.maximumTotalLoss = maximumTotalLoss
+  }
 
-    public func accepts(_ report: SchemaCompletenessReport) -> Bool {
-        report.totals.total <= maximumTotalLoss
-    }
+  public func accepts(_ report: SchemaCompletenessReport) -> Bool {
+    report.totals.total <= maximumTotalLoss
+  }
 }
 
 public struct SchemaCompletenessFileReport: Codable, Equatable, Sendable {
-    public let path: String
-    public let fcpxmlVersion: String?
-    public let summary: SchemaCompletenessSummary
-    public let findings: [FCPXMLDifference]
+  public let path: String
+  public let fcpxmlVersion: String?
+  public let summary: SchemaCompletenessSummary
+  public let findings: [FCPXMLDifference]
 }
 
 public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
-    public let formatVersion: Int
-    public let normalization: [String]
-    public let totals: SchemaCompletenessSummary
-    public let aggregateFindings: [FCPXMLDifference]
-    public let files: [SchemaCompletenessFileReport]
+  public let formatVersion: Int
+  public let normalization: [String]
+  public let totals: SchemaCompletenessSummary
+  public let aggregateFindings: [FCPXMLDifference]
+  public let files: [SchemaCompletenessFileReport]
 
-    public init(
-        formatVersion: Int,
-        normalization: [String],
-        totals: SchemaCompletenessSummary,
-        aggregateFindings: [FCPXMLDifference],
-        files: [SchemaCompletenessFileReport]
-    ) {
-        self.formatVersion = formatVersion
-        self.normalization = normalization
-        self.totals = totals
-        self.aggregateFindings = aggregateFindings
-        self.files = files
-    }
+  public init(
+    formatVersion: Int,
+    normalization: [String],
+    totals: SchemaCompletenessSummary,
+    aggregateFindings: [FCPXMLDifference],
+    files: [SchemaCompletenessFileReport]
+  ) {
+    self.formatVersion = formatVersion
+    self.normalization = normalization
+    self.totals = totals
+    self.aggregateFindings = aggregateFindings
+    self.files = files
+  }
 }
 
 public struct SchemaCompletenessAnalyzer: Sendable {
-    private let treeParser = XMLTreeParser()
-    private let diffEngine = FCPXMLDiffEngine()
+  private let treeParser = XMLTreeParser()
+  private let diffEngine = FCPXMLDiffEngine()
 
-    public init() {}
+  public init() {}
 
-    public func analyze(
-        fileURLs: [URL],
-        relativeTo baseURL: URL? = nil
-    ) throws -> SchemaCompletenessReport {
-        let parser = FCPXMLParser()
-        let files = try fileURLs.sorted { $0.path < $1.path }.map { fileURL in
-            let originalData = try Data(contentsOf: fileURL)
-            let originalTree = try treeParser.parse(originalData)
-            let model = try parser.parse(data: originalData)
-            let encodedData = try parser.encode(model)
-            let encodedTree = try treeParser.parse(encodedData)
-            let findings = diffEngine.compare(originalTree, encodedTree, mode: .completeness)
-            return SchemaCompletenessFileReport(
-                path: displayPath(fileURL, relativeTo: baseURL),
-                fcpxmlVersion: originalTree.attributes["version"],
-                summary: SchemaCompletenessSummary(findings: findings),
-                findings: findings
-            )
-        }
-
-        var aggregate: [FindingKey: Int] = [:]
-        for finding in files.flatMap(\.findings) {
-            aggregate[FindingKey(finding), default: 0] += finding.count
-        }
-        let aggregateFindings = aggregate.map { key, count in
-            FCPXMLDifference(kind: key.kind, path: key.path, count: count)
-        }.sorted(by: findingOrdering)
-
-        return SchemaCompletenessReport(
-            formatVersion: 1,
-            normalization: FCPXMLNormalizer.rules,
-            totals: SchemaCompletenessSummary(findings: aggregateFindings),
-            aggregateFindings: aggregateFindings,
-            files: files
-        )
+  public func analyze(
+    fileURLs: [URL],
+    relativeTo baseURL: URL? = nil
+  ) throws -> SchemaCompletenessReport {
+    let parser = FCPXMLParser()
+    let files = try fileURLs.sorted { $0.path < $1.path }.map { fileURL in
+      let originalData = try Data(contentsOf: fileURL)
+      let originalTree = try treeParser.parse(originalData)
+      let model = try parser.parse(data: originalData)
+      let encodedData = try parser.encode(model)
+      let encodedTree = try treeParser.parse(encodedData)
+      let findings = diffEngine.compare(originalTree, encodedTree, mode: .completeness)
+      return SchemaCompletenessFileReport(
+        path: displayPath(fileURL, relativeTo: baseURL),
+        fcpxmlVersion: originalTree.attributes["version"],
+        summary: SchemaCompletenessSummary(findings: findings),
+        findings: findings
+      )
     }
 
-    private func displayPath(_ url: URL, relativeTo baseURL: URL?) -> String {
-        guard let baseURL else { return url.lastPathComponent }
-        let base = baseURL.standardizedFileURL.path
-        let path = url.standardizedFileURL.path
-        guard path.hasPrefix(base + "/") else { return path }
-        return String(path.dropFirst(base.count + 1))
+    var aggregate: [FindingKey: Int] = [:]
+    for finding in files.flatMap(\.findings) {
+      aggregate[FindingKey(finding), default: 0] += finding.count
     }
+    let aggregateFindings = aggregate.map { key, count in
+      FCPXMLDifference(kind: key.kind, path: key.path, count: count)
+    }.sorted(by: findingOrdering)
 
-    private func findingOrdering(_ lhs: FCPXMLDifference, _ rhs: FCPXMLDifference) -> Bool {
-        if lhs.count != rhs.count { return lhs.count > rhs.count }
-        if lhs.kind.rawValue != rhs.kind.rawValue { return lhs.kind.rawValue < rhs.kind.rawValue }
-        return lhs.path < rhs.path
-    }
+    return SchemaCompletenessReport(
+      formatVersion: 1,
+      normalization: FCPXMLNormalizer.rules,
+      totals: SchemaCompletenessSummary(findings: aggregateFindings),
+      aggregateFindings: aggregateFindings,
+      files: files
+    )
+  }
+
+  private func displayPath(_ url: URL, relativeTo baseURL: URL?) -> String {
+    guard let baseURL else { return url.lastPathComponent }
+    let base = baseURL.standardizedFileURL.path
+    let path = url.standardizedFileURL.path
+    guard path.hasPrefix(base + "/") else { return path }
+    return String(path.dropFirst(base.count + 1))
+  }
+
+  private func findingOrdering(_ lhs: FCPXMLDifference, _ rhs: FCPXMLDifference) -> Bool {
+    if lhs.count != rhs.count { return lhs.count > rhs.count }
+    if lhs.kind.rawValue != rhs.kind.rawValue { return lhs.kind.rawValue < rhs.kind.rawValue }
+    return lhs.path < rhs.path
+  }
 }
 
 private struct FindingKey: Hashable {
-    let kind: FCPXMLDifferenceKind
-    let path: String
+  let kind: FCPXMLDifferenceKind
+  let path: String
 
-    init(_ finding: FCPXMLDifference) {
-        kind = finding.kind
-        path = finding.path
-    }
+  init(_ finding: FCPXMLDifference) {
+    kind = finding.kind
+    path = finding.path
+  }
 }
 
 public struct SchemaCompletenessReportRenderer: Sendable {
-    public init() {}
+  public init() {}
 
-    public func jsonData(_ report: SchemaCompletenessReport) throws -> Data {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-        return try encoder.encode(report)
+  public func jsonData(_ report: SchemaCompletenessReport) throws -> Data {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+    return try encoder.encode(report)
+  }
+
+  public func markdown(_ report: SchemaCompletenessReport) -> String {
+    var lines = [
+      "# FCPKit Schema Completeness Report",
+      "",
+      "Generated by `fcpxml-diff schema-completeness` from decode/re-encode structural loss.",
+      "",
+      "## Summary",
+      "",
+      "| Files | Dropped elements | Dropped attributes | Dropped text | Total |",
+      "| ---: | ---: | ---: | ---: | ---: |",
+      "| \(report.files.count) | \(report.totals.droppedElements) | \(report.totals.droppedAttributes) | \(report.totals.droppedText) | \(report.totals.total) |",
+      "",
+      "## Normalization",
+      "",
+    ]
+    lines.append(contentsOf: report.normalization.map { "- \($0)" })
+    lines += ["", "## Aggregate Findings", ""]
+    appendFindings(report.aggregateFindings, to: &lines)
+
+    for file in report.files {
+      lines += [
+        "",
+        "## \(file.path)",
+        "",
+        "FCPXML version: `\(file.fcpxmlVersion ?? "unknown")`",
+        "",
+        "Dropped elements: \(file.summary.droppedElements); dropped attributes: \(file.summary.droppedAttributes); dropped text: \(file.summary.droppedText).",
+        "",
+      ]
+      appendFindings(file.findings, to: &lines)
     }
+    return lines.joined(separator: "\n") + "\n"
+  }
 
-    public func markdown(_ report: SchemaCompletenessReport) -> String {
-        var lines = [
-            "# FCPKit Schema Completeness Report",
-            "",
-            "Generated by `fcpxml-diff schema-completeness` from decode/re-encode structural loss.",
-            "",
-            "## Summary",
-            "",
-            "| Files | Dropped elements | Dropped attributes | Dropped text | Total |",
-            "| ---: | ---: | ---: | ---: | ---: |",
-            "| \(report.files.count) | \(report.totals.droppedElements) | \(report.totals.droppedAttributes) | \(report.totals.droppedText) | \(report.totals.total) |",
-            "",
-            "## Normalization",
-            "",
-        ]
-        lines.append(contentsOf: report.normalization.map { "- \($0)" })
-        lines += ["", "## Aggregate Findings", ""]
-        appendFindings(report.aggregateFindings, to: &lines)
-
-        for file in report.files {
-            lines += [
-                "",
-                "## \(file.path)",
-                "",
-                "FCPXML version: `\(file.fcpxmlVersion ?? "unknown")`",
-                "",
-                "Dropped elements: \(file.summary.droppedElements); dropped attributes: \(file.summary.droppedAttributes); dropped text: \(file.summary.droppedText).",
-                "",
-            ]
-            appendFindings(file.findings, to: &lines)
-        }
-        return lines.joined(separator: "\n") + "\n"
+  private func appendFindings(
+    _ findings: [FCPXMLDifference],
+    to lines: inout [String]
+  ) {
+    if findings.isEmpty {
+      lines.append("No structural loss detected.")
+      return
     }
-
-    private func appendFindings(
-        _ findings: [FCPXMLDifference],
-        to lines: inout [String]
-    ) {
-        if findings.isEmpty {
-            lines.append("No structural loss detected.")
-            return
-        }
-        lines += [
-            "| Count | Kind | Structural path |",
-            "| ---: | --- | --- |",
-        ]
-        lines.append(contentsOf: findings.map {
-            "| \($0.count) | `\($0.kind.rawValue)` | `\($0.path)` |"
-        })
-    }
+    lines += [
+      "| Count | Kind | Structural path |",
+      "| ---: | --- | --- |",
+    ]
+    lines.append(
+      contentsOf: findings.map {
+        "| \($0.count) | `\($0.kind.rawValue)` | `\($0.path)` |"
+      })
+  }
 }

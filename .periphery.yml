@@ -1,5 +1,1 @@
 retain_public: true
-targets:
-- FCPKit
-- FCPKitMediaTools
-- FCPXMLDiff
