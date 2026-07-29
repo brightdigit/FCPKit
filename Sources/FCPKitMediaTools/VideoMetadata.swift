@@ -73,27 +73,3 @@ import Foundation
     }
   }
 #endif
-
-/// Errors that can occur during video metadata extraction
-public enum VideoMetadataError: Error, LocalizedError {
-  case fileNotFound
-  case unsupportedFormat
-  case noVideoTrack
-  case noAudioTrack
-  case extractionFailed(String)
-
-  public var errorDescription: String? {
-    switch self {
-    case .fileNotFound:
-      return "Video file not found"
-    case .unsupportedFormat:
-      return "Unsupported video format"
-    case .noVideoTrack:
-      return "No video track found in file"
-    case .noAudioTrack:
-      return "No audio track found in file"
-    case .extractionFailed(let reason):
-      return "Metadata extraction failed: \(reason)"
-    }
-  }
-}

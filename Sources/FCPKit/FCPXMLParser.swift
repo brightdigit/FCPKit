@@ -76,26 +76,3 @@ public class FCPXMLParser {
     try data.write(to: url)
   }
 }
-
-public enum FCPXMLError: Error, LocalizedError {
-  case invalidXMLString
-  case encodingFailed
-  case decodingFailed(String)
-  case fileNotFound
-  case unsupportedVersion(String)
-
-  public var errorDescription: String? {
-    switch self {
-    case .invalidXMLString:
-      return "Invalid XML string provided"
-    case .encodingFailed:
-      return "Failed to encode FCPXML to string"
-    case .decodingFailed(let message):
-      return "Failed to decode FCPXML: \(message)"
-    case .fileNotFound:
-      return "FCPXML file not found"
-    case .unsupportedVersion(let version):
-      return "Malformed or unsupported FCPXML version declaration: \(version)"
-    }
-  }
-}

@@ -54,18 +54,6 @@ public struct FCPXMLVersion: RawRepresentable, Hashable, Sendable, Codable {
   ]
 }
 
-/// Compatibility of a declared FCPXML version against the library policy.
-public enum FCPXMLVersionCompatibility: String, Sendable, Equatable {
-  /// Declared version matches the current generation/fixture baseline.
-  case supported
-  /// Declared version is older than the generation baseline but parseable best-effort.
-  case older
-  /// Declared version is newer than the generation baseline; parse remains best-effort.
-  case newer
-  /// Declared version string is not a dotted numeric FCPXML version.
-  case malformed
-}
-
 extension FCPXMLVersion {
   /// Evaluates compatibility of this declared version against the generation baseline.
   public func compatibility(
@@ -98,39 +86,5 @@ extension FCPXMLVersion {
       components.append(number)
     }
     return components
-  }
-}
-
-extension FCPXML {
-  /// Compatibility of `version` against the library generation baseline.
-  public var versionCompatibility: FCPXMLVersionCompatibility {
-    FCPXMLVersion(version).compatibility()
-  }
-}
-
-extension FCPXMLParser {
-  /// Inspects a declared version string without requiring a full document parse.
-  public func compatibility(ofVersion version: String) -> FCPXMLVersionCompatibility {
-    FCPXMLVersion(version).compatibility()
-  }
-
-  /// Parses a document and returns it with an explicit compatibility classification.
-  public func parseWithCompatibility(data: Data) throws -> (
-    document: FCPXML, compatibility: FCPXMLVersionCompatibility
-  ) {
-    let document = try parse(data: data)
-    return (document, document.versionCompatibility)
-  }
-
-  /// Parses a document and throws when the declared version is malformed.
-  ///
-  /// Older and newer versions still decode best-effort per ADR 0001; only
-  /// malformed version declarations fail this policy entry point.
-  public func parseRequiringWellFormedVersion(data: Data) throws -> FCPXML {
-    let (document, compatibility) = try parseWithCompatibility(data: data)
-    if compatibility == .malformed {
-      throw FCPXMLError.unsupportedVersion(document.version)
-    }
-    return document
   }
 }
