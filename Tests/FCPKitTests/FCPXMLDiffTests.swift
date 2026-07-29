@@ -75,7 +75,8 @@ internal final class FCPXMLDiffTests: XCTestCase {
       differences.contains {
         $0.kind == .addedElement
           && $0.path.hasSuffix("/asset-clip/marker")
-      })
+      }
+    )
   }
 
   internal func testInsertedResourceDoesNotChangeLaterReferences() throws {
@@ -133,13 +134,15 @@ internal final class FCPXMLDiffTests: XCTestCase {
   internal func testRepeatedSiblingsAreMatchedAsMultisets() throws {
     let left = try tree("<root><param value=\"a\"/><param value=\"b\"/><param value=\"b\"/></root>")
     let right = try tree(
-      "<root><param value=\"b\"/><param value=\"c\"/><param value=\"b\"/></root>")
+      "<root><param value=\"b\"/><param value=\"c\"/><param value=\"b\"/></root>"
+    )
 
     XCTAssertEqual(
       engine.compare(left, right, mode: .symmetric),
       [
         FCPXMLDifference(kind: .changedAttribute, path: "/root/param/@value", count: 1)
-      ])
+      ]
+    )
   }
 
   internal func testAttributeOrderEmptyElementsAndHeterogeneousChildrenAreStable() throws {
@@ -157,7 +160,8 @@ internal final class FCPXMLDiffTests: XCTestCase {
       engine.compare(left, right, mode: .symmetric),
       [
         FCPXMLDifference(kind: .changedText, path: "/root/#text", count: 1)
-      ])
+      ]
+    )
   }
 
   internal func testOpaqueMaskingKeepsElementPathsAndAttributesSignificant() throws {
@@ -194,7 +198,8 @@ internal final class FCPXMLDiffTests: XCTestCase {
       engine.compare(original, encoded, mode: .completeness),
       [
         FCPXMLDifference(kind: .droppedAttribute, path: "/root/@uid", count: 1)
-      ])
+      ]
+    )
   }
 
   internal func testCompleteSyntheticModelHasNoRoundTripLoss() throws {
@@ -267,12 +272,14 @@ internal final class FCPXMLDiffTests: XCTestCase {
       animatedVolume.children.map(\.name),
       [
         "fadeIn", "fadeOut", "keyframeAnimation",
-      ])
+      ]
+    )
     XCTAssertEqual(
       animatedVolume.children.last?.children.map(\.name),
       [
         "keyframe", "keyframe", "keyframe",
-      ])
+      ]
+    )
   }
 
   internal func testReportRenderingIsDeterministic() throws {
@@ -310,14 +317,16 @@ internal final class FCPXMLDiffTests: XCTestCase {
     XCTAssertTrue(
       report.aggregateFindings.allSatisfy {
         $0.path.hasPrefix("/fcpxml/library/event/")
-      })
+      }
+    )
     XCTAssertFalse(
       report.aggregateFindings.contains {
         $0.path.contains("/param")
           || $0.path.contains("/keyframe")
           || $0.path.contains("/fadeIn")
           || $0.path.contains("/fadeOut")
-      })
+      }
+    )
     XCTAssertFalse(report.aggregateFindings.contains { $0.path.contains("/title/") })
     XCTAssertEqual(report.aggregateFindings, [])
 
@@ -353,20 +362,25 @@ internal final class FCPXMLDiffTests: XCTestCase {
     XCTAssertTrue(
       report.findings.contains {
         $0.kind == .changedAttribute && $0.path.hasSuffix("/marker/@value")
-      })
+      }
+    )
     XCTAssertTrue(
-      report.findings.contains { $0.kind == .droppedElement && $0.path.hasSuffix("/note") })
+      report.findings.contains { $0.kind == .droppedElement && $0.path.hasSuffix("/note") }
+    )
     XCTAssertTrue(
-      report.findings.contains { $0.kind == .addedElement && $0.path.hasSuffix("/keyword") })
+      report.findings.contains { $0.kind == .addedElement && $0.path.hasSuffix("/keyword") }
+    )
   }
 
   internal func testRawPairNormalizationIdentityFilteringAndRenderingAreDeterministic() throws {
     let before = Data(
       "<fcpxml version=\"1.13\" uid=\"old\"><resources><format id=\"r1\"/></resources><library format=\"r1\"><marker value=\"old\"/></library></fcpxml>"
-        .utf8)
+        .utf8
+    )
     let after = Data(
       "<fcpxml version=\"1.13\" uid=\"new\"><resources><format id=\"r9\"/></resources><library format=\"r9\"><marker value=\"new\"/></library></fcpxml>"
-        .utf8)
+        .utf8
+    )
     let analyzer = RawPairAnalyzer()
     let report = try analyzer.analyze(
       beforeData: before,
@@ -378,7 +392,8 @@ internal final class FCPXMLDiffTests: XCTestCase {
       report.findings,
       [
         FCPXMLDifference(kind: .changedAttribute, path: "/fcpxml/library/marker/@value", count: 1)
-      ])
+      ]
+    )
     let renderer = RawPairReportRenderer()
     XCTAssertEqual(renderer.markdown(report), renderer.markdown(report))
     XCTAssertEqual(try renderer.jsonData(report), try renderer.jsonData(report))
@@ -409,17 +424,20 @@ internal final class FCPXMLDiffTests: XCTestCase {
       report.findings.contains {
         $0.kind == .droppedAttribute
           && $0.path.hasSuffix("/gap/@unsupported-attribute")
-      })
+      }
+    )
     XCTAssertTrue(
       report.findings.contains {
         $0.kind == .droppedElement
           && $0.path.hasSuffix("/unsupported")
-      })
+      }
+    )
     XCTAssertTrue(
       report.findings.contains {
         $0.kind == .droppedElement
           && $0.path.hasSuffix("/unsupported/nested")
-      })
+      }
+    )
   }
 
   internal func testRoundTripAnalyzerCanCheckAnEditedEncodedDocument() throws {

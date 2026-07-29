@@ -74,7 +74,8 @@ extension Event: DynamicNodeEncoding {
       for: key,
       elementKeys: [
         "project", "asset-clip", "ref-clip", "mc-clip", "sync-clip",
-      ])
+      ]
+    )
   }
 }
 
@@ -112,7 +113,8 @@ extension AssetClip: DynamicNodeEncoding {
         "filter-audio", "filter-video",
         "title",
         "asset-clip", "video", "adjust-transform", "adjust-crop", "timeMap",
-      ])
+      ]
+    )
   }
 }
 
@@ -136,7 +138,8 @@ extension Video: DynamicNodeEncoding {
       for: key,
       elementKeys: [
         "param", "filter-video", "adjust-transform", "adjust-colorConform",
-      ])
+      ]
+    )
   }
 }
 
@@ -158,7 +161,8 @@ extension ParamElement: DynamicNodeEncoding {
       for: key,
       elementKeys: [
         "param", "data", "fadeIn", "fadeOut", "keyframeAnimation",
-      ])
+      ]
+    )
   }
 }
 
@@ -188,7 +192,8 @@ extension RefClip: DynamicNodeEncoding {
         "conform-rate", "timeMap", "adjust-transform", "adjust-crop", "asset-clip",
         "video",
         "ref-clip", "adjust-volume", "filter-video",
-      ])
+      ]
+    )
   }
 }
 
@@ -242,7 +247,8 @@ extension SmartCollection: DynamicNodeEncoding {
       for: key,
       elementKeys: [
         "match-clip", "match-media", "match-ratings", "match-analysis-type",
-      ])
+      ]
+    )
   }
 }
 
@@ -368,7 +374,8 @@ extension Storyline: DynamicNodeEncoding {
       for: key,
       elementKeys: [
         "clip", "asset-clip", "ref-clip", "title", "generator",
-      ])
+      ]
+    )
   }
 }
 

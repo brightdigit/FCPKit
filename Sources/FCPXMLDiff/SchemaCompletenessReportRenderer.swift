@@ -88,6 +88,7 @@ public struct SchemaCompletenessReportRenderer: Sendable {
     lines.append(
       contentsOf: findings.map {
         "| \($0.count) | `\($0.kind.rawValue)` | `\($0.path)` |"
-      })
+      }
+    )
   }
 }

@@ -64,7 +64,8 @@ public struct FCPXMLNormalizer: Sendable {
           return (name, resourceMap[value] ?? "$resource-unmapped")
         }
         return (name, value)
-      })
+      }
+    )
     normalized.children = node.children.map { normalize($0, resourceMap: resourceMap) }
 
     if node.name == "bookmark"

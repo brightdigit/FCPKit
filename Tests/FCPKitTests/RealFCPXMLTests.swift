@@ -7,7 +7,8 @@ internal final class RealFCPXMLTests: XCTestCase {
     let bundle = Bundle.module
     guard
       let fileURL = bundle.url(
-        forResource: "Interview", withExtension: "fcpxml", subdirectory: "TestData")
+        forResource: "Interview", withExtension: "fcpxml", subdirectory: "TestData"
+      )
     else {
       throw XCTSkip("Interview FCPXML test file not found")
     }
@@ -51,7 +52,8 @@ internal final class RealFCPXMLTests: XCTestCase {
     let bundle = Bundle.module
     guard
       let fileURL = bundle.url(
-        forResource: "UntitledXML", withExtension: "fcpxml", subdirectory: "TestData")
+        forResource: "UntitledXML", withExtension: "fcpxml", subdirectory: "TestData"
+      )
     else {
       throw XCTSkip("UntitledXML FCPXML test file not found")
     }
@@ -96,13 +98,15 @@ internal final class RealFCPXMLTests: XCTestCase {
       videoFilter.param?.map(\.name),
       [
         "Look", "Amount", "Ease", "Ease Amount", "disableDRT",
-      ])
+      ]
+    )
     XCTAssertEqual(videoFilter.param?.first(where: { $0.name == "Amount" })?.value, "50")
     XCTAssertEqual(originalData.key, "effectConfig")
     XCTAssertFalse(try XCTUnwrap(originalData.value).isEmpty)
 
     let mediaIndex = try XCTUnwrap(
-      document.resources?.media?.firstIndex { $0.name == "Music Intro" })
+      document.resources?.media?.firstIndex { $0.name == "Music Intro" }
+    )
     let amountIndex = try XCTUnwrap(
       document.resources?.media?[mediaIndex].sequence?.spine?.transitions?[0]
         .filterVideo?[0].param?.firstIndex { $0.name == "Amount" }
@@ -152,7 +156,8 @@ internal final class RealFCPXMLTests: XCTestCase {
         media.sequence?.spine?.assetClips?.contains {
           $0.adjustVolume?.param?.contains { $0.keyframeAnimation != nil } == true
         } == true
-      })
+      }
+    )
     let assetIndex = try XCTUnwrap(
       document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?.firstIndex {
         $0.adjustVolume?.param?.contains { $0.keyframeAnimation != nil } == true
@@ -195,7 +200,8 @@ internal final class RealFCPXMLTests: XCTestCase {
         media.sequence?.spine?.assetClips?.contains {
           $0.titles?.contains { $0.name?.contains("SyntaxKit") == true } == true
         } == true
-      })
+      }
+    )
     let assetIndex = try XCTUnwrap(
       document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?.firstIndex {
         $0.titles?.contains { $0.name?.contains("SyntaxKit") == true } == true
@@ -249,7 +255,8 @@ internal final class RealFCPXMLTests: XCTestCase {
     let mediaIndex = try XCTUnwrap(
       document.resources?.media?.firstIndex { media in
         media.sequence?.spine?.refClips?.contains { $0.refClips?.isEmpty == false } == true
-      })
+      }
+    )
     let parentIndex = try XCTUnwrap(
       document.resources?.media?[mediaIndex].sequence?.spine?.refClips?.firstIndex {
         $0.refClips?.isEmpty == false
@@ -285,7 +292,8 @@ internal final class RealFCPXMLTests: XCTestCase {
     // Test Interview FCPXML elements
     guard
       let interviewURL = bundle.url(
-        forResource: "Interview", withExtension: "fcpxml", subdirectory: "TestData")
+        forResource: "Interview", withExtension: "fcpxml", subdirectory: "TestData"
+      )
     else {
       throw XCTSkip("Interview FCPXML test file not found")
     }
@@ -304,7 +312,8 @@ internal final class RealFCPXMLTests: XCTestCase {
     // Test UntitledXML FCPXML elements
     guard
       let untitledURL = bundle.url(
-        forResource: "UntitledXML", withExtension: "fcpxml", subdirectory: "TestData")
+        forResource: "UntitledXML", withExtension: "fcpxml", subdirectory: "TestData"
+      )
     else {
       throw XCTSkip("UntitledXML FCPXML test file not found")
     }
@@ -328,7 +337,8 @@ internal final class RealFCPXMLTests: XCTestCase {
     let bundle = Bundle.module
     guard
       let fileURL = bundle.url(
-        forResource: "Both-Multicam", withExtension: "fcpxml", subdirectory: "TestData")
+        forResource: "Both-Multicam", withExtension: "fcpxml", subdirectory: "TestData"
+      )
     else {
       throw XCTSkip("Both-Multicam FCPXML test file not found")
     }

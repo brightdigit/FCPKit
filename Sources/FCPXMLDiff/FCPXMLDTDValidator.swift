@@ -152,8 +152,8 @@ public struct FCPXMLDTDValidator: Sendable {
       }
     }
     if let range = line.range(
-      of: #"No declaration for element\s+([A-Za-z0-9:_-]+)"#, options: .regularExpression)
-    {
+      of: #"No declaration for element\s+([A-Za-z0-9:_-]+)"#, options: .regularExpression
+    ) {
       let token = line[range]
         .split(whereSeparator: \.isWhitespace)
         .last

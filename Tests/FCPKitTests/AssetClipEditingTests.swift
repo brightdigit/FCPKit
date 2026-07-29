@@ -19,7 +19,8 @@ internal final class AssetClipEditingTests: XCTestCase {
 
   private func spineClip(_ document: inout FCPXML) throws -> AssetClip {
     try XCTUnwrap(
-      document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first)
+      document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first
+    )
   }
 
   private func setSpineClip(_ document: inout FCPXML, _ clip: AssetClip) throws {
@@ -67,7 +68,8 @@ internal final class AssetClipEditingTests: XCTestCase {
     XCTAssertEqual(
       actualClip.audioRole,
       expected.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?
-        .audioRole)
+        .audioRole
+    )
     XCTAssertEqual(actualSource.srcCh, expectedSource.srcCh)
     XCTAssertEqual(actualSource.role, expectedSource.role)
 

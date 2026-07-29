@@ -94,16 +94,19 @@ import XCTest
       XCTAssertEqual(decoded.resources?.assets?.first?.id, "r2")
       XCTAssertEqual(
         decoded.resources?.assets?.first?.mediaRep?.first?.src,
-        "file:///Users/Shared/FCPKitMedia/interview.mov")
+        "file:///Users/Shared/FCPKitMedia/interview.mov"
+      )
       XCTAssertEqual(decoded.library?.events?.first?.uid, "EVENT-UID")
       XCTAssertEqual(decoded.library?.events?.first?.projects?.first?.sequence?.format, "r1")
       XCTAssertEqual(decoded.library?.events?.first?.projects?.first?.sequence?.duration, "240/24s")
       XCTAssertEqual(
         decoded.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.ref,
-        "r2")
+        "r2"
+      )
       XCTAssertEqual(
         decoded.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.offset,
-        "0s")
+        "0s"
+      )
       XCTAssertFalse(try FCPXMLRoundTripAnalyzer().analyze(data: originalData).hasLoss)
 
       document.library?.events?[0].projects?[0].name = "Renamed Typed Project"
@@ -118,15 +121,18 @@ import XCTest
       XCTAssertEqual(mutated.library?.events?.first?.uid, decoded.library?.events?.first?.uid)
       XCTAssertEqual(
         mutated.library?.events?.first?.projects?.first?.uid,
-        decoded.library?.events?.first?.projects?.first?.uid)
+        decoded.library?.events?.first?.projects?.first?.uid
+      )
       XCTAssertEqual(mutated.library?.events?.first?.projects?.first?.sequence?.format, "r1")
       XCTAssertEqual(mutated.library?.events?.first?.projects?.first?.sequence?.duration, "240/24s")
       XCTAssertEqual(
         mutated.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.ref,
-        "r2")
+        "r2"
+      )
       XCTAssertEqual(
         mutated.resources?.assets?.first?.mediaRep?.first?.src,
-        decoded.resources?.assets?.first?.mediaRep?.first?.src)
+        decoded.resources?.assets?.first?.mediaRep?.first?.src
+      )
     }
 
     internal func testTypedMulticamBuilderRoundTripsAndPreservesStructure() throws {
@@ -177,19 +183,24 @@ import XCTest
 
       XCTAssertEqual(
         decoded.resources?.media?.first(where: { $0.id == "r3" })?.sequence?.spine?.assetClips?
-          .first?.ref, "r4")
+          .first?.ref, "r4"
+      )
       XCTAssertEqual(
         decoded.resources?.media?.first(where: { $0.id == "r5" })?.sequence?.spine?.assetClips?
-          .first?.ref, "r7")
+          .first?.ref, "r7"
+      )
       XCTAssertEqual(
         decoded.resources?.assets?.first(where: { $0.id == "r4" })?.mediaRep?.first?.src,
-        left.url.absoluteString)
+        left.url.absoluteString
+      )
       XCTAssertEqual(
         decoded.resources?.assets?.first(where: { $0.id == "r7" })?.mediaRep?.first?.src,
-        right.url.absoluteString)
+        right.url.absoluteString
+      )
 
       let angles = try XCTUnwrap(
-        decoded.resources?.media?.first(where: { $0.id == "r8" })?.multicam?.mcAngles)
+        decoded.resources?.media?.first(where: { $0.id == "r8" })?.multicam?.mcAngles
+      )
       XCTAssertEqual(angles.count, 3)
       XCTAssertEqual(angles.map(\.name), ["Both", "Left", "Right"])
       let angleIDs = try angles.map { try XCTUnwrap($0.angleID) }

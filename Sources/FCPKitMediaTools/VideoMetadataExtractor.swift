@@ -85,7 +85,8 @@ import Foundation
         let formatDescriptions = try await audioTrack.load(.formatDescriptions)
         if let formatDescription = formatDescriptions.first {
           let audioStreamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(
-            formatDescription)
+            formatDescription
+          )
           if let asbd = audioStreamBasicDescription {
             audioChannels = Int(asbd.pointee.mChannelsPerFrame)
             audioSampleRate = asbd.pointee.mSampleRate

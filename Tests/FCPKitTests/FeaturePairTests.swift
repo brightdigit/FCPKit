@@ -32,7 +32,8 @@ internal final class FeaturePairTests: XCTestCase {
 
     let marker = try XCTUnwrap(
       document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.markers?
-        .first)
+        .first
+    )
     XCTAssertEqual(marker.start, "5s")
     XCTAssertEqual(marker.value, "Cue")
 
@@ -58,7 +59,8 @@ internal final class FeaturePairTests: XCTestCase {
     try assertNoRoundTripLoss(data)
 
     let clip = try XCTUnwrap(
-      document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first)
+      document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first
+    )
     XCTAssertEqual(clip.audioRole, "dialogue")
     let source = try XCTUnwrap(clip.audioChannelSource?.first)
     XCTAssertEqual(source.srcCh, "1, 2")
@@ -87,7 +89,8 @@ internal final class FeaturePairTests: XCTestCase {
 
     let title = try XCTUnwrap(
       document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.titles?
-        .first)
+        .first
+    )
     XCTAssertEqual(title.name, "Basic Title")
     let styledText = try XCTUnwrap(title.text?.first?.textStyle?.first)
     XCTAssertEqual(styledText.content, "Title")
@@ -117,7 +120,8 @@ internal final class FeaturePairTests: XCTestCase {
     try assertNoRoundTripLoss(data)
 
     let clip = try XCTUnwrap(
-      document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first)
+      document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first
+    )
     XCTAssertEqual(clip.duration, "20s")
     let timeMap = try XCTUnwrap(clip.timeMap)
     XCTAssertEqual(timeMap.timepts?.count, 2)

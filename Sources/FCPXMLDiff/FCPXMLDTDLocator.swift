@@ -47,7 +47,8 @@ public struct FCPXMLDTDLocator: Sendable {
       applications
         .appendingPathComponent($0, isDirectory: true)
         .appendingPathComponent(
-          "Contents/Frameworks/Interchange.framework/Versions/A/Resources", isDirectory: true)
+          "Contents/Frameworks/Interchange.framework/Versions/A/Resources", isDirectory: true
+        )
     }
   }
 

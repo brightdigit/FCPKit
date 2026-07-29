@@ -42,7 +42,8 @@ import Foundation
       FileHandle.standardError.write(
         Data(
           "fcpxml-generator requires AVFoundation and is unavailable on this platform.\n".utf8
-        ))
+        )
+      )
       exit(1)
     }
   }

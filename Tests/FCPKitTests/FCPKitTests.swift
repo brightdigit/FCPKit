@@ -101,7 +101,8 @@ internal final class FCPKitTests: XCTestCase {
 
     XCTAssertEqual(originalFCPXML.version, decodedFCPXML.version)
     XCTAssertEqual(
-      originalFCPXML.resources?.formats?.count, decodedFCPXML.resources?.formats?.count)
+      originalFCPXML.resources?.formats?.count, decodedFCPXML.resources?.formats?.count
+    )
     XCTAssertEqual(originalFCPXML.resources?.assets?.count, decodedFCPXML.resources?.assets?.count)
     XCTAssertEqual(originalFCPXML.library?.events?.count, decodedFCPXML.library?.events?.count)
   }
