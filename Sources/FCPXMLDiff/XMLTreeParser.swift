@@ -29,29 +29,6 @@
 
 import Foundation
 
-public struct XMLTreeParser: Sendable {
-  public init() {}
-
-  public func parse(_ data: Data) throws -> XMLTreeNode {
-    let delegate = TreeParserDelegate()
-    let parser = XMLParser(data: data)
-    parser.delegate = delegate
-    parser.shouldProcessNamespaces = false
-    parser.shouldReportNamespacePrefixes = true
-    parser.shouldResolveExternalEntities = false
-
-    guard parser.parse() else {
-      throw XMLTreeParserError.invalidDocument(
-        parser.parserError?.localizedDescription ?? "unknown parser error"
-      )
-    }
-    guard let root = delegate.root else {
-      throw XMLTreeParserError.missingRootElement
-    }
-    return root
-  }
-}
-
 private final class TreeParserDelegate: NSObject, XMLParserDelegate {
   private struct Builder {
     var name: String
@@ -111,5 +88,28 @@ private final class TreeParserDelegate: NSObject, XMLParserDelegate {
     } else {
       stack[stack.count - 1].children.append(node)
     }
+  }
+}
+
+public struct XMLTreeParser: Sendable {
+  public init() {}
+
+  public func parse(_ data: Data) throws -> XMLTreeNode {
+    let delegate = TreeParserDelegate()
+    let parser = XMLParser(data: data)
+    parser.delegate = delegate
+    parser.shouldProcessNamespaces = false
+    parser.shouldReportNamespacePrefixes = true
+    parser.shouldResolveExternalEntities = false
+
+    guard parser.parse() else {
+      throw XMLTreeParserError.invalidDocument(
+        parser.parserError?.localizedDescription ?? "unknown parser error"
+      )
+    }
+    guard let root = delegate.root else {
+      throw XMLTreeParserError.missingRootElement
+    }
+    return root
   }
 }

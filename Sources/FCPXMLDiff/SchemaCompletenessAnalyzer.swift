@@ -30,6 +30,16 @@
 import FCPKit
 import Foundation
 
+private struct FindingKey: Hashable {
+  let kind: FCPXMLDifferenceKind
+  let path: String
+
+  init(_ finding: FCPXMLDifference) {
+    kind = finding.kind
+    path = finding.path
+  }
+}
+
 public struct SchemaCompletenessAnalyzer: Sendable {
   private let treeParser = XMLTreeParser()
   private let diffEngine = FCPXMLDiffEngine()
@@ -93,15 +103,5 @@ public struct SchemaCompletenessAnalyzer: Sendable {
       return lhs.kind.rawValue < rhs.kind.rawValue
     }
     return lhs.path < rhs.path
-  }
-}
-
-private struct FindingKey: Hashable {
-  let kind: FCPXMLDifferenceKind
-  let path: String
-
-  init(_ finding: FCPXMLDifference) {
-    kind = finding.kind
-    path = finding.path
   }
 }

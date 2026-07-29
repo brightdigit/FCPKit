@@ -34,6 +34,15 @@ import Foundation
 /// A version string alone does not imply complete schema coverage. Support is
 /// limited to the explicitly tested vocabulary for that version.
 public struct FCPXMLVersion: RawRepresentable, Hashable, Sendable, Codable {
+  /// Version emitted by typed generation and `MulticamXMLBuilder`.
+  public static let supportedGenerationVersion = FCPXMLVersion("1.13")
+
+  /// Fixture versions currently covered by schema-completeness evidence.
+  public static let testedFixtureVersions: Set<FCPXMLVersion> = [
+    FCPXMLVersion("1.13"),
+    FCPXMLVersion("1.14"),
+  ]
+
   public let rawValue: String
 
   public init(rawValue: String) {
@@ -43,18 +52,25 @@ public struct FCPXMLVersion: RawRepresentable, Hashable, Sendable, Codable {
   public init(_ rawValue: String) {
     self.rawValue = rawValue
   }
-
-  /// Version emitted by typed generation and `MulticamXMLBuilder`.
-  public static let supportedGenerationVersion = FCPXMLVersion("1.13")
-
-  /// Fixture versions currently covered by schema-completeness evidence.
-  public static let testedFixtureVersions: Set<FCPXMLVersion> = [
-    FCPXMLVersion("1.13"),
-    FCPXMLVersion("1.14"),
-  ]
 }
 
 extension FCPXMLVersion {
+  private static func numericComponents(_ value: String) -> [Int]? {
+    let parts = value.split(separator: ".", omittingEmptySubsequences: false)
+    guard !parts.isEmpty else {
+      return nil
+    }
+    var components: [Int] = []
+    components.reserveCapacity(parts.count)
+    for part in parts {
+      guard let number = Int(part), String(number) == part else {
+        return nil
+      }
+      components.append(number)
+    }
+    return components
+  }
+
   /// Evaluates compatibility of this declared version against the generation baseline.
   public func compatibility(
     relativeTo baseline: FCPXMLVersion = .supportedGenerationVersion
@@ -72,21 +88,5 @@ extension FCPXMLVersion {
       return .older
     }
     return .newer
-  }
-
-  private static func numericComponents(_ value: String) -> [Int]? {
-    let parts = value.split(separator: ".", omittingEmptySubsequences: false)
-    guard !parts.isEmpty else {
-      return nil
-    }
-    var components: [Int] = []
-    components.reserveCapacity(parts.count)
-    for part in parts {
-      guard let number = Int(part), String(number) == part else {
-        return nil
-      }
-      components.append(number)
-    }
-    return components
   }
 }

@@ -29,6 +29,30 @@
 
 import Foundation
 
+private struct Inventory {
+  var elements: [String: Int] = [:]
+  var attributes: [String: [String]] = [:]
+  var text: [String: [String]] = [:]
+
+  init(root: XMLTreeNode) {
+    collect(root, parentPath: "")
+  }
+
+  private mutating func collect(_ node: XMLTreeNode, parentPath: String) {
+    let path = "\(parentPath)/\(node.name)"
+    elements[path, default: 0] += 1
+    for (name, value) in node.attributes {
+      attributes["\(path)/@\(name)", default: []].append(value)
+    }
+    if !node.text.isEmpty && node.text != "$opaque" {
+      text["\(path)/#text", default: []].append(node.text)
+    }
+    for child in node.children {
+      collect(child, parentPath: path)
+    }
+  }
+}
+
 public struct FCPXMLDiffEngine: Sendable {
   private let normalizer = FCPXMLNormalizer()
 
@@ -183,29 +207,5 @@ public struct FCPXMLDiffEngine: Sendable {
       return lhs.kind.rawValue < rhs.kind.rawValue
     }
     return lhs.path < rhs.path
-  }
-}
-
-private struct Inventory {
-  var elements: [String: Int] = [:]
-  var attributes: [String: [String]] = [:]
-  var text: [String: [String]] = [:]
-
-  init(root: XMLTreeNode) {
-    collect(root, parentPath: "")
-  }
-
-  private mutating func collect(_ node: XMLTreeNode, parentPath: String) {
-    let path = "\(parentPath)/\(node.name)"
-    elements[path, default: 0] += 1
-    for (name, value) in node.attributes {
-      attributes["\(path)/@\(name)", default: []].append(value)
-    }
-    if !node.text.isEmpty && node.text != "$opaque" {
-      text["\(path)/#text", default: []].append(node.text)
-    }
-    for child in node.children {
-      collect(child, parentPath: path)
-    }
   }
 }

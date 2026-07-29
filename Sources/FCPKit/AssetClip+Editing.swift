@@ -30,6 +30,37 @@
 import Foundation
 
 extension AssetClip {
+  private static func parseDurationSeconds(_ value: String) throws -> Double {
+    let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard trimmed.hasSuffix("s") else {
+      throw AssetClipEditingError.unsupportedDuration(value)
+    }
+    let body = String(trimmed.dropLast())
+    if body.contains("/") {
+      let parts = body.split(separator: "/", maxSplits: 1).map(String.init)
+      guard parts.count == 2,
+        let numerator = Double(parts[0]),
+        let denominator = Double(parts[1]),
+        denominator != 0
+      else {
+        throw AssetClipEditingError.unsupportedDuration(value)
+      }
+      return numerator / denominator
+    }
+    guard let seconds = Double(body) else {
+      throw AssetClipEditingError.unsupportedDuration(value)
+    }
+    return seconds
+  }
+
+  private static func formatSeconds(_ seconds: Double) -> String {
+    if seconds.rounded() == seconds {
+      return "\(Int(seconds))s"
+    }
+    // Prefer exact integer rational when possible; otherwise emit a decimal seconds form.
+    return "\(seconds)s"
+  }
+
   /// Appends a standard marker matching Final Cut's default marker duration.
   public mutating func addMarker(
     name: String,
@@ -76,34 +107,4 @@ extension AssetClip {
     ])
   }
 
-  private static func parseDurationSeconds(_ value: String) throws -> Double {
-    let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard trimmed.hasSuffix("s") else {
-      throw AssetClipEditingError.unsupportedDuration(value)
-    }
-    let body = String(trimmed.dropLast())
-    if body.contains("/") {
-      let parts = body.split(separator: "/", maxSplits: 1).map(String.init)
-      guard parts.count == 2,
-        let numerator = Double(parts[0]),
-        let denominator = Double(parts[1]),
-        denominator != 0
-      else {
-        throw AssetClipEditingError.unsupportedDuration(value)
-      }
-      return numerator / denominator
-    }
-    guard let seconds = Double(body) else {
-      throw AssetClipEditingError.unsupportedDuration(value)
-    }
-    return seconds
-  }
-
-  private static func formatSeconds(_ seconds: Double) -> String {
-    if seconds.rounded() == seconds {
-      return "\(Int(seconds))s"
-    }
-    // Prefer exact integer rational when possible; otherwise emit a decimal seconds form.
-    return "\(seconds)s"
-  }
 }
