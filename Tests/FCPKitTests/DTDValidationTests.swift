@@ -44,10 +44,18 @@ final class DTDValidationTests: XCTestCase {
         XCTAssertThrowsError(
             try FCPXMLDTDValidator(locator: emptyLocator).validate(data: data)
         ) { error in
-            guard case FCPXMLValidationError.dtdNotFound(let version) = error else {
-                return XCTFail("Expected dtdNotFound, got \(error)")
+            // validate() checks for xmllint before looking up the DTD, so on hosts
+            // without xmllint (e.g. the Linux CI container) that error comes first.
+            // Either outcome proves validation refused to run; only an unexpected
+            // error kind is a failure.
+            switch error {
+            case FCPXMLValidationError.dtdNotFound(let version):
+                XCTAssertEqual(version, "1.14")
+            case FCPXMLValidationError.xmllintUnavailable:
+                break
+            default:
+                XCTFail("Expected dtdNotFound or xmllintUnavailable, got \(error)")
             }
-            XCTAssertEqual(version, "1.14")
         }
     }
 }

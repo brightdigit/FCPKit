@@ -109,11 +109,11 @@ jobs:
             echo 'ubuntu-type=[""]' >> "$GITHUB_OUTPUT"
           fi
 
-  # Single Ubuntu job across stable Swift 5.10/6.0/6.1/6.2/6.3 (swift.org images) and
-  # nightly 6.4 (swiftlang nightly image), chosen by the container expression below.
-  # wasm / wasm-embedded run on 6.3 + 6.4 only (older versions excluded); those legs
-  # are build-only. The nightly wasm SDK is passed explicitly for 6.4; 6.3 uses the
-  # swift-build default release wasm SDK.
+  # Single Ubuntu job on nightly 6.4 (swiftlang nightly image) — see the header note
+  # for why older toolchains are excluded. wasm / wasm-embedded ride along as
+  # build-only legs with the snapshot wasm SDK passed explicitly. The container
+  # expression still handles stable swift.org images so restoring older versions
+  # only requires widening the list in `configure`.
   build-ubuntu:
     name: Build on Ubuntu
     needs: configure
@@ -144,8 +144,8 @@ jobs:
           skip-package-resolved: ${{ contains(matrix.swift.version, '5.') }}
           # Nightly-6.4 wasm needs the snapshot SDK bundle explicitly; 6.3 wasm falls
           # back to swift-build's default release SDK (empty url).
-          wasm-sdk-url: ${{ matrix.type != '' && matrix.swift.version == '6.4' && 'https://download.swift.org/swift-6.4.x-branch/wasm-sdk/swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-06-15-a/swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-06-15-a_wasm.artifactbundle.tar.gz' || '' }}
-          wasm-sdk-checksum: ${{ matrix.type != '' && matrix.swift.version == '6.4' && 'c014a0162de6eeeef4f07904ce096ccee5405c1478a12c99a3a9750bd42d7702' || '' }}
+          wasm-sdk-url: ${{ matrix.type != '' && matrix.swift.version == '6.4' && 'https://download.swift.org/swift-6.4.x-branch/wasm-sdk/swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-07-22-a/swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-07-22-a_wasm.artifactbundle.tar.gz' || '' }}
+          wasm-sdk-checksum: ${{ matrix.type != '' && matrix.swift.version == '6.4' && 'b8754274bb887c7aa0d3fc532c2d65291a6db42b8a7f4cd3937b036dc1ceb29a' || '' }}
           wasm-swift-flags: ${{ matrix.type != '' && matrix.swift.version == '6.4' && '-Xcc -D_WASI_EMULATED_SIGNAL -Xcc -D_WASI_EMULATED_MMAN -Xlinker -lwasi-emulated-signal -Xlinker -lwasi-emulated-mman -Xlinker -lwasi-emulated-getpid -Xlinker --initial-memory=536870912 -Xlinker --max-memory=536870912' || '' }}
       - name: Install curl (required by Codecov uploader)
         if: steps.build.outputs.contains-code-coverage == 'true'
@@ -274,10 +274,10 @@ jobs:
       matrix:
         swift:
           # 6.4 only — swift-tools-version 6.4 cannot be parsed by 6.3.
-          - version: 6.4.x-DEVELOPMENT-SNAPSHOT-2026-06-15-a
+          - version: 6.4.x-DEVELOPMENT-SNAPSHOT-2026-07-22-a
             label: "6.4"
-            sdk-url: https://download.swift.org/swift-6.4.x-branch/android-sdk/swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-06-15-a/swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-06-15-a_android.artifactbundle.tar.gz
-            sdk-id: swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-06-15-a_android
+            sdk-url: https://download.swift.org/swift-6.4.x-branch/android-sdk/swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-07-22-a/swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-07-22-a_android.artifactbundle.tar.gz
+            sdk-id: swift-6.4.x-DEVELOPMENT-SNAPSHOT-2026-07-22-a_android
         android-api-level: [28, 34]
     steps:
       - uses: actions/checkout@v6
