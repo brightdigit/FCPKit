@@ -37,17 +37,39 @@ import Foundation
   ///
   /// Available only on platforms that provide CoreMedia, because `duration` is a `CMTime`.
   public struct VideoMetadata {
+    /// Location of the media file the metadata was read from.
     public let url: URL
+    /// Total duration of the asset.
     public let duration: CMTime
+    /// Natural pixel dimensions of the first video track.
     public let dimensions: CGSize
+    /// Nominal frame rate of the first video track, in frames per second.
     public let frameRate: Float
+    /// Whether the asset contains at least one video track.
     public let hasVideo: Bool
+    /// Whether the asset contains at least one audio track.
     public let hasAudio: Bool
+    /// Channel count of the first audio track, or `nil` when unavailable.
     public let audioChannels: Int?
+    /// Sample rate of the first audio track in hertz, or `nil` when unavailable.
     public let audioSampleRate: Double?
+    /// Four-character codec identifier of the first video track, if known.
     public let videoCodec: String?
+    /// Four-character codec identifier of the first audio track, if known.
     public let audioCodec: String?
 
+    /// Creates a metadata value describing a media file.
+    /// - Parameters:
+    ///   - url: Location of the media file.
+    ///   - duration: Total duration of the asset.
+    ///   - dimensions: Natural pixel dimensions of the first video track.
+    ///   - frameRate: Nominal frame rate in frames per second.
+    ///   - hasVideo: Whether the asset contains a video track.
+    ///   - hasAudio: Whether the asset contains an audio track.
+    ///   - audioChannels: Channel count of the first audio track.
+    ///   - audioSampleRate: Sample rate of the first audio track, in hertz.
+    ///   - videoCodec: Codec identifier of the first video track.
+    ///   - audioCodec: Codec identifier of the first audio track.
     public init(
       url: URL,
       duration: CMTime,

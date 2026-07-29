@@ -37,6 +37,7 @@ import Foundation
   ///
   /// Available only on platforms that provide AVFoundation.
   public class VideoMetadataExtractor {
+    /// Creates an extractor.
     public init() {}
 
     /// Extracts metadata from a video file

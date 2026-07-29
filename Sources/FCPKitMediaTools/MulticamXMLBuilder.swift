@@ -37,6 +37,7 @@ import Foundation
   ///
   /// Available only on platforms that provide CoreMedia, because it builds from `VideoMetadata`.
   public class MulticamXMLBuilder {
+    /// Creates a builder.
     public init() {}
 
     /// Generates a complete multicam FCPXML document from two video files.
