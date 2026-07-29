@@ -31,15 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct Storyline: Codable {
-  public let lane: String?
-  public let offset: String?
-  public let format: String?
-  public let clips: [Clip]?
-  public let assetClips: [AssetClip]?
-  public let refClips: [RefClip]?
-  public let titles: [Title]?
-  public let generators: [Generator]?
-
   enum CodingKeys: String, CodingKey {
     case lane
     case offset
@@ -50,4 +41,13 @@ public struct Storyline: Codable {
     case titles = "title"
     case generators = "generator"
   }
+
+  public let lane: String?
+  public let offset: String?
+  public let format: String?
+  public let clips: [Clip]?
+  public let assetClips: [AssetClip]?
+  public let refClips: [RefClip]?
+  public let titles: [Title]?
+  public let generators: [Generator]?
 }

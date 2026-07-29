@@ -31,15 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct Clip: Codable {
-  public let name: String?
-  public let ref: String?
-  public let offset: String?
-  public let duration: String?
-  public let start: String?
-  public let tcFormat: String?
-  public let audioChannels: String?
-  public let audioRate: String?
-
   enum CodingKeys: String, CodingKey {
     case name
     case ref
@@ -50,4 +41,13 @@ public struct Clip: Codable {
     case audioChannels
     case audioRate
   }
+
+  public let name: String?
+  public let ref: String?
+  public let offset: String?
+  public let duration: String?
+  public let start: String?
+  public let tcFormat: String?
+  public let audioChannels: String?
+  public let audioRate: String?
 }

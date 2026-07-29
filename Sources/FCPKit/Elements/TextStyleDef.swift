@@ -31,11 +31,11 @@ import Foundation
 import XMLCoder
 
 public struct TextStyleDef: Codable {
-  public let id: String?
-  public var textStyle: TextStyle?
-
   enum CodingKeys: String, CodingKey {
     case id
     case textStyle = "text-style"
   }
+
+  public let id: String?
+  public var textStyle: TextStyle?
 }

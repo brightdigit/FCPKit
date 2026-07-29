@@ -31,13 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct Keyframe: Codable {
-  public let time: String?
-  public var value: String?
-  public let interp: String?
-
   enum CodingKeys: String, CodingKey {
     case time
     case value
     case interp
   }
+
+  public let time: String?
+  public var value: String?
+  public let interp: String?
 }

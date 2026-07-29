@@ -31,6 +31,12 @@ import Foundation
 import XMLCoder
 
 public struct FCPXML: Codable {
+  enum CodingKeys: String, CodingKey {
+    case version
+    case resources
+    case library
+  }
+
   public let version: String
   public var resources: Resources?
   public var library: Library?
@@ -39,11 +45,5 @@ public struct FCPXML: Codable {
     self.version = version
     self.resources = resources
     self.library = library
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case version
-    case resources
-    case library
   }
 }

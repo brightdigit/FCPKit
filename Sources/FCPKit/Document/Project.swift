@@ -31,6 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct Project: Codable {
+  enum CodingKeys: String, CodingKey {
+    case name
+    case uid
+    case modDate
+    case sequence
+  }
+
   public var name: String?
   public let uid: String?
   public var modDate: String?
@@ -46,12 +53,5 @@ public struct Project: Codable {
     self.uid = uid
     self.modDate = modDate
     self.sequence = sequence
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case name
-    case uid
-    case modDate
-    case sequence
   }
 }

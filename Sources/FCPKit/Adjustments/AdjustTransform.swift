@@ -31,16 +31,16 @@ import Foundation
 import XMLCoder
 
 public struct AdjustTransform: Codable {
+  enum CodingKeys: String, CodingKey {
+    case position
+    case scale
+  }
+
   public var position: String?
   public var scale: String?
 
   public init(position: String? = nil, scale: String? = nil) {
     self.position = position
     self.scale = scale
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case position
-    case scale
   }
 }

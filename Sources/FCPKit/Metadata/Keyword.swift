@@ -31,15 +31,15 @@ import Foundation
 import XMLCoder
 
 public struct Keyword: Codable {
-  public let start: String?
-  public let duration: String?
-  public let value: String?
-  public let note: String?
-
   enum CodingKeys: String, CodingKey {
     case start
     case duration
     case value
     case note
   }
+
+  public let start: String?
+  public let duration: String?
+  public let value: String?
+  public let note: String?
 }

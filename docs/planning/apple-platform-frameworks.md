@@ -8,7 +8,10 @@ exercise it), gated with `#if canImport(...)` so non-Apple CI can still build
 the package.
 
 For non-Apple replacements of those MediaTools capabilities, see
-[non-apple-media-alternatives.md](non-apple-media-alternatives.md).
+[non-apple-media-alternatives.md](non-apple-media-alternatives.md)
+(candidate inventory) and
+[ffmpeg-in-library-viability.md](ffmpeg-in-library-viability.md)
+(preferred path: no host `ffprobe`; in-process FFmpeg).
 
 ## Inventory
 

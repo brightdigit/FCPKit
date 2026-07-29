@@ -31,17 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct Video: Codable {
-  public let ref: String?
-  public let lane: String?
-  public let offset: String?
-  public let name: String?
-  public let start: String?
-  public let duration: String?
-  public var param: [ParamElement]?
-  public let filterVideo: [FilterVideo]?
-  public var adjustTransform: AdjustTransform?
-  public var adjustColorConform: AdjustColorConform?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case lane
@@ -54,4 +43,15 @@ public struct Video: Codable {
     case adjustTransform = "adjust-transform"
     case adjustColorConform = "adjust-colorConform"
   }
+
+  public let ref: String?
+  public let lane: String?
+  public let offset: String?
+  public let name: String?
+  public let start: String?
+  public let duration: String?
+  public var param: [ParamElement]?
+  public let filterVideo: [FilterVideo]?
+  public var adjustTransform: AdjustTransform?
+  public var adjustColorConform: AdjustColorConform?
 }

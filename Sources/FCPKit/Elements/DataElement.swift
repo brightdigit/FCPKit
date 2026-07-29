@@ -31,11 +31,11 @@ import Foundation
 import XMLCoder
 
 public struct DataElement: Codable {
-  public let key: String?
-  public var value: String?
-
   enum CodingKeys: String, CodingKey {
     case key
     case value = ""
   }
+
+  public let key: String?
+  public var value: String?
 }

@@ -31,15 +31,15 @@ import Foundation
 import XMLCoder
 
 public struct Gap: Codable {
-  public let name: String?
-  public let offset: String?
-  public let duration: String?
-  public let start: String?
-
   enum CodingKeys: String, CodingKey {
     case name
     case offset
     case duration
     case start
   }
+
+  public let name: String?
+  public let offset: String?
+  public let duration: String?
+  public let start: String?
 }

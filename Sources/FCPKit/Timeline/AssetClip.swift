@@ -31,6 +31,41 @@ import Foundation
 import XMLCoder
 
 public struct AssetClip: Codable {
+  enum CodingKeys: String, CodingKey {
+    case ref
+    case name
+    case duration
+    case start
+    case format
+    case tcFormat
+    case audioChannels
+    case audioRate
+    case audioRole
+    case lane
+    case offset
+    case useAudioSubroles
+    case modDate
+    case audioStart
+    case audioDuration
+    case keywords = "keyword"
+    case note
+    case conformRate = "conform-rate"
+    case adjustVolume = "adjust-volume"
+    case adjustBlend = "adjust-blend"
+    case audioChannelSource = "audio-channel-source"
+    case markers = "marker"
+    case rating
+    case chapterMarkers = "chapter-marker"
+    case filterAudio = "filter-audio"
+    case filterVideo = "filter-video"
+    case titles = "title"
+    case assetClips = "asset-clip"
+    case video
+    case adjustTransform = "adjust-transform"
+    case adjustCrop = "adjust-crop"
+    case timeMap
+  }
+
   public var ref: String?
   public var name: String?
   public var duration: String?
@@ -130,40 +165,5 @@ public struct AssetClip: Codable {
     self.adjustTransform = adjustTransform
     self.adjustCrop = adjustCrop
     self.timeMap = timeMap
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case ref
-    case name
-    case duration
-    case start
-    case format
-    case tcFormat
-    case audioChannels
-    case audioRate
-    case audioRole
-    case lane
-    case offset
-    case useAudioSubroles
-    case modDate
-    case audioStart
-    case audioDuration
-    case keywords = "keyword"
-    case note
-    case conformRate = "conform-rate"
-    case adjustVolume = "adjust-volume"
-    case adjustBlend = "adjust-blend"
-    case audioChannelSource = "audio-channel-source"
-    case markers = "marker"
-    case rating
-    case chapterMarkers = "chapter-marker"
-    case filterAudio = "filter-audio"
-    case filterVideo = "filter-video"
-    case titles = "title"
-    case assetClips = "asset-clip"
-    case video
-    case adjustTransform = "adjust-transform"
-    case adjustCrop = "adjust-crop"
-    case timeMap
   }
 }

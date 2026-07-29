@@ -31,6 +31,16 @@ import Foundation
 import XMLCoder
 
 public struct Event: Codable {
+  enum CodingKeys: String, CodingKey {
+    case name
+    case uid
+    case projects = "project"
+    case assetClips = "asset-clip"
+    case refClips = "ref-clip"
+    case mcClips = "mc-clip"
+    case syncClips = "sync-clip"
+  }
+
   public var name: String?
   public let uid: String?
   public var projects: [Project]?
@@ -55,15 +65,5 @@ public struct Event: Codable {
     self.refClips = refClips
     self.mcClips = mcClips
     self.syncClips = syncClips
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case name
-    case uid
-    case projects = "project"
-    case assetClips = "asset-clip"
-    case refClips = "ref-clip"
-    case mcClips = "mc-clip"
-    case syncClips = "sync-clip"
   }
 }

@@ -31,17 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct TextStyle: Codable {
-  public let ref: String?
-  public var font: String?
-  public var fontSize: String?
-  public var fontFace: String?
-  public var fontColor: String?
-  public var bold: String?
-  public var kerning: String?
-  public var alignment: String?
-  public var param: [ParamElement]?
-  public var content: String?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case font
@@ -54,4 +43,15 @@ public struct TextStyle: Codable {
     case param
     case content = ""
   }
+
+  public let ref: String?
+  public var font: String?
+  public var fontSize: String?
+  public var fontFace: String?
+  public var fontColor: String?
+  public var bold: String?
+  public var kerning: String?
+  public var alignment: String?
+  public var param: [ParamElement]?
+  public var content: String?
 }

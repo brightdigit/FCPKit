@@ -31,6 +31,14 @@ import Foundation
 import XMLCoder
 
 public struct Marker: Codable {
+  enum CodingKeys: String, CodingKey {
+    case start
+    case duration
+    case value
+    case note
+    case completed
+  }
+
   public var start: String?
   public var duration: String?
   public var value: String?
@@ -49,13 +57,5 @@ public struct Marker: Codable {
     self.value = value
     self.note = note
     self.completed = completed
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case start
-    case duration
-    case value
-    case note
-    case completed
   }
 }

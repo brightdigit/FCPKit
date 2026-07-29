@@ -31,6 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct AudioChannelSource: Codable {
+  enum CodingKeys: String, CodingKey {
+    case srcCh
+    case role
+    case active
+    case adjustLoudness = "adjust-loudness"
+  }
+
   public var srcCh: String?
   public var role: String?
   public var active: String?
@@ -46,12 +53,5 @@ public struct AudioChannelSource: Codable {
     self.role = role
     self.active = active
     self.adjustLoudness = adjustLoudness
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case srcCh
-    case role
-    case active
-    case adjustLoudness = "adjust-loudness"
   }
 }

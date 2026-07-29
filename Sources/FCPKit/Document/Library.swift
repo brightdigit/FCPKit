@@ -31,6 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct Library: Codable {
+  enum CodingKeys: String, CodingKey {
+    case location
+    case colorProcessing
+    case events = "event"
+    case smartCollections = "smart-collection"
+  }
+
   public var location: String?
   public var colorProcessing: String?
   public var events: [Event]?
@@ -46,12 +53,5 @@ public struct Library: Codable {
     self.colorProcessing = colorProcessing
     self.events = events
     self.smartCollections = smartCollections
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case location
-    case colorProcessing
-    case events = "event"
-    case smartCollections = "smart-collection"
   }
 }

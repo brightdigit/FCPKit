@@ -31,6 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct Multicam: Codable {
+  enum CodingKeys: String, CodingKey {
+    case format
+    case tcStart
+    case tcFormat
+    case mcAngles = "mc-angle"
+  }
+
   public var format: String?
   public var tcStart: String?
   public var tcFormat: String?
@@ -46,12 +53,5 @@ public struct Multicam: Codable {
     self.tcStart = tcStart
     self.tcFormat = tcFormat
     self.mcAngles = mcAngles
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case format
-    case tcStart
-    case tcFormat
-    case mcAngles = "mc-angle"
   }
 }

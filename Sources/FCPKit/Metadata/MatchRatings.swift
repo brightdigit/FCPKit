@@ -31,13 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct MatchRatings: Codable {
+  enum CodingKeys: String, CodingKey {
+    case value
+  }
+
   public var value: String?
 
   public init(value: String? = nil) {
     self.value = value
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case value
   }
 }

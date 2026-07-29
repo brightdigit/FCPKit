@@ -31,14 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct ConnectedClip: Codable {
-  public let ref: String?
-  public let offset: String?
-  public let name: String?
-  public let start: String?
-  public let duration: String?
-  public let lane: String?
-  public let tcFormat: String?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case offset
@@ -48,4 +40,12 @@ public struct ConnectedClip: Codable {
     case lane
     case tcFormat
   }
+
+  public let ref: String?
+  public let offset: String?
+  public let name: String?
+  public let start: String?
+  public let duration: String?
+  public let lane: String?
+  public let tcFormat: String?
 }

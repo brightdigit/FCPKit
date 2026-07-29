@@ -31,15 +31,15 @@ import Foundation
 import XMLCoder
 
 public struct FilterAudio: Codable {
-  public let ref: String?
-  public let name: String?
-  public let enabled: String?
-  public var param: [ParamElement]?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case name
     case enabled
     case param
   }
+
+  public let ref: String?
+  public let name: String?
+  public let enabled: String?
+  public var param: [ParamElement]?
 }

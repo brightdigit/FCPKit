@@ -31,13 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct TimeMap: Codable {
+  enum CodingKeys: String, CodingKey {
+    case timepts = "timept"
+  }
+
   public var timepts: [Timept]?
 
   public init(timepts: [Timept]? = nil) {
     self.timepts = timepts
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case timepts = "timept"
   }
 }

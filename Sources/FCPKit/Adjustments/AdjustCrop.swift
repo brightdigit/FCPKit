@@ -31,16 +31,16 @@ import Foundation
 import XMLCoder
 
 public struct AdjustCrop: Codable {
+  enum CodingKeys: String, CodingKey {
+    case mode
+    case trimRect = "trim-rect"
+  }
+
   public var mode: String?
   public var trimRect: TrimRect?
 
   public init(mode: String? = nil, trimRect: TrimRect? = nil) {
     self.mode = mode
     self.trimRect = trimRect
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case mode
-    case trimRect = "trim-rect"
   }
 }

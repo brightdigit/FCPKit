@@ -31,16 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct Title: Codable {
-  public let ref: String?
-  public let offset: String?
-  public let name: String?
-  public let start: String?
-  public let duration: String?
-  public let lane: String?
-  public var param: [ParamElement]?
-  public var text: [TextElement]?
-  public var textStyleDef: [TextStyleDef]?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case offset
@@ -52,4 +42,14 @@ public struct Title: Codable {
     case text
     case textStyleDef = "text-style-def"
   }
+
+  public let ref: String?
+  public let offset: String?
+  public let name: String?
+  public let start: String?
+  public let duration: String?
+  public let lane: String?
+  public var param: [ParamElement]?
+  public var text: [TextElement]?
+  public var textStyleDef: [TextStyleDef]?
 }

@@ -31,14 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct CompoundClip: Codable {
-  public let ref: String?
-  public let offset: String?
-  public let name: String?
-  public let start: String?
-  public let duration: String?
-  public let useAudioSubroles: String?
-  public let format: String?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case offset
@@ -48,4 +40,12 @@ public struct CompoundClip: Codable {
     case useAudioSubroles
     case format
   }
+
+  public let ref: String?
+  public let offset: String?
+  public let name: String?
+  public let start: String?
+  public let duration: String?
+  public let useAudioSubroles: String?
+  public let format: String?
 }

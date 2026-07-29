@@ -31,15 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct ParamElement: Codable {
-  public let name: String?
-  public let key: String?
-  public var value: String?
-  public var param: [ParamElement]?
-  public var data: [DataElement]?
-  public var fadeIn: Fade?
-  public var fadeOut: Fade?
-  public var keyframeAnimation: KeyframeAnimation?
-
   enum CodingKeys: String, CodingKey {
     case name
     case key
@@ -50,4 +41,13 @@ public struct ParamElement: Codable {
     case fadeOut
     case keyframeAnimation
   }
+
+  public let name: String?
+  public let key: String?
+  public var value: String?
+  public var param: [ParamElement]?
+  public var data: [DataElement]?
+  public var fadeIn: Fade?
+  public var fadeOut: Fade?
+  public var keyframeAnimation: KeyframeAnimation?
 }

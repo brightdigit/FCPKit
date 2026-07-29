@@ -1,12 +1,20 @@
 # Non-Apple Media Alternatives for FCPKitMediaTools
 
+> **Supersedes / updates (2026-07-29):** Host-tool probing (`ffprobe` /
+> `mediainfo` via `Process`) is **rejected as the preferred MediaTools path**
+> per `.claude/agent-notes.md` (“Do not rely on external host tools like
+> ffprobe for MediaTools; prefer something that can be built into the
+> library”). For the updated recommendation — rational time now; in-process
+> FFmpeg (systemLibrary short-term, vendored/static with work) — see
+> [`ffmpeg-in-library-viability.md`](ffmpeg-in-library-viability.md). This
+> document remains a candidate inventory; treat § “Suggested direction” item 2
+> (ffprobe CLI) as historical, not preferred.
+
 FCPKit core does not need media frameworks. The Apple-only gap lives in
 `FCPKitMediaTools`: rational timeline time (`CMTime`) and file probing
-(`AVAsset`). The strongest near-term path is a **local (or SwiftTimecode)
-rational-time type** plus an **`ffprobe` CLI probe** patterned after existing
-`xmllint` Process usage; native FFmpeg bindings and pure-Swift parsers are
-viable later but carry system-library or format-coverage costs. Linux/`linux/amd64`
-verification is still required before claiming support
+(`AVAsset`). Candidate inventory below still covers rational-time types,
+CLI probes (contrast only), native library bindings, and pure-Swift parsers.
+Linux/`linux/amd64` verification is still required before claiming support
 (`.claude/agent-notes.md`).
 
 ## Capability gap (what Apple APIs provide today)

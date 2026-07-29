@@ -31,11 +31,11 @@ import Foundation
 import XMLCoder
 
 public struct Fade: Codable {
-  public let type: String?
-  public var duration: String?
-
   enum CodingKeys: String, CodingKey {
     case type
     case duration
   }
+
+  public let type: String?
+  public var duration: String?
 }

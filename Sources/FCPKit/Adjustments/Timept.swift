@@ -31,6 +31,12 @@ import Foundation
 import XMLCoder
 
 public struct Timept: Codable {
+  enum CodingKeys: String, CodingKey {
+    case time
+    case value
+    case interp
+  }
+
   public var time: String?
   public var value: String?
   public var interp: String?
@@ -39,11 +45,5 @@ public struct Timept: Codable {
     self.time = time
     self.value = value
     self.interp = interp
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case time
-    case value
-    case interp
   }
 }

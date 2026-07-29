@@ -31,14 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct Caption: Codable {
-  public let lane: String?
-  public let offset: String?
-  public let name: String?
-  public let start: String?
-  public let duration: String?
-  public let role: String?
-  public let text: String?
-
   enum CodingKeys: String, CodingKey {
     case lane
     case offset
@@ -48,4 +40,12 @@ public struct Caption: Codable {
     case role
     case text
   }
+
+  public let lane: String?
+  public let offset: String?
+  public let name: String?
+  public let start: String?
+  public let duration: String?
+  public let role: String?
+  public let text: String?
 }

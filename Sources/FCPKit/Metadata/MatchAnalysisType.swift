@@ -31,16 +31,16 @@ import Foundation
 import XMLCoder
 
 public struct MatchAnalysisType: Codable {
+  enum CodingKeys: String, CodingKey {
+    case rule
+    case value
+  }
+
   public var rule: String?
   public var value: String?
 
   public init(rule: String? = nil, value: String? = nil) {
     self.rule = rule
     self.value = value
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case rule
-    case value
   }
 }

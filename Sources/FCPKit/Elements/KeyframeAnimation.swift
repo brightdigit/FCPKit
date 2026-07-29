@@ -31,9 +31,9 @@ import Foundation
 import XMLCoder
 
 public struct KeyframeAnimation: Codable {
-  public var keyframes: [Keyframe]?
-
   enum CodingKeys: String, CodingKey {
     case keyframes = "keyframe"
   }
+
+  public var keyframes: [Keyframe]?
 }

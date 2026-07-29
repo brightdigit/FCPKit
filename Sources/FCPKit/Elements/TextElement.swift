@@ -31,9 +31,9 @@ import Foundation
 import XMLCoder
 
 public struct TextElement: Codable {
-  public var textStyle: [TextStyle]?
-
   enum CodingKeys: String, CodingKey {
     case textStyle = "text-style"
   }
+
+  public var textStyle: [TextStyle]?
 }

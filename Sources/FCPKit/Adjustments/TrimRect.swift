@@ -31,6 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct TrimRect: Codable {
+  enum CodingKeys: String, CodingKey {
+    case left
+    case right
+    case top
+    case bottom
+  }
+
   public var left: String?
   public var right: String?
   public var top: String?
@@ -46,12 +53,5 @@ public struct TrimRect: Codable {
     self.right = right
     self.top = top
     self.bottom = bottom
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case left
-    case right
-    case top
-    case bottom
   }
 }

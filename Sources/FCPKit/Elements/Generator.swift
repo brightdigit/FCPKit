@@ -31,14 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct Generator: Codable {
-  public let ref: String?
-  public let offset: String?
-  public let duration: String?
-  public let name: String?
-  public let start: String?
-  public let lane: String?
-  public let param: [ParamElement]?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case offset
@@ -48,4 +40,12 @@ public struct Generator: Codable {
     case lane
     case param
   }
+
+  public let ref: String?
+  public let offset: String?
+  public let duration: String?
+  public let name: String?
+  public let start: String?
+  public let lane: String?
+  public let param: [ParamElement]?
 }

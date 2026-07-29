@@ -31,14 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct RetimeClip: Codable {
-  public let ref: String?
-  public let offset: String?
-  public let name: String?
-  public let start: String?
-  public let duration: String?
-  public let speed: String?
-  public let timeMap: TimeMap?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case offset
@@ -48,4 +40,12 @@ public struct RetimeClip: Codable {
     case speed
     case timeMap
   }
+
+  public let ref: String?
+  public let offset: String?
+  public let name: String?
+  public let start: String?
+  public let duration: String?
+  public let speed: String?
+  public let timeMap: TimeMap?
 }

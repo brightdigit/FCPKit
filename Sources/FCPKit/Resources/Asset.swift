@@ -31,6 +31,25 @@ import Foundation
 import XMLCoder
 
 public struct Asset: Codable {
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+    case uid
+    case src
+    case start
+    case duration
+    case format
+    case hasVideo
+    case hasAudio
+    case audioChannels
+    case audioRate
+    case videoRate
+    case videoSources
+    case audioSources
+    case mediaRep = "media-rep"
+    case metadata
+  }
+
   public let id: String
   public var name: String?
   public let uid: String?
@@ -82,24 +101,5 @@ public struct Asset: Codable {
     self.audioSources = audioSources
     self.mediaRep = mediaRep
     self.metadata = metadata
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case id
-    case name
-    case uid
-    case src
-    case start
-    case duration
-    case format
-    case hasVideo
-    case hasAudio
-    case audioChannels
-    case audioRate
-    case videoRate
-    case videoSources
-    case audioSources
-    case mediaRep = "media-rep"
-    case metadata
   }
 }

@@ -31,11 +31,11 @@ import Foundation
 import XMLCoder
 
 public struct AdjustBlend: Codable {
-  public let amount: String?
-  public let mode: String?
-
   enum CodingKeys: String, CodingKey {
     case amount
     case mode
   }
+
+  public let amount: String?
+  public let mode: String?
 }

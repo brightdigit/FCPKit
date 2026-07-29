@@ -31,11 +31,11 @@ import Foundation
 import XMLCoder
 
 public struct AdjustLoudness: Codable {
-  public let amount: String?
-  public let uniformity: String?
-
   enum CodingKeys: String, CodingKey {
     case amount
     case uniformity
   }
+
+  public let amount: String?
+  public let uniformity: String?
 }

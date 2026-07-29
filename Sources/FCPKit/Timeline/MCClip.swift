@@ -31,6 +31,17 @@ import Foundation
 import XMLCoder
 
 public struct MCClip: Codable {
+  enum CodingKeys: String, CodingKey {
+    case ref
+    case offset
+    case name
+    case start
+    case duration
+    case modDate
+    case mcSources = "mc-source"
+    case video
+  }
+
   public var ref: String?
   public var offset: String?
   public var name: String?
@@ -58,16 +69,5 @@ public struct MCClip: Codable {
     self.modDate = modDate
     self.mcSources = mcSources
     self.video = video
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case ref
-    case offset
-    case name
-    case start
-    case duration
-    case modDate
-    case mcSources = "mc-source"
-    case video
   }
 }

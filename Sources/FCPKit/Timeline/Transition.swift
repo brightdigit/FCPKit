@@ -31,15 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct Transition: Codable {
-  public let ref: String?
-  public let offset: String?
-  public let duration: String?
-  public let alignment: String?
-  public let name: String?
-  public let start: String?
-  public var filterVideo: [FilterVideo]?
-  public var filterAudio: [FilterAudio]?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case offset
@@ -50,4 +41,13 @@ public struct Transition: Codable {
     case filterVideo = "filter-video"
     case filterAudio = "filter-audio"
   }
+
+  public let ref: String?
+  public let offset: String?
+  public let duration: String?
+  public let alignment: String?
+  public let name: String?
+  public let start: String?
+  public var filterVideo: [FilterVideo]?
+  public var filterAudio: [FilterAudio]?
 }

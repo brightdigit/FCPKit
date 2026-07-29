@@ -31,12 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct AdjustColorConform: Codable {
-  public let enabled: String?
-  public let autoOrManual: String?
-  public let conformType: String?
-  public let peakNitsOfPQSource: String?
-  public let peakNitsOfSDRToPQSource: String?
-
   enum CodingKeys: String, CodingKey {
     case enabled
     case autoOrManual
@@ -44,4 +38,10 @@ public struct AdjustColorConform: Codable {
     case peakNitsOfPQSource
     case peakNitsOfSDRToPQSource
   }
+
+  public let enabled: String?
+  public let autoOrManual: String?
+  public let conformType: String?
+  public let peakNitsOfPQSource: String?
+  public let peakNitsOfSDRToPQSource: String?
 }

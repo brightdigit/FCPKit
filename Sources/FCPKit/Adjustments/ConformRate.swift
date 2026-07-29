@@ -31,11 +31,11 @@ import Foundation
 import XMLCoder
 
 public struct ConformRate: Codable {
-  public let srcFrameRate: String?
-  public let scaleEnabled: String?
-
   enum CodingKeys: String, CodingKey {
     case srcFrameRate
     case scaleEnabled
   }
+
+  public let srcFrameRate: String?
+  public let scaleEnabled: String?
 }

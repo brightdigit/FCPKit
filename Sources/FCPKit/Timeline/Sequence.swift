@@ -31,6 +31,17 @@ import Foundation
 import XMLCoder
 
 public struct Sequence: Codable {
+  enum CodingKeys: String, CodingKey {
+    case format
+    case duration
+    case tcStart
+    case tcFormat
+    case audioLayout
+    case audioRate
+    case renderFormat
+    case spine
+  }
+
   public var format: String?
   public var duration: String?
   public var tcStart: String?
@@ -58,16 +69,5 @@ public struct Sequence: Codable {
     self.audioRate = audioRate
     self.renderFormat = renderFormat
     self.spine = spine
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case format
-    case duration
-    case tcStart
-    case tcFormat
-    case audioLayout
-    case audioRate
-    case renderFormat
-    case spine
   }
 }

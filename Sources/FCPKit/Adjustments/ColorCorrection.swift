@@ -31,13 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct ColorCorrection: Codable {
-  public let name: String?
-  public let ref: String?
-  public let param: [ParamElement]?
-
   enum CodingKeys: String, CodingKey {
     case name
     case ref
     case param
   }
+
+  public let name: String?
+  public let ref: String?
+  public let param: [ParamElement]?
 }

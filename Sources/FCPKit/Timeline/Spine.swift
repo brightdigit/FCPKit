@@ -31,6 +31,23 @@ import Foundation
 import XMLCoder
 
 public struct Spine: Codable {
+  enum CodingKeys: String, CodingKey {
+    case clips = "clip"
+    case gaps = "gap"
+    case mcClips = "mc-clip"
+    case refClips = "ref-clip"
+    case syncClips = "sync-clip"
+    case assetClips = "asset-clip"
+    case titles = "title"
+    case generators = "generator"
+    case transitions = "transition"
+    case storylines = "storyline"
+    case compoundClips = "compound-clip"
+    case retimeClips = "retime-clip"
+    case captions = "caption"
+    case video
+  }
+
   public var clips: [Clip]?
   public var gaps: [Gap]?
   public var mcClips: [MCClip]?
@@ -76,22 +93,5 @@ public struct Spine: Codable {
     self.retimeClips = retimeClips
     self.captions = captions
     self.video = video
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case clips = "clip"
-    case gaps = "gap"
-    case mcClips = "mc-clip"
-    case refClips = "ref-clip"
-    case syncClips = "sync-clip"
-    case assetClips = "asset-clip"
-    case titles = "title"
-    case generators = "generator"
-    case transitions = "transition"
-    case storylines = "storyline"
-    case compoundClips = "compound-clip"
-    case retimeClips = "retime-clip"
-    case captions = "caption"
-    case video
   }
 }

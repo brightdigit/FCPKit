@@ -31,13 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct MetadataArray: Codable {
+  enum CodingKeys: String, CodingKey {
+    case strings = "string"
+  }
+
   public var strings: [MetadataString]?
 
   public init(strings: [MetadataString]? = nil) {
     self.strings = strings
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case strings = "string"
   }
 }

@@ -31,6 +31,16 @@ import Foundation
 import XMLCoder
 
 public struct Media: Codable {
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+    case uid
+    case modDate
+    case sequence
+    case multicam
+    case mediaRep = "media-rep"
+  }
+
   public let id: String?
   public var name: String?
   public let uid: String?
@@ -55,15 +65,5 @@ public struct Media: Codable {
     self.sequence = sequence
     self.multicam = multicam
     self.mediaRep = mediaRep
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case id
-    case name
-    case uid
-    case modDate
-    case sequence
-    case multicam
-    case mediaRep = "media-rep"
   }
 }

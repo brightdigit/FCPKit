@@ -31,12 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct ChapterMarker: Codable {
-  public let start: String?
-  public let duration: String?
-  public let value: String?
-  public let note: String?
-  public let posterOffset: String?
-
   enum CodingKeys: String, CodingKey {
     case start
     case duration
@@ -44,4 +38,10 @@ public struct ChapterMarker: Codable {
     case note
     case posterOffset
   }
+
+  public let start: String?
+  public let duration: String?
+  public let value: String?
+  public let note: String?
+  public let posterOffset: String?
 }

@@ -31,15 +31,15 @@ import Foundation
 import XMLCoder
 
 public struct Effect: Codable {
-  public let id: String
-  public let name: String?
-  public let uid: String?
-  public let src: String?
-
   enum CodingKeys: String, CodingKey {
     case id
     case name
     case uid
     case src
   }
+
+  public let id: String
+  public let name: String?
+  public let uid: String?
+  public let src: String?
 }

@@ -31,9 +31,9 @@ import Foundation
 import XMLCoder
 
 public struct VideoRole: Codable {
-  public let value: String?
-
   enum CodingKeys: String, CodingKey {
     case value
   }
+
+  public let value: String?
 }

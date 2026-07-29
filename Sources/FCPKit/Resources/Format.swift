@@ -31,6 +31,15 @@ import Foundation
 import XMLCoder
 
 public struct Format: Codable {
+  enum CodingKeys: String, CodingKey {
+    case id
+    case name
+    case frameDuration
+    case width
+    case height
+    case colorSpace
+  }
+
   public let id: String
   public var name: String?
   public var frameDuration: String?
@@ -52,14 +61,5 @@ public struct Format: Codable {
     self.width = width
     self.height = height
     self.colorSpace = colorSpace
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case id
-    case name
-    case frameDuration
-    case width
-    case height
-    case colorSpace
   }
 }

@@ -31,11 +31,11 @@ import Foundation
 import XMLCoder
 
 public struct AdjustVolume: Codable {
-  public var amount: String?
-  public var param: [ParamElement]?
-
   enum CodingKeys: String, CodingKey {
     case amount
     case param
   }
+
+  public var amount: String?
+  public var param: [ParamElement]?
 }

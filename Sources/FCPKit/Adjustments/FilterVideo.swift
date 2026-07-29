@@ -31,15 +31,15 @@ import Foundation
 import XMLCoder
 
 public struct FilterVideo: Codable {
-  public let ref: String?
-  public let name: String?
-  public var data: [DataElement]?
-  public var param: [ParamElement]?
-
   enum CodingKeys: String, CodingKey {
     case ref
     case name
     case data
     case param
   }
+
+  public let ref: String?
+  public let name: String?
+  public var data: [DataElement]?
+  public var param: [ParamElement]?
 }

@@ -31,6 +31,12 @@ import Foundation
 import XMLCoder
 
 public struct MetadataEntry: Codable {
+  enum CodingKeys: String, CodingKey {
+    case key
+    case value
+    case array
+  }
+
   public var key: String?
   public var value: String?
   public var array: MetadataArray?
@@ -39,11 +45,5 @@ public struct MetadataEntry: Codable {
     self.key = key
     self.value = value
     self.array = array
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case key
-    case value
-    case array
   }
 }

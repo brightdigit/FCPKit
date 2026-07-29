@@ -31,17 +31,6 @@ import Foundation
 import XMLCoder
 
 public struct SyncClip: Codable {
-  public let offset: String?
-  public let name: String?
-  public let duration: String?
-  public let tcFormat: String?
-  public let format: String?
-  public let start: String?
-  public let modDate: String?
-  public let assetClips: [AssetClip]?
-  public let video: [Video]?
-  public let filterVideo: [FilterVideo]?
-
   enum CodingKeys: String, CodingKey {
     case offset
     case name
@@ -54,4 +43,15 @@ public struct SyncClip: Codable {
     case video
     case filterVideo = "filter-video"
   }
+
+  public let offset: String?
+  public let name: String?
+  public let duration: String?
+  public let tcFormat: String?
+  public let format: String?
+  public let start: String?
+  public let modDate: String?
+  public let assetClips: [AssetClip]?
+  public let video: [Video]?
+  public let filterVideo: [FilterVideo]?
 }

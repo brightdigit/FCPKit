@@ -31,6 +31,26 @@ import Foundation
 import XMLCoder
 
 public struct RefClip: Codable {
+  enum CodingKeys: String, CodingKey {
+    case ref
+    case offset
+    case name
+    case duration
+    case start
+    case lane
+    case modDate
+    case useAudioSubroles
+    case conformRate = "conform-rate"
+    case timeMap
+    case adjustCrop = "adjust-crop"
+    case adjustTransform = "adjust-transform"
+    case assetClips = "asset-clip"
+    case video
+    case refClips = "ref-clip"
+    case adjustVolume = "adjust-volume"
+    case filterVideo = "filter-video"
+  }
+
   public var ref: String?
   public var offset: String?
   public var name: String?
@@ -85,25 +105,5 @@ public struct RefClip: Codable {
     self.refClips = refClips
     self.adjustVolume = adjustVolume
     self.filterVideo = filterVideo
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case ref
-    case offset
-    case name
-    case duration
-    case start
-    case lane
-    case modDate
-    case useAudioSubroles
-    case conformRate = "conform-rate"
-    case timeMap
-    case adjustCrop = "adjust-crop"
-    case adjustTransform = "adjust-transform"
-    case assetClips = "asset-clip"
-    case video
-    case refClips = "ref-clip"
-    case adjustVolume = "adjust-volume"
-    case filterVideo = "filter-video"
   }
 }

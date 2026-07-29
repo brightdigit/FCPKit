@@ -31,6 +31,15 @@ import Foundation
 import XMLCoder
 
 public struct SmartCollection: Codable {
+  enum CodingKeys: String, CodingKey {
+    case name
+    case match
+    case matchClip = "match-clip"
+    case matchMedia = "match-media"
+    case matchRatings = "match-ratings"
+    case matchAnalysisType = "match-analysis-type"
+  }
+
   public var name: String?
   public var match: String?
   public var matchClip: [MatchClip]?
@@ -52,14 +61,5 @@ public struct SmartCollection: Codable {
     self.matchMedia = matchMedia
     self.matchRatings = matchRatings
     self.matchAnalysisType = matchAnalysisType
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case name
-    case match
-    case matchClip = "match-clip"
-    case matchMedia = "match-media"
-    case matchRatings = "match-ratings"
-    case matchAnalysisType = "match-analysis-type"
   }
 }

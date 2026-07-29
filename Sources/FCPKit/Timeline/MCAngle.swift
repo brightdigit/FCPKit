@@ -31,6 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct MCAngle: Codable {
+  enum CodingKeys: String, CodingKey {
+    case name
+    case angleID
+    case gaps = "gap"
+    case refClips = "ref-clip"
+  }
+
   public var name: String?
   public let angleID: String?
   public var gaps: [Gap]?
@@ -46,12 +53,5 @@ public struct MCAngle: Codable {
     self.angleID = angleID
     self.gaps = gaps
     self.refClips = refClips
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case name
-    case angleID
-    case gaps = "gap"
-    case refClips = "ref-clip"
   }
 }

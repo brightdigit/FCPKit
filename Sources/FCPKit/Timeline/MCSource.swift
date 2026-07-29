@@ -31,16 +31,16 @@ import Foundation
 import XMLCoder
 
 public struct MCSource: Codable {
+  enum CodingKeys: String, CodingKey {
+    case angleID
+    case srcEnable
+  }
+
   public let angleID: String?
   public var srcEnable: String?
 
   public init(angleID: String, srcEnable: String? = nil) {
     self.angleID = angleID
     self.srcEnable = srcEnable
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case angleID
-    case srcEnable
   }
 }

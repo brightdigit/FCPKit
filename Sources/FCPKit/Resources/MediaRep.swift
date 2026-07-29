@@ -31,6 +31,13 @@ import Foundation
 import XMLCoder
 
 public struct MediaRep: Codable {
+  enum CodingKeys: String, CodingKey {
+    case kind
+    case sig
+    case src
+    case bookmark
+  }
+
   public var kind: String?
   public var sig: String?
   public var src: String?
@@ -46,12 +53,5 @@ public struct MediaRep: Codable {
     self.sig = sig
     self.src = src
     self.bookmark = bookmark
-  }
-
-  enum CodingKeys: String, CodingKey {
-    case kind
-    case sig
-    case src
-    case bookmark
   }
 }
