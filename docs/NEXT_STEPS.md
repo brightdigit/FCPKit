@@ -66,6 +66,29 @@ ordered, typed working version. **Implementation has not started.** Create-from-
 authoring is the acceptance bar; editing existing exports stays best-effort
 ([ADR 0001](adr/0001-supported-schema-and-best-effort-editing.md)).
 
+### Resume later (reading order)
+
+1. [ADR 0002](adr/0002-create-first-ordered-typed-model.md) — accepted decisions
+2. [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
+   — full plan; **§3 is the locked `FCPKitDSL` surface**
+3. [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
+   — evidence, rejected alternatives, resolved questions, deferred DSL grill list (§10)
+4. This section — where to code next
+
+**Worktrees:** This planning branch is `swift-package-plan`. Implementation evolves
+`v0.1.x` (sibling worktree). Before Step 0 code: merge or cherry-pick these planning/ADR
+commits onto `v0.1.x` (or continue implementing here only if that branch is intentionally
+repurposed — default is **code on `v0.1.x` with docs present**).
+
+**Immediate code:** **Step 0** — XMLCoder ordering guardrails + Spine choice spike +
+`XCTExpectFailure` spine order test on
+`Tests/FCPKitTests/FeaturePairs/transitions/after.fcpxml`.
+DSL code is **Step 6** (`FCPKitDSL` product).
+
+**Still open (design, not blocking Step 0–5):** markers / roles / retiming modifier shapes;
+time literals (`10s`); `RefClip` / `<media>` authoring; exact transition-overlap algorithm
+write-up; preset catalog membership; `URL` vs `filePath` spelling. Listed under findings §10.
+
 - [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
   — accepted plan: ordered content models, strong value types (`FCPTime` and
   friends), **`FCPKitDSL`** (`Document` + result builders), and a read-only
@@ -73,10 +96,6 @@ authoring is the acceptance bar; editing existing exports stays best-effort
   2026-07-28 (§3).
 - [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
   — supporting evidence and the resolved decision table.
-
-Immediate engineering start: **Step 0** (XMLCoder ordering guardrails + Spine choice
-spike + expected-failure spine order test on the transitions FeaturePair).
-DSL implementation is **Step 6** (`FCPKitDSL`).
 
 ## Completed Foundation
 
