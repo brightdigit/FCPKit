@@ -83,12 +83,16 @@ private final class TreeParserDelegate: NSObject, XMLParserDelegate {
   }
 
   func parser(_ parser: XMLParser, foundCharacters string: String) {
-    guard !stack.isEmpty else { return }
+    guard !stack.isEmpty else {
+      return
+    }
     stack[stack.count - 1].text += string
   }
 
   func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
-    guard !stack.isEmpty, let string = String(data: CDATABlock, encoding: .utf8) else { return }
+    guard !stack.isEmpty, let string = String(data: CDATABlock, encoding: .utf8) else {
+      return
+    }
     stack[stack.count - 1].text += string
   }
 
@@ -98,7 +102,9 @@ private final class TreeParserDelegate: NSObject, XMLParserDelegate {
     namespaceURI: String?,
     qualifiedName qName: String?
   ) {
-    guard let builder = stack.popLast() else { return }
+    guard let builder = stack.popLast() else {
+      return
+    }
     let node = builder.build()
     if stack.isEmpty {
       root = node

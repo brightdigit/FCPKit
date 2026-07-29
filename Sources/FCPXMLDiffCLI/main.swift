@@ -128,7 +128,9 @@ internal struct FCPXMLDiffCommand {
     if let jsonPath {
       try renderer.jsonData(report).writeAtomicallyIfSupported(to: URL(fileURLWithPath: jsonPath))
     }
-    guard let maximumTotalLoss else { return true }
+    guard let maximumTotalLoss else {
+      return true
+    }
     let acceptance = SchemaCompletenessAcceptance(maximumTotalLoss: maximumTotalLoss)
     if !acceptance.accepts(report) {
       writeError(

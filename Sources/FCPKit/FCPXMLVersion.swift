@@ -76,7 +76,9 @@ extension FCPXMLVersion {
 
   private static func numericComponents(_ value: String) -> [Int]? {
     let parts = value.split(separator: ".", omittingEmptySubsequences: false)
-    guard !parts.isEmpty else { return nil }
+    guard !parts.isEmpty else {
+      return nil
+    }
     var components: [Int] = []
     components.reserveCapacity(parts.count)
     for part in parts {

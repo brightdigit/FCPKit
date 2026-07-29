@@ -74,16 +74,24 @@ public struct SchemaCompletenessAnalyzer: Sendable {
   }
 
   private func displayPath(_ url: URL, relativeTo baseURL: URL?) -> String {
-    guard let baseURL else { return url.lastPathComponent }
+    guard let baseURL else {
+      return url.lastPathComponent
+    }
     let base = baseURL.standardizedFileURL.path
     let path = url.standardizedFileURL.path
-    guard path.hasPrefix(base + "/") else { return path }
+    guard path.hasPrefix(base + "/") else {
+      return path
+    }
     return String(path.dropFirst(base.count + 1))
   }
 
   private func findingOrdering(_ lhs: FCPXMLDifference, _ rhs: FCPXMLDifference) -> Bool {
-    if lhs.count != rhs.count { return lhs.count > rhs.count }
-    if lhs.kind.rawValue != rhs.kind.rawValue { return lhs.kind.rawValue < rhs.kind.rawValue }
+    if lhs.count != rhs.count {
+      return lhs.count > rhs.count
+    }
+    if lhs.kind.rawValue != rhs.kind.rawValue {
+      return lhs.kind.rawValue < rhs.kind.rawValue
+    }
     return lhs.path < rhs.path
   }
 }

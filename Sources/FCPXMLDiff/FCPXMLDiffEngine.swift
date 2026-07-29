@@ -176,8 +176,12 @@ public struct FCPXMLDiffEngine: Sendable {
   }
 
   private func differenceOrdering(_ lhs: FCPXMLDifference, _ rhs: FCPXMLDifference) -> Bool {
-    if lhs.count != rhs.count { return lhs.count > rhs.count }
-    if lhs.kind.rawValue != rhs.kind.rawValue { return lhs.kind.rawValue < rhs.kind.rawValue }
+    if lhs.count != rhs.count {
+      return lhs.count > rhs.count
+    }
+    if lhs.kind.rawValue != rhs.kind.rawValue {
+      return lhs.kind.rawValue < rhs.kind.rawValue
+    }
     return lhs.path < rhs.path
   }
 }

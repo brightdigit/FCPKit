@@ -114,7 +114,9 @@ public struct FCPXMLDTDValidator: Sendable {
   #endif
 
   private func declaredVersion(in data: Data) throws -> String? {
-    guard let xml = String(data: data, encoding: .utf8) else { return nil }
+    guard let xml = String(data: data, encoding: .utf8) else {
+      return nil
+    }
     guard let regex = try? NSRegularExpression(pattern: #"<fcpxml\s+[^>]*version=\"([^\"]+)\""#)
     else {
       return nil

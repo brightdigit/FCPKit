@@ -45,7 +45,9 @@ public struct RawPairAnalyzer: Sendable {
     let before = try parser.parse(beforeData)
     let after = try parser.parse(afterData)
     let findings = engine.compare(before, after, mode: .symmetric).filter {
-      guard let pathFilter else { return true }
+      guard let pathFilter else {
+        return true
+      }
       return $0.path.hasPrefix(pathFilter)
     }
     return RawPairReport(

@@ -119,9 +119,13 @@ public struct FCPXMLNormalizer: Sendable {
   }
 
   private func resources(in root: XMLTreeNode) -> [(id: String, node: XMLTreeNode)] {
-    guard let resources = root.children.first(where: { $0.name == "resources" }) else { return [] }
+    guard let resources = root.children.first(where: { $0.name == "resources" }) else {
+      return []
+    }
     return resources.children.compactMap { node in
-      guard let id = node.attributes["id"], isResourceIdentifier(id) else { return nil }
+      guard let id = node.attributes["id"], isResourceIdentifier(id) else {
+        return nil
+      }
       return (id, node)
     }
   }
@@ -147,7 +151,9 @@ public struct FCPXMLNormalizer: Sendable {
   }
 
   private func isResourceIdentifier(_ value: String) -> Bool {
-    guard value.first == "r", value.count > 1 else { return false }
+    guard value.first == "r", value.count > 1 else {
+      return false
+    }
     return value.dropFirst().allSatisfy(\.isNumber)
       && value.dropFirst().first != "0"
   }
