@@ -59,21 +59,24 @@ establishes the current compatibility policy:
 Gate evidence:
 [manual/typed-generation-gate.md](manual/typed-generation-gate.md).
 
-## Proposed Next Milestone: v0.1.0
+## Accepted Next Milestone: v0.1.0
 
-A design proposal for the first working version is under review — **not yet
-accepted, no implementation started**:
+[ADR 0002](adr/0002-create-first-ordered-typed-model.md) accepts the create-first,
+ordered, typed working version. **Implementation has not started.** Create-from-scratch
+authoring is the acceptance bar; editing existing exports stays best-effort
+([ADR 0001](adr/0001-supported-schema-and-best-effort-editing.md)).
 
 - [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
-  — the proposal: ordered content models, strong value types (`FCPTime` and
-  friends), a resultBuilder authoring DSL, and a read-only ScriptingBridge
-  inspector, sequenced into nine steps.
+  — accepted plan: ordered content models, strong value types (`FCPTime` and
+  friends), **`FCPKitDSL`** (`Document` + result builders), and a read-only
+  ScriptingBridge inspector, sequenced into Steps 0–8. DSL surface grilled
+  2026-07-28 (§3).
 - [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
-  — the supporting evidence: the spine ordering defect, verified XMLCoder
-  ordering behavior, the read-only Final Cut sdef, 1.14 DTD reference notes,
-  documentation inaccuracies, and the alternatives that were rejected.
+  — supporting evidence and the resolved decision table.
 
-Open questions are listed at the end of the findings document.
+Immediate engineering start: **Step 0** (XMLCoder ordering guardrails + Spine choice
+spike + expected-failure spine order test on the transitions FeaturePair).
+DSL implementation is **Step 6** (`FCPKitDSL`).
 
 ## Completed Foundation
 

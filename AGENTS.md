@@ -61,6 +61,8 @@ sequence. `Tests/FCPKitTests/FeaturePairs/transitions/after.fcpxml` is
 `asset-clip, transition, asset-clip` on disk and re-encodes as
 `asset-clip, asset-clip, transition`, which Final Cut rejects. Analysis:
 [docs/planning/v0.1.0-investigation-findings.md](docs/planning/v0.1.0-investigation-findings.md).
+Accepted fix and create-first scope:
+[docs/adr/0002-create-first-ordered-typed-model.md](docs/adr/0002-create-first-ordered-typed-model.md).
 
 Note that XMLCoder emits child elements in `CodingKeys` declaration order (it
 sorts only under `.sortedKeys`, which `FCPXMLParser` does not set). Ordered DTD
