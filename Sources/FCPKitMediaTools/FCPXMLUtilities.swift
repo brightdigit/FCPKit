@@ -35,7 +35,7 @@ import Foundation
 #endif
 
 /// Utility functions for converting between video metadata and FCPXML formats
-public struct FCPXMLUtilities {
+public enum FCPXMLUtilities {
   #if canImport(CoreMedia)
     /// Converts CMTime to FCPXML duration string format
     /// - Parameter time: CMTime to convert
@@ -100,9 +100,10 @@ public struct FCPXMLUtilities {
     /// - Parameter metadata: Video metadata
     /// - Returns: Hexadecimal signature string
     public static func generateAssetSignature(from metadata: VideoMetadata) -> String {
-      let data =
+      let data = Data(
         "\(metadata.url.lastPathComponent)\(metadata.duration.value)\(metadata.dimensions.width)\(metadata.dimensions.height)"
-        .data(using: .utf8) ?? Data()
+          .utf8
+      )
       return data.map { String(format: "%02X", $0) }.joined()
     }
   #endif

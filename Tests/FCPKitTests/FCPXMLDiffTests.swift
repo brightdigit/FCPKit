@@ -301,8 +301,10 @@ internal final class FCPXMLDiffTests: XCTestCase {
   }
 
   internal func testCheckedInFixtureBaselineAndRepresentativePaths() throws {
-    let urls = ["Both-Multicam", "Interview", "UntitledXML"].map {
-      Bundle.module.url(forResource: $0, withExtension: "fcpxml", subdirectory: "TestData")!
+    let urls = try ["Both-Multicam", "Interview", "UntitledXML"].map {
+      try XCTUnwrap(
+        Bundle.module.url(forResource: $0, withExtension: "fcpxml", subdirectory: "TestData")
+      )
     }
     let report = try SchemaCompletenessAnalyzer().analyze(fileURLs: urls)
 

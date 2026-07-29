@@ -157,10 +157,11 @@ internal final class FeaturePairTests: XCTestCase {
       "FFRenderFormatProRes422HQ"
     )
     XCTAssertNotNil(document.resources?.assets?.first?.metadata)
-    XCTAssertTrue(
+    XCTAssertEqual(
       document.library?.smartCollections?.contains {
         $0.matchAnalysisType?.contains { $0.rule == "isMissing" && $0.value == "any" } == true
-      } == true
+      },
+      true
     )
   }
 }

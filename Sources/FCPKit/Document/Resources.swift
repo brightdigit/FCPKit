@@ -44,7 +44,9 @@ public struct Resources: Codable {
   public var media: [Media]?
 
   public init(
-    assets: [Asset]? = nil, formats: [Format]? = nil, effects: [Effect]? = nil,
+    assets: [Asset]? = nil,
+    formats: [Format]? = nil,
+    effects: [Effect]? = nil,
     media: [Media]? = nil
   ) {
     self.assets = assets

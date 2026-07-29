@@ -37,7 +37,7 @@ import Foundation
   /// The generator extracts metadata from real media files, which requires AVFoundation.
   /// The target still builds everywhere so cross-platform CI stays honest.
   @main
-  internal struct FCPXMLGeneratorTool {
+  internal enum FCPXMLGeneratorTool {
     internal static func main() {
       FileHandle.standardError.write(
         Data(
@@ -51,7 +51,7 @@ import Foundation
 #else
 
   @main
-  internal struct FCPXMLGeneratorTool {
+  internal enum FCPXMLGeneratorTool {
     internal static func main() async {
       let args = CommandLine.arguments
 

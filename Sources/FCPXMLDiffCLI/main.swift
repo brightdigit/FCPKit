@@ -46,7 +46,7 @@ extension Data {
 }
 
 @main
-internal struct FCPXMLDiffCommand {
+internal enum FCPXMLDiffCommand {
   internal static func main() {
     do {
       let accepted = try run()

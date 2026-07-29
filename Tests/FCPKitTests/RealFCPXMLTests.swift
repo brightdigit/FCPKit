@@ -146,7 +146,7 @@ internal final class RealFCPXMLTests: XCTestCase {
       title.textStyleDef?.first?.textStyle?.param?.first?.param?.first
     )
 
-    XCTAssertEqual(customSpeed.value, nil)
+    XCTAssertNil(customSpeed.value)
     XCTAssertEqual(customSpeed.keyframeAnimation?.keyframes?.map(\.value), ["0", "1"])
     XCTAssertEqual(tracking.name, "motionTextTracking")
     XCTAssertEqual(tracking.value, "-1.7751")
@@ -299,7 +299,7 @@ internal final class RealFCPXMLTests: XCTestCase {
     }
 
     let interviewData = try Data(contentsOf: interviewURL)
-    let interviewString = String(data: interviewData, encoding: .utf8)!
+    let interviewString = try XCTUnwrap(String(data: interviewData, encoding: .utf8))
 
     XCTAssertTrue(interviewString.contains("mc-clip"))
     XCTAssertTrue(interviewString.contains("mc-source"))
@@ -319,7 +319,7 @@ internal final class RealFCPXMLTests: XCTestCase {
     }
 
     let untitledData = try Data(contentsOf: untitledURL)
-    let untitledString = String(data: untitledData, encoding: .utf8)!
+    let untitledString = try XCTUnwrap(String(data: untitledData, encoding: .utf8))
 
     XCTAssertTrue(untitledString.contains("sync-clip"))
     XCTAssertTrue(untitledString.contains("adjust-transform"))
