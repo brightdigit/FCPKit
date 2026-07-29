@@ -37,3 +37,7 @@ public struct Rating: Codable {
 
   public let value: String?
 }
+
+extension Rating: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

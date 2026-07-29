@@ -39,3 +39,7 @@ public struct AdjustLoudness: Codable {
   public let amount: String?
   public let uniformity: String?
 }
+
+extension AdjustLoudness: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

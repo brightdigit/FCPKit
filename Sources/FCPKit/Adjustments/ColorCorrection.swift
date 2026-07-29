@@ -41,3 +41,9 @@ public struct ColorCorrection: Codable {
   public let ref: String?
   public let param: [ParamElement]?
 }
+
+extension ColorCorrection: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["param"])
+  }
+}

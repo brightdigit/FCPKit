@@ -49,3 +49,7 @@ public struct CompoundClip: Codable {
   public let useAudioSubroles: String?
   public let format: String?
 }
+
+extension CompoundClip: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

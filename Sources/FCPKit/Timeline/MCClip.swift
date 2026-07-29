@@ -71,3 +71,9 @@ public struct MCClip: Codable {
     self.video = video
   }
 }
+
+extension MCClip: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["mc-source", "video"])
+  }
+}

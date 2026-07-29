@@ -107,3 +107,16 @@ public struct RefClip: Codable {
     self.filterVideo = filterVideo
   }
 }
+
+extension RefClip: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(
+      for: key,
+      elementKeys: [
+        "conform-rate", "timeMap", "adjust-transform", "adjust-crop", "asset-clip",
+        "video",
+        "ref-clip", "adjust-volume", "filter-video",
+      ]
+    )
+  }
+}

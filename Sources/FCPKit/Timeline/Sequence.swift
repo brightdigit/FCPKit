@@ -71,3 +71,9 @@ public struct Sequence: Codable {
     self.spine = spine
   }
 }
+
+extension Sequence: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["spine"])
+  }
+}

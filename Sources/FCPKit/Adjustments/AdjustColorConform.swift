@@ -45,3 +45,7 @@ public struct AdjustColorConform: Codable {
   public let peakNitsOfPQSource: String?
   public let peakNitsOfSDRToPQSource: String?
 }
+
+extension AdjustColorConform: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

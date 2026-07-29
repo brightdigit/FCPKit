@@ -55,3 +55,9 @@ public struct Resources: Codable {
     self.media = media
   }
 }
+
+extension Resources: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    .element
+  }
+}

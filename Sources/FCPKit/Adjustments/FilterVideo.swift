@@ -43,3 +43,9 @@ public struct FilterVideo: Codable {
   public var data: [DataElement]?
   public var param: [ParamElement]?
 }
+
+extension FilterVideo: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["data", "param"])
+  }
+}

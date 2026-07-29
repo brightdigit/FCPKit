@@ -43,3 +43,7 @@ public struct Effect: Codable {
   public let uid: String?
   public let src: String?
 }
+
+extension Effect: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

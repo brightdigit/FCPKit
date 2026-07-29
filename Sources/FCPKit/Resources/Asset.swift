@@ -103,3 +103,9 @@ public struct Asset: Codable {
     self.metadata = metadata
   }
 }
+
+extension Asset: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["media-rep", "metadata"])
+  }
+}

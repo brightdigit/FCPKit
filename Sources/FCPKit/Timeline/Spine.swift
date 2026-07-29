@@ -95,3 +95,7 @@ public struct Spine: Codable {
     self.video = video
   }
 }
+
+extension Spine: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .element }
+}

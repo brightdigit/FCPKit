@@ -1,5 +1,5 @@
 //
-//  TextStyle.swift
+//  FCPNodeEncoding.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,37 +27,15 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
 import XMLCoder
 
-public struct TextStyle: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case ref
-    case font
-    case fontSize
-    case fontFace
-    case fontColor
-    case bold
-    case kerning
-    case alignment
-    case param
-    case content = ""
-  }
-
-  public let ref: String?
-  public var font: String?
-  public var fontSize: String?
-  public var fontFace: String?
-  public var fontColor: String?
-  public var bold: String?
-  public var kerning: String?
-  public var alignment: String?
-  public var param: [ParamElement]?
-  public var content: String?
-}
-
-extension TextStyle: DynamicNodeEncoding {
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    key.stringValue.isEmpty || key.stringValue == "param" ? .element : .attribute
-  }
+/// Maps a coding key to attribute or element encoding.
+///
+/// Keys listed in `elementKeys` encode as child elements; every other key
+/// encodes as an attribute.
+internal func fcpNodeEncoding(
+  for key: CodingKey,
+  elementKeys: Set<String> = []
+) -> XMLEncoder.NodeEncoding {
+  elementKeys.contains(key.stringValue) ? .element : .attribute
 }

@@ -45,3 +45,7 @@ public struct ChapterMarker: Codable {
   public let note: String?
   public let posterOffset: String?
 }
+
+extension ChapterMarker: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

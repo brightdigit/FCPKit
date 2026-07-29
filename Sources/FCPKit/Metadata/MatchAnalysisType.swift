@@ -44,3 +44,7 @@ public struct MatchAnalysisType: Codable {
     self.value = value
   }
 }
+
+extension MatchAnalysisType: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

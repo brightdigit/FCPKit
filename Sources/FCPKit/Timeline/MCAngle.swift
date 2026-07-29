@@ -55,3 +55,9 @@ public struct MCAngle: Codable {
     self.refClips = refClips
   }
 }
+
+extension MCAngle: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["gap", "ref-clip"])
+  }
+}

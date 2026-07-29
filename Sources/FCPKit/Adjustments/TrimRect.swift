@@ -55,3 +55,7 @@ public struct TrimRect: Codable {
     self.bottom = bottom
   }
 }
+
+extension TrimRect: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

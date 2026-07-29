@@ -49,3 +49,9 @@ public struct Caption: Codable {
   public let role: String?
   public let text: String?
 }
+
+extension Caption: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["text"])
+  }
+}

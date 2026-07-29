@@ -63,3 +63,7 @@ public struct Format: Codable {
     self.colorSpace = colorSpace
   }
 }
+
+extension Format: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

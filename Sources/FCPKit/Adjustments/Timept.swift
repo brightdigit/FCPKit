@@ -47,3 +47,7 @@ public struct Timept: Codable {
     self.interp = interp
   }
 }
+
+extension Timept: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

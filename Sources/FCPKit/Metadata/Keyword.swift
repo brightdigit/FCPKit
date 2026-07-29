@@ -43,3 +43,7 @@ public struct Keyword: Codable {
   public let value: String?
   public let note: String?
 }
+
+extension Keyword: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

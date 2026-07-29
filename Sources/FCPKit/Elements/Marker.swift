@@ -59,3 +59,7 @@ public struct Marker: Codable {
     self.completed = completed
   }
 }
+
+extension Marker: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

@@ -63,3 +63,14 @@ public struct SmartCollection: Codable {
     self.matchAnalysisType = matchAnalysisType
   }
 }
+
+extension SmartCollection: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(
+      for: key,
+      elementKeys: [
+        "match-clip", "match-media", "match-ratings", "match-analysis-type",
+      ]
+    )
+  }
+}

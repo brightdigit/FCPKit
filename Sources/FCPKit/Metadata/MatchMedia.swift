@@ -44,3 +44,7 @@ public struct MatchMedia: Codable {
     self.type = type
   }
 }
+
+extension MatchMedia: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

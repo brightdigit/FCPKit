@@ -44,3 +44,7 @@ public struct MCSource: Codable {
     self.srcEnable = srcEnable
   }
 }
+
+extension MCSource: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

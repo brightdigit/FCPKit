@@ -47,3 +47,9 @@ public struct MetadataEntry: Codable {
     self.array = array
   }
 }
+
+extension MetadataEntry: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["array"])
+  }
+}

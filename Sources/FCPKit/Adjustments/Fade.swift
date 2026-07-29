@@ -39,3 +39,7 @@ public struct Fade: Codable {
   public let type: String?
   public var duration: String?
 }
+
+extension Fade: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

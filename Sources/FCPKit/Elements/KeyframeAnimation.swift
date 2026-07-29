@@ -37,3 +37,7 @@ public struct KeyframeAnimation: Codable {
 
   public var keyframes: [Keyframe]?
 }
+
+extension KeyframeAnimation: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .element }
+}

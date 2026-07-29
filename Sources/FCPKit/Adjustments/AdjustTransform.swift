@@ -44,3 +44,7 @@ public struct AdjustTransform: Codable {
     self.scale = scale
   }
 }
+
+extension AdjustTransform: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

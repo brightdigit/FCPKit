@@ -55,3 +55,9 @@ public struct SyncClip: Codable {
   public let video: [Video]?
   public let filterVideo: [FilterVideo]?
 }
+
+extension SyncClip: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["asset-clip", "video", "filter-video"])
+  }
+}

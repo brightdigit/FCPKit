@@ -47,3 +47,9 @@ public struct FCPXML: Codable {
     self.library = library
   }
 }
+
+extension FCPXML: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["resources", "library"])
+  }
+}

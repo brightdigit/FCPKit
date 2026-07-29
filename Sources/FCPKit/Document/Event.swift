@@ -67,3 +67,14 @@ public struct Event: Codable {
     self.syncClips = syncClips
   }
 }
+
+extension Event: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(
+      for: key,
+      elementKeys: [
+        "project", "asset-clip", "ref-clip", "mc-clip", "sync-clip",
+      ]
+    )
+  }
+}

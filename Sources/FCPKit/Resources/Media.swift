@@ -67,3 +67,9 @@ public struct Media: Codable {
     self.mediaRep = mediaRep
   }
 }
+
+extension Media: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["sequence", "multicam", "media-rep"])
+  }
+}

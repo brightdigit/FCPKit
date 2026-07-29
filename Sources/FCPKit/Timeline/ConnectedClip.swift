@@ -49,3 +49,7 @@ public struct ConnectedClip: Codable {
   public let lane: String?
   public let tcFormat: String?
 }
+
+extension ConnectedClip: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

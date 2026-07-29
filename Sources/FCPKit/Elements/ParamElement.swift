@@ -51,3 +51,14 @@ public struct ParamElement: Codable {
   public var fadeOut: Fade?
   public var keyframeAnimation: KeyframeAnimation?
 }
+
+extension ParamElement: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(
+      for: key,
+      elementKeys: [
+        "param", "data", "fadeIn", "fadeOut", "keyframeAnimation",
+      ]
+    )
+  }
+}

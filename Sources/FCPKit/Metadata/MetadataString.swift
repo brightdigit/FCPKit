@@ -41,3 +41,9 @@ public struct MetadataString: Codable {
     self.content = content
   }
 }
+
+extension MetadataString: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    key.stringValue.isEmpty ? .element : .attribute
+  }
+}

@@ -37,3 +37,7 @@ public struct CaptionRole: Codable {
 
   public let value: String?
 }
+
+extension CaptionRole: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

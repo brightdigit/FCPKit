@@ -39,3 +39,7 @@ public struct ConformRate: Codable {
   public let srcFrameRate: String?
   public let scaleEnabled: String?
 }
+
+extension ConformRate: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

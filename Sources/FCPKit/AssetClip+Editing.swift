@@ -1,5 +1,5 @@
 //
-//  AssetClipEditing.swift
+//  AssetClip+Editing.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,20 +28,6 @@
 //
 
 import Foundation
-
-public enum AssetClipEditingError: Error, LocalizedError, Equatable, Sendable {
-  case invalidSpeedPercent(Int)
-  case unsupportedDuration(String)
-
-  public var errorDescription: String? {
-    switch self {
-    case .invalidSpeedPercent(let percent):
-      return "Speed percent must be positive, got \(percent)"
-    case .unsupportedDuration(let value):
-      return "Unsupported FCPXML duration string: \(value)"
-    }
-  }
-}
 
 extension AssetClip {
   /// Appends a standard marker matching Final Cut's default marker duration.

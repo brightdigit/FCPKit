@@ -43,3 +43,9 @@ public struct FilterAudio: Codable {
   public let enabled: String?
   public var param: [ParamElement]?
 }
+
+extension FilterAudio: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["param"])
+  }
+}

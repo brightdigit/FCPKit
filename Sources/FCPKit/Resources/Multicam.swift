@@ -55,3 +55,9 @@ public struct Multicam: Codable {
     self.mcAngles = mcAngles
   }
 }
+
+extension Multicam: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["mc-angle"])
+  }
+}

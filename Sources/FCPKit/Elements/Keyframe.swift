@@ -41,3 +41,7 @@ public struct Keyframe: Codable {
   public var value: String?
   public let interp: String?
 }
+
+extension Keyframe: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

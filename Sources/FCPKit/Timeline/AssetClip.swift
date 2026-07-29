@@ -167,3 +167,18 @@ public struct AssetClip: Codable {
     self.timeMap = timeMap
   }
 }
+
+extension AssetClip: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(
+      for: key,
+      elementKeys: [
+        "keyword", "note", "conform-rate", "adjust-volume", "adjust-blend",
+        "audio-channel-source", "marker", "rating", "chapter-marker",
+        "filter-audio", "filter-video",
+        "title",
+        "asset-clip", "video", "adjust-transform", "adjust-crop", "timeMap",
+      ]
+    )
+  }
+}

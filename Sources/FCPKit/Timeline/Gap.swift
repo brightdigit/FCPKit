@@ -43,3 +43,7 @@ public struct Gap: Codable {
   public let duration: String?
   public let start: String?
 }
+
+extension Gap: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

@@ -55,3 +55,9 @@ public struct MediaRep: Codable {
     self.bookmark = bookmark
   }
 }
+
+extension MediaRep: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["bookmark"])
+  }
+}

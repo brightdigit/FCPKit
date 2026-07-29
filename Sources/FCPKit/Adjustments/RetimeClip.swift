@@ -49,3 +49,9 @@ public struct RetimeClip: Codable {
   public let speed: String?
   public let timeMap: TimeMap?
 }
+
+extension RetimeClip: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["timeMap"])
+  }
+}

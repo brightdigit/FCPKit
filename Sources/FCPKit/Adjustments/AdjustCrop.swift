@@ -44,3 +44,9 @@ public struct AdjustCrop: Codable {
     self.trimRect = trimRect
   }
 }
+
+extension AdjustCrop: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["trim-rect"])
+  }
+}

@@ -51,3 +51,9 @@ public struct Transition: Codable {
   public var filterVideo: [FilterVideo]?
   public var filterAudio: [FilterAudio]?
 }
+
+extension Transition: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["filter-video", "filter-audio"])
+  }
+}

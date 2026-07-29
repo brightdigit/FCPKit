@@ -49,3 +49,9 @@ public struct Generator: Codable {
   public let lane: String?
   public let param: [ParamElement]?
 }
+
+extension Generator: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["param"])
+  }
+}

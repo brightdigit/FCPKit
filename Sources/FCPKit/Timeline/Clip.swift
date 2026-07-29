@@ -51,3 +51,7 @@ public struct Clip: Codable {
   public let audioChannels: String?
   public let audioRate: String?
 }
+
+extension Clip: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

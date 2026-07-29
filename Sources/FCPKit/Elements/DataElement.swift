@@ -39,3 +39,9 @@ public struct DataElement: Codable {
   public let key: String?
   public var value: String?
 }
+
+extension DataElement: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    key.stringValue.isEmpty ? .element : .attribute
+  }
+}

@@ -39,3 +39,7 @@ public struct AdjustBlend: Codable {
   public let amount: String?
   public let mode: String?
 }
+
+extension AdjustBlend: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

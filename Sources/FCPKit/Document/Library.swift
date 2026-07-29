@@ -55,3 +55,9 @@ public struct Library: Codable {
     self.smartCollections = smartCollections
   }
 }
+
+extension Library: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["event", "smart-collection"])
+  }
+}

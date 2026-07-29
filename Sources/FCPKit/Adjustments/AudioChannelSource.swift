@@ -55,3 +55,9 @@ public struct AudioChannelSource: Codable {
     self.adjustLoudness = adjustLoudness
   }
 }
+
+extension AudioChannelSource: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["adjust-loudness"])
+  }
+}

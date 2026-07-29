@@ -37,3 +37,7 @@ public struct VideoRole: Codable {
 
   public let value: String?
 }
+
+extension VideoRole: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

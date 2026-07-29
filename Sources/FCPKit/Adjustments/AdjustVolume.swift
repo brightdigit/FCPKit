@@ -39,3 +39,9 @@ public struct AdjustVolume: Codable {
   public var amount: String?
   public var param: [ParamElement]?
 }
+
+extension AdjustVolume: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["param"])
+  }
+}

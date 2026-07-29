@@ -55,3 +55,14 @@ public struct Video: Codable {
   public var adjustTransform: AdjustTransform?
   public var adjustColorConform: AdjustColorConform?
 }
+
+extension Video: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(
+      for: key,
+      elementKeys: [
+        "param", "filter-video", "adjust-transform", "adjust-colorConform",
+      ]
+    )
+  }
+}

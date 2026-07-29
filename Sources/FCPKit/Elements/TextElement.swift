@@ -37,3 +37,7 @@ public struct TextElement: Codable {
 
   public var textStyle: [TextStyle]?
 }
+
+extension TextElement: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .element }
+}

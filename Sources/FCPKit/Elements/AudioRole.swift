@@ -37,3 +37,7 @@ public struct AudioRole: Codable {
 
   public let value: String?
 }
+
+extension AudioRole: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+}

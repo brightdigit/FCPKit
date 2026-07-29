@@ -39,3 +39,9 @@ public struct TextStyleDef: Codable {
   public let id: String?
   public var textStyle: TextStyle?
 }
+
+extension TextStyleDef: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["text-style"])
+  }
+}

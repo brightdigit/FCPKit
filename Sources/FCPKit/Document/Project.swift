@@ -55,3 +55,9 @@ public struct Project: Codable {
     self.sequence = sequence
   }
 }
+
+extension Project: DynamicNodeEncoding {
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: ["sequence"])
+  }
+}
