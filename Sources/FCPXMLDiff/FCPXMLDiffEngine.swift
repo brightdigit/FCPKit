@@ -173,15 +173,7 @@ public struct FCPXMLDiffEngine: Sendable {
     to result: inout [FCPXMLDifference]
   ) {
     for path in Set(left.keys).union(right.keys) {
-      let leftValues = multiset(left[path] ?? [])
-      let rightValues = multiset(right[path] ?? [])
-      var removed = 0
-      var added = 0
-      for value in Set(leftValues.keys).union(rightValues.keys) {
-        let delta = (leftValues[value] ?? 0) - (rightValues[value] ?? 0)
-        if delta > 0 { removed += delta }
-        if delta < 0 { added -= delta }
-      }
+      let (removed, added) = removedAndAdded(left[path] ?? [], right[path] ?? [])
       let changed = min(removed, added)
       if changed > 0 {
         result.append(FCPXMLDifference(kind: changedKind, path: path, count: changed))
@@ -193,6 +185,29 @@ public struct FCPXMLDiffEngine: Sendable {
         result.append(FCPXMLDifference(kind: addedKind, path: path, count: added - changed))
       }
     }
+  }
+
+  /// Counts how many values were removed from `left` and added in `right`.
+  ///
+  /// Values are compared as multisets, so repeated values count individually.
+  private func removedAndAdded(
+    _ left: [String],
+    _ right: [String]
+  ) -> (removed: Int, added: Int) {
+    let leftValues = multiset(left)
+    let rightValues = multiset(right)
+    var removed = 0
+    var added = 0
+    for value in Set(leftValues.keys).union(rightValues.keys) {
+      let delta = (leftValues[value] ?? 0) - (rightValues[value] ?? 0)
+      if delta > 0 {
+        removed += delta
+      }
+      if delta < 0 {
+        added -= delta
+      }
+    }
+    return (removed, added)
   }
 
   private func multiset(_ values: [String]) -> [String: Int] {

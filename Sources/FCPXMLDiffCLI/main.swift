@@ -253,7 +253,6 @@ internal enum FCPXMLDiffCommand {
   private static func writeError(_ message: String) {
     FileHandle.standardError.write(Data(message.utf8))
   }
-
 }
 
 private enum CommandError: Error, LocalizedError {
