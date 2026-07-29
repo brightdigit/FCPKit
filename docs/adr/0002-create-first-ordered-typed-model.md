@@ -52,9 +52,15 @@ v0.1.0 delivers the **full** plan (not ordering+DSL-only):
 5. **`FCPKitScripting`** — additive, macOS-only, read-only ScriptingBridge inspector.
    Scripting timecode format is a separate enum (includes `unspecified`) with
    conversion to/from FCPXML `TCFormat` (`DF|NDF` only).
+6. **BrightDigit package scaffolding** — CI, lint/format, and package hygiene so
+   implementation PRs land against a reviewable pipeline
+   ([#4](https://github.com/brightdigit/FCPKit/issues/4); added 2026-07-29).
+
+Tracker: [planning/v0.1.0-issues.md](../planning/v0.1.0-issues.md). Parallel lanes:
+[planning/v0.1.0-worktree-plan.md](../planning/v0.1.0-worktree-plan.md).
 
 **Out of 0.1.0:** `locator` resources, `import-options`, sidecar unknown-XML
-preservation, AppleScript-driven export, CI, XCTest → Swift Testing migration
+preservation, AppleScript-driven export, XCTest → Swift Testing migration
 (defer migration to 0.1.1 as one no-behavior-change PR), and migrating
 `MulticamXMLBuilder` onto `FCPKitDSL`.
 
@@ -70,4 +76,5 @@ preservation, AppleScript-driven export, CI, XCTest → Swift Testing migration
 - Future readers should not “fix” the completeness gate to be order-aware without
   revisiting this ADR — order belongs in explicit order tests.
 - ADR 0001 still governs unsupported elements/attributes; this ADR adds create-first
-  priority, ordering, typing, and authoring/scripting boundaries for v0.1.0.
+  priority, ordering, typing, authoring/scripting boundaries, and package scaffolding
+  for v0.1.0.
