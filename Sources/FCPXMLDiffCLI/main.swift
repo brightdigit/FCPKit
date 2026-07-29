@@ -134,7 +134,8 @@ internal enum FCPXMLDiffCommand {
     let acceptance = SchemaCompletenessAcceptance(maximumTotalLoss: maximumTotalLoss)
     if !acceptance.accepts(report) {
       writeError(
-        "fcpxml-diff: total structural loss \(report.totals.total) exceeds accepted baseline \(maximumTotalLoss)\n"
+        "fcpxml-diff: total structural loss \(report.totals.total) "
+          + "exceeds accepted baseline \(maximumTotalLoss)\n"
       )
       return false
     }

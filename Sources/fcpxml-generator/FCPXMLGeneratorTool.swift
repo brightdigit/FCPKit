@@ -102,14 +102,10 @@ import Foundation
         let extractor = VideoMetadataExtractor()
 
         let video1Metadata = try await extractor.extractMetadata(from: video1URL)
-        print(
-          "✅ \(video1URL.lastPathComponent): \(Int(video1Metadata.dimensions.width))x\(Int(video1Metadata.dimensions.height)) @ \(video1Metadata.frameRate)fps"
-        )
+        print(describe(video1URL, video1Metadata))
 
         let video2Metadata = try await extractor.extractMetadata(from: video2URL)
-        print(
-          "✅ \(video2URL.lastPathComponent): \(Int(video2Metadata.dimensions.width))x\(Int(video2Metadata.dimensions.height)) @ \(video2Metadata.frameRate)fps"
-        )
+        print(describe(video2URL, video2Metadata))
 
         // Generate FCPXML
         print("\n🏗️  Generating FCPXML structure...")
@@ -130,15 +126,22 @@ import Foundation
         // Print summary
         print("\n📋 Summary:")
         print("   • Combined media with side-by-side layout")
-        print(
-          "   • Multicam clip with 3 angles (Both, \(video1URL.deletingPathExtension().lastPathComponent), \(video2URL.deletingPathExtension().lastPathComponent))"
-        )
+        let angle1 = video1URL.deletingPathExtension().lastPathComponent
+        let angle2 = video2URL.deletingPathExtension().lastPathComponent
+        print("   • Multicam clip with 3 angles (Both, \(angle1), \(angle2))")
         print("   • Standard smart collections included")
         print("   • Ready to import into Final Cut Pro")
       } catch {
         print("❌ Error: \(error.localizedDescription)")
         exit(1)
       }
+    }
+
+    /// Formats a one-line summary of an extracted video's dimensions and frame rate.
+    private static func describe(_ url: URL, _ metadata: VideoMetadata) -> String {
+      let width = Int(metadata.dimensions.width)
+      let height = Int(metadata.dimensions.height)
+      return "✅ \(url.lastPathComponent): \(width)x\(height) @ \(metadata.frameRate)fps"
     }
 
     internal static func printUsage() {

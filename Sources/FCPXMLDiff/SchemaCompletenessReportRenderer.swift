@@ -49,7 +49,7 @@ public struct SchemaCompletenessReportRenderer: Sendable {
       "",
       "| Files | Dropped elements | Dropped attributes | Dropped text | Total |",
       "| ---: | ---: | ---: | ---: | ---: |",
-      "| \(report.files.count) | \(report.totals.droppedElements) | \(report.totals.droppedAttributes) | \(report.totals.droppedText) | \(report.totals.total) |",
+      summaryRow(report),
       "",
       "## Normalization",
       "",
@@ -65,12 +65,30 @@ public struct SchemaCompletenessReportRenderer: Sendable {
         "",
         "FCPXML version: `\(file.fcpxmlVersion ?? "unknown")`",
         "",
-        "Dropped elements: \(file.summary.droppedElements); dropped attributes: \(file.summary.droppedAttributes); dropped text: \(file.summary.droppedText).",
+        lossSentence(file.summary),
         "",
       ]
       appendFindings(file.findings, to: &lines)
     }
     return lines.joined(separator: "\n") + "\n"
+  }
+
+  private func summaryRow(_ report: SchemaCompletenessReport) -> String {
+    let totals = report.totals
+    let counts = [
+      report.files.count,
+      totals.droppedElements,
+      totals.droppedAttributes,
+      totals.droppedText,
+      totals.total,
+    ]
+    return "| " + counts.map(String.init).joined(separator: " | ") + " |"
+  }
+
+  private func lossSentence(_ summary: SchemaCompletenessSummary) -> String {
+    "Dropped elements: \(summary.droppedElements); "
+      + "dropped attributes: \(summary.droppedAttributes); "
+      + "dropped text: \(summary.droppedText)."
   }
 
   private func appendFindings(

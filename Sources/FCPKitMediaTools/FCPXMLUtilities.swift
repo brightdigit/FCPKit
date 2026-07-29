@@ -100,11 +100,13 @@ public enum FCPXMLUtilities {
     /// - Parameter metadata: Video metadata
     /// - Returns: Hexadecimal signature string
     public static func generateAssetSignature(from metadata: VideoMetadata) -> String {
-      let data = Data(
-        "\(metadata.url.lastPathComponent)\(metadata.duration.value)\(metadata.dimensions.width)\(metadata.dimensions.height)"
-          .utf8
-      )
-      return data.map { String(format: "%02X", $0) }.joined()
+      // Concatenation order is part of the signature; do not reorder.
+      let seed =
+        "\(metadata.url.lastPathComponent)"
+        + "\(metadata.duration.value)"
+        + "\(metadata.dimensions.width)"
+        + "\(metadata.dimensions.height)"
+      return Data(seed.utf8).map { String(format: "%02X", $0) }.joined()
     }
   #endif
 }
