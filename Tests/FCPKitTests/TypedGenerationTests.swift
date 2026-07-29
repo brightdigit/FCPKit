@@ -1,9 +1,13 @@
-import AVFoundation
-import CoreMedia
 import FCPKit
 import FCPKitMediaTools
 import FCPXMLDiff
 import XCTest
+
+// Exercises MulticamXMLBuilder / VideoMetadata, which are gated on CoreMedia,
+// so these tests only exist on Apple platforms.
+#if canImport(CoreMedia)
+import AVFoundation
+import CoreMedia
 
 final class TypedGenerationTests: XCTestCase {
     func testPublicAPIConstructsRoundTripsAndMutatesMinimalProject() throws {
@@ -181,3 +185,4 @@ final class TypedGenerationTests: XCTestCase {
         )
     }
 }
+#endif

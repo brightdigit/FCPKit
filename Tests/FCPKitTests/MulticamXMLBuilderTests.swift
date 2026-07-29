@@ -1,8 +1,12 @@
-import AVFoundation
-import CoreMedia
 import FCPKit
 import XCTest
 @testable import FCPKitMediaTools
+
+// MulticamXMLBuilder and VideoMetadata are gated on CoreMedia, so these tests
+// only exist on Apple platforms.
+#if canImport(CoreMedia)
+import AVFoundation
+import CoreMedia
 
 final class MulticamXMLBuilderTests: XCTestCase {
 
@@ -102,3 +106,4 @@ final class MulticamXMLBuilderTests: XCTestCase {
         XCTAssertEqual(parsed.resources?.media?.count, 4)
     }
 }
+#endif
