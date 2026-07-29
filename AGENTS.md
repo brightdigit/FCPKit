@@ -159,10 +159,20 @@ Favor the existing Swift, FCPKit, and XMLCoder stack. The differential tooling
 belongs in Swift because it must exercise the same model and encoder used by
 downstream apps.
 
-The test suite is **XCTest**, not Swift Testing — all nine files under
-`Tests/FCPKitTests/` use `XCTestCase`. Write new tests in XCTest for now;
-mixing frameworks mid-migration is worse than either alone. A wholesale
-migration is proposed for after v0.1.0.
+**Write new tests in Swift Testing** (`import Testing`, `@Suite` / `@Test` /
+`#expect`), following the conventions in
+[this Swift Testing guide](https://gist.github.com/leogdion/0806c2f41aeb2c77db6a4a846cf13c0f).
+Key points: include "Tests" in *either* the parent enum *or* the child struct
+and never both; use a single `@Suite struct` for fewer than ten tests and a
+parent `@Suite enum` plus per-category `extension` files when a suite will grow;
+gate platform-specific tests through a centralized `Platform` helper with
+`.enabled(if:)` traits (see the guide's platform-compatibility page). Use
+`withKnownIssue { }` where XCTest would have used `XCTExpectFailure`.
+
+The existing suite is **XCTest** — all ten files under `Tests/FCPKitTests/` use
+`XCTestCase`, and they stay that way for now. Migrating them is a separate,
+no-behavior-change change proposed for after v0.1.0; that deferral does not
+apply to newly authored tests.
 
 Keep model additions faithful to XML ordering and XMLCoder node-encoding rules.
 Avoid convenience abstractions that prevent lossless representation. Where the

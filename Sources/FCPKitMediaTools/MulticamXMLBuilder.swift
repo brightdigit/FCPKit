@@ -1,8 +1,12 @@
-import CoreMedia
 import Foundation
 import FCPKit
 
+#if canImport(CoreMedia)
+import CoreMedia
+
 /// Builds multicam FCPXML documents through the typed FCPKit model.
+///
+/// Available only on platforms that provide CoreMedia, because it builds from `VideoMetadata`.
 public class MulticamXMLBuilder {
 
     public init() {}
@@ -329,3 +333,4 @@ public class MulticamXMLBuilder {
         )
     }
 }
+#endif

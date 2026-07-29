@@ -1,9 +1,27 @@
 import Foundation
 import FCPKitMediaTools
 
+#if !canImport(AVFoundation)
+
+/// Placeholder entry point for platforms without AVFoundation.
+///
+/// The generator extracts metadata from real media files, which requires AVFoundation.
+/// The target still builds everywhere so cross-platform CI stays honest.
 @main
 struct FCPXMLGeneratorTool {
-    
+    static func main() {
+        FileHandle.standardError.write(Data(
+            "fcpxml-generator requires AVFoundation and is unavailable on this platform.\n".utf8
+        ))
+        exit(1)
+    }
+}
+
+#else
+
+@main
+struct FCPXMLGeneratorTool {
+
     static func main() async {
         let args = CommandLine.arguments
         
@@ -122,3 +140,5 @@ struct FCPXMLGeneratorTool {
         """)
     }
 }
+
+#endif

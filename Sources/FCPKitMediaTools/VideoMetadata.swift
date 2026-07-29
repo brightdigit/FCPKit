@@ -1,8 +1,12 @@
 import Foundation
+
+#if canImport(CoreMedia)
 import CoreMedia
 import AVFoundation
 
 /// Represents metadata extracted from a video file
+///
+/// Available only on platforms that provide CoreMedia, because `duration` is a `CMTime`.
 public struct VideoMetadata {
     public let url: URL
     public let duration: CMTime
@@ -39,6 +43,7 @@ public struct VideoMetadata {
         self.audioCodec = audioCodec
     }
 }
+#endif
 
 /// Errors that can occur during video metadata extraction
 public enum VideoMetadataError: Error, LocalizedError {

@@ -1,8 +1,12 @@
 import Foundation
+
+#if canImport(AVFoundation)
 import AVFoundation
 import CoreMedia
 
 /// Extracts metadata from video files using AVFoundation
+///
+/// Available only on platforms that provide AVFoundation.
 public class VideoMetadataExtractor {
     
     public init() {}
@@ -88,3 +92,4 @@ public class VideoMetadataExtractor {
         return String(bytes: bytes, encoding: .ascii) ?? "unknown"
     }
 }
+#endif

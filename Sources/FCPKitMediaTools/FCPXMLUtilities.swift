@@ -1,10 +1,14 @@
 import Foundation
-import CoreMedia
 import FCPKit
+
+#if canImport(CoreMedia)
+import CoreMedia
+#endif
 
 /// Utility functions for converting between video metadata and FCPXML formats
 public struct FCPXMLUtilities {
-    
+
+    #if canImport(CoreMedia)
     /// Converts CMTime to FCPXML duration string format
     /// - Parameter time: CMTime to convert
     /// - Returns: String in format like "7700200/2400s"
@@ -14,7 +18,8 @@ public struct FCPXMLUtilities {
         }
         return "0s"
     }
-    
+    #endif
+
     /// Generates a unique identifier for FCPXML elements
     /// - Returns: Base64-encoded random string suitable for FCPXML UIDs
     public static func generateUID() -> String {
@@ -62,6 +67,7 @@ public struct FCPXMLUtilities {
         return url.absoluteString
     }
     
+    #if canImport(CoreMedia)
     /// Generates a signature for an asset based on its properties
     /// - Parameter metadata: Video metadata
     /// - Returns: Hexadecimal signature string
@@ -69,4 +75,5 @@ public struct FCPXMLUtilities {
         let data = "\(metadata.url.lastPathComponent)\(metadata.duration.value)\(metadata.dimensions.width)\(metadata.dimensions.height)".data(using: .utf8) ?? Data()
         return data.map { String(format: "%02X", $0) }.joined()
     }
+    #endif
 }
