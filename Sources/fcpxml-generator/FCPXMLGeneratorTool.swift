@@ -86,7 +86,8 @@ struct FCPXMLGeneratorTool {
                 projectName: projectName
             )
             
-            // Write to file
+            // Write to file. (This branch is Apple-only — see the #if above — so
+            // atomic writing is always available here.)
             try xmlString.write(to: outputURL, atomically: true, encoding: .utf8)
             
             print("✅ Successfully generated FCPXML file!")

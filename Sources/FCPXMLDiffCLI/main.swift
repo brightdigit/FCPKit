@@ -1,6 +1,21 @@
 import FCPXMLDiff
 import Foundation
 
+extension Data {
+    /// Writes atomically where the platform supports it.
+    ///
+    /// WASI has no temporary files, so `.atomic` is unavailable there and the write
+    /// is direct. Report output is written once at the end of a run, so losing
+    /// atomicity only matters if the process dies mid-write.
+    func writeAtomicallyIfSupported(to url: URL) throws {
+        #if os(WASI)
+        try write(to: url)
+        #else
+        try write(to: url, options: .atomic)
+        #endif
+    }
+}
+
 @main
 struct FCPXMLDiffCommand {
     static func main() {
@@ -80,10 +95,10 @@ struct FCPXMLDiffCommand {
         print(markdown, terminator: "")
 
         if let markdownPath {
-            try Data(markdown.utf8).write(to: URL(fileURLWithPath: markdownPath), options: .atomic)
+            try Data(markdown.utf8).writeAtomicallyIfSupported(to: URL(fileURLWithPath: markdownPath))
         }
         if let jsonPath {
-            try renderer.jsonData(report).write(to: URL(fileURLWithPath: jsonPath), options: .atomic)
+            try renderer.jsonData(report).writeAtomicallyIfSupported(to: URL(fileURLWithPath: jsonPath))
         }
         guard let maximumTotalLoss else { return true }
         let acceptance = SchemaCompletenessAcceptance(maximumTotalLoss: maximumTotalLoss)
@@ -136,10 +151,10 @@ struct FCPXMLDiffCommand {
         let markdown = renderer.markdown(report)
         print(markdown, terminator: "")
         if let markdownPath {
-            try Data(markdown.utf8).write(to: URL(fileURLWithPath: markdownPath), options: .atomic)
+            try Data(markdown.utf8).writeAtomicallyIfSupported(to: URL(fileURLWithPath: markdownPath))
         }
         if let jsonPath {
-            try renderer.jsonData(report).write(to: URL(fileURLWithPath: jsonPath), options: .atomic)
+            try renderer.jsonData(report).writeAtomicallyIfSupported(to: URL(fileURLWithPath: jsonPath))
         }
     }
 
@@ -180,10 +195,10 @@ struct FCPXMLDiffCommand {
         let markdown = renderer.markdown(report)
         print(markdown, terminator: "")
         if let markdownPath {
-            try Data(markdown.utf8).write(to: URL(fileURLWithPath: markdownPath), options: .atomic)
+            try Data(markdown.utf8).writeAtomicallyIfSupported(to: URL(fileURLWithPath: markdownPath))
         }
         if let jsonPath {
-            try renderer.jsonData(report).write(to: URL(fileURLWithPath: jsonPath), options: .atomic)
+            try renderer.jsonData(report).writeAtomicallyIfSupported(to: URL(fileURLWithPath: jsonPath))
         }
         return report.isValid
     }
