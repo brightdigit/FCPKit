@@ -45,8 +45,8 @@ internal final class FCPXMLVersionTests: XCTestCase {
   }
 
   internal func testGenerationBaselineMatchesSupportedVersion() {
-    XCTAssertEqual(FCPXMLVersion.supportedGenerationVersion.rawValue, "1.13")
-    XCTAssertTrue(FCPXMLVersion.testedFixtureVersions.contains(.supportedGenerationVersion))
+    XCTAssertEqual(FCPXMLVersion.supportedGeneration.rawValue, "1.13")
+    XCTAssertTrue(FCPXMLVersion.testedFixtureVersions.contains(.supportedGeneration))
     XCTAssertTrue(FCPXMLVersion.testedFixtureVersions.contains(FCPXMLVersion("1.14")))
     // 1.14 is fixture-tested but still newer than the generation baseline.
     XCTAssertEqual(FCPXMLVersion("1.14").compatibility(), .newer)

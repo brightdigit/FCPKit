@@ -93,7 +93,7 @@ import XCTest
       let encoded = try parser.encode(document)
       let decoded = try parser.parse(data: encoded)
 
-      XCTAssertEqual(decoded.version, FCPXMLVersion.supportedGenerationVersion.rawValue)
+      XCTAssertEqual(decoded.version, FCPXMLVersion.supportedGeneration.rawValue)
       XCTAssertEqual(decoded.versionCompatibility, .supported)
       XCTAssertNil(decoded.library?.smartCollections)
       XCTAssertEqual(decoded.library?.events?.first?.name, "Typed Parity")

@@ -35,7 +35,7 @@ import Foundation
 /// limited to the explicitly tested vocabulary for that version.
 public struct FCPXMLVersion: RawRepresentable, Hashable, Sendable, Codable {
   /// Version emitted by typed generation and `MulticamXMLBuilder`.
-  public static let supportedGenerationVersion = FCPXMLVersion("1.13")
+  public static let supportedGeneration = FCPXMLVersion("1.13")
 
   /// Fixture versions currently covered by schema-completeness evidence.
   public static let testedFixtureVersions: Set<FCPXMLVersion> = [
@@ -73,7 +73,7 @@ extension FCPXMLVersion {
 
   /// Evaluates compatibility of this declared version against the generation baseline.
   public func compatibility(
-    relativeTo baseline: FCPXMLVersion = .supportedGenerationVersion
+    relativeTo baseline: FCPXMLVersion = .supportedGeneration
   ) -> FCPXMLVersionCompatibility {
     guard let declaredComponents = Self.numericComponents(rawValue),
       let baselineComponents = Self.numericComponents(baseline.rawValue)

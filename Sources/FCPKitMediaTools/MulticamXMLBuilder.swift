@@ -159,7 +159,7 @@ import Foundation
       )
 
       return FCPXML(
-        version: FCPXMLVersion.supportedGenerationVersion.rawValue,
+        version: FCPXMLVersion.supportedGeneration.rawValue,
         resources: Resources(
           assets: buildAssets(
             leftSideVideo: leftSideVideo,
