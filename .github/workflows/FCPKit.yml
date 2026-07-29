@@ -160,11 +160,14 @@ jobs:
         with:
           search-paths: .build
           fail-on-empty-output: true
+      # fail_ci_if_error is false across this workflow until FCPKit is registered
+      # with Codecov and CODECOV_TOKEN is set — uploads currently 404 with
+      # "Repository not found". Flip back to true once that is configured.
       - name: Upload coverage to Codecov
         if: ${{ steps.build.outputs.contains-code-coverage == 'true' && matrix.swift.version != '6.4' }}
         uses: codecov/codecov-action@v7
         with:
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           flags: spm,${{ matrix.os }},${{ matrix.swift.version }}
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -218,7 +221,7 @@ jobs:
           # Append the runner so the SPM and macOS legs stay distinct across Xcodes
           # (they carry no osVersion of their own and would otherwise collide).
           flags: ${{ matrix.type && format('{0}{1},{2}', matrix.type, matrix.osVersion, matrix.runs-on) || format('spm,{0}', matrix.runs-on) }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false
 
   # Windows on hosted runners: Swift 6.3 release + 6.4 nightly snapshot, via
   # compnerd/gha-setup-swift under swift-build. Own tier (run-windows). Bump the

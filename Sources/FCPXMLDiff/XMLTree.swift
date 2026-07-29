@@ -1,5 +1,10 @@
 import Foundation
 
+// On Linux, XMLParser lives in FoundationXML rather than Foundation.
+#if canImport(FoundationXML)
+import FoundationXML
+#endif
+
 public struct XMLTreeNode: Equatable, Sendable {
     public var name: String
     public var attributes: [String: String]
