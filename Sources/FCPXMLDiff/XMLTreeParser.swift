@@ -29,6 +29,10 @@
 
 import Foundation
 
+#if canImport(FoundationXML)
+  import FoundationXML
+#endif
+
 private final class TreeParserDelegate: NSObject, XMLParserDelegate {
   private struct Builder {
     var name: String
