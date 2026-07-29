@@ -1,0 +1,4 @@
+<fcpxml version="1.13"><resources><format id="r1"/></resources>
+<library><event><project><sequence format="r1" duration="1s"><spine>
+<gap duration="1s"/>
+</spine></sequence></project></event></library></fcpxml>

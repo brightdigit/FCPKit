@@ -10,62 +10,9 @@ internal final class FCPXMLDiffTests: XCTestCase {
 
   internal func testNormalizerSuppressesChurnAndSurfacesStructuralDelta() throws {
     let left = try tree(
-      """
-      <fcpxml version="1.13">
-          <resources>
-              <asset id="r1" name="Clip" uid="OLD-ASSET">
-                  <media-rep kind="original-media" sig="OLD-SIG" src="file:///clip.mov">
-                      <bookmark>OLD-BOOKMARK</bookmark>
-                  </media-rep>
-              </asset>
-              <effect id="r2" name="Effect" uid="OLD-EFFECT"/>
-          </resources>
-          <library>
-              <event name="Event" uid="OLD-EVENT">
-                  <project name="Project" uid="OLD-PROJECT" modDate="OLD-DATE">
-                      <sequence format="r1" duration="10s">
-                          <spine>
-                              <asset-clip ref="r1" duration="10s">
-                                  <filter-video ref="r2">
-                                      <data key="effectConfig">OLD-CONFIG</data>
-                                  </filter-video>
-                              </asset-clip>
-                          </spine>
-                      </sequence>
-                  </project>
-              </event>
-          </library>
-      </fcpxml>
-      """)
+      fixture("NormalizerSuppressesChurnAndSurfacesStructuralDeltaLeft"))
     let right = try tree(
-      """
-      <fcpxml version="1.13">
-          <resources>
-              <asset id="r7" name="Clip" uid="NEW-ASSET">
-                  <media-rep kind="original-media" sig="NEW-SIG" src="file:///clip.mov">
-                      <bookmark>NEW-BOOKMARK</bookmark>
-                  </media-rep>
-              </asset>
-              <effect id="r8" name="Effect" uid="NEW-EFFECT"/>
-          </resources>
-          <library>
-              <event name="Event" uid="NEW-EVENT">
-                  <project name="Project" uid="NEW-PROJECT" modDate="NEW-DATE">
-                      <sequence format="r7" duration="10s">
-                          <spine>
-                              <asset-clip ref="r7" duration="10s">
-                                  <filter-video ref="r8">
-                                      <data key="effectConfig">NEW-CONFIG</data>
-                                  </filter-video>
-                                  <marker start="1s" value="Feature marker"/>
-                              </asset-clip>
-                          </spine>
-                      </sequence>
-                  </project>
-              </event>
-          </library>
-      </fcpxml>
-      """)
+      fixture("NormalizerSuppressesChurnAndSurfacesStructuralDeltaRight"))
 
     let differences = engine.compare(left, right, mode: .symmetric)
 
@@ -81,26 +28,9 @@ internal final class FCPXMLDiffTests: XCTestCase {
 
   internal func testInsertedResourceDoesNotChangeLaterReferences() throws {
     let left = try tree(
-      """
-      <fcpxml version="1.13">
-          <resources>
-              <format id="r1" name="Format"/>
-              <asset id="r2" name="Clip" format="r1"/>
-          </resources>
-          <library><event><asset-clip ref="r2" format="r1"/></event></library>
-      </fcpxml>
-      """)
+      fixture("InsertedResourceDoesNotChangeLaterReferencesLeft"))
     let right = try tree(
-      """
-      <fcpxml version="1.13">
-          <resources>
-              <effect id="r1" name="New Effect"/>
-              <format id="r2" name="Format"/>
-              <asset id="r3" name="Clip" format="r2"/>
-          </resources>
-          <library><event><asset-clip ref="r3" format="r2"/></event></library>
-      </fcpxml>
-      """)
+      fixture("InsertedResourceDoesNotChangeLaterReferencesRight"))
 
     let differences = engine.compare(left, right, mode: .symmetric)
 
@@ -110,20 +40,9 @@ internal final class FCPXMLDiffTests: XCTestCase {
 
   internal func testDeletedAndReorderedResourcesDoNotChangeSurvivingReferences() throws {
     let left = try tree(
-      """
-      <fcpxml><resources>
-          <format id="r1" name="Format"/>
-          <effect id="r2" name="Removed"/>
-          <asset id="r3" name="Clip" format="r1"/>
-      </resources><library><asset-clip ref="r3" format="r1"/></library></fcpxml>
-      """)
+      fixture("DeletedAndReorderedResourcesDoNotChangeSurvivingReferencesLeft"))
     let right = try tree(
-      """
-      <fcpxml><resources>
-          <asset id="r1" name="Clip" format="r3"/>
-          <format id="r3" name="Format"/>
-      </resources><library><asset-clip ref="r1" format="r3"/></library></fcpxml>
-      """)
+      fixture("DeletedAndReorderedResourcesDoNotChangeSurvivingReferencesRight"))
 
     let differences = engine.compare(left, right, mode: .symmetric)
 
@@ -166,17 +85,11 @@ internal final class FCPXMLDiffTests: XCTestCase {
 
   internal func testOpaqueMaskingKeepsElementPathsAndAttributesSignificant() throws {
     let left = try tree(
-      """
-      <root><bookmark kind="security">OLD</bookmark><data key="effectConfig" version="1">OLD</data></root>
-      """)
+      fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantLeft"))
     let payloadOnly = try tree(
-      """
-      <root><bookmark kind="security">NEW</bookmark><data key="effectConfig" version="1">NEW</data></root>
-      """)
+      fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantPayloadOnly"))
     let changedAttribute = try tree(
-      """
-      <root><bookmark kind="different">NEW</bookmark><data key="effectConfig" version="2">NEW</data></root>
-      """)
+      fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantChangedAttribute"))
 
     XCTAssertEqual(engine.compare(left, payloadOnly, mode: .symmetric), [])
     XCTAssertEqual(

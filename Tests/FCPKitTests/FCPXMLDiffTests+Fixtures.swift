@@ -6,23 +6,7 @@ import XMLCoder
 
 extension FCPXMLDiffTests {
   internal func testCompleteSyntheticModelHasNoRoundTripLoss() throws {
-    let xml = """
-      <fcpxml version="1.13">
-          <resources>
-              <format id="r1" name="Format" frameDuration="1/24s" width="1920" height="1080"/>
-              <asset id="r2" name="Clip" uid="ASSET" duration="10s" format="r1" hasVideo="1"/>
-          </resources>
-          <library>
-              <event name="Event" uid="EVENT">
-                  <project name="Project" uid="PROJECT" modDate="DATE">
-                      <sequence format="r1" duration="10s" tcStart="0s" tcFormat="NDF">
-                          <spine><asset-clip ref="r2" name="Clip" duration="10s"/></spine>
-                      </sequence>
-                  </project>
-              </event>
-          </library>
-      </fcpxml>
-      """
+    let xml = fixture("CompleteSyntheticModelHasNoRoundTripLossXml")
     let originalData = try XCTUnwrap(xml.data(using: .utf8))
     let modelParser = FCPXMLParser()
     let model = try modelParser.parse(data: originalData)

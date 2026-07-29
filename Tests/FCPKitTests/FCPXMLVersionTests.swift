@@ -16,12 +16,7 @@ internal final class FCPXMLVersionTests: XCTestCase {
   }
 
   internal func testParseWithCompatibilityReportsDocumentVersion() throws {
-    let xml = """
-      <?xml version="1.0" encoding="UTF-8"?>
-      <fcpxml version="1.13">
-          <resources/>
-      </fcpxml>
-      """
+    let xml = fixture("ParseWithCompatibilityReportsDocumentVersionXml")
     let data = try XCTUnwrap(xml.data(using: .utf8))
     let parser = FCPXMLParser()
     let result = try parser.parseWithCompatibility(data: data)
@@ -31,12 +26,7 @@ internal final class FCPXMLVersionTests: XCTestCase {
   }
 
   internal func testParseRequiringWellFormedVersionRejectsMalformed() throws {
-    let xml = """
-      <?xml version="1.0" encoding="UTF-8"?>
-      <fcpxml version="not-a-version">
-          <resources/>
-      </fcpxml>
-      """
+    let xml = fixture("ParseRequiringWellFormedVersionRejectsMalformedXml")
     let data = try XCTUnwrap(xml.data(using: .utf8))
     let parser = FCPXMLParser()
 
@@ -48,12 +38,7 @@ internal final class FCPXMLVersionTests: XCTestCase {
     }
 
     // Newer versions remain best-effort under the well-formed policy.
-    let newer = """
-      <?xml version="1.0" encoding="UTF-8"?>
-      <fcpxml version="1.14">
-          <resources/>
-      </fcpxml>
-      """
+    let newer = fixture("ParseRequiringWellFormedVersionRejectsMalformedNewer")
     let newerData = try XCTUnwrap(newer.data(using: .utf8))
     let newerDocument = try parser.parseRequiringWellFormedVersion(data: newerData)
     XCTAssertEqual(newerDocument.versionCompatibility, .newer)

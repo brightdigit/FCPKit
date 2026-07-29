@@ -87,16 +87,7 @@ extension FCPXMLDiffTests {
 
   internal func testRoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInput() throws {
     let xml = Data(
-      """
-      <fcpxml version="1.13">
-          <resources><format id="r1"/></resources>
-          <library><event><project><sequence format="r1" duration="2s"><spine>
-              <gap duration="1s" unsupported-attribute="kept-nowhere"/>
-              <unsupported><nested>payload</nested></unsupported>
-              <gap duration="1s"/>
-          </spine></sequence></project></event></library>
-      </fcpxml>
-      """.utf8)
+      fixture("RoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInputXml").utf8)
 
     let report = try FCPXMLRoundTripAnalyzer().analyze(data: xml)
 
@@ -125,19 +116,9 @@ extension FCPXMLDiffTests {
 
   internal func testRoundTripAnalyzerCanCheckAnEditedEncodedDocument() throws {
     let original = Data(
-      """
-      <fcpxml version="1.13"><resources><format id="r1"/></resources>
-      <library><event><project><sequence format="r1" duration="1s"><spine>
-      <gap duration="1s"/>
-      </spine></sequence></project></event></library></fcpxml>
-      """.utf8)
+      fixture("RoundTripAnalyzerCanCheckAnEditedEncodedDocumentOriginal").utf8)
     let edited = Data(
-      """
-      <fcpxml version="1.13"><resources><format id="r1"/></resources>
-      <library><event><project><sequence format="r1" duration="2s"><spine>
-      <gap duration="1s"/>
-      </spine></sequence></project></event></library></fcpxml>
-      """.utf8)
+      fixture("RoundTripAnalyzerCanCheckAnEditedEncodedDocumentEdited").utf8)
 
     let report = try FCPXMLRoundTripAnalyzer().analyze(
       originalData: original,

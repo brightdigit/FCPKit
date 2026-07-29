@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.11">
+    <resources>
+        <format id="r1" name="FFVideoFormat1080p24" frameDuration="1/24s" width="1920" height="1080"/>
+        <asset id="r2" name="video.mov" hasVideo="1" duration="600s"/>
+    </resources>
+    <library>
+        <event name="Marker Test">
+            <project name="Marker Project">
+                <sequence format="r1" duration="600s">
+                    <spine>
+                        <asset-clip ref="r2" offset="0s" duration="600s">
+                            <marker start="60s" duration="1s" value="Chapter 1"/>
+                            <marker start="180s" duration="1s" value="Chapter 2" note="Important scene"/>
+                            <keyword start="0s" duration="120s" value="intro"/>
+                            <rating value="favorite"/>
+                        </asset-clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>

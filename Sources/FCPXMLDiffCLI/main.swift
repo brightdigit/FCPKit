@@ -263,11 +263,16 @@ private enum CommandError: Error, LocalizedError {
   var errorDescription: String? {
     switch self {
     case .usage:
+      // Usage text is laid out for a terminal: the continuation lines are
+      // aligned under the first, and rewrapping them would change what users
+      // see. The layout rules measure this prose as if it were Swift.
+      // swiftlint:disable indentation_width line_length
       return """
         usage: fcpxml-diff schema-completeness <file-or-directory>... [--markdown path] [--json path] [--fail-if-total-exceeds count]
                fcpxml-diff compare <before.fcpxml> <after.fcpxml> [--path structural-path] [--markdown path] [--json path]
                fcpxml-diff validate <file.fcpxml> [--dtd path] [--markdown path] [--json path]
         """
+    // swiftlint:enable indentation_width line_length
     case .noInputFiles:
       return "no .fcpxml input files found"
     case .missingInput(let path):

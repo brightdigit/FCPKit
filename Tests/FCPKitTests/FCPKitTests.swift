@@ -3,27 +3,7 @@ import XCTest
 @testable import FCPKit
 
 internal final class FCPKitTests: XCTestCase {
-  internal let sampleFCPXML = """
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE fcpxml>
-    <fcpxml version="1.10">
-        <resources>
-            <format id="r1" name="FFVideoFormat1080p2997" frameDuration="1001/30000s" width="1920" height="1080" colorSpace="1-1-1 (Rec. 709)"/>
-            <asset id="r2" name="sample_video" uid="1234567890" src="file:///Users/test/sample_video.mov" start="3600s" duration="7200s" hasVideo="1" hasAudio="1" audioChannels="2" audioRate="48000"/>
-        </resources>
-        <library>
-            <event name="Test Event" uid="event123">
-                <project name="Test Project" uid="project456">
-                    <sequence format="r1" duration="7200s" tcStart="0s" tcFormat="NDF">
-                        <spine>
-                            <clip name="sample_video" ref="r2" offset="0s" duration="7200s" start="3600s" tcFormat="NDF"/>
-                        </spine>
-                    </sequence>
-                </project>
-            </event>
-        </library>
-    </fcpxml>
-    """
+  internal let sampleFCPXML = fixture("SampleFCPXML")
 
   internal func testParseBasicFCPXML() throws {
     let parser = FCPXMLParser()
@@ -108,29 +88,7 @@ internal final class FCPKitTests: XCTestCase {
   }
 
   internal func testDataElementTextContentRoundTrips() throws {
-    let xml = """
-      <fcpxml version="1.13">
-          <resources>
-              <format id="r1"/>
-              <asset id="r2"/>
-          </resources>
-          <library>
-              <event>
-                  <project>
-                      <sequence format="r1" duration="1s">
-                          <spine>
-                              <asset-clip ref="r2" duration="1s">
-                                  <filter-video ref="r3">
-                                      <data key="effectConfig">PAYLOAD</data>
-                                  </filter-video>
-                              </asset-clip>
-                          </spine>
-                      </sequence>
-                  </project>
-              </event>
-          </library>
-      </fcpxml>
-      """
+    let xml = fixture("DataElementTextContentRoundTripsXml")
     let parser = FCPXMLParser()
     let model = try parser.parse(xmlString: xml)
 

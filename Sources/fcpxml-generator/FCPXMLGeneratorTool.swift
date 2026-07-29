@@ -145,6 +145,9 @@ import Foundation
     }
 
     internal static func printUsage() {
+      // Help text is laid out for a terminal: sections are indented four spaces
+      // and the wording is wrapped for reading, not for Swift source width.
+      // swiftlint:disable indentation_width
       print(
         """
         fcpxml-generator - Generate multicam FCPXML from two video files
@@ -178,6 +181,7 @@ import Foundation
 
             The first video is positioned on the left, the second on the right.
         """)
+      // swiftlint:enable indentation_width
     }
   }
 

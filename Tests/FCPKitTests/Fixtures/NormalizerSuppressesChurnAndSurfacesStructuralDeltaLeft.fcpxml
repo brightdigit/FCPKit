@@ -1,0 +1,25 @@
+<fcpxml version="1.13">
+    <resources>
+        <asset id="r1" name="Clip" uid="OLD-ASSET">
+            <media-rep kind="original-media" sig="OLD-SIG" src="file:///clip.mov">
+                <bookmark>OLD-BOOKMARK</bookmark>
+            </media-rep>
+        </asset>
+        <effect id="r2" name="Effect" uid="OLD-EFFECT"/>
+    </resources>
+    <library>
+        <event name="Event" uid="OLD-EVENT">
+            <project name="Project" uid="OLD-PROJECT" modDate="OLD-DATE">
+                <sequence format="r1" duration="10s">
+                    <spine>
+                        <asset-clip ref="r1" duration="10s">
+                            <filter-video ref="r2">
+                                <data key="effectConfig">OLD-CONFIG</data>
+                            </filter-video>
+                        </asset-clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>

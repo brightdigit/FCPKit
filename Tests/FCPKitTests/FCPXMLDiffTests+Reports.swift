@@ -71,13 +71,9 @@ extension FCPXMLDiffTests {
 
   internal func testRawPairReportsAddedRemovedAndChangedStructures() throws {
     let before = Data(
-      """
-      <fcpxml version="1.13"><library><event name="Before"><marker value="old"/><note>gone</note></event></library></fcpxml>
-      """.utf8)
+      fixture("RawPairReportsAddedRemovedAndChangedStructuresBefore").utf8)
     let after = Data(
-      """
-      <fcpxml version="1.13"><library><event name="After"><marker value="new"/><keyword value="added"/></event></library></fcpxml>
-      """.utf8)
+      fixture("RawPairReportsAddedRemovedAndChangedStructuresAfter").utf8)
 
     let report = try RawPairAnalyzer().analyze(beforeData: before, afterData: after)
 

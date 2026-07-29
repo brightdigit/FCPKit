@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.11">
+    <resources>
+        <format id="r1" name="FFVideoFormat1080p24" frameDuration="1/24s" width="1920" height="1080"/>
+        <effect id="r2" name="Custom" uid="FFB3BDE8-E5F3-4E11-9C67-9D8CFB57A076"/>
+    </resources>
+    <library>
+        <event name="Generator Test">
+            <project name="Generator Project">
+                <sequence format="r1" duration="300s">
+                    <spine>
+                        <generator ref="r2" offset="0s" duration="300s" name="Color Solid">
+                            <param name="Color" key="9999/999166631/999166633/1/100/101" value="1 0 0 1"/>
+                        </generator>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>

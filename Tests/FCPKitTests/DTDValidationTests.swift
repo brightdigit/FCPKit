@@ -36,10 +36,7 @@ internal final class DTDValidationTests: XCTestCase {
     let emptyLocator = FCPXMLDTDLocator(searchRoots: [
       URL(fileURLWithPath: "/tmp/fcpxml-missing-dtds", isDirectory: true)
     ])
-    let xml = """
-      <?xml version="1.0" encoding="UTF-8"?>
-      <fcpxml version="1.14"><resources/></fcpxml>
-      """
+    let xml = fixture("ValidateThrowsWhenDTDMissingXml")
     let data = try XCTUnwrap(xml.data(using: .utf8))
     XCTAssertThrowsError(
       try FCPXMLDTDValidator(locator: emptyLocator).validate(data: data)
