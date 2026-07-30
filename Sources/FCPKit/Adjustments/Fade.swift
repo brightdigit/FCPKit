@@ -39,8 +39,8 @@ public struct Fade: Codable {
 
   /// The fade curve type (for example "easeIn" or "easeOut").
   public let type: String?
-  /// The fade duration, as a rational time string (for example "1/2s").
-  public var duration: String?
+  /// The fade duration.
+  public var duration: FCPTime?
 }
 
 extension Fade: DynamicNodeEncoding {

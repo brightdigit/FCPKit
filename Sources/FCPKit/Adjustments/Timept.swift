@@ -38,15 +38,15 @@ public struct Timept: Codable {
     case interp
   }
 
-  /// The output (timeline) time of this point, as a rational time string.
-  public var time: String?
-  /// The corresponding source media time, as a rational time string.
-  public var value: String?
-  /// The interpolation to the next point (for example "smooth2" or "linear").
-  public var interp: String?
+  /// The output (timeline) time of this point.
+  public var time: FCPTime?
+  /// The corresponding source media time.
+  public var value: FCPTime?
+  /// The interpolation to the next point.
+  public var interp: TimeptInterp?
 
   /// Creates a `timept` with an optional time, value, and interpolation.
-  public init(time: String? = nil, value: String? = nil, interp: String? = nil) {
+  public init(time: FCPTime? = nil, value: FCPTime? = nil, interp: TimeptInterp? = nil) {
     self.time = time
     self.value = value
     self.interp = interp

@@ -30,7 +30,7 @@ internal final class AssetClipEditingTests: XCTestCase {
   internal func testAddMarkerMatchesFeaturePairAfter() throws {
     var document = try loadDocument("markers", file: "before.fcpxml")
     var clip = try spineClip(&document)
-    clip.addMarker(name: "Cue", at: "5s")
+    clip.addMarker(name: "Cue", at: FCPTime(numerator: 5))
     try setSpineClip(&document, clip)
 
     let expected = try loadDocument("markers", file: "after.fcpxml")
@@ -80,7 +80,7 @@ internal final class AssetClipEditingTests: XCTestCase {
   internal func testSetConstantSpeedMatchesFeaturePairAfter() throws {
     var document = try loadDocument("retiming", file: "before.fcpxml")
     var clip = try spineClip(&document)
-    try clip.setConstantSpeed(percent: 50, mediaDuration: "10s")
+    try clip.setConstantSpeed(percent: 50, mediaDuration: FCPTime(numerator: 10))
     try setSpineClip(&document, clip)
     document.library?.events?[0].projects?[0].sequence?.duration = clip.duration
 
@@ -110,8 +110,22 @@ internal final class AssetClipEditingTests: XCTestCase {
 
   internal func testSetConstantSpeedRejectsNonPositivePercent() {
     var clip = AssetClip(ref: "r2", duration: "10s")
-    XCTAssertThrowsError(try clip.setConstantSpeed(percent: 0, mediaDuration: "10s")) { error in
+    XCTAssertThrowsError(
+      try clip.setConstantSpeed(percent: 0, mediaDuration: FCPTime(numerator: 10))
+    ) { error in
       XCTAssertEqual(error as? AssetClipEditingError, .invalidSpeedPercent(0))
     }
+  }
+
+  internal func testSetConstantSpeedEmitsExactRationalForNonIntegralPercent() throws {
+    var clip = AssetClip(ref: "r2", duration: "10s")
+    try clip.setConstantSpeed(percent: 75, mediaDuration: FCPTime(numerator: 10))
+    XCTAssertEqual(clip.duration, "40/3s")
+    XCTAssertEqual(clip.timeMap?.timepts?[0].time?.description, "0s")
+    XCTAssertEqual(clip.timeMap?.timepts?[0].value?.description, "0s")
+    XCTAssertEqual(clip.timeMap?.timepts?[0].interp, .smooth2)
+    XCTAssertEqual(clip.timeMap?.timepts?[1].time?.description, "40/3s")
+    XCTAssertEqual(clip.timeMap?.timepts?[1].value?.description, "10s")
+    XCTAssertEqual(clip.timeMap?.timepts?[1].interp, .smooth2)
   }
 }

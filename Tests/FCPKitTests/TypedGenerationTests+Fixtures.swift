@@ -35,7 +35,7 @@ import XCTest
             audioRate: "48000",
             mediaRep: [
               MediaRep(
-                kind: "original-media",
+                kind: .originalMedia,
                 sig: "ASSET-SIGNATURE",
                 src: "file:///Users/Shared/FCPKitMedia/interview.mov"
               )

@@ -45,7 +45,7 @@ internal final class FeaturePairTests: XCTestCase {
       document.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.markers?
         .first
     )
-    XCTAssertEqual(marker.start, "5s")
+    XCTAssertEqual(marker.start, FCPTime(numerator: 5))
     XCTAssertEqual(marker.value, "Cue")
 
     document.library?.events?[0].projects?[0].sequence?.spine?.assetClips?[0].markers?[0].value =
@@ -60,7 +60,7 @@ internal final class FeaturePairTests: XCTestCase {
     XCTAssertEqual(
       decoded.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.markers?
         .first?.start,
-      "5s"
+      FCPTime(numerator: 5)
     )
     try assertNoRoundTripLoss(encoded)
   }
@@ -137,24 +137,24 @@ internal final class FeaturePairTests: XCTestCase {
     XCTAssertEqual(clip.duration, "20s")
     let timeMap = try XCTUnwrap(clip.timeMap)
     XCTAssertEqual(timeMap.timepts?.count, 2)
-    XCTAssertEqual(timeMap.timepts?[0].time, "0s")
-    XCTAssertEqual(timeMap.timepts?[0].value, "0s")
-    XCTAssertEqual(timeMap.timepts?[1].time, "20s")
-    XCTAssertEqual(timeMap.timepts?[1].value, "10s")
+    XCTAssertEqual(timeMap.timepts?[0].time, .zero)
+    XCTAssertEqual(timeMap.timepts?[0].value, .zero)
+    XCTAssertEqual(timeMap.timepts?[1].time, FCPTime(numerator: 20))
+    XCTAssertEqual(timeMap.timepts?[1].value, FCPTime(numerator: 10))
 
     document.library?.events?[0].projects?[0].sequence?.spine?.assetClips?[0].timeMap?.timepts?[1]
-      .interp = "linear"
+      .interp = .linear
     let encoded = try FCPXMLParser().encode(document)
     let decoded = try FCPXMLParser().parse(data: encoded)
     XCTAssertEqual(
       decoded.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.timeMap?
         .timepts?[1].interp,
-      "linear"
+      .linear
     )
     XCTAssertEqual(
       decoded.library?.events?.first?.projects?.first?.sequence?.spine?.assetClips?.first?.timeMap?
         .timepts?[1].value,
-      "10s"
+      FCPTime(numerator: 10)
     )
     try assertNoRoundTripLoss(encoded)
   }

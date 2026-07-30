@@ -40,16 +40,16 @@ public struct ChapterMarker: Codable {
     case posterOffset
   }
 
-  /// The marker's position within its parent clip, as a rational time string.
-  public let start: String?
-  /// The marker's duration, as a rational time string.
-  public let duration: String?
+  /// The marker's position within its parent clip.
+  public let start: FCPTime?
+  /// The marker's duration.
+  public let duration: FCPTime?
   /// The chapter title displayed for this marker.
   public let value: String?
   /// An optional note attached to the marker.
   public let note: String?
-  /// The offset from `start` to the chapter's poster frame, as a rational time string.
-  public let posterOffset: String?
+  /// The offset from `start` to the chapter's poster frame.
+  public let posterOffset: FCPTime?
 }
 
 extension ChapterMarker: DynamicNodeEncoding {

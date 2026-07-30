@@ -39,8 +39,8 @@ public struct ConformRate: Codable {
 
   /// The source media frame rate (for example "29.97"), as a string.
   public let srcFrameRate: String?
-  /// Whether frame-rate scaling is enabled ("0" or "1").
-  public let scaleEnabled: String?
+  /// Whether frame-rate scaling is enabled.
+  public let scaleEnabled: FCPBool?
 }
 
 extension ConformRate: DynamicNodeEncoding {

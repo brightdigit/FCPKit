@@ -56,7 +56,7 @@ import Foundation
           audioSources: "1",
           mediaRep: [
             MediaRep(
-              kind: "original-media",
+              kind: .originalMedia,
               sig: context.leftSig,
               src: FCPXMLUtilities.formatFileURL(leftSideVideo.url)
             )
@@ -77,7 +77,7 @@ import Foundation
           audioSources: "1",
           mediaRep: [
             MediaRep(
-              kind: "original-media",
+              kind: .originalMedia,
               sig: context.rightSig,
               src: FCPXMLUtilities.formatFileURL(rightSideVideo.url)
             )
