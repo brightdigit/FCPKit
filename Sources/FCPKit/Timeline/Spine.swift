@@ -30,8 +30,6 @@
 import Foundation
 import XMLCoder
 
-// swiftlint:disable cyclomatic_complexity file_length type_contents_order
-
 /// A `spine` element containing the ordered story elements of a storyline.
 public struct Spine: Codable {
   internal enum CodingKeys: String, CodingKey {
@@ -40,80 +38,6 @@ public struct Spine: Codable {
 
   /// The ordered elements in the spine.
   public var items: [SpineItem]
-
-  /// Creates a spine with the given ordered items.
-  public init(items: [SpineItem] = []) {
-    self.items = items
-  }
-
-  /// Creates a spine from a decoder.
-  public init(from decoder: Decoder) throws {
-    let itemsContainer = try decoder.singleValueContainer()
-    self.items = (try? itemsContainer.decode([SpineItem].self)) ?? []
-  }
-
-  /// Creates a spine with the given story elements.
-  public init(
-    clips: [Clip]? = nil,
-    gaps: [Gap]? = nil,
-    mcClips: [MCClip]? = nil,
-    refClips: [RefClip]? = nil,
-    syncClips: [SyncClip]? = nil,
-    assetClips: [AssetClip]? = nil,
-    titles: [Title]? = nil,
-    generators: [Generator]? = nil,
-    transitions: [Transition]? = nil,
-    storylines: [Storyline]? = nil,
-    compoundClips: [CompoundClip]? = nil,
-    retimeClips: [RetimeClip]? = nil,
-    captions: [Caption]? = nil,
-    video: [Video]? = nil
-  ) {
-    var items = [SpineItem]()
-    if let clips {
-      items.append(contentsOf: clips.map(SpineItem.clip))
-    }
-    if let gaps {
-      items.append(contentsOf: gaps.map(SpineItem.gap))
-    }
-    if let mcClips {
-      items.append(contentsOf: mcClips.map(SpineItem.mcClip))
-    }
-    if let refClips {
-      items.append(contentsOf: refClips.map(SpineItem.refClip))
-    }
-    if let syncClips {
-      items.append(contentsOf: syncClips.map(SpineItem.syncClip))
-    }
-    if let assetClips {
-      items.append(contentsOf: assetClips.map(SpineItem.assetClip))
-    }
-    if let titles {
-      items.append(contentsOf: titles.map(SpineItem.title))
-    }
-    if let generators {
-      items.append(contentsOf: generators.map(SpineItem.generator))
-    }
-    if let transitions {
-      items.append(contentsOf: transitions.map(SpineItem.transition))
-    }
-    if let storylines {
-      items.append(contentsOf: storylines.map(SpineItem.storyline))
-    }
-    if let compoundClips {
-      items.append(contentsOf: compoundClips.map(SpineItem.compoundClip))
-    }
-    if let retimeClips {
-      items.append(contentsOf: retimeClips.map(SpineItem.retimeClip))
-    }
-    if let captions {
-      items.append(contentsOf: captions.map(SpineItem.caption))
-    }
-    if let video {
-      items.append(contentsOf: video.map(SpineItem.video))
-    }
-    self.items = items
-  }
 
   /// The `clip` elements in the spine.
   public var clips: [Clip]? {
@@ -199,6 +123,52 @@ public struct Spine: Codable {
     set { setItems(newValue, isType: \.isVideo, wrap: SpineItem.video) }
   }
 
+  /// Creates a spine with the given ordered items.
+  public init(items: [SpineItem] = []) {
+    self.items = items
+  }
+
+  /// Creates a spine from a decoder.
+  public init(from decoder: Decoder) throws {
+    let itemsContainer = try decoder.singleValueContainer()
+    self.items = (try? itemsContainer.decode([SpineItem].self)) ?? []
+  }
+
+  /// Creates a spine with the given story elements.
+  public init(
+    clips: [Clip]? = nil,
+    gaps: [Gap]? = nil,
+    mcClips: [MCClip]? = nil,
+    refClips: [RefClip]? = nil,
+    syncClips: [SyncClip]? = nil,
+    assetClips: [AssetClip]? = nil,
+    titles: [Title]? = nil,
+    generators: [Generator]? = nil,
+    transitions: [Transition]? = nil,
+    storylines: [Storyline]? = nil,
+    compoundClips: [CompoundClip]? = nil,
+    retimeClips: [RetimeClip]? = nil,
+    captions: [Caption]? = nil,
+    video: [Video]? = nil
+  ) {
+    self.items = OrderedChoiceItems.appending([
+      clips?.map(SpineItem.clip),
+      gaps?.map(SpineItem.gap),
+      mcClips?.map(SpineItem.mcClip),
+      refClips?.map(SpineItem.refClip),
+      syncClips?.map(SpineItem.syncClip),
+      assetClips?.map(SpineItem.assetClip),
+      titles?.map(SpineItem.title),
+      generators?.map(SpineItem.generator),
+      transitions?.map(SpineItem.transition),
+      storylines?.map(SpineItem.storyline),
+      compoundClips?.map(SpineItem.compoundClip),
+      retimeClips?.map(SpineItem.retimeClip),
+      captions?.map(SpineItem.caption),
+      video?.map(SpineItem.video),
+    ])
+  }
+
   private func getItems<T>(_ extract: (SpineItem) -> T?) -> [T]? {
     let list = items.compactMap(extract)
     return list.isEmpty ? nil : list
@@ -239,5 +209,3 @@ extension Spine: DynamicNodeEncoding {
     key.stringValue.isEmpty ? .element : .attribute
   }
 }
-
-// swiftlint:enable cyclomatic_complexity file_length type_contents_order
