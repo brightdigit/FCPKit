@@ -2,7 +2,6 @@ import FCPXMLDiff
 import XCTest
 import XMLCoder
 
-
 extension FCPXMLDiffTests {
   internal func testReportRenderingIsDeterministic() throws {
     let report = SchemaCompletenessReport(
