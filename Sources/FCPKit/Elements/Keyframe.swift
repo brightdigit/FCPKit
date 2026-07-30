@@ -38,11 +38,11 @@ public struct Keyframe: Codable {
     case interp
   }
 
-  /// The time of the keyframe, as a rational time string.
-  public let time: String?
-  /// The parameter value at this keyframe.
+  /// The time of the keyframe.
+  public let time: FCPTime?
+  /// The parameter value at this keyframe (not a `%time;` attribute).
   public var value: String?
-  /// The interpolation mode toward the next keyframe, such as `linear` or `smooth2`.
+  /// The interpolation mode toward the next keyframe (keyframe DTD vocabulary; kept as string).
   public let interp: String?
 }
 

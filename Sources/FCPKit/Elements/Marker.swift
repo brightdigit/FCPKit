@@ -40,24 +40,24 @@ public struct Marker: Codable {
     case completed
   }
 
-  /// The marker's position within its parent clip, as a rational time string.
-  public var start: String?
-  /// The marker's duration, as a rational time string.
-  public var duration: String?
+  /// The marker's position within its parent clip.
+  public var start: FCPTime?
+  /// The marker's duration.
+  public var duration: FCPTime?
   /// The marker's title text.
   public var value: String?
   /// An optional note attached to the marker.
   public var note: String?
-  /// The to-do completion state (`1` or `0`); present only for to-do markers.
-  public var completed: String?
+  /// The to-do completion state; present only for to-do markers.
+  public var completed: FCPBool?
 
   /// Creates a marker with the given timing, title, note, and to-do completion state.
   public init(
-    start: String? = nil,
-    duration: String? = nil,
+    start: FCPTime? = nil,
+    duration: FCPTime? = nil,
     value: String? = nil,
     note: String? = nil,
-    completed: String? = nil
+    completed: FCPBool? = nil
   ) {
     self.start = start
     self.duration = duration

@@ -30,42 +30,11 @@
 import Foundation
 
 extension AssetClip {
-  private static func parseDurationSeconds(_ value: String) throws -> Double {
-    let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard trimmed.hasSuffix("s") else {
-      throw AssetClipEditingError.unsupportedDuration(value)
-    }
-    let body = String(trimmed.dropLast())
-    if body.contains("/") {
-      let parts = body.split(separator: "/", maxSplits: 1).map(String.init)
-      guard parts.count == 2,
-        let numerator = Double(parts[0]),
-        let denominator = Double(parts[1]),
-        denominator != 0
-      else {
-        throw AssetClipEditingError.unsupportedDuration(value)
-      }
-      return numerator / denominator
-    }
-    guard let seconds = Double(body) else {
-      throw AssetClipEditingError.unsupportedDuration(value)
-    }
-    return seconds
-  }
-
-  private static func formatSeconds(_ seconds: Double) -> String {
-    if seconds.rounded() == seconds {
-      return "\(Int(seconds))s"
-    }
-    // Prefer exact integer rational when possible; otherwise emit a decimal seconds form.
-    return "\(seconds)s"
-  }
-
   /// Appends a standard marker matching Final Cut's default marker duration.
   public mutating func addMarker(
     name: String,
-    at start: String,
-    duration: String = "100/2400s"
+    at start: FCPTime,
+    duration: FCPTime = FCPTime(numerator: 100, denominator: 2_400)
   ) {
     var list = markers ?? []
     list.append(Marker(start: start, duration: duration, value: name))
@@ -89,21 +58,22 @@ extension AssetClip {
   /// duration `10s` sets clip duration to `20s` and a two-point `timeMap`
   /// matching Final Cut's 50% slow export (`interp: smooth2`).
   ///
+  /// Non-integral speeds use exact rational arithmetic (for example 75% of
+  /// `10s` → `40/3s`), never decimal seconds.
+  ///
   /// Updates only this clip. Callers should update parent `sequence.duration`
   /// when the timeline length must change.
-  public mutating func setConstantSpeed(percent: Int, mediaDuration: String) throws {
+  public mutating func setConstantSpeed(percent: Int, mediaDuration: FCPTime) throws {
     guard percent > 0 else {
       throw AssetClipEditingError.invalidSpeedPercent(percent)
     }
 
-    let mediaSeconds = try Self.parseDurationSeconds(mediaDuration)
-    let timelineSeconds = mediaSeconds * 100.0 / Double(percent)
-    let timelineDuration = Self.formatSeconds(timelineSeconds)
+    let timelineDuration = try mediaDuration.scaled(by: 100, over: Int64(percent)).reduced()
 
-    duration = timelineDuration
+    duration = timelineDuration.description
     timeMap = TimeMap(timepts: [
-      Timept(time: "0s", value: "0s", interp: "smooth2"),
-      Timept(time: timelineDuration, value: mediaDuration, interp: "smooth2"),
+      Timept(time: .zero, value: .zero, interp: .smooth2),
+      Timept(time: timelineDuration, value: mediaDuration, interp: .smooth2),
     ])
   }
 }

@@ -39,10 +39,10 @@ public struct Keyword: Codable {
     case note
   }
 
-  /// The start time of the keyworded range, as a rational time value.
-  public let start: String?
-  /// The duration of the keyworded range, as a rational time value.
-  public let duration: String?
+  /// The start time of the keyworded range.
+  public let start: FCPTime?
+  /// The duration of the keyworded range.
+  public let duration: FCPTime?
   /// The keyword text; multiple keywords are comma-separated.
   public let value: String?
   /// An optional note attached to the keyword range.

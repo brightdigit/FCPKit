@@ -102,4 +102,31 @@ extension FCPTime {
     }
     return scaled
   }
+
+  /// Scales this time by an exact rational factor `numerator / denominator`.
+  ///
+  /// The result keeps an unreduced fraction; call ``reduced()`` when a canonical
+  /// form such as `40/3s` is required.
+  ///
+  /// - Throws: ``FCPTimeError/overflow`` when the exact product cannot be represented.
+  public func scaled(by numerator: Int64, over denominator: Int64) throws -> FCPTime {
+    guard denominator > 0 else {
+      throw FCPTimeError.overflow
+    }
+    let (scaledNumerator, numeratorOverflow) = self.numerator.multipliedReportingOverflow(
+      by: numerator
+    )
+    guard !numeratorOverflow else {
+      throw FCPTimeError.overflow
+    }
+    let (scaledDenominator, denominatorOverflow) = Int64(self.denominator)
+      .multipliedReportingOverflow(by: denominator)
+    guard !denominatorOverflow,
+      scaledDenominator > 0,
+      scaledDenominator <= Int64(Int32.max)
+    else {
+      throw FCPTimeError.overflow
+    }
+    return FCPTime(numerator: scaledNumerator, denominator: Int32(scaledDenominator))
+  }
 }

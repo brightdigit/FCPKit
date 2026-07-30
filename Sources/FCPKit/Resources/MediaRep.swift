@@ -39,8 +39,8 @@ public struct MediaRep: Codable {
     case bookmark
   }
 
-  /// The representation kind, e.g. "original-media" or "proxy-media".
-  public var kind: String?
+  /// The representation kind.
+  public var kind: MediaRepKind?
   /// The media file's content signature used to relink the representation.
   public var sig: String?
   /// The URL of the media file for this representation.
@@ -50,7 +50,7 @@ public struct MediaRep: Codable {
 
   /// Creates a `media-rep` element describing one representation of an asset's media.
   public init(
-    kind: String? = nil,
+    kind: MediaRepKind? = nil,
     sig: String? = nil,
     src: String? = nil,
     bookmark: String? = nil

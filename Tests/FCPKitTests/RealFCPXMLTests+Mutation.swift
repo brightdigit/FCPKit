@@ -81,7 +81,7 @@ extension RealFCPXMLTests {
         .adjustVolume?.param?.first
     )
     XCTAssertEqual(volume.fadeIn?.type, "easeIn")
-    XCTAssertEqual(volume.fadeOut?.duration, "1947511/720000s")
+    XCTAssertEqual(volume.fadeOut?.duration, FCPTime("1947511/720000s"))
     XCTAssertEqual(volume.keyframeAnimation?.keyframes?.count, 3)
 
     try withAssetClip(in: &document, mediaAt: mediaIndex, at: assetIndex) {
@@ -95,7 +95,7 @@ extension RealFCPXMLTests {
 
     XCTAssertEqual(changedVolume.keyframeAnimation?.keyframes?[2].value, "-3dB")
     XCTAssertEqual(changedVolume.fadeIn?.type, "easeIn")
-    XCTAssertEqual(changedVolume.fadeOut?.duration, "1947511/720000s")
+    XCTAssertEqual(changedVolume.fadeOut?.duration, FCPTime("1947511/720000s"))
     XCTAssertEqual(changedVolume.keyframeAnimation?.keyframes?.count, 3)
   }
 
