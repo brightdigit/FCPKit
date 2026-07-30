@@ -208,16 +208,14 @@ public struct RefClip: Codable {
     self.filterVideo = filterVideo
     self.filterAudio = filterAudio
 
-    var items = anchoredItems ?? []
-    if let assetClips {
-      items.append(contentsOf: assetClips.map(AnchoredItem.assetClip))
-    }
-    if let video {
-      items.append(contentsOf: video.map(AnchoredItem.video))
-    }
-    if let refClips {
-      items.append(contentsOf: refClips.map(AnchoredItem.refClip))
-    }
+    let items = OrderedChoiceItems.appending(
+      [
+        assetClips?.map(AnchoredItem.assetClip),
+        video?.map(AnchoredItem.video),
+        refClips?.map(AnchoredItem.refClip),
+      ],
+      onto: anchoredItems ?? []
+    )
     self.anchoredItems = items.isEmpty ? nil : items
   }
 

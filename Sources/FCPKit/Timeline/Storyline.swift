@@ -127,22 +127,16 @@ public struct Storyline: Codable {
     self.format = format
     self.spine = spine
 
-    var items = anchoredItems ?? []
-    if let clips {
-      items.append(contentsOf: clips.map(AnchoredItem.clip))
-    }
-    if let assetClips {
-      items.append(contentsOf: assetClips.map(AnchoredItem.assetClip))
-    }
-    if let refClips {
-      items.append(contentsOf: refClips.map(AnchoredItem.refClip))
-    }
-    if let titles {
-      items.append(contentsOf: titles.map(AnchoredItem.title))
-    }
-    if let generators {
-      items.append(contentsOf: generators.map(AnchoredItem.generator))
-    }
+    let items = OrderedChoiceItems.appending(
+      [
+        clips?.map(AnchoredItem.clip),
+        assetClips?.map(AnchoredItem.assetClip),
+        refClips?.map(AnchoredItem.refClip),
+        titles?.map(AnchoredItem.title),
+        generators?.map(AnchoredItem.generator),
+      ],
+      onto: anchoredItems ?? []
+    )
     self.anchoredItems = items.isEmpty ? nil : items
   }
 

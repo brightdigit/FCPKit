@@ -269,16 +269,14 @@ public struct AssetClip: Codable {
     self.adjustCrop = adjustCrop
     self.timeMap = timeMap
 
-    var items = anchoredItems ?? []
-    if let titles {
-      items.append(contentsOf: titles.map(AnchoredItem.title))
-    }
-    if let assetClips {
-      items.append(contentsOf: assetClips.map(AnchoredItem.assetClip))
-    }
-    if let video {
-      items.append(contentsOf: video.map(AnchoredItem.video))
-    }
+    let items = OrderedChoiceItems.appending(
+      [
+        titles?.map(AnchoredItem.title),
+        assetClips?.map(AnchoredItem.assetClip),
+        video?.map(AnchoredItem.video),
+      ],
+      onto: anchoredItems ?? []
+    )
     self.anchoredItems = items.isEmpty ? nil : items
   }
 

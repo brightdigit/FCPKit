@@ -201,13 +201,13 @@ public struct SyncClip: Codable {
     self.filterVideo = filterVideo
     self.filterAudio = filterAudio
 
-    var items = anchoredItems ?? []
-    if let assetClips {
-      items.append(contentsOf: assetClips.map(AnchoredItem.assetClip))
-    }
-    if let video {
-      items.append(contentsOf: video.map(AnchoredItem.video))
-    }
+    let items = OrderedChoiceItems.appending(
+      [
+        assetClips?.map(AnchoredItem.assetClip),
+        video?.map(AnchoredItem.video),
+      ],
+      onto: anchoredItems ?? []
+    )
     self.anchoredItems = items.isEmpty ? nil : items
   }
 
