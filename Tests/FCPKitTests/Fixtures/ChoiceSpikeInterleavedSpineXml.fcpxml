@@ -1,0 +1,5 @@
+<toy-spine lane="1" offset="0s">
+  <clip ref="r2"/>
+  <transition name="Cross Dissolve"/>
+  <clip ref="r5"/>
+</toy-spine>
