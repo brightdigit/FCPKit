@@ -31,6 +31,7 @@ import Foundation
 import XMLCoder
 
 extension SyncClip {
+  /// Creates a sync clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
@@ -70,5 +71,4 @@ extension SyncClip {
     }
     self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
   }
-
 }

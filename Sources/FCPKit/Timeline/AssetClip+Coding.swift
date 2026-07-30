@@ -31,6 +31,7 @@ import Foundation
 import XMLCoder
 
 extension AssetClip {
+  /// Creates an asset clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
@@ -82,5 +83,4 @@ extension AssetClip {
     }
     self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
   }
-
 }

@@ -31,6 +31,7 @@ import Foundation
 import XMLCoder
 
 extension Clip {
+  /// Creates a clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -78,5 +79,4 @@ extension Clip {
     }
     self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
   }
-
 }

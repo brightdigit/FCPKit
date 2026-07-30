@@ -45,7 +45,6 @@ extension AssetClip {
     get { anchoredPayloads(\.video) }
     set { setAnchoredPayloads(newValue, extract: \.video, wrap: AnchoredItem.video) }
   }
-
 }
 
 extension AssetClip: AnchoredChoiceContainer {}

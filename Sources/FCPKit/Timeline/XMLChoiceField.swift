@@ -95,10 +95,7 @@ extension XMLChoiceCodable {
   /// Encodes by writing the first matching ``choiceFields`` entry.
   public func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: ChoiceKey.self)
-    for field in Self.choiceFields {
-      guard try field.encode(self, into: &container) else {
-        continue
-      }
+    for field in Self.choiceFields where try field.encode(self, into: &container) {
       return
     }
   }

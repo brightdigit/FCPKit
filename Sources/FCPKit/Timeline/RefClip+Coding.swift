@@ -31,6 +31,7 @@ import Foundation
 import XMLCoder
 
 extension RefClip {
+  /// Creates a reference clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
@@ -70,5 +71,4 @@ extension RefClip {
     }
     self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
   }
-
 }

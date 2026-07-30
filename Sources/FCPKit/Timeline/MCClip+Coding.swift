@@ -31,6 +31,7 @@ import Foundation
 import XMLCoder
 
 extension MCClip {
+  /// Creates a multicam clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
@@ -64,5 +65,4 @@ extension MCClip {
     }
     self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
   }
-
 }

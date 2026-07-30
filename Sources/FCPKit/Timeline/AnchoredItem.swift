@@ -63,6 +63,8 @@ public enum AnchoredItem: XMLChoiceCodable {
   /// An unsupported or unrecognized anchored element.
   case unsupported
 
+  internal typealias ChoiceKey = CodingKeys
+
   internal enum CodingKeys: String, XMLChoiceCodingKey {
     case clip
     case gap
@@ -79,8 +81,6 @@ public enum AnchoredItem: XMLChoiceCodable {
     case video
     case spine
   }
-
-  internal typealias ChoiceKey = CodingKeys
 
   internal static var unsupportedChoice: AnchoredItem { .unsupported }
 

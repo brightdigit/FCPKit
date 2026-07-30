@@ -210,7 +210,6 @@ public struct AssetClip: Codable {
   }
 }
 
-
 extension AssetClip: FCPNodeEncodable {
   /// Returns whether the given coding key encodes as an XML attribute or element.
   public static let elementKeys: Set<String> = [
