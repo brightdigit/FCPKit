@@ -139,13 +139,12 @@ public struct MCClip: Codable {
 
     let items = OrderedChoiceItems.appending(
       [
-        video?.map(AnchoredItem.video),
+        video?.map(AnchoredItem.video)
       ],
       onto: anchoredItems ?? []
     )
     self.anchoredItems = items.isEmpty ? nil : items
   }
-
 }
 
 extension MCClip: AnchoredChoiceContainer {}

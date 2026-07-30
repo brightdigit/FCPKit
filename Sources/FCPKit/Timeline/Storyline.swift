@@ -139,7 +139,6 @@ public struct Storyline: Codable {
     )
     self.anchoredItems = items.isEmpty ? nil : items
   }
-
 }
 
 extension Storyline: AnchoredChoiceContainer {}

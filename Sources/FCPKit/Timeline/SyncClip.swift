@@ -168,7 +168,6 @@ public struct SyncClip: Codable {
     )
     self.anchoredItems = items.isEmpty ? nil : items
   }
-
 }
 
 extension SyncClip: AnchoredChoiceContainer {}

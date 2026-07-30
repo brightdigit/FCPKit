@@ -176,7 +176,6 @@ public struct RefClip: Codable {
     )
     self.anchoredItems = items.isEmpty ? nil : items
   }
-
 }
 
 extension RefClip: AnchoredChoiceContainer {}

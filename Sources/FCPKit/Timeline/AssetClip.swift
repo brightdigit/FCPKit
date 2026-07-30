@@ -132,7 +132,6 @@ public struct AssetClip: Codable {
   /// The retiming map applied to the clip.
   public var timeMap: TimeMap?
 
-
   /// Creates an asset clip with the given attributes and contained elements.
   public init(
     ref: ResourceRef<AssetKind>? = nil,
@@ -209,9 +208,7 @@ public struct AssetClip: Codable {
     )
     self.anchoredItems = items.isEmpty ? nil : items
   }
-
 }
-
 
 extension AssetClip: FCPNodeEncodable {
   /// Returns whether the given coding key encodes as an XML attribute or element.
