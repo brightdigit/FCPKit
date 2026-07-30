@@ -41,8 +41,9 @@ public struct Title: Codable {
     case lane
     case offset
 
-    // swiftlint:disable:next line_length
-    // DTD line 566: param*, text*, text-style-def*, note?, %intrinsic-params-video;, (%anchor_item;)*, (%marker_item;)*, (%video_filter_item;)*, metadata?
+    // DTD line 566:
+    // param*, text*, text-style-def*, note?, %intrinsic-params-video;, (%anchor_item;)*,
+    // (%marker_item;)*, (%video_filter_item;)*, metadata?
     case param
     case text
     case textStyleDef = "text-style-def"

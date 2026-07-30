@@ -30,8 +30,6 @@
 import Foundation
 import XMLCoder
 
-// swiftlint:disable file_length
-
 /// An `mc-clip` element that places a multicam media resource on the timeline.
 public struct MCClip: Codable {
   internal enum CodingKeys: String, CodingKey {
@@ -44,8 +42,9 @@ public struct MCClip: Codable {
     case lane
     case modDate
 
-    // swiftlint:disable:next line_length
-    // DTD line 460: note?, %timing-params;, %intrinsic-params-audio;, mc-source*, (%anchor_item;)*, (%marker_item;)*, filter-audio*, metadata?
+    // DTD line 460:
+    // note?, %timing-params;, %intrinsic-params-audio;, mc-source*, (%anchor_item;)*,
+    // (%marker_item;)*, filter-audio*, metadata?
     case note
     case conformRate = "conform-rate"
     case timeMap
@@ -96,43 +95,8 @@ public struct MCClip: Codable {
 
   /// Nested `video` elements anchored to the clip.
   public var video: [Video]? {
-    get { getAnchored(\.video) }
-    set { setAnchored(newValue, isType: \.isVideo, wrap: AnchoredItem.video) }
-  }
-
-  /// Creates a multicam clip by decoding from the given decoder.
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(ResourceRef<MediaKind>.self, forKey: .ref)
-    self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
-    self.name = try container.decodeIfPresent(String.self, forKey: .name)
-    self.start = try container.decodeIfPresent(String.self, forKey: .start)
-    self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
-    self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
-    self.modDate = try container.decodeIfPresent(String.self, forKey: .modDate)
-
-    self.note = try container.decodeIfPresent(String.self, forKey: .note)
-    self.conformRate = try container.decodeIfPresent(ConformRate.self, forKey: .conformRate)
-    self.timeMap = try container.decodeIfPresent(TimeMap.self, forKey: .timeMap)
-    self.adjustVolume = try container.decodeIfPresent(AdjustVolume.self, forKey: .adjustVolume)
-    self.mcSources = try container.decodeIfPresent([MCSource].self, forKey: .mcSources)
-    self.markers = try container.decodeIfPresent([Marker].self, forKey: .markers)
-    self.rating = try container.decodeIfPresent(Rating.self, forKey: .rating)
-    self.chapterMarkers = try container.decodeIfPresent(
-      [ChapterMarker].self,
-      forKey: .chapterMarkers
-    )
-    self.filterAudio = try container.decodeIfPresent([FilterAudio].self, forKey: .filterAudio)
-
-    let itemsContainer = try decoder.singleValueContainer()
-    let decodedItems = (try? itemsContainer.decode([AnchoredItem].self)) ?? []
-    let filteredItems = decodedItems.filter { item in
-      if case .unsupported = item {
-        return false
-      }
-      return true
-    }
-    self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
+    get { anchoredPayloads(\.video) }
+    set { setAnchoredPayloads(newValue, extract: \.video, wrap: AnchoredItem.video) }
   }
 
   /// Creates a multicam clip with the given attributes and contents.
@@ -182,50 +146,9 @@ public struct MCClip: Codable {
     self.anchoredItems = items.isEmpty ? nil : items
   }
 
-  private func getAnchored<T>(_ extract: (AnchoredItem) -> T?) -> [T]? {
-    guard let anchoredItems else {
-      return nil
-    }
-    let list = anchoredItems.compactMap(extract)
-    if list.isEmpty {
-      return nil
-    }
-    return list
-  }
-
-  private mutating func setAnchored<T>(
-    _ newValue: [T]?,
-    isType: (AnchoredItem) -> Bool,
-    wrap: (T) -> AnchoredItem
-  ) {
-    guard let newValue else {
-      anchoredItems?.removeAll(where: isType)
-      if anchoredItems?.isEmpty == true {
-        anchoredItems = nil
-      }
-      return
-    }
-    var items = anchoredItems ?? []
-    var newIndex = 0
-    var indicesToRemove = [Int]()
-    for index in items.indices where isType(items[index]) {
-      if newIndex < newValue.count {
-        items[index] = wrap(newValue[newIndex])
-        newIndex += 1
-      } else {
-        indicesToRemove.append(index)
-      }
-    }
-    for index in indicesToRemove.reversed() {
-      items.remove(at: index)
-    }
-    while newIndex < newValue.count {
-      items.append(wrap(newValue[newIndex]))
-      newIndex += 1
-    }
-    anchoredItems = items
-  }
 }
+
+extension MCClip: AnchoredChoiceContainer {}
 
 extension MCClip: FCPNodeEncodable {
   /// Encodes elements and remaining keys as attributes.

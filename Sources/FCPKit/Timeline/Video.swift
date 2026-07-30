@@ -42,8 +42,9 @@ public struct Video: Codable {
     case duration
     case role
 
-    // swiftlint:disable:next line_length
-    // DTD line 539: param*, note?, %timing-params;, %intrinsic-params-video;, (%anchor_item;)*, (%marker_item;)*, (%video_filter_item;)*, reserved?
+    // DTD line 539:
+    // param*, note?, %timing-params;, %intrinsic-params-video;, (%anchor_item;)*,
+    // (%marker_item;)*, (%video_filter_item;)*, reserved?
     case param
     case note
     case conformRate = "conform-rate"
