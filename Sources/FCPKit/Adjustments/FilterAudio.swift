@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `filter-audio` element applying an audio effect to a clip.
 public struct FilterAudio: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -38,13 +39,18 @@ public struct FilterAudio: Codable {
     case param
   }
 
+  /// The ID of the referenced `effect` resource.
   public let ref: String?
+  /// The display name of the audio filter.
   public let name: String?
+  /// Whether the filter is enabled ("0" or "1").
   public let enabled: String?
+  /// Nested `param` elements holding the filter's parameter values.
   public var param: [ParamElement]?
 }
 
 extension FilterAudio: DynamicNodeEncoding {
+  /// Encodes `param` as child elements and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["param"])
   }

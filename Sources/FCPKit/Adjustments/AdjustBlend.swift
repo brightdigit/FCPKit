@@ -30,16 +30,20 @@
 import Foundation
 import XMLCoder
 
+/// An `adjust-blend` element controlling how a clip composites over the clips below it.
 public struct AdjustBlend: Codable {
   internal enum CodingKeys: String, CodingKey {
     case amount
     case mode
   }
 
+  /// The blend opacity amount from 0.0 to 1.0, as a string.
   public let amount: String?
+  /// The compositing blend mode identifier, as a string.
   public let mode: String?
 }
 
 extension AdjustBlend: DynamicNodeEncoding {
+  /// Encodes all coding keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

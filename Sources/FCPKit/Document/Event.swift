@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A Final Cut Pro `event` grouping projects and browser clips within a library.
 public struct Event: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -41,14 +42,22 @@ public struct Event: Codable {
     case syncClips = "sync-clip"
   }
 
+  /// The event's display name.
   public var name: String?
+  /// The event's unique identifier assigned by Final Cut Pro.
   public let uid: String?
+  /// The `project` elements stored in the event.
   public var projects: [Project]?
+  /// The event's browser `asset-clip` elements referencing media assets.
   public var assetClips: [AssetClip]?
+  /// The event's browser `ref-clip` elements referencing compound clips.
   public var refClips: [RefClip]?
+  /// The event's browser `mc-clip` elements referencing multicam media.
   public var mcClips: [MCClip]?
+  /// The event's browser `sync-clip` elements of synchronized media.
   public var syncClips: [SyncClip]?
 
+  /// Creates an `event` element with the given name, identifier, projects, and clips.
   public init(
     name: String? = nil,
     uid: String? = nil,
@@ -69,6 +78,7 @@ public struct Event: Codable {
 }
 
 extension Event: DynamicNodeEncoding {
+  /// Encodes projects and clips as child elements and other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(
       for: key,

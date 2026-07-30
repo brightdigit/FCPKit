@@ -30,15 +30,19 @@
 import Foundation
 import XMLCoder
 
+/// An `adjust-crop` element controlling how a clip's frame is cropped.
 public struct AdjustCrop: Codable {
   internal enum CodingKeys: String, CodingKey {
     case mode
     case trimRect = "trim-rect"
   }
 
+  /// The crop mode: "trim", "crop", or "pan".
   public var mode: String?
+  /// The `trim-rect` child element giving per-edge insets when in trim mode.
   public var trimRect: TrimRect?
 
+  /// Creates an `adjust-crop` adjustment with an optional mode and trim rectangle.
   public init(mode: String? = nil, trimRect: TrimRect? = nil) {
     self.mode = mode
     self.trimRect = trimRect
@@ -46,6 +50,7 @@ public struct AdjustCrop: Codable {
 }
 
 extension AdjustCrop: DynamicNodeEncoding {
+  /// Encodes `trim-rect` as a child element and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["trim-rect"])
   }

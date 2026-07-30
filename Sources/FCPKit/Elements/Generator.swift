@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `generator` element: a clip whose content is produced by a generator effect resource.
 public struct Generator: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -41,16 +42,24 @@ public struct Generator: Codable {
     case param
   }
 
+  /// The `id` of the `effect` resource that generates this clip's content.
   public let ref: String?
+  /// The clip's position on its parent timeline, as a rational time string.
   public let offset: String?
+  /// The clip's duration, as a rational time string.
   public let duration: String?
+  /// The display name of the generator clip.
   public let name: String?
+  /// The start time within the generator's local timeline, as a rational time string.
   public let start: String?
+  /// The lane number for vertical placement relative to the primary storyline.
   public let lane: String?
+  /// The effect parameters applied to the generator.
   public let param: [ParamElement]?
 }
 
 extension Generator: DynamicNodeEncoding {
+  /// Encodes `param` as a child element and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["param"])
   }

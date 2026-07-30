@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `storyline` element: a connected secondary storyline anchored to the primary spine.
 public struct Storyline: Codable {
   internal enum CodingKeys: String, CodingKey {
     case lane
@@ -42,17 +43,26 @@ public struct Storyline: Codable {
     case generators = "generator"
   }
 
+  /// The vertical lane the storyline occupies relative to the primary spine.
   public let lane: String?
+  /// The storyline's start position on the parent timeline, as a rational time string.
   public let offset: String?
+  /// The identifier of the `format` resource describing the storyline's video format.
   public let format: String?
+  /// The `clip` elements in the storyline.
   public let clips: [Clip]?
+  /// The `asset-clip` elements referencing asset resources.
   public let assetClips: [AssetClip]?
+  /// The `ref-clip` elements referencing compound clips or other media resources.
   public let refClips: [RefClip]?
+  /// The `title` elements in the storyline.
   public let titles: [Title]?
+  /// The `generator` elements referencing generator effects.
   public let generators: [Generator]?
 }
 
 extension Storyline: DynamicNodeEncoding {
+  /// Encodes child clip content as XML elements and remaining keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(
       for: key,

@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// An `audio-channel-source` element routing source audio channels to a role with adjustments.
 public struct AudioChannelSource: Codable {
   internal enum CodingKeys: String, CodingKey {
     case srcCh
@@ -38,11 +39,16 @@ public struct AudioChannelSource: Codable {
     case adjustLoudness = "adjust-loudness"
   }
 
+  /// The comma-separated source channel numbers (for example "1, 2").
   public var srcCh: String?
+  /// The audio role assigned to these channels (for example "dialogue").
   public var role: String?
+  /// Whether the channel source is active ("0" or "1").
   public var active: String?
+  /// An optional `adjust-loudness` adjustment applied to these channels.
   public var adjustLoudness: AdjustLoudness?
 
+  /// Creates an `audio-channel-source` with optional channels, role, state, and loudness.
   public init(
     srcCh: String? = nil,
     role: String? = nil,
@@ -57,6 +63,7 @@ public struct AudioChannelSource: Codable {
 }
 
 extension AudioChannelSource: DynamicNodeEncoding {
+  /// Encodes `adjust-loudness` as a child element and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["adjust-loudness"])
   }

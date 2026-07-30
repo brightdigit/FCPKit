@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `ref-clip` element referencing a compound clip or other media resource.
 public struct RefClip: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -51,24 +52,42 @@ public struct RefClip: Codable {
     case filterVideo = "filter-video"
   }
 
+  /// The identifier of the referenced media resource.
   public var ref: String?
+  /// The clip's start position on the parent timeline, as a rational time string.
   public var offset: String?
+  /// The display name of the clip.
   public var name: String?
+  /// The playback duration of the clip, as a rational time string.
   public var duration: String?
+  /// The start time within the clip's local timeline, as a rational time string.
   public var start: String?
+  /// The vertical lane the clip occupies when connected to a primary storyline item.
   public var lane: String?
+  /// The date the clip was last modified.
   public var modDate: String?
+  /// Whether the referenced media's audio subroles are active (`1`) or not (`0`).
   public var useAudioSubroles: String?
+  /// The `conform-rate` element describing frame-rate conforming behavior.
   public var conformRate: ConformRate?
+  /// The `timeMap` element applying retiming to the clip.
   public var timeMap: TimeMap?
+  /// The `adjust-crop` element applying crop adjustments to the clip.
   public var adjustCrop: AdjustCrop?
+  /// The `adjust-transform` element applying position, scale, and rotation adjustments.
   public var adjustTransform: AdjustTransform?
+  /// Nested `asset-clip` elements anchored to the clip.
   public var assetClips: [AssetClip]?
+  /// Nested `video` elements anchored to the clip.
   public var video: [Video]?
+  /// Nested `ref-clip` elements anchored to the clip.
   public var refClips: [RefClip]?
+  /// The `adjust-volume` element applying an audio volume adjustment.
   public var adjustVolume: AdjustVolume?
+  /// The `filter-video` elements applying video effects to the clip.
   public var filterVideo: [FilterVideo]?
 
+  /// Creates a reference clip with the given attributes and contents.
   public init(
     ref: String? = nil,
     offset: String? = nil,
@@ -109,6 +128,7 @@ public struct RefClip: Codable {
 }
 
 extension RefClip: DynamicNodeEncoding {
+  /// Encodes child clip content as XML elements and remaining keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(
       for: key,

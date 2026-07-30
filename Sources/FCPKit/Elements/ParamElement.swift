@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `param` element: an effect parameter setting, possibly nested, faded, or keyframed.
 public struct ParamElement: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -42,17 +43,26 @@ public struct ParamElement: Codable {
     case keyframeAnimation
   }
 
+  /// The human-readable parameter name, such as `Position` or `Amount`.
   public let name: String?
+  /// The parameter's stable identifier key within the effect.
   public let key: String?
+  /// The parameter's value, as a string.
   public var value: String?
+  /// Nested child parameters of this parameter.
   public var param: [ParamElement]?
+  /// Opaque `data` payloads attached to the parameter.
   public var data: [DataElement]?
+  /// The `fadeIn` element easing the parameter in over time.
   public var fadeIn: Fade?
+  /// The `fadeOut` element easing the parameter out over time.
   public var fadeOut: Fade?
+  /// The keyframe animation that varies the parameter's value over time.
   public var keyframeAnimation: KeyframeAnimation?
 }
 
 extension ParamElement: DynamicNodeEncoding {
+  /// Encodes nested elements as children and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(
       for: key,

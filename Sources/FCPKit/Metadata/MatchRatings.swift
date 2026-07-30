@@ -30,18 +30,22 @@
 import Foundation
 import XMLCoder
 
+/// A `match-ratings` rule matching items by rating in a smart collection.
 public struct MatchRatings: Codable {
   internal enum CodingKeys: String, CodingKey {
     case value
   }
 
+  /// The rating to match, either "favorites" or "rejected".
   public var value: String?
 
+  /// Creates a `match-ratings` rule matching the given rating value.
   public init(value: String? = nil) {
     self.value = value
   }
 }
 
 extension MatchRatings: DynamicNodeEncoding {
+  /// Encodes every property of the `match-ratings` element as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

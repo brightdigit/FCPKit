@@ -30,17 +30,21 @@
 import Foundation
 import XMLCoder
 
+/// An `adjust-volume` element controlling a clip's audio volume.
 public struct AdjustVolume: Codable {
   internal enum CodingKeys: String, CodingKey {
     case amount
     case param
   }
 
+  /// The volume adjustment in decibels (for example "6dB"), as a string.
   public var amount: String?
+  /// Nested `param` elements for keyframed or per-parameter volume settings.
   public var param: [ParamElement]?
 }
 
 extension AdjustVolume: DynamicNodeEncoding {
+  /// Encodes `param` as child elements and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["param"])
   }

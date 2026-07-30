@@ -29,10 +29,12 @@
 
 import Foundation
 
+/// Errors thrown by asset-clip editing operations such as retiming.
 public enum AssetClipEditingError: Error, LocalizedError, Equatable, Sendable {
   case invalidSpeedPercent(Int)
   case unsupportedDuration(String)
 
+  /// A human-readable description of the error.
   public var errorDescription: String? {
     switch self {
     case .invalidSpeedPercent(let percent):

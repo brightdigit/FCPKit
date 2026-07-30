@@ -30,16 +30,20 @@
 import Foundation
 import XMLCoder
 
+/// A `conform-rate` element describing how a clip's frame rate conforms to the sequence rate.
 public struct ConformRate: Codable {
   internal enum CodingKeys: String, CodingKey {
     case srcFrameRate
     case scaleEnabled
   }
 
+  /// The source media frame rate (for example "29.97"), as a string.
   public let srcFrameRate: String?
+  /// Whether frame-rate scaling is enabled ("0" or "1").
   public let scaleEnabled: String?
 }
 
 extension ConformRate: DynamicNodeEncoding {
+  /// Encodes all coding keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

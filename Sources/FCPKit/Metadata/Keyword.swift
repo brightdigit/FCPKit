@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `keyword` element tagging a time range of a clip with a keyword phrase.
 public struct Keyword: Codable {
   internal enum CodingKeys: String, CodingKey {
     case start
@@ -38,12 +39,17 @@ public struct Keyword: Codable {
     case note
   }
 
+  /// The start time of the keyworded range, as a rational time value.
   public let start: String?
+  /// The duration of the keyworded range, as a rational time value.
   public let duration: String?
+  /// The keyword text; multiple keywords are comma-separated.
   public let value: String?
+  /// An optional note attached to the keyword range.
   public let note: String?
 }
 
 extension Keyword: DynamicNodeEncoding {
+  /// Encodes every property of the `keyword` element as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

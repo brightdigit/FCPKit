@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `sync-clip` element containing clips synchronized by matching audio or timecode.
 public struct SyncClip: Codable {
   internal enum CodingKeys: String, CodingKey {
     case offset
@@ -44,19 +45,30 @@ public struct SyncClip: Codable {
     case filterVideo = "filter-video"
   }
 
+  /// The clip's start position on the parent timeline, as a rational time string.
   public let offset: String?
+  /// The display name of the clip.
   public let name: String?
+  /// The playback duration of the clip, as a rational time string.
   public let duration: String?
+  /// The timecode format, such as `DF` (drop frame) or `NDF` (non-drop frame).
   public let tcFormat: String?
+  /// The identifier of the `format` resource describing the clip's video format.
   public let format: String?
+  /// The start time within the clip's local timeline, as a rational time string.
   public let start: String?
+  /// The date the clip was last modified.
   public let modDate: String?
+  /// The synchronized `asset-clip` elements contained in the clip.
   public let assetClips: [AssetClip]?
+  /// Nested `video` elements contained in the clip.
   public let video: [Video]?
+  /// The `filter-video` elements applying video effects to the clip.
   public let filterVideo: [FilterVideo]?
 }
 
 extension SyncClip: DynamicNodeEncoding {
+  /// Encodes child clip content as XML elements and remaining keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["asset-clip", "video", "filter-video"])
   }

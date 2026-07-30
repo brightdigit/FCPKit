@@ -30,15 +30,19 @@
 import Foundation
 import XMLCoder
 
+/// A `match-media` rule matching items by media type in a smart collection.
 public struct MatchMedia: Codable {
   internal enum CodingKeys: String, CodingKey {
     case rule
     case type
   }
 
+  /// How the rule compares, e.g. "is" or "is not".
   public var rule: String?
+  /// The media type to match, e.g. "videoWithAudio", "videoOnly", or "stills".
   public var type: String?
 
+  /// Creates a `match-media` rule with the given comparison and media type.
   public init(rule: String? = nil, type: String? = nil) {
     self.rule = rule
     self.type = type
@@ -46,5 +50,6 @@ public struct MatchMedia: Codable {
 }
 
 extension MatchMedia: DynamicNodeEncoding {
+  /// Encodes every property of the `match-media` element as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

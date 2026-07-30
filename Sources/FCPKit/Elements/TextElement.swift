@@ -30,14 +30,17 @@
 import Foundation
 import XMLCoder
 
+/// A `text` element holding the styled text content of a title or caption.
 public struct TextElement: Codable {
   internal enum CodingKeys: String, CodingKey {
     case textStyle = "text-style"
   }
 
+  /// The `text-style` runs that carry the text content and its styling.
   public var textStyle: [TextStyle]?
 }
 
 extension TextElement: DynamicNodeEncoding {
+  /// Encodes every key as a child XML element.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .element }
 }

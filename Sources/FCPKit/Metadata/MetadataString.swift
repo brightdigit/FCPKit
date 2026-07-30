@@ -30,19 +30,23 @@
 import Foundation
 import XMLCoder
 
+/// A `string` element holding one text value inside a metadata `array`.
 public struct MetadataString: Codable {
   internal enum CodingKeys: String, CodingKey {
     case content = ""
   }
 
+  /// The text content of the `string` element.
   public var content: String?
 
+  /// Creates a `string` element with the given text content.
   public init(content: String? = nil) {
     self.content = content
   }
 }
 
 extension MetadataString: DynamicNodeEncoding {
+  /// Encodes the text content as the element's value and all other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     key.stringValue.isEmpty ? .element : .attribute
   }

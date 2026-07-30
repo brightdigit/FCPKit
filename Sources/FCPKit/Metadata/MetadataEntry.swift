@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// An `md` element holding a single key-value metadata entry inside a `metadata` container.
 public struct MetadataEntry: Codable {
   internal enum CodingKeys: String, CodingKey {
     case key
@@ -37,10 +38,14 @@ public struct MetadataEntry: Codable {
     case array
   }
 
+  /// The metadata entry's key name, e.g. "com.apple.proapps.studio.reel".
   public var key: String?
+  /// The entry's scalar value, used when the entry holds a single string.
   public var value: String?
+  /// The entry's `array` of string values, used when the entry holds multiple values.
   public var array: MetadataArray?
 
+  /// Creates an `md` metadata entry with the given key and scalar or array value.
   public init(key: String? = nil, value: String? = nil, array: MetadataArray? = nil) {
     self.key = key
     self.value = value
@@ -49,6 +54,7 @@ public struct MetadataEntry: Codable {
 }
 
 extension MetadataEntry: DynamicNodeEncoding {
+  /// Encodes `array` as a child element and all other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["array"])
   }

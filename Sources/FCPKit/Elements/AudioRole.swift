@@ -30,14 +30,17 @@
 import Foundation
 import XMLCoder
 
+/// An `audio-role` element assigning an audio role to media, such as `dialogue` or `music`.
 public struct AudioRole: Codable {
   internal enum CodingKeys: String, CodingKey {
     case value
   }
 
+  /// The audio role name, optionally with a subrole (for example `dialogue.dialogue-1`).
   public let value: String?
 }
 
 extension AudioRole: DynamicNodeEncoding {
+  /// Encodes every key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

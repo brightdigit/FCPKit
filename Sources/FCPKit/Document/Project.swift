@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A Final Cut Pro `project` whose timeline is described by a single sequence.
 public struct Project: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -38,11 +39,16 @@ public struct Project: Codable {
     case sequence
   }
 
+  /// The project's display name.
   public var name: String?
+  /// The project's unique identifier assigned by Final Cut Pro.
   public let uid: String?
+  /// The project's last-modified date string.
   public var modDate: String?
+  /// The `sequence` element defining the project's timeline.
   public var sequence: Sequence?
 
+  /// Creates a `project` element with the given name, identifier, date, and sequence.
   public init(
     name: String? = nil,
     uid: String? = nil,
@@ -57,6 +63,7 @@ public struct Project: Codable {
 }
 
 extension Project: DynamicNodeEncoding {
+  /// Encodes the sequence as a child element and other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["sequence"])
   }

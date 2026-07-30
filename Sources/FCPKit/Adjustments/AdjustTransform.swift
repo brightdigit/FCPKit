@@ -30,15 +30,19 @@
 import Foundation
 import XMLCoder
 
+/// An `adjust-transform` element controlling a clip's spatial transform (position and scale).
 public struct AdjustTransform: Codable {
   internal enum CodingKeys: String, CodingKey {
     case position
     case scale
   }
 
+  /// The position offset as an "x y" pair, as a string.
   public var position: String?
+  /// The scale factor as an "x y" pair, as a string.
   public var scale: String?
 
+  /// Creates an `adjust-transform` adjustment with an optional position and scale.
   public init(position: String? = nil, scale: String? = nil) {
     self.position = position
     self.scale = scale
@@ -46,5 +50,6 @@ public struct AdjustTransform: Codable {
 }
 
 extension AdjustTransform: DynamicNodeEncoding {
+  /// Encodes all coding keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

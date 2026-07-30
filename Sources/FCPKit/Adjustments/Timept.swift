@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `timept` element mapping an output time to a source media time within a `timeMap`.
 public struct Timept: Codable {
   internal enum CodingKeys: String, CodingKey {
     case time
@@ -37,10 +38,14 @@ public struct Timept: Codable {
     case interp
   }
 
+  /// The output (timeline) time of this point, as a rational time string.
   public var time: String?
+  /// The corresponding source media time, as a rational time string.
   public var value: String?
+  /// The interpolation to the next point (for example "smooth2" or "linear").
   public var interp: String?
 
+  /// Creates a `timept` with an optional time, value, and interpolation.
   public init(time: String? = nil, value: String? = nil, interp: String? = nil) {
     self.time = time
     self.value = value
@@ -49,5 +54,6 @@ public struct Timept: Codable {
 }
 
 extension Timept: DynamicNodeEncoding {
+  /// Encodes all coding keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

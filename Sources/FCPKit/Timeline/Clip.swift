@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `clip` element representing a basic clip in a storyline.
 public struct Clip: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -42,16 +43,25 @@ public struct Clip: Codable {
     case audioRate
   }
 
+  /// The display name of the clip.
   public let name: String?
+  /// The identifier of the referenced resource.
   public let ref: String?
+  /// The clip's start position on the parent timeline, as a rational time string.
   public let offset: String?
+  /// The clip's duration, as a rational time string.
   public let duration: String?
+  /// The start time within the source media, as a rational time string.
   public let start: String?
+  /// The timecode format, either `DF` (drop frame) or `NDF` (non-drop frame).
   public let tcFormat: String?
+  /// The number of audio channels in the source media.
   public let audioChannels: String?
+  /// The audio sample rate of the source media, in hertz.
   public let audioRate: String?
 }
 
 extension Clip: DynamicNodeEncoding {
+  /// Encodes every coding key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

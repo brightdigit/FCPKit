@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A Final Cut Pro `library` element containing events and smart collections.
 public struct Library: Codable {
   internal enum CodingKeys: String, CodingKey {
     case location
@@ -38,11 +39,16 @@ public struct Library: Codable {
     case smartCollections = "smart-collection"
   }
 
+  /// The file URL of the library bundle on disk.
   public var location: String?
+  /// The library's color-processing mode (for example, `"wide-gamut-hdr"`).
   public var colorProcessing: String?
+  /// The `event` elements grouped inside the library.
   public var events: [Event]?
+  /// The library-level `smart-collection` elements.
   public var smartCollections: [SmartCollection]?
 
+  /// Creates a `library` element with the given location, color processing, and contents.
   public init(
     location: String? = nil,
     colorProcessing: String? = nil,
@@ -57,6 +63,7 @@ public struct Library: Codable {
 }
 
 extension Library: DynamicNodeEncoding {
+  /// Encodes events and smart collections as child elements and other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["event", "smart-collection"])
   }

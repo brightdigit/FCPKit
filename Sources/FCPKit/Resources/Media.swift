@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `media` resource containing a compound clip sequence or multicam referenced by clips.
 public struct Media: Codable {
   internal enum CodingKeys: String, CodingKey {
     case id
@@ -41,14 +42,22 @@ public struct Media: Codable {
     case mediaRep = "media-rep"
   }
 
+  /// The resource identifier other elements use to reference this media, e.g. "r4".
   public let id: String?
+  /// The media's display name as shown in the browser.
   public var name: String?
+  /// A globally unique identifier for the media.
   public let uid: String?
+  /// The media's last modification date, e.g. "2026-01-01 12:00:00 -0500".
   public var modDate: String?
+  /// The compound clip's `sequence` content, if this media is a compound clip.
   public var sequence: Sequence?
+  /// The `multicam` content with camera angles, if this media is a multicam clip.
   public var multicam: Multicam?
+  /// The `media-rep` elements locating representations of the media.
   public var mediaRep: [MediaRep]?
 
+  /// Creates a `media` resource wrapping a compound clip sequence or multicam.
   public init(
     id: String,
     name: String? = nil,
@@ -69,6 +78,7 @@ public struct Media: Codable {
 }
 
 extension Media: DynamicNodeEncoding {
+  /// Encodes `sequence`, `multicam`, and `media-rep` as child elements; other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["sequence", "multicam", "media-rep"])
   }

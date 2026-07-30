@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// The root `fcpxml` element of a Final Cut Pro XML interchange document.
 public struct FCPXML: Codable {
   internal enum CodingKeys: String, CodingKey {
     case version
@@ -37,10 +38,14 @@ public struct FCPXML: Codable {
     case library
   }
 
+  /// The FCPXML schema version declared by the document (for example, `"1.13"`).
   public let version: String
+  /// The `resources` element listing shared assets, formats, effects, and media.
   public var resources: Resources?
+  /// The `library` element containing the document's events.
   public var library: Library?
 
+  /// Creates an `fcpxml` root element with the given version, resources, and library.
   public init(version: String, resources: Resources? = nil, library: Library? = nil) {
     self.version = version
     self.resources = resources
@@ -49,6 +54,7 @@ public struct FCPXML: Codable {
 }
 
 extension FCPXML: DynamicNodeEncoding {
+  /// Encodes `resources` and `library` as child elements and other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["resources", "library"])
   }

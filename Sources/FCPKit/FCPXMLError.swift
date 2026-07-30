@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// Errors thrown while reading, decoding, or encoding FCPXML documents.
 public enum FCPXMLError: Error, LocalizedError {
   case invalidXMLString
   case encodingFailed
@@ -37,6 +38,7 @@ public enum FCPXMLError: Error, LocalizedError {
   case fileNotFound
   case unsupportedVersion(String)
 
+  /// A human-readable description of the error.
   public var errorDescription: String? {
     switch self {
     case .invalidXMLString:

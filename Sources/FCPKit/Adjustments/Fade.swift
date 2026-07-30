@@ -30,16 +30,20 @@
 import Foundation
 import XMLCoder
 
+/// A fade applied at a clip edge, with a curve type and duration.
 public struct Fade: Codable {
   internal enum CodingKeys: String, CodingKey {
     case type
     case duration
   }
 
+  /// The fade curve type (for example "easeIn" or "easeOut").
   public let type: String?
+  /// The fade duration, as a rational time string (for example "1/2s").
   public var duration: String?
 }
 
 extension Fade: DynamicNodeEncoding {
+  /// Encodes all coding keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

@@ -30,14 +30,17 @@
 import Foundation
 import XMLCoder
 
+/// A `video-role` element assigning a video role to media, such as `video` or `titles`.
 public struct VideoRole: Codable {
   internal enum CodingKeys: String, CodingKey {
     case value
   }
 
+  /// The video role name, optionally with a subrole (for example `video.video-1`).
   public let value: String?
 }
 
 extension VideoRole: DynamicNodeEncoding {
+  /// Encodes every key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

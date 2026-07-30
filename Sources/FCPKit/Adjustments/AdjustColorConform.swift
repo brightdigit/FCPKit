@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// An `adjust-colorConform` element describing how a clip's color space conforms to the timeline.
 public struct AdjustColorConform: Codable {
   internal enum CodingKeys: String, CodingKey {
     case enabled
@@ -39,13 +40,19 @@ public struct AdjustColorConform: Codable {
     case peakNitsOfSDRToPQSource
   }
 
+  /// Whether color conforming is enabled ("0" or "1").
   public let enabled: String?
+  /// Whether conform settings are chosen automatically or manually.
   public let autoOrManual: String?
+  /// The type of color conform to apply (for example "conformNone").
   public let conformType: String?
+  /// The peak brightness in nits assumed for a PQ (HDR) source.
   public let peakNitsOfPQSource: String?
+  /// The peak brightness in nits used when mapping an SDR source to PQ.
   public let peakNitsOfSDRToPQSource: String?
 }
 
 extension AdjustColorConform: DynamicNodeEncoding {
+  /// Encodes all coding keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

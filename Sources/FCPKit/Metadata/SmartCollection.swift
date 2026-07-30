@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `smart-collection` element that gathers library items matching a set of filter rules.
 public struct SmartCollection: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -40,13 +41,20 @@ public struct SmartCollection: Codable {
     case matchAnalysisType = "match-analysis-type"
   }
 
+  /// The smart collection's display name, e.g. "All Video".
   public var name: String?
+  /// How the rules combine: "all" (every rule) or "any" (at least one rule).
   public var match: String?
+  /// The `match-clip` rules matching items by clip type.
   public var matchClip: [MatchClip]?
+  /// The `match-media` rules matching items by media type.
   public var matchMedia: [MatchMedia]?
+  /// The `match-ratings` rules matching items by favorite or rejected rating.
   public var matchRatings: [MatchRatings]?
+  /// The `match-analysis-type` rules matching items by analysis results such as people or shots.
   public var matchAnalysisType: [MatchAnalysisType]?
 
+  /// Creates a `smart-collection` element with the given name and filter rules.
   public init(
     name: String? = nil,
     match: String? = nil,
@@ -65,6 +73,7 @@ public struct SmartCollection: Codable {
 }
 
 extension SmartCollection: DynamicNodeEncoding {
+  /// Encodes the match rules as child elements and all other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(
       for: key,

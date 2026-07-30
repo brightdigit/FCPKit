@@ -30,14 +30,17 @@
 import Foundation
 import XMLCoder
 
+/// A `rating` element marking a range of a clip as a favorite or rejected.
 public struct Rating: Codable {
   internal enum CodingKeys: String, CodingKey {
     case value
   }
 
+  /// The rating value, either "favorite" or "reject".
   public let value: String?
 }
 
 extension Rating: DynamicNodeEncoding {
+  /// Encodes every property of the `rating` element as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

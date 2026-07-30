@@ -43,12 +43,15 @@ public struct FCPXMLVersion: RawRepresentable, Hashable, Sendable, Codable {
     FCPXMLVersion("1.14"),
   ]
 
+  /// The declared version string, such as `"1.13"`.
   public let rawValue: String
 
+  /// Creates a version from its raw declared string.
   public init(rawValue: String) {
     self.rawValue = rawValue
   }
 
+  /// Creates a version from a declared string such as `"1.13"`.
   public init(_ rawValue: String) {
     self.rawValue = rawValue
   }

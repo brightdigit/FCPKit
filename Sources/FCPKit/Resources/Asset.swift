@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// An `asset` resource describing a source media file referenced by clips in the library.
 public struct Asset: Codable {
   internal enum CodingKeys: String, CodingKey {
     case id
@@ -50,23 +51,40 @@ public struct Asset: Codable {
     case metadata
   }
 
+  /// The resource identifier other elements use to reference this asset, e.g. "r2".
   public let id: String
+  /// The asset's display name as shown in the browser.
   public var name: String?
+  /// A globally unique identifier for the asset's source media.
   public let uid: String?
+  /// The URL of the asset's original media file.
   public var src: String?
+  /// The start time of the asset's available media, as a rational time value.
   public var start: String?
+  /// The total duration of the asset's media, as a rational time value.
   public var duration: String?
+  /// The `id` of the `format` resource describing this asset's video characteristics.
   public var format: String?
+  /// Whether the asset contains video, as "0" or "1".
   public var hasVideo: String?
+  /// Whether the asset contains audio, as "0" or "1".
   public var hasAudio: String?
+  /// The number of audio channels in the asset's media.
   public var audioChannels: String?
+  /// The audio sample rate in hertz, e.g. "48000".
   public var audioRate: String?
+  /// The video frame rate expressed as a rational or decimal value.
   public var videoRate: String?
+  /// The number of video sources in the asset's media.
   public var videoSources: String?
+  /// The number of audio sources in the asset's media.
   public var audioSources: String?
+  /// The `media-rep` elements locating the original and proxy media files.
   public var mediaRep: [MediaRep]?
+  /// The `metadata` container holding the asset's `md` key-value entries.
   public var metadata: AssetMetadata?
 
+  /// Creates an `asset` resource with the given identifier and media attributes.
   public init(
     id: String,
     name: String? = nil,
@@ -105,6 +123,7 @@ public struct Asset: Codable {
 }
 
 extension Asset: DynamicNodeEncoding {
+  /// Encodes `media-rep` and `metadata` as child elements and all other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["media-rep", "metadata"])
   }

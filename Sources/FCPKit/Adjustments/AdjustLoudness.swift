@@ -30,16 +30,20 @@
 import Foundation
 import XMLCoder
 
+/// An `adjust-loudness` element applying automatic loudness correction to a clip's audio.
 public struct AdjustLoudness: Codable {
   internal enum CodingKeys: String, CodingKey {
     case amount
     case uniformity
   }
 
+  /// The loudness correction amount, as a string.
   public let amount: String?
+  /// The loudness uniformity applied across the clip, as a string.
   public let uniformity: String?
 }
 
 extension AdjustLoudness: DynamicNodeEncoding {
+  /// Encodes all coding keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// The `resources` element listing media and effects shared across the document.
 public struct Resources: Codable {
   internal enum CodingKeys: String, CodingKey {
     case assets = "asset"
@@ -38,11 +39,16 @@ public struct Resources: Codable {
     case media
   }
 
+  /// The `asset` elements describing source media files.
   public var assets: [Asset]?
+  /// The `format` elements describing video and audio format settings.
   public var formats: [Format]?
+  /// The `effect` elements referencing Motion templates and built-in effects.
   public var effects: [Effect]?
+  /// The `media` elements containing compound clip and multicam definitions.
   public var media: [Media]?
 
+  /// Creates a `resources` element with the given assets, formats, effects, and media.
   public init(
     assets: [Asset]? = nil,
     formats: [Format]? = nil,
@@ -57,6 +63,7 @@ public struct Resources: Codable {
 }
 
 extension Resources: DynamicNodeEncoding {
+  /// Encodes every child resource as an XML element.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     .element
   }

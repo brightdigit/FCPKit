@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `chapter-marker` element marking a chapter point, with an optional poster frame.
 public struct ChapterMarker: Codable {
   internal enum CodingKeys: String, CodingKey {
     case start
@@ -39,13 +40,19 @@ public struct ChapterMarker: Codable {
     case posterOffset
   }
 
+  /// The marker's position within its parent clip, as a rational time string.
   public let start: String?
+  /// The marker's duration, as a rational time string.
   public let duration: String?
+  /// The chapter title displayed for this marker.
   public let value: String?
+  /// An optional note attached to the marker.
   public let note: String?
+  /// The offset from `start` to the chapter's poster frame, as a rational time string.
   public let posterOffset: String?
 }
 
 extension ChapterMarker: DynamicNodeEncoding {
+  /// Encodes every key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

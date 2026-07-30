@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// An `mc-clip` element that places a multicam media resource on the timeline.
 public struct MCClip: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -42,15 +43,24 @@ public struct MCClip: Codable {
     case video
   }
 
+  /// The identifier of the referenced multicam media resource.
   public var ref: String?
+  /// The clip's start position on the parent timeline, as a rational time string.
   public var offset: String?
+  /// The display name of the clip.
   public var name: String?
+  /// The start time within the clip's local timeline, as a rational time string.
   public var start: String?
+  /// The playback duration of the clip, as a rational time string.
   public var duration: String?
+  /// The date the clip was last modified.
   public var modDate: String?
+  /// The `mc-source` elements selecting which multicam angles are active.
   public var mcSources: [MCSource]?
+  /// Nested `video` elements anchored to the clip.
   public var video: [Video]?
 
+  /// Creates a multicam clip with the given attributes and contents.
   public init(
     ref: String? = nil,
     offset: String? = nil,
@@ -73,6 +83,7 @@ public struct MCClip: Codable {
 }
 
 extension MCClip: DynamicNodeEncoding {
+  /// Encodes child clip content as XML elements and remaining keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["mc-source", "video"])
   }

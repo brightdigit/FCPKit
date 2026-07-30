@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `format` resource describing video frame dimensions, frame rate, and color space.
 public struct Format: Codable {
   internal enum CodingKeys: String, CodingKey {
     case id
@@ -40,13 +41,20 @@ public struct Format: Codable {
     case colorSpace
   }
 
+  /// The resource identifier other elements use to reference this format, e.g. "r1".
   public let id: String
+  /// The format's descriptive name, e.g. "FFVideoFormat1080p30".
   public var name: String?
+  /// The duration of a single frame as a rational time value, e.g. "100/3000s".
   public var frameDuration: String?
+  /// The frame width in pixels.
   public var width: String?
+  /// The frame height in pixels.
   public var height: String?
+  /// The color space of the video, e.g. "1-1-1 (Rec. 709)".
   public var colorSpace: String?
 
+  /// Creates a `format` resource with the given identifier and video characteristics.
   public init(
     id: String,
     name: String? = nil,
@@ -65,5 +73,6 @@ public struct Format: Codable {
 }
 
 extension Format: DynamicNodeEncoding {
+  /// Encodes every property of the `format` element as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

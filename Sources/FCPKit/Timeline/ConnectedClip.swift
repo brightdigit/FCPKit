@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A clip connected above or below the primary storyline on a numbered lane.
 public struct ConnectedClip: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -41,15 +42,23 @@ public struct ConnectedClip: Codable {
     case tcFormat
   }
 
+  /// The identifier of the referenced resource.
   public let ref: String?
+  /// The clip's start position on the parent timeline, as a rational time string.
   public let offset: String?
+  /// The display name of the clip.
   public let name: String?
+  /// The start time within the source media, as a rational time string.
   public let start: String?
+  /// The clip's duration, as a rational time string.
   public let duration: String?
+  /// The vertical lane of the clip relative to the primary storyline.
   public let lane: String?
+  /// The timecode format, either `DF` (drop frame) or `NDF` (non-drop frame).
   public let tcFormat: String?
 }
 
 extension ConnectedClip: DynamicNodeEncoding {
+  /// Encodes every coding key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

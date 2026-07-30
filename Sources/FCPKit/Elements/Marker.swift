@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `marker` element annotating a point on a clip, optionally as a completable to-do item.
 public struct Marker: Codable {
   internal enum CodingKeys: String, CodingKey {
     case start
@@ -39,12 +40,18 @@ public struct Marker: Codable {
     case completed
   }
 
+  /// The marker's position within its parent clip, as a rational time string.
   public var start: String?
+  /// The marker's duration, as a rational time string.
   public var duration: String?
+  /// The marker's title text.
   public var value: String?
+  /// An optional note attached to the marker.
   public var note: String?
+  /// The to-do completion state (`1` or `0`); present only for to-do markers.
   public var completed: String?
 
+  /// Creates a marker with the given timing, title, note, and to-do completion state.
   public init(
     start: String? = nil,
     duration: String? = nil,
@@ -61,5 +68,6 @@ public struct Marker: Codable {
 }
 
 extension Marker: DynamicNodeEncoding {
+  /// Encodes every key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `spine` element containing the ordered story elements of a storyline.
 public struct Spine: Codable {
   internal enum CodingKeys: String, CodingKey {
     case clips = "clip"
@@ -48,21 +49,36 @@ public struct Spine: Codable {
     case video
   }
 
+  /// The `clip` elements in the spine.
   public var clips: [Clip]?
+  /// The `gap` elements filling empty stretches of the spine.
   public var gaps: [Gap]?
+  /// The `mc-clip` elements referencing multicam media resources.
   public var mcClips: [MCClip]?
+  /// The `ref-clip` elements referencing compound clips or other media resources.
   public var refClips: [RefClip]?
+  /// The `sync-clip` elements containing synchronized audio and video.
   public var syncClips: [SyncClip]?
+  /// The `asset-clip` elements referencing asset resources.
   public var assetClips: [AssetClip]?
+  /// The `title` elements in the spine.
   public var titles: [Title]?
+  /// The `generator` elements referencing generator effects.
   public var generators: [Generator]?
+  /// The `transition` elements joining adjacent story elements.
   public var transitions: [Transition]?
+  /// Nested `storyline` elements connected to the spine.
   public var storylines: [Storyline]?
+  /// The `compound-clip` elements in the spine.
   public var compoundClips: [CompoundClip]?
+  /// The `retime-clip` elements applying retiming to their contents.
   public var retimeClips: [RetimeClip]?
+  /// The `caption` elements in the spine.
   public var captions: [Caption]?
+  /// The `video` elements in the spine.
   public var video: [Video]?
 
+  /// Creates a spine with the given story elements.
   public init(
     clips: [Clip]? = nil,
     gaps: [Gap]? = nil,
@@ -97,5 +113,6 @@ public struct Spine: Codable {
 }
 
 extension Spine: DynamicNodeEncoding {
+  /// Encodes every key as an XML element.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .element }
 }

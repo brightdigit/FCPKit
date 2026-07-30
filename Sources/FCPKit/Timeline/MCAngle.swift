@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// An `mc-angle` element describing one angle of a multicam media resource.
 public struct MCAngle: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -38,11 +39,16 @@ public struct MCAngle: Codable {
     case refClips = "ref-clip"
   }
 
+  /// The display name of the angle.
   public var name: String?
+  /// The unique identifier of the angle within the multicam resource.
   public let angleID: String?
+  /// The `gap` elements filling empty stretches of the angle's timeline.
   public var gaps: [Gap]?
+  /// The `ref-clip` elements placed on the angle's timeline.
   public var refClips: [RefClip]?
 
+  /// Creates a multicam angle with the given identifier and contents.
   public init(
     name: String? = nil,
     angleID: String,
@@ -57,6 +63,7 @@ public struct MCAngle: Codable {
 }
 
 extension MCAngle: DynamicNodeEncoding {
+  /// Encodes child clip content as XML elements and remaining keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["gap", "ref-clip"])
   }

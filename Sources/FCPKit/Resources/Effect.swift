@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// An `effect` resource referencing a Motion template or FxPlug plug-in used by clips.
 public struct Effect: Codable {
   internal enum CodingKeys: String, CodingKey {
     case id
@@ -38,12 +39,17 @@ public struct Effect: Codable {
     case src
   }
 
+  /// The resource identifier other elements use to reference this effect, e.g. "r3".
   public let id: String
+  /// The effect's display name, e.g. "Cross Dissolve".
   public let name: String?
+  /// The unique identifier of the effect's Motion template or plug-in.
   public let uid: String?
+  /// The URL of the effect's source template file.
   public let src: String?
 }
 
 extension Effect: DynamicNodeEncoding {
+  /// Encodes every property of the `effect` element as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

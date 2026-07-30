@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A color correction adjustment referencing a color effect and its parameter values.
 public struct ColorCorrection: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -37,12 +38,16 @@ public struct ColorCorrection: Codable {
     case param
   }
 
+  /// The display name of the color correction.
   public let name: String?
+  /// The ID of the referenced effect resource.
   public let ref: String?
+  /// Nested `param` elements holding the correction's parameter values.
   public let param: [ParamElement]?
 }
 
 extension ColorCorrection: DynamicNodeEncoding {
+  /// Encodes `param` as child elements and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["param"])
   }

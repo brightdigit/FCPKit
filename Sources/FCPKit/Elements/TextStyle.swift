@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `text-style` element: a styled run of text, either inline or referencing a `text-style-def`.
 public struct TextStyle: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -44,19 +45,30 @@ public struct TextStyle: Codable {
     case content = ""
   }
 
+  /// The `id` of the `text-style-def` this run references, if any.
   public let ref: String?
+  /// The font family name, such as `Helvetica`.
   public var font: String?
+  /// The font size in points, as a string.
   public var fontSize: String?
+  /// The font face or weight within the family, such as `Regular`.
   public var fontFace: String?
+  /// The text color as space-separated RGBA components (for example `1 1 1 1`).
   public var fontColor: String?
+  /// Whether the text is bold, as a boolean string (`1` or `0`).
   public var bold: String?
+  /// The kerning adjustment applied to the text, as a string.
   public var kerning: String?
+  /// The paragraph alignment, such as `left`, `center`, or `right`.
   public var alignment: String?
+  /// Additional styling parameters applied to the text run.
   public var param: [ParamElement]?
+  /// The run's text content, stored as the element's character data.
   public var content: String?
 }
 
 extension TextStyle: DynamicNodeEncoding {
+  /// Encodes the text content and `param` as elements and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     key.stringValue.isEmpty || key.stringValue == "param" ? .element : .attribute
   }

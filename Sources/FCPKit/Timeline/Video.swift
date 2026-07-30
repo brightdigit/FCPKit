@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `video` element referencing the video portion of a media resource.
 public struct Video: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -44,19 +45,30 @@ public struct Video: Codable {
     case adjustColorConform = "adjust-colorConform"
   }
 
+  /// The identifier of the referenced media resource.
   public let ref: String?
+  /// The vertical lane the element occupies when connected to a primary storyline item.
   public let lane: String?
+  /// The element's start position on the parent timeline, as a rational time string.
   public let offset: String?
+  /// The display name of the element.
   public let name: String?
+  /// The start time within the element's local timeline, as a rational time string.
   public let start: String?
+  /// The playback duration of the element, as a rational time string.
   public let duration: String?
+  /// The `param` elements adjusting the referenced effect's parameters.
   public var param: [ParamElement]?
+  /// The `filter-video` elements applying video effects to the element.
   public let filterVideo: [FilterVideo]?
+  /// The `adjust-transform` element applying position, scale, and rotation adjustments.
   public var adjustTransform: AdjustTransform?
+  /// The `adjust-colorConform` element controlling color conform behavior.
   public var adjustColorConform: AdjustColorConform?
 }
 
 extension Video: DynamicNodeEncoding {
+  /// Encodes params, filters, and adjustments as XML elements and remaining keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(
       for: key,

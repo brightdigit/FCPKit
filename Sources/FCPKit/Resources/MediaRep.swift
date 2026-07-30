@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `media-rep` element locating a representation (original or proxy) of an asset's media.
 public struct MediaRep: Codable {
   internal enum CodingKeys: String, CodingKey {
     case kind
@@ -38,11 +39,16 @@ public struct MediaRep: Codable {
     case bookmark
   }
 
+  /// The representation kind, e.g. "original-media" or "proxy-media".
   public var kind: String?
+  /// The media file's content signature used to relink the representation.
   public var sig: String?
+  /// The URL of the media file for this representation.
   public var src: String?
+  /// A security-scoped bookmark, base64-encoded, for locating the media file.
   public var bookmark: String?
 
+  /// Creates a `media-rep` element describing one representation of an asset's media.
   public init(
     kind: String? = nil,
     sig: String? = nil,
@@ -57,6 +63,7 @@ public struct MediaRep: Codable {
 }
 
 extension MediaRep: DynamicNodeEncoding {
+  /// Encodes `bookmark` as a child element and all other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["bookmark"])
   }

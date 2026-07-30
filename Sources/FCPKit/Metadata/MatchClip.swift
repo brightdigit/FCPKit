@@ -30,15 +30,19 @@
 import Foundation
 import XMLCoder
 
+/// A `match-clip` rule matching items by clip type in a smart collection.
 public struct MatchClip: Codable {
   internal enum CodingKeys: String, CodingKey {
     case rule
     case type
   }
 
+  /// How the rule compares, e.g. "is" or "is not".
   public var rule: String?
+  /// The clip type to match, e.g. "project", "synchronized", or "compound".
   public var type: String?
 
+  /// Creates a `match-clip` rule with the given comparison and clip type.
   public init(rule: String? = nil, type: String? = nil) {
     self.rule = rule
     self.type = type
@@ -46,5 +50,6 @@ public struct MatchClip: Codable {
 }
 
 extension MatchClip: DynamicNodeEncoding {
+  /// Encodes every property of the `match-clip` element as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

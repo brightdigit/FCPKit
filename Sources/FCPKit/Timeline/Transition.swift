@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `transition` element joining two adjacent story elements, such as a cross dissolve.
 public struct Transition: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -42,17 +43,26 @@ public struct Transition: Codable {
     case filterAudio = "filter-audio"
   }
 
+  /// The identifier of the referenced transition effect resource.
   public let ref: String?
+  /// The transition's start position on the parent timeline, as a rational time string.
   public let offset: String?
+  /// The duration of the transition, as a rational time string.
   public let duration: String?
+  /// How the transition aligns to the edit point: `start`, `center`, or `end`.
   public let alignment: String?
+  /// The display name of the transition.
   public let name: String?
+  /// The start time within the transition's local timeline, as a rational time string.
   public let start: String?
+  /// The `filter-video` elements applying video effects to the transition.
   public var filterVideo: [FilterVideo]?
+  /// The `filter-audio` elements applying audio effects to the transition.
   public var filterAudio: [FilterAudio]?
 }
 
 extension Transition: DynamicNodeEncoding {
+  /// Encodes filter content as XML elements and remaining keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["filter-video", "filter-audio"])
   }

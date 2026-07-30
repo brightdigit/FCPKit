@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `multicam` element containing the camera angles of a multicam clip inside a `media` resource.
 public struct Multicam: Codable {
   internal enum CodingKeys: String, CodingKey {
     case format
@@ -38,11 +39,16 @@ public struct Multicam: Codable {
     case mcAngles = "mc-angle"
   }
 
+  /// The `id` of the `format` resource describing the multicam's video characteristics.
   public var format: String?
+  /// The starting timecode of the multicam, as a rational time value.
   public var tcStart: String?
+  /// The timecode format, either "DF" (drop frame) or "NDF" (non-drop frame).
   public var tcFormat: String?
+  /// The `mc-angle` elements holding each camera angle's clips.
   public var mcAngles: [MCAngle]?
 
+  /// Creates a `multicam` element with the given format, timecode, and camera angles.
   public init(
     format: String? = nil,
     tcStart: String? = nil,
@@ -57,6 +63,7 @@ public struct Multicam: Codable {
 }
 
 extension Multicam: DynamicNodeEncoding {
+  /// Encodes `mc-angle` as child elements and all other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["mc-angle"])
   }

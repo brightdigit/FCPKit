@@ -30,19 +30,23 @@
 import Foundation
 import XMLCoder
 
+/// A `timeMap` element remapping a clip's time for constant or variable speed changes.
 public struct TimeMap: Codable {
   internal enum CodingKeys: String, CodingKey {
     case timepts = "timept"
   }
 
+  /// The `timept` child elements defining the time-remapping curve.
   public var timepts: [Timept]?
 
+  /// Creates a `timeMap` with an optional list of time points.
   public init(timepts: [Timept]? = nil) {
     self.timepts = timepts
   }
 }
 
 extension TimeMap: DynamicNodeEncoding {
+  /// Encodes `timept` as child elements and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["timept"])
   }

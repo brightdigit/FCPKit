@@ -30,14 +30,17 @@
 import Foundation
 import XMLCoder
 
+/// A `caption-role` element assigning a caption role to media, such as `iTT?captionFormat=ITT.en`.
 public struct CaptionRole: Codable {
   internal enum CodingKeys: String, CodingKey {
     case value
   }
 
+  /// The caption role name, including its caption format qualifier.
   public let value: String?
 }
 
 extension CaptionRole: DynamicNodeEncoding {
+  /// Encodes every key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

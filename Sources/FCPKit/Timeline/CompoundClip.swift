@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `compound-clip` element referencing a compound clip media resource.
 public struct CompoundClip: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -41,15 +42,23 @@ public struct CompoundClip: Codable {
     case format
   }
 
+  /// The identifier of the referenced media resource.
   public let ref: String?
+  /// The clip's start position on the parent timeline, as a rational time string.
   public let offset: String?
+  /// The display name of the clip.
   public let name: String?
+  /// The start time within the referenced media, as a rational time string.
   public let start: String?
+  /// The clip's duration, as a rational time string.
   public let duration: String?
+  /// Whether the clip's audio subroles are active, as `1` or `0`.
   public let useAudioSubroles: String?
+  /// The identifier of the referenced format resource.
   public let format: String?
 }
 
 extension CompoundClip: DynamicNodeEncoding {
+  /// Encodes every coding key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

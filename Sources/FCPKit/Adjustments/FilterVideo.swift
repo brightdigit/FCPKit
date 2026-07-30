@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `filter-video` element applying a video effect to a clip.
 public struct FilterVideo: Codable {
   internal enum CodingKeys: String, CodingKey {
     case ref
@@ -38,13 +39,18 @@ public struct FilterVideo: Codable {
     case param
   }
 
+  /// The ID of the referenced `effect` resource.
   public let ref: String?
+  /// The display name of the video filter.
   public let name: String?
+  /// Nested `data` elements carrying opaque effect data.
   public var data: [DataElement]?
+  /// Nested `param` elements holding the filter's parameter values.
   public var param: [ParamElement]?
 }
 
 extension FilterVideo: DynamicNodeEncoding {
+  /// Encodes `data` and `param` as child elements and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["data", "param"])
   }

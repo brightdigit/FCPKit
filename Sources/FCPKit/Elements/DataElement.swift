@@ -30,17 +30,21 @@
 import Foundation
 import XMLCoder
 
+/// A `data` element carrying an opaque keyed payload inside a `param`.
 public struct DataElement: Codable {
   internal enum CodingKeys: String, CodingKey {
     case key
     case value = ""
   }
 
+  /// The key identifying this data entry.
   public let key: String?
+  /// The data payload, stored as the element's character data.
   public var value: String?
 }
 
 extension DataElement: DynamicNodeEncoding {
+  /// Encodes the payload as element content and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     key.stringValue.isEmpty ? .element : .attribute
   }

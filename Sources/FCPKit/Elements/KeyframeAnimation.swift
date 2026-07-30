@@ -30,14 +30,17 @@
 import Foundation
 import XMLCoder
 
+/// A `keyframeAnimation` element animating a parameter's value over time via keyframes.
 public struct KeyframeAnimation: Codable {
   internal enum CodingKeys: String, CodingKey {
     case keyframes = "keyframe"
   }
 
+  /// The `keyframe` elements that define the animation curve.
   public var keyframes: [Keyframe]?
 }
 
 extension KeyframeAnimation: DynamicNodeEncoding {
+  /// Encodes every key as a child XML element.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .element }
 }

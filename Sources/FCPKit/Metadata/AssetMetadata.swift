@@ -30,19 +30,23 @@
 import Foundation
 import XMLCoder
 
+/// A `metadata` container holding the `md` key-value entries attached to an asset or clip.
 public struct AssetMetadata: Codable {
   internal enum CodingKeys: String, CodingKey {
     case entries = "md"
   }
 
+  /// The `md` elements, each holding one key-value metadata entry.
   public var entries: [MetadataEntry]?
 
+  /// Creates a `metadata` container with the given `md` entries.
   public init(entries: [MetadataEntry]? = nil) {
     self.entries = entries
   }
 }
 
 extension AssetMetadata: DynamicNodeEncoding {
+  /// Encodes `md` entries as child elements and all other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["md"])
   }

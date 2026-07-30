@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `caption` element: a closed caption or subtitle anchored to a clip on the timeline.
 public struct Caption: Codable {
   internal enum CodingKeys: String, CodingKey {
     case lane
@@ -41,16 +42,24 @@ public struct Caption: Codable {
     case text
   }
 
+  /// The lane number for vertical placement relative to the primary storyline.
   public let lane: String?
+  /// The caption's position on its parent timeline, as a rational time string.
   public let offset: String?
+  /// The display name of the caption.
   public let name: String?
+  /// The start time within the caption's local timeline, as a rational time string.
   public let start: String?
+  /// The caption's duration, as a rational time string.
   public let duration: String?
+  /// The caption role, including its format qualifier (for example `iTT?captionFormat=ITT.en`).
   public let role: String?
+  /// The caption's displayed text content.
   public let text: String?
 }
 
 extension Caption: DynamicNodeEncoding {
+  /// Encodes `text` as a child element and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["text"])
   }

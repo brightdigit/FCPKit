@@ -30,15 +30,19 @@
 import Foundation
 import XMLCoder
 
+/// An `mc-source` element selecting the active angle of a multicam clip.
 public struct MCSource: Codable {
   internal enum CodingKeys: String, CodingKey {
     case angleID
     case srcEnable
   }
 
+  /// The identifier of the multicam angle this source refers to.
   public let angleID: String?
+  /// Which media of the angle is enabled: `all`, `audio`, `video`, or `none`.
   public var srcEnable: String?
 
+  /// Creates a multicam source selection for the given angle.
   public init(angleID: String, srcEnable: String? = nil) {
     self.angleID = angleID
     self.srcEnable = srcEnable
@@ -46,5 +50,6 @@ public struct MCSource: Codable {
 }
 
 extension MCSource: DynamicNodeEncoding {
+  /// Encodes every key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

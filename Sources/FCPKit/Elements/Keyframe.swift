@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `keyframe` element: a parameter value pinned to a point in time within an animation.
 public struct Keyframe: Codable {
   internal enum CodingKeys: String, CodingKey {
     case time
@@ -37,11 +38,15 @@ public struct Keyframe: Codable {
     case interp
   }
 
+  /// The time of the keyframe, as a rational time string.
   public let time: String?
+  /// The parameter value at this keyframe.
   public var value: String?
+  /// The interpolation mode toward the next keyframe, such as `linear` or `smooth2`.
   public let interp: String?
 }
 
 extension Keyframe: DynamicNodeEncoding {
+  /// Encodes every key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

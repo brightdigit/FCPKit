@@ -30,19 +30,23 @@
 import Foundation
 import XMLCoder
 
+/// An `array` element holding multiple `string` values for a single `md` metadata entry.
 public struct MetadataArray: Codable {
   internal enum CodingKeys: String, CodingKey {
     case strings = "string"
   }
 
+  /// The `string` elements, each holding one value of the array.
   public var strings: [MetadataString]?
 
+  /// Creates an `array` element with the given `string` values.
   public init(strings: [MetadataString]? = nil) {
     self.strings = strings
   }
 }
 
 extension MetadataArray: DynamicNodeEncoding {
+  /// Encodes `string` values as child elements and all other keys as attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["string"])
   }

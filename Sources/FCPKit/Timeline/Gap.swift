@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `gap` element representing empty space in a storyline.
 public struct Gap: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -38,12 +39,17 @@ public struct Gap: Codable {
     case start
   }
 
+  /// The display name of the gap.
   public let name: String?
+  /// The gap's start position on the parent timeline, as a rational time string.
   public let offset: String?
+  /// The gap's duration, as a rational time string.
   public let duration: String?
+  /// The gap's local timeline start time, as a rational time string.
   public let start: String?
 }
 
 extension Gap: DynamicNodeEncoding {
+  /// Encodes every coding key as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

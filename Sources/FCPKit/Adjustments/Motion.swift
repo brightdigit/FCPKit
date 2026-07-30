@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A motion effect adjustment referencing a Motion effect resource and its parameters.
 public struct Motion: Codable {
   internal enum CodingKeys: String, CodingKey {
     case name
@@ -37,12 +38,16 @@ public struct Motion: Codable {
     case param
   }
 
+  /// The display name of the motion effect.
   public let name: String?
+  /// The ID of the referenced effect resource.
   public let ref: String?
+  /// Nested `param` elements holding the effect's parameter values.
   public let param: [ParamElement]?
 }
 
 extension Motion: DynamicNodeEncoding {
+  /// Encodes `param` as child elements and all other keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
     fcpNodeEncoding(for: key, elementKeys: ["param"])
   }

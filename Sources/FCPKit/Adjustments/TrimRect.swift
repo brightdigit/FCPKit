@@ -30,6 +30,7 @@
 import Foundation
 import XMLCoder
 
+/// A `trim-rect` element giving per-edge trim insets for an `adjust-crop` in trim mode.
 public struct TrimRect: Codable {
   internal enum CodingKeys: String, CodingKey {
     case left
@@ -38,11 +39,16 @@ public struct TrimRect: Codable {
     case bottom
   }
 
+  /// The trim inset from the left edge of the frame, as a string.
   public var left: String?
+  /// The trim inset from the right edge of the frame, as a string.
   public var right: String?
+  /// The trim inset from the top edge of the frame, as a string.
   public var top: String?
+  /// The trim inset from the bottom edge of the frame, as a string.
   public var bottom: String?
 
+  /// Creates a `trim-rect` with optional per-edge insets.
   public init(
     left: String? = nil,
     right: String? = nil,
@@ -57,5 +63,6 @@ public struct TrimRect: Codable {
 }
 
 extension TrimRect: DynamicNodeEncoding {
+  /// Encodes all coding keys as XML attributes.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }

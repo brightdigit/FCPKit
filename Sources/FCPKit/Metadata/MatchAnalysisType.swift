@@ -30,15 +30,19 @@
 import Foundation
 import XMLCoder
 
+/// A `match-analysis-type` rule matching items by analysis result in a smart collection.
 public struct MatchAnalysisType: Codable {
   internal enum CodingKeys: String, CodingKey {
     case rule
     case value
   }
 
+  /// How the rule compares, e.g. "includesAny" or "doesNotIncludeAny".
   public var rule: String?
+  /// The analysis type to match, e.g. "onePerson" or "wideShot".
   public var value: String?
 
+  /// Creates a `match-analysis-type` rule with the given comparison and analysis type.
   public init(rule: String? = nil, value: String? = nil) {
     self.rule = rule
     self.value = value
@@ -46,5 +50,6 @@ public struct MatchAnalysisType: Codable {
 }
 
 extension MatchAnalysisType: DynamicNodeEncoding {
+  /// Encodes every property of the `match-analysis-type` element as an XML attribute.
   public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
 }
