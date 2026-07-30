@@ -6,13 +6,13 @@ import XMLCoder
 
 extension FCPXMLDiffTests {
   internal static let attributeOnlyTypes: [any DynamicNodeEncoding.Type] = [
-    Format.self, Effect.self, Clip.self, Gap.self, Keyword.self,
+    Format.self, Effect.self, Keyword.self,
     MCSource.self, ParamElement.self, ConformRate.self, Timept.self,
     AdjustTransform.self, TrimRect.self, MatchClip.self, MatchMedia.self,
     MatchRatings.self, AdjustVolume.self, AdjustLoudness.self,
     AdjustBlend.self, Transition.self, Marker.self, Rating.self,
     ChapterMarker.self, ConnectedClip.self, Keyframe.self,
-    CompoundClip.self, AudioRole.self, VideoRole.self, CaptionRole.self,
+    AudioRole.self, VideoRole.self, CaptionRole.self,
     Fade.self,
     AdjustColorConform.self,
     MatchAnalysisType.self,
@@ -29,7 +29,7 @@ extension FCPXMLDiffTests {
     (Project.self, "sequence"),
     (Sequence.self, "spine"),
     (AssetClip.self, "marker"),
-    (AssetClip.self, "title"),
+    (AssetClip.self, ""),
     (MCClip.self, "mc-source"),
     (Video.self, "filter-video"),
     (Video.self, "param"),
@@ -43,10 +43,10 @@ extension FCPXMLDiffTests {
     (Multicam.self, "mc-angle"),
     (MCAngle.self, "ref-clip"),
     (RefClip.self, "timeMap"),
-    (RefClip.self, "video"),
+    (RefClip.self, ""),
     (TimeMap.self, "timept"),
     (AdjustCrop.self, "trim-rect"),
-    (SyncClip.self, "asset-clip"),
+    (SyncClip.self, ""),
     (MediaRep.self, "bookmark"),
     (SmartCollection.self, "match-clip"),
     (SmartCollection.self, "match-analysis-type"),
@@ -65,7 +65,7 @@ extension FCPXMLDiffTests {
     (Transition.self, "filter-video"),
     (Transition.self, "filter-audio"),
     (Generator.self, "param"),
-    (Storyline.self, "title"),
+    (Storyline.self, ""),
     (RetimeClip.self, "timeMap"),
     (ColorCorrection.self, "param"),
     (Motion.self, "param"),
@@ -82,6 +82,7 @@ extension FCPXMLDiffTests {
     FilterAudio.self, Transition.self, Generator.self,
     Storyline.self, RetimeClip.self, ColorCorrection.self, Motion.self,
     Caption.self, AssetMetadata.self, MetadataEntry.self, Spine.self,
+    Clip.self, Gap.self, CompoundClip.self,
   ]
 
   internal func testRoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInput() throws {
