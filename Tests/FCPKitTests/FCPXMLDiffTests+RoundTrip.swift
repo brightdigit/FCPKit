@@ -28,7 +28,6 @@ extension FCPXMLDiffTests {
     (Event.self, "project"),
     (Project.self, "sequence"),
     (Sequence.self, "spine"),
-    (Spine.self, "transition"),
     (AssetClip.self, "marker"),
     (AssetClip.self, "title"),
     (MCClip.self, "mc-source"),
@@ -82,7 +81,7 @@ extension FCPXMLDiffTests {
     AdjustVolume.self, Title.self, TextStyle.self, TextStyleDef.self,
     FilterAudio.self, Transition.self, Generator.self,
     Storyline.self, RetimeClip.self, ColorCorrection.self, Motion.self,
-    Caption.self, AssetMetadata.self, MetadataEntry.self,
+    Caption.self, AssetMetadata.self, MetadataEntry.self, Spine.self,
   ]
 
   internal func testRoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInput() throws {
@@ -144,6 +143,7 @@ extension FCPXMLDiffTests {
     assertEncoding(TextStyle.nodeEncoding(for: TestCodingKey("font")), is: .attribute)
     assertEncoding(TextStyle.nodeEncoding(for: TestCodingKey("")), is: .element)
     assertEncoding(MetadataString.nodeEncoding(for: TestCodingKey("")), is: .element)
+    assertEncoding(Spine.nodeEncoding(for: TestCodingKey("")), is: .element)
 
     for type in Self.mixedTypes {
       assertEncoding(type.nodeEncoding(for: TestCodingKey("name")), is: .attribute)
