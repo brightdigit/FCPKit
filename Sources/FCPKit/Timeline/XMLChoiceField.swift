@@ -61,4 +61,12 @@ internal struct XMLChoiceField<Item, Key: CodingKey> {
   internal func decode(from container: KeyedDecodingContainer<Key>) throws -> Item {
     try decodeFrom(container)
   }
+
+  /// Encodes `item` when it matches this field; returns whether a value was written.
+  internal func encode(
+    _ item: Item,
+    into container: inout KeyedEncodingContainer<Key>
+  ) throws -> Bool {
+    try encodeInto(item, &container)
+  }
 }
