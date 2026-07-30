@@ -44,7 +44,11 @@ public struct FCPLibraryInspector: Sendable {
 
   /// Creates an inspector that talks to the running Final Cut Pro application.
   public init() {
-    self.applicationProvider = FCPLibraryInspector.liveApplication
+    #if os(macOS)
+      self.applicationProvider = FCPLibraryInspector.liveApplication
+    #else
+      self.applicationProvider = { throw FCPScriptingError.unsupportedPlatform }
+    #endif
     self.requiresRunning = true
   }
 
