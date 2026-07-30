@@ -63,6 +63,8 @@ public enum SpineItem: XMLChoiceCodable {
   /// An unsupported or unrecognized spine element.
   case unsupported
 
+  internal typealias ChoiceKey = CodingKeys
+
   internal enum CodingKeys: String, XMLChoiceCodingKey {
     case clip
     case gap
@@ -79,8 +81,6 @@ public enum SpineItem: XMLChoiceCodable {
     case caption
     case video
   }
-
-  internal typealias ChoiceKey = CodingKeys
 
   internal static var unsupportedChoice: SpineItem { .unsupported }
 
