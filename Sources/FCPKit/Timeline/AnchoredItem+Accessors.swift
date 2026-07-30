@@ -29,72 +29,100 @@
 
 extension AnchoredItem {
   internal var clip: Clip? {
-    if case .clip(let val) = self { return val }
-    return nil
+    guard case .clip(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var gap: Gap? {
-    if case .gap(let val) = self { return val }
-    return nil
+    guard case .gap(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var mcClip: MCClip? {
-    if case .mcClip(let val) = self { return val }
-    return nil
+    guard case .mcClip(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var refClip: RefClip? {
-    if case .refClip(let val) = self { return val }
-    return nil
+    guard case .refClip(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var syncClip: SyncClip? {
-    if case .syncClip(let val) = self { return val }
-    return nil
+    guard case .syncClip(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var assetClip: AssetClip? {
-    if case .assetClip(let val) = self { return val }
-    return nil
+    guard case .assetClip(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var title: Title? {
-    if case .title(let val) = self { return val }
-    return nil
+    guard case .title(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var generator: Generator? {
-    if case .generator(let val) = self { return val }
-    return nil
+    guard case .generator(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var storyline: Storyline? {
-    if case .storyline(let val) = self { return val }
-    return nil
+    guard case .storyline(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var compoundClip: CompoundClip? {
-    if case .compoundClip(let val) = self { return val }
-    return nil
+    guard case .compoundClip(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var retimeClip: RetimeClip? {
-    if case .retimeClip(let val) = self { return val }
-    return nil
+    guard case .retimeClip(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var caption: Caption? {
-    if case .caption(let val) = self { return val }
-    return nil
+    guard case .caption(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var video: Video? {
-    if case .video(let val) = self { return val }
-    return nil
+    guard case .video(let val) = self else {
+      return nil
+    }
+    return val
   }
 
   internal var spine: Spine? {
-    if case .spine(let val) = self { return val }
-    return nil
+    guard case .spine(let val) = self else {
+      return nil
+    }
+    return val
   }
 }

@@ -71,32 +71,3 @@ internal struct XMLChoiceField<Item, Key: CodingKey> {
     try encodeInto(item, &container)
   }
 }
-
-/// An XML choice enum decoded and encoded via a ``XMLChoiceField`` table.
-internal protocol XMLChoiceCodable: Codable {
-  associatedtype ChoiceKey: CodingKey & XMLChoiceCodingKey
-  /// Field handlers attempted in declaration order.
-  static var choiceFields: [XMLChoiceField<Self, ChoiceKey>] { get }
-  /// Value used when no known choice key is present.
-  static var unsupportedChoice: Self { get }
-}
-
-extension XMLChoiceCodable {
-  /// Decodes by selecting the first matching ``choiceFields`` entry.
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: ChoiceKey.self)
-    for field in Self.choiceFields where container.contains(field.key) {
-      self = try field.decode(from: container)
-      return
-    }
-    self = Self.unsupportedChoice
-  }
-
-  /// Encodes by writing the first matching ``choiceFields`` entry.
-  public func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: ChoiceKey.self)
-    for field in Self.choiceFields where try field.encode(self, into: &container) {
-      return
-    }
-  }
-}
