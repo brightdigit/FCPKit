@@ -159,10 +159,20 @@ Favor the existing Swift, FCPKit, and XMLCoder stack. The differential tooling
 belongs in Swift because it must exercise the same model and encoder used by
 downstream apps.
 
-The test suite is **XCTest**, not Swift Testing — all nine files under
-`Tests/FCPKitTests/` use `XCTestCase`. Write new tests in XCTest for now;
-mixing frameworks mid-migration is worse than either alone. A wholesale
-migration is proposed for after v0.1.0.
+**Write new tests in Swift Testing** (`import Testing`, `@Suite` / `@Test` /
+`#expect`), following the conventions in
+[this Swift Testing guide](https://gist.github.com/leogdion/0806c2f41aeb2c77db6a4a846cf13c0f).
+Key points: include "Tests" in *either* the parent enum *or* the child struct
+and never both; use a single `@Suite struct` for fewer than ten tests and a
+parent `@Suite enum` plus per-category `extension` files when a suite will grow;
+gate platform-specific tests through a centralized `Platform` helper with
+`.enabled(if:)` traits (see the guide's platform-compatibility page). Use
+`withKnownIssue { }` where XCTest would have used `XCTExpectFailure`.
+
+The existing suite is **XCTest** — all ten files under `Tests/FCPKitTests/` use
+`XCTestCase`, and they stay that way for now. Migrating them is a separate,
+no-behavior-change change proposed for after v0.1.0; that deferral does not
+apply to newly authored tests.
 
 Keep model additions faithful to XML ordering and XMLCoder node-encoding rules.
 Avoid convenience abstractions that prevent lossless representation. Where the
@@ -203,9 +213,28 @@ Default five-role vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `
 
 Single-context — one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
 
-## Agent memory & corrections
+## Memory & Corrections Convention
 
-Persistent notes for agents live in the repo (committed and shared), not in any machine-local directory:
+Persistent notes for agents live in the repo (committed and shared), not in any machine-local
+directory.
 
-- **`.claude/CORRECTIONS.md`** — append-only log; the source of truth for user corrections and explicit always/never directives. Whenever the user corrects an agent or gives an "always"/"never" directive, append one concise dated line. Never rewrite, reorder, or delete prior entries.
-- **`.claude/memory/MEMORY.md`** — index of persistent memories; read it, then the linked files under `.claude/memory/`.
+**`.claude/agent-notes.md` is the source of truth for how to work in this repo. Read it first,
+at the start of every session, before doing any work.** It is the running log of user corrections
+and standing always/never directives, and it takes precedence over guidance elsewhere in this file
+when the two disagree.
+
+Maintaining it:
+
+- Append one line per directive **proactively** — without being asked — whenever the user corrects
+  you or gives an "always"/"never" instruction. Record the literal meaning, not an interpretation.
+- Newest lines at the bottom; one line per entry; prefix each with the date (YYYY-MM-DD).
+- When a directive supersedes an earlier one, **update or remove the stale line** rather than
+  leaving both, so the log always reads as the current rule set.
+
+Also:
+
+- **`.claude/memory/MEMORY.md`** — index of persistent memories; read it, then the linked files
+  under `.claude/memory/`.
+
+(`.claude/CORRECTIONS.md` was merged into `.claude/agent-notes.md` on 2026-07-29 and no longer
+exists. Its strictly-append-only rule is superseded by the update-stale-lines rule above.)

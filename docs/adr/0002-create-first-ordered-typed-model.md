@@ -60,9 +60,10 @@ Tracker: [planning/v0.1.0-issues.md](../planning/v0.1.0-issues.md). Parallel lan
 [planning/v0.1.0-worktree-plan.md](../planning/v0.1.0-worktree-plan.md).
 
 **Out of 0.1.0:** `locator` resources, `import-options`, sidecar unknown-XML
-preservation, AppleScript-driven export, XCTest → Swift Testing migration
-(defer migration to 0.1.1 as one no-behavior-change PR), and migrating
-`MulticamXMLBuilder` onto `FCPKitDSL`.
+preservation, AppleScript-driven export, migrating the **existing** XCTest suite
+to Swift Testing (defer to 0.1.1 as one no-behavior-change PR — note that
+*newly authored* tests use Swift Testing as of 2026-07-29; see `AGENTS.md`), and
+migrating `MulticamXMLBuilder` onto `FCPKitDSL`.
 
 ## Consequences
 

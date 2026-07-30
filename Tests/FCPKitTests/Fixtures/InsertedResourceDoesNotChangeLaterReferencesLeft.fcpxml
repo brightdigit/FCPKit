@@ -1,0 +1,7 @@
+<fcpxml version="1.13">
+    <resources>
+        <format id="r1" name="Format"/>
+        <asset id="r2" name="Clip" format="r1"/>
+    </resources>
+    <library><event><asset-clip ref="r2" format="r1"/></event></library>
+</fcpxml>

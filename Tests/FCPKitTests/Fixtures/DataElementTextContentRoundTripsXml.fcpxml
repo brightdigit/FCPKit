@@ -1,0 +1,21 @@
+<fcpxml version="1.13">
+    <resources>
+        <format id="r1"/>
+        <asset id="r2"/>
+    </resources>
+    <library>
+        <event>
+            <project>
+                <sequence format="r1" duration="1s">
+                    <spine>
+                        <asset-clip ref="r2" duration="1s">
+                            <filter-video ref="r3">
+                                <data key="effectConfig">PAYLOAD</data>
+                            </filter-video>
+                        </asset-clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
