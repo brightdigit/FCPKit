@@ -43,9 +43,7 @@ public struct AdjustVolume: Codable {
   public var param: [ParamElement]?
 }
 
-extension AdjustVolume: DynamicNodeEncoding {
+extension AdjustVolume: FCPNodeEncodable {
   /// Encodes `param` as child elements and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["param"])
-  }
+  public static let elementKeys: Set<String> = ["param"]
 }

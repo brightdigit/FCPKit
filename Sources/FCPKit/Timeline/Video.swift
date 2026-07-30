@@ -67,14 +67,9 @@ public struct Video: Codable {
   public var adjustColorConform: AdjustColorConform?
 }
 
-extension Video: DynamicNodeEncoding {
+extension Video: FCPNodeEncodable {
   /// Encodes params, filters, and adjustments as XML elements and remaining keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(
-      for: key,
-      elementKeys: [
-        "param", "filter-video", "adjust-transform", "adjust-colorConform",
-      ]
-    )
-  }
+  public static let elementKeys: Set<String> = [
+    "param", "filter-video", "adjust-transform", "adjust-colorConform",
+  ]
 }

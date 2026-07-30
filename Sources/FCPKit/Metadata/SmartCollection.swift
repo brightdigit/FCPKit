@@ -72,14 +72,9 @@ public struct SmartCollection: Codable {
   }
 }
 
-extension SmartCollection: DynamicNodeEncoding {
+extension SmartCollection: FCPNodeEncodable {
   /// Encodes the match rules as child elements and all other keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(
-      for: key,
-      elementKeys: [
-        "match-clip", "match-media", "match-ratings", "match-analysis-type",
-      ]
-    )
-  }
+  public static let elementKeys: Set<String> = [
+    "match-clip", "match-media", "match-ratings", "match-analysis-type",
+  ]
 }

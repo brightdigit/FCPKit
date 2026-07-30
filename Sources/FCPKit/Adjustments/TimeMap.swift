@@ -45,9 +45,7 @@ public struct TimeMap: Codable {
   }
 }
 
-extension TimeMap: DynamicNodeEncoding {
+extension TimeMap: FCPNodeEncodable {
   /// Encodes `timept` as child elements and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["timept"])
-  }
+  public static let elementKeys: Set<String> = ["timept"]
 }

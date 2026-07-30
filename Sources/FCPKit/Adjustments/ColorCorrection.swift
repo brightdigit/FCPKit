@@ -46,9 +46,7 @@ public struct ColorCorrection: Codable {
   public let param: [ParamElement]?
 }
 
-extension ColorCorrection: DynamicNodeEncoding {
+extension ColorCorrection: FCPNodeEncodable {
   /// Encodes `param` as child elements and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["param"])
-  }
+  public static let elementKeys: Set<String> = ["param"]
 }

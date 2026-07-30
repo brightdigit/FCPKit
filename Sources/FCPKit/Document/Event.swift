@@ -77,14 +77,9 @@ public struct Event: Codable {
   }
 }
 
-extension Event: DynamicNodeEncoding {
+extension Event: FCPNodeEncodable {
   /// Encodes projects and clips as child elements and other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(
-      for: key,
-      elementKeys: [
-        "project", "asset-clip", "ref-clip", "mc-clip", "sync-clip",
-      ]
-    )
-  }
+  public static let elementKeys: Set<String> = [
+    "project", "asset-clip", "ref-clip", "mc-clip", "sync-clip",
+  ]
 }

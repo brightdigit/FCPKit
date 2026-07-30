@@ -61,9 +61,7 @@ public struct Transition: Codable {
   public var filterAudio: [FilterAudio]?
 }
 
-extension Transition: DynamicNodeEncoding {
+extension Transition: FCPNodeEncodable {
   /// Encodes filter content as XML elements and remaining keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["filter-video", "filter-audio"])
-  }
+  public static let elementKeys: Set<String> = ["filter-video", "filter-audio"]
 }

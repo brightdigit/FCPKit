@@ -62,9 +62,7 @@ public struct MCAngle: Codable {
   }
 }
 
-extension MCAngle: DynamicNodeEncoding {
+extension MCAngle: FCPNodeEncodable {
   /// Encodes child clip content as XML elements and remaining keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["gap", "ref-clip"])
-  }
+  public static let elementKeys: Set<String> = ["gap", "ref-clip"]
 }

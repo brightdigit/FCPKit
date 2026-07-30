@@ -62,9 +62,7 @@ public struct MediaRep: Codable {
   }
 }
 
-extension MediaRep: DynamicNodeEncoding {
+extension MediaRep: FCPNodeEncodable {
   /// Encodes `bookmark` as a child element and all other keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["bookmark"])
-  }
+  public static let elementKeys: Set<String> = ["bookmark"]
 }

@@ -67,9 +67,7 @@ public struct SyncClip: Codable {
   public let filterVideo: [FilterVideo]?
 }
 
-extension SyncClip: DynamicNodeEncoding {
+extension SyncClip: FCPNodeEncodable {
   /// Encodes child clip content as XML elements and remaining keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["asset-clip", "video", "filter-video"])
-  }
+  public static let elementKeys: Set<String> = ["asset-clip", "video", "filter-video"]
 }

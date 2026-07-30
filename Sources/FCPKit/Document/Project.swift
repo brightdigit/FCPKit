@@ -62,9 +62,7 @@ public struct Project: Codable {
   }
 }
 
-extension Project: DynamicNodeEncoding {
+extension Project: FCPNodeEncodable {
   /// Encodes the sequence as a child element and other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["sequence"])
-  }
+  public static let elementKeys: Set<String> = ["sequence"]
 }

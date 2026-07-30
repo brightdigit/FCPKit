@@ -62,9 +62,7 @@ public struct AudioChannelSource: Codable {
   }
 }
 
-extension AudioChannelSource: DynamicNodeEncoding {
+extension AudioChannelSource: FCPNodeEncodable {
   /// Encodes `adjust-loudness` as a child element and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["adjust-loudness"])
-  }
+  public static let elementKeys: Set<String> = ["adjust-loudness"]
 }

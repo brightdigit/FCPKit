@@ -64,9 +64,7 @@ public struct Title: Codable {
   public var textStyleDef: [TextStyleDef]?
 }
 
-extension Title: DynamicNodeEncoding {
+extension Title: FCPNodeEncodable {
   /// Encodes `param`, `text`, and `text-style-def` as child elements and other keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["param", "text", "text-style-def"])
-  }
+  public static let elementKeys: Set<String> = ["param", "text", "text-style-def"]
 }

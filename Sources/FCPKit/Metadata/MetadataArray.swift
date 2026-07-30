@@ -45,9 +45,7 @@ public struct MetadataArray: Codable {
   }
 }
 
-extension MetadataArray: DynamicNodeEncoding {
+extension MetadataArray: FCPNodeEncodable {
   /// Encodes `string` values as child elements and all other keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["string"])
-  }
+  public static let elementKeys: Set<String> = ["string"]
 }

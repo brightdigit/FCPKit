@@ -61,14 +61,9 @@ public struct ParamElement: Codable {
   public var keyframeAnimation: KeyframeAnimation?
 }
 
-extension ParamElement: DynamicNodeEncoding {
+extension ParamElement: FCPNodeEncodable {
   /// Encodes nested elements as children and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(
-      for: key,
-      elementKeys: [
-        "param", "data", "fadeIn", "fadeOut", "keyframeAnimation",
-      ]
-    )
-  }
+  public static let elementKeys: Set<String> = [
+    "param", "data", "fadeIn", "fadeOut", "keyframeAnimation",
+  ]
 }

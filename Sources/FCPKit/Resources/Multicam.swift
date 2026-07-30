@@ -62,9 +62,7 @@ public struct Multicam: Codable {
   }
 }
 
-extension Multicam: DynamicNodeEncoding {
+extension Multicam: FCPNodeEncodable {
   /// Encodes `mc-angle` as child elements and all other keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["mc-angle"])
-  }
+  public static let elementKeys: Set<String> = ["mc-angle"]
 }

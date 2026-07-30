@@ -45,9 +45,7 @@ public struct AssetMetadata: Codable {
   }
 }
 
-extension AssetMetadata: DynamicNodeEncoding {
+extension AssetMetadata: FCPNodeEncodable {
   /// Encodes `md` entries as child elements and all other keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["md"])
-  }
+  public static let elementKeys: Set<String> = ["md"]
 }

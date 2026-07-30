@@ -62,9 +62,7 @@ public struct Library: Codable {
   }
 }
 
-extension Library: DynamicNodeEncoding {
+extension Library: FCPNodeEncodable {
   /// Encodes events and smart collections as child elements and other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["event", "smart-collection"])
-  }
+  public static let elementKeys: Set<String> = ["event", "smart-collection"]
 }

@@ -61,14 +61,9 @@ public struct Storyline: Codable {
   public let generators: [Generator]?
 }
 
-extension Storyline: DynamicNodeEncoding {
+extension Storyline: FCPNodeEncodable {
   /// Encodes child clip content as XML elements and remaining keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(
-      for: key,
-      elementKeys: [
-        "clip", "asset-clip", "ref-clip", "title", "generator",
-      ]
-    )
-  }
+  public static let elementKeys: Set<String> = [
+    "clip", "asset-clip", "ref-clip", "title", "generator",
+  ]
 }

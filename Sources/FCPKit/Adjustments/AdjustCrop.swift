@@ -49,9 +49,7 @@ public struct AdjustCrop: Codable {
   }
 }
 
-extension AdjustCrop: DynamicNodeEncoding {
+extension AdjustCrop: FCPNodeEncodable {
   /// Encodes `trim-rect` as a child element and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["trim-rect"])
-  }
+  public static let elementKeys: Set<String> = ["trim-rect"]
 }

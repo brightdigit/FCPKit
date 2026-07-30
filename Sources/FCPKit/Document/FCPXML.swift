@@ -53,9 +53,7 @@ public struct FCPXML: Codable {
   }
 }
 
-extension FCPXML: DynamicNodeEncoding {
+extension FCPXML: FCPNodeEncodable {
   /// Encodes `resources` and `library` as child elements and other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["resources", "library"])
-  }
+  public static let elementKeys: Set<String> = ["resources", "library"]
 }

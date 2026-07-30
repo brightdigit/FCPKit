@@ -49,9 +49,7 @@ public struct FilterVideo: Codable {
   public var param: [ParamElement]?
 }
 
-extension FilterVideo: DynamicNodeEncoding {
+extension FilterVideo: FCPNodeEncodable {
   /// Encodes `data` and `param` as child elements and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["data", "param"])
-  }
+  public static let elementKeys: Set<String> = ["data", "param"]
 }

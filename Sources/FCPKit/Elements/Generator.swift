@@ -58,9 +58,7 @@ public struct Generator: Codable {
   public let param: [ParamElement]?
 }
 
-extension Generator: DynamicNodeEncoding {
+extension Generator: FCPNodeEncodable {
   /// Encodes `param` as a child element and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["param"])
-  }
+  public static let elementKeys: Set<String> = ["param"]
 }

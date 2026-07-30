@@ -82,9 +82,7 @@ public struct MCClip: Codable {
   }
 }
 
-extension MCClip: DynamicNodeEncoding {
+extension MCClip: FCPNodeEncodable {
   /// Encodes child clip content as XML elements and remaining keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["mc-source", "video"])
-  }
+  public static let elementKeys: Set<String> = ["mc-source", "video"]
 }

@@ -58,9 +58,7 @@ public struct Caption: Codable {
   public let text: String?
 }
 
-extension Caption: DynamicNodeEncoding {
+extension Caption: FCPNodeEncodable {
   /// Encodes `text` as a child element and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["text"])
-  }
+  public static let elementKeys: Set<String> = ["text"]
 }

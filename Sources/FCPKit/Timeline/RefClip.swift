@@ -127,16 +127,11 @@ public struct RefClip: Codable {
   }
 }
 
-extension RefClip: DynamicNodeEncoding {
+extension RefClip: FCPNodeEncodable {
   /// Encodes child clip content as XML elements and remaining keys as attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(
-      for: key,
-      elementKeys: [
-        "conform-rate", "timeMap", "adjust-transform", "adjust-crop", "asset-clip",
-        "video",
-        "ref-clip", "adjust-volume", "filter-video",
-      ]
-    )
-  }
+  public static let elementKeys: Set<String> = [
+    "conform-rate", "timeMap", "adjust-transform", "adjust-crop", "asset-clip",
+    "video",
+    "ref-clip", "adjust-volume", "filter-video",
+  ]
 }

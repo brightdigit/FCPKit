@@ -1,5 +1,5 @@
 //
-//  FCPNodeEncoding.swift
+//  FCPNodeEncodable.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,6 +28,24 @@
 //
 
 import XMLCoder
+
+/// An FCPXML model type whose coding keys encode as attributes except for a
+/// declared set of child-element keys.
+///
+/// Conform by declaring ``elementKeys``; ``nodeEncoding(for:)`` is provided.
+public protocol FCPNodeEncodable: DynamicNodeEncoding {
+  /// Coding-key string values that encode as child XML elements.
+  ///
+  /// Every other key encodes as an XML attribute.
+  static var elementKeys: Set<String> { get }
+}
+
+extension FCPNodeEncodable {
+  /// Encodes keys in ``elementKeys`` as child elements and all other keys as attributes.
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    fcpNodeEncoding(for: key, elementKeys: elementKeys)
+  }
+}
 
 /// Maps a coding key to attribute or element encoding.
 ///

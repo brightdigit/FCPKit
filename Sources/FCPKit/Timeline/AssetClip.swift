@@ -202,18 +202,13 @@ public struct AssetClip: Codable {
   }
 }
 
-extension AssetClip: DynamicNodeEncoding {
+extension AssetClip: FCPNodeEncodable {
   /// Returns whether the given coding key encodes as an XML attribute or element.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(
-      for: key,
-      elementKeys: [
-        "keyword", "note", "conform-rate", "adjust-volume", "adjust-blend",
-        "audio-channel-source", "marker", "rating", "chapter-marker",
-        "filter-audio", "filter-video",
-        "title",
-        "asset-clip", "video", "adjust-transform", "adjust-crop", "timeMap",
-      ]
-    )
-  }
+  public static let elementKeys: Set<String> = [
+    "keyword", "note", "conform-rate", "adjust-volume", "adjust-blend",
+    "audio-channel-source", "marker", "rating", "chapter-marker",
+    "filter-audio", "filter-video",
+    "title",
+    "asset-clip", "video", "adjust-transform", "adjust-crop", "timeMap",
+  ]
 }

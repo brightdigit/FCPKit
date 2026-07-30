@@ -43,9 +43,7 @@ public struct TextStyleDef: Codable {
   public var textStyle: TextStyle?
 }
 
-extension TextStyleDef: DynamicNodeEncoding {
+extension TextStyleDef: FCPNodeEncodable {
   /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
-    fcpNodeEncoding(for: key, elementKeys: ["text-style"])
-  }
+  public static let elementKeys: Set<String> = ["text-style"]
 }
