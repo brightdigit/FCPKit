@@ -29,7 +29,7 @@
 
 import Foundation
 
-/// Helpers for building an ordered choice-item array from typed optional batches.
+/// Helpers for building and mutating ordered choice-item arrays.
 internal enum OrderedChoiceItems {
   /// Appends each non-nil batch onto `base` in declaration order.
   internal static func appending<Item>(
@@ -43,5 +43,46 @@ internal enum OrderedChoiceItems {
       }
     }
     return items
+  }
+
+  /// Returns non-empty payloads extracted from `items`, or `nil` when none match.
+  internal static func payloads<Item, T>(
+    in items: [Item],
+    extract: (Item) -> T?
+  ) -> [T]? {
+    let list = items.compactMap(extract)
+    return list.isEmpty ? nil : list
+  }
+
+  /// Replaces items matching `extract` with `newValue`, preserving relative order.
+  ///
+  /// Matching uses `extract($0) != nil`. Passing `nil` removes all matching items.
+  internal static func replace<Item, T>(
+    _ items: inout [Item],
+    with newValue: [T]?,
+    extract: @escaping (Item) -> T?,
+    wrap: (T) -> Item
+  ) {
+    guard let newValue else {
+      items.removeAll { extract($0) != nil }
+      return
+    }
+    var newIndex = 0
+    var indicesToRemove = [Int]()
+    for index in items.indices where extract(items[index]) != nil {
+      if newIndex < newValue.count {
+        items[index] = wrap(newValue[newIndex])
+        newIndex += 1
+      } else {
+        indicesToRemove.append(index)
+      }
+    }
+    for index in indicesToRemove.reversed() {
+      items.remove(at: index)
+    }
+    while newIndex < newValue.count {
+      items.append(wrap(newValue[newIndex]))
+      newIndex += 1
+    }
   }
 }

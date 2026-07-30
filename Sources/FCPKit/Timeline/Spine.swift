@@ -41,86 +41,159 @@ public struct Spine: Codable {
 
   /// The `clip` elements in the spine.
   public var clips: [Clip]? {
-    get { getItems(\.clip) }
-    set { setItems(newValue, isType: \.isClip, wrap: SpineItem.clip) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.clip) }
+    set {
+      OrderedChoiceItems.replace(&items, with: newValue, extract: \.clip, wrap: SpineItem.clip)
+    }
   }
 
   /// The `gap` elements filling empty stretches of the spine.
   public var gaps: [Gap]? {
-    get { getItems(\.gap) }
-    set { setItems(newValue, isType: \.isGap, wrap: SpineItem.gap) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.gap) }
+    set {
+      OrderedChoiceItems.replace(&items, with: newValue, extract: \.gap, wrap: SpineItem.gap)
+    }
   }
 
   /// The `mc-clip` elements referencing multicam media resources.
   public var mcClips: [MCClip]? {
-    get { getItems(\.mcClip) }
-    set { setItems(newValue, isType: \.isMCClip, wrap: SpineItem.mcClip) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.mcClip) }
+    set {
+      OrderedChoiceItems.replace(&items, with: newValue, extract: \.mcClip, wrap: SpineItem.mcClip)
+    }
   }
 
   /// The `ref-clip` elements referencing compound clips or other media resources.
   public var refClips: [RefClip]? {
-    get { getItems(\.refClip) }
-    set { setItems(newValue, isType: \.isRefClip, wrap: SpineItem.refClip) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.refClip) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.refClip,
+        wrap: SpineItem.refClip
+      )
+    }
   }
 
   /// The `sync-clip` elements containing synchronized audio and video.
   public var syncClips: [SyncClip]? {
-    get { getItems(\.syncClip) }
-    set { setItems(newValue, isType: \.isSyncClip, wrap: SpineItem.syncClip) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.syncClip) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.syncClip,
+        wrap: SpineItem.syncClip
+      )
+    }
   }
 
   /// The `asset-clip` elements referencing asset resources.
   public var assetClips: [AssetClip]? {
-    get { getItems(\.assetClip) }
-    set { setItems(newValue, isType: \.isAssetClip, wrap: SpineItem.assetClip) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.assetClip) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.assetClip,
+        wrap: SpineItem.assetClip
+      )
+    }
   }
 
   /// The `title` elements in the spine.
   public var titles: [Title]? {
-    get { getItems(\.title) }
-    set { setItems(newValue, isType: \.isTitle, wrap: SpineItem.title) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.title) }
+    set {
+      OrderedChoiceItems.replace(&items, with: newValue, extract: \.title, wrap: SpineItem.title)
+    }
   }
 
   /// The `generator` elements referencing generator effects.
   public var generators: [Generator]? {
-    get { getItems(\.generator) }
-    set { setItems(newValue, isType: \.isGenerator, wrap: SpineItem.generator) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.generator) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.generator,
+        wrap: SpineItem.generator
+      )
+    }
   }
 
   /// The `transition` elements joining adjacent story elements.
   public var transitions: [Transition]? {
-    get { getItems(\.transition) }
-    set { setItems(newValue, isType: \.isTransition, wrap: SpineItem.transition) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.transition) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.transition,
+        wrap: SpineItem.transition
+      )
+    }
   }
 
   /// Nested `storyline` elements connected to the spine.
   public var storylines: [Storyline]? {
-    get { getItems(\.storyline) }
-    set { setItems(newValue, isType: \.isStoryline, wrap: SpineItem.storyline) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.storyline) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.storyline,
+        wrap: SpineItem.storyline
+      )
+    }
   }
 
   /// The `compound-clip` elements in the spine.
   public var compoundClips: [CompoundClip]? {
-    get { getItems(\.compoundClip) }
-    set { setItems(newValue, isType: \.isCompoundClip, wrap: SpineItem.compoundClip) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.compoundClip) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.compoundClip,
+        wrap: SpineItem.compoundClip
+      )
+    }
   }
 
   /// The `retime-clip` elements applying retiming to their contents.
   public var retimeClips: [RetimeClip]? {
-    get { getItems(\.retimeClip) }
-    set { setItems(newValue, isType: \.isRetimeClip, wrap: SpineItem.retimeClip) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.retimeClip) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.retimeClip,
+        wrap: SpineItem.retimeClip
+      )
+    }
   }
 
   /// The `caption` elements in the spine.
   public var captions: [Caption]? {
-    get { getItems(\.caption) }
-    set { setItems(newValue, isType: \.isCaption, wrap: SpineItem.caption) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.caption) }
+    set {
+      OrderedChoiceItems.replace(
+        &items,
+        with: newValue,
+        extract: \.caption,
+        wrap: SpineItem.caption
+      )
+    }
   }
 
   /// The `video` elements in the spine.
   public var video: [Video]? {
-    get { getItems(\.video) }
-    set { setItems(newValue, isType: \.isVideo, wrap: SpineItem.video) }
+    get { OrderedChoiceItems.payloads(in: items, extract: \.video) }
+    set {
+      OrderedChoiceItems.replace(&items, with: newValue, extract: \.video, wrap: SpineItem.video)
+    }
   }
 
   /// Creates a spine with the given ordered items.
@@ -167,39 +240,6 @@ public struct Spine: Codable {
       captions?.map(SpineItem.caption),
       video?.map(SpineItem.video),
     ])
-  }
-
-  private func getItems<T>(_ extract: (SpineItem) -> T?) -> [T]? {
-    let list = items.compactMap(extract)
-    return list.isEmpty ? nil : list
-  }
-
-  private mutating func setItems<T>(
-    _ newValue: [T]?,
-    isType: (SpineItem) -> Bool,
-    wrap: (T) -> SpineItem
-  ) {
-    guard let newValue else {
-      items.removeAll(where: isType)
-      return
-    }
-    var newIndex = 0
-    var indicesToRemove = [Int]()
-    for index in items.indices where isType(items[index]) {
-      if newIndex < newValue.count {
-        items[index] = wrap(newValue[newIndex])
-        newIndex += 1
-      } else {
-        indicesToRemove.append(index)
-      }
-    }
-    for index in indicesToRemove.reversed() {
-      items.remove(at: index)
-    }
-    while newIndex < newValue.count {
-      items.append(wrap(newValue[newIndex]))
-      newIndex += 1
-    }
   }
 }
 

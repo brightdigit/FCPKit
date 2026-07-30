@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 /// An ordered element within a `spine`.
-public enum SpineItem: Codable {
+public enum SpineItem: XMLChoiceCodable {
   /// A `clip` element.
   case clip(Clip)
   /// A `gap` element.
@@ -80,7 +80,11 @@ public enum SpineItem: Codable {
     case video
   }
 
-  private static var fields: [XMLChoiceField<SpineItem, CodingKeys>] {
+  internal typealias ChoiceKey = CodingKeys
+
+  internal static var unsupportedChoice: SpineItem { .unsupported }
+
+  internal static var choiceFields: [XMLChoiceField<SpineItem, CodingKeys>] {
     [
       .init(key: .clip, wrap: SpineItem.clip, unwrap: { $0.clip }),
       .init(key: .gap, wrap: SpineItem.gap, unwrap: { $0.gap }),
@@ -97,26 +101,5 @@ public enum SpineItem: Codable {
       .init(key: .caption, wrap: SpineItem.caption, unwrap: { $0.caption }),
       .init(key: .video, wrap: SpineItem.video, unwrap: { $0.video }),
     ]
-  }
-
-  /// Creates a spine item by decoding from the given decoder.
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    for field in Self.fields where container.contains(field.key) {
-      self = try field.decode(from: container)
-      return
-    }
-    self = .unsupported
-  }
-
-  /// Encodes this spine item into the given encoder.
-  public func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self)
-    for field in Self.fields {
-      guard try field.encode(self, into: &container) else {
-        continue
-      }
-      return
-    }
   }
 }
