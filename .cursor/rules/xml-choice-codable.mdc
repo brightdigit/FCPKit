@@ -22,20 +22,20 @@ if container.contains(.clip) {
 if let clips {
   items.append(contentsOf: clips.map(SpineItem.clip))
 }
-if let gaps {
-  items.append(contentsOf: gaps.map(SpineItem.gap))
-}
 ```
 
 ## Good
 
-Use `XMLChoiceField` (decode/encode) and `OrderedChoiceItems.appending` (seed
-inits), walked with a for-loop:
+- Choice enums conform to `XMLChoiceCodable` and declare `choiceFields`.
+- Seed ordered items with `OrderedChoiceItems.appending`.
+- Typed slices use `OrderedChoiceItems.payloads` / `replace`, or
+  `AnchoredChoiceContainer` for hosts with `anchoredItems`.
+- Do not re-copy Codable loops or get/set helpers per type.
 
 ```swift
-for field in Self.fields where container.contains(field.key) {
-  self = try field.decode(from: container)
-  return
+public enum SpineItem: XMLChoiceCodable {
+  static var choiceFields: [XMLChoiceField<SpineItem, CodingKeys>] { … }
+  static var unsupportedChoice: SpineItem { .unsupported }
 }
 
 self.items = OrderedChoiceItems.appending([

@@ -29,197 +29,72 @@
 
 extension SpineItem {
   internal var clip: Clip? {
-    if case .clip(let val) = self {
-      return val
-    }
+    if case .clip(let val) = self { return val }
     return nil
-  }
-  internal var isClip: Bool {
-    if case .clip = self {
-      return true
-    }
-    return false
   }
 
   internal var gap: Gap? {
-    if case .gap(let val) = self {
-      return val
-    }
+    if case .gap(let val) = self { return val }
     return nil
-  }
-
-  internal var isGap: Bool {
-    if case .gap = self {
-      return true
-    }
-    return false
   }
 
   internal var mcClip: MCClip? {
-    if case .mcClip(let val) = self {
-      return val
-    }
+    if case .mcClip(let val) = self { return val }
     return nil
-  }
-
-  internal var isMCClip: Bool {
-    if case .mcClip = self {
-      return true
-    }
-    return false
   }
 
   internal var refClip: RefClip? {
-    if case .refClip(let val) = self {
-      return val
-    }
+    if case .refClip(let val) = self { return val }
     return nil
-  }
-
-  internal var isRefClip: Bool {
-    if case .refClip = self {
-      return true
-    }
-    return false
   }
 
   internal var syncClip: SyncClip? {
-    if case .syncClip(let val) = self {
-      return val
-    }
+    if case .syncClip(let val) = self { return val }
     return nil
-  }
-
-  internal var isSyncClip: Bool {
-    if case .syncClip = self {
-      return true
-    }
-    return false
   }
 
   internal var assetClip: AssetClip? {
-    if case .assetClip(let val) = self {
-      return val
-    }
+    if case .assetClip(let val) = self { return val }
     return nil
-  }
-
-  internal var isAssetClip: Bool {
-    if case .assetClip = self {
-      return true
-    }
-    return false
   }
 
   internal var title: Title? {
-    if case .title(let val) = self {
-      return val
-    }
+    if case .title(let val) = self { return val }
     return nil
-  }
-
-  internal var isTitle: Bool {
-    if case .title = self {
-      return true
-    }
-    return false
   }
 
   internal var generator: Generator? {
-    if case .generator(let val) = self {
-      return val
-    }
+    if case .generator(let val) = self { return val }
     return nil
-  }
-
-  internal var isGenerator: Bool {
-    if case .generator = self {
-      return true
-    }
-    return false
   }
 
   internal var transition: Transition? {
-    if case .transition(let val) = self {
-      return val
-    }
+    if case .transition(let val) = self { return val }
     return nil
-  }
-
-  internal var isTransition: Bool {
-    if case .transition = self {
-      return true
-    }
-    return false
   }
 
   internal var storyline: Storyline? {
-    if case .storyline(let val) = self {
-      return val
-    }
+    if case .storyline(let val) = self { return val }
     return nil
-  }
-
-  internal var isStoryline: Bool {
-    if case .storyline = self {
-      return true
-    }
-    return false
   }
 
   internal var compoundClip: CompoundClip? {
-    if case .compoundClip(let val) = self {
-      return val
-    }
+    if case .compoundClip(let val) = self { return val }
     return nil
-  }
-
-  internal var isCompoundClip: Bool {
-    if case .compoundClip = self {
-      return true
-    }
-    return false
   }
 
   internal var retimeClip: RetimeClip? {
-    if case .retimeClip(let val) = self {
-      return val
-    }
+    if case .retimeClip(let val) = self { return val }
     return nil
-  }
-
-  internal var isRetimeClip: Bool {
-    if case .retimeClip = self {
-      return true
-    }
-    return false
   }
 
   internal var caption: Caption? {
-    if case .caption(let val) = self {
-      return val
-    }
+    if case .caption(let val) = self { return val }
     return nil
-  }
-
-  internal var isCaption: Bool {
-    if case .caption = self {
-      return true
-    }
-    return false
   }
 
   internal var video: Video? {
-    if case .video(let val) = self {
-      return val
-    }
+    if case .video(let val) = self { return val }
     return nil
-  }
-
-  internal var isVideo: Bool {
-    if case .video = self {
-      return true
-    }
-    return false
   }
 }
