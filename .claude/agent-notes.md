@@ -31,3 +31,5 @@ Running log of user corrections and standing always/never directives for this re
 - 2026-07-29: When verifying Linux/wasm builds in Docker, pass `--platform linux/amd64` to match CI — a Docker tag can ship different Swift builds per architecture, so an arm64 pass proves nothing about CI.
 - 2026-07-29: Foundation and FoundationXML are available on all OSes.
 - 2026-07-29: Do not rely on external host tools like ffprobe for MediaTools; prefer something that can be built into the library.
+
+- 2026-07-30: Never `swiftlint:disable cyclomatic_complexity` for choice Codable or stacked if-let seed chains; use `XMLChoiceField` / `OrderedChoiceItems` + for-loops instead (large if/switch ladders are an anti-pattern).
