@@ -27,7 +27,6 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import Foundation
 
 #if canImport(CoreMedia)

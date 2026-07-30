@@ -2,7 +2,6 @@ import FCPXMLDiff
 import XCTest
 import XMLCoder
 
-@testable import FCPKit
 
 extension FCPXMLDiffTests {
   internal func testReportRenderingIsDeterministic() throws {

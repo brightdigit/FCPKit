@@ -2,7 +2,6 @@ import FCPXMLDiff
 import XCTest
 import XMLCoder
 
-@testable import FCPKit
 
 internal final class FCPXMLDiffTests: XCTestCase {
   internal let parser = XMLTreeParser()
