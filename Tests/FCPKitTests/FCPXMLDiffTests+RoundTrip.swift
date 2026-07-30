@@ -87,7 +87,8 @@ extension FCPXMLDiffTests {
 
   internal func testRoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInput() throws {
     let xml = Data(
-      fixture("RoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInputXml").utf8)
+      fixture("RoundTripAnalyzerReportsUnsupportedContentWithoutRejectingInputXml").utf8
+    )
 
     let report = try FCPXMLRoundTripAnalyzer().analyze(data: xml)
 
@@ -115,10 +116,8 @@ extension FCPXMLDiffTests {
   }
 
   internal func testRoundTripAnalyzerCanCheckAnEditedEncodedDocument() throws {
-    let original = Data(
-      fixture("RoundTripAnalyzerCanCheckAnEditedEncodedDocumentOriginal").utf8)
-    let edited = Data(
-      fixture("RoundTripAnalyzerCanCheckAnEditedEncodedDocumentEdited").utf8)
+    let original = Data(fixture("RoundTripAnalyzerCanCheckAnEditedEncodedDocumentOriginal").utf8)
+    let edited = Data(fixture("RoundTripAnalyzerCanCheckAnEditedEncodedDocumentEdited").utf8)
 
     let report = try FCPXMLRoundTripAnalyzer().analyze(
       originalData: original,

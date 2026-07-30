@@ -29,11 +29,16 @@
 
 import Foundation
 
+/// A single structural difference between two FCPXML trees.
 public struct FCPXMLDifference: Codable, Equatable, Sendable {
+  /// The category of structural change this difference represents.
   public let kind: FCPXMLDifferenceKind
+  /// The XPath-like structural location of the difference.
   public let path: String
+  /// The number of occurrences of this difference at the given path.
   public let count: Int
 
+  /// Creates a difference of the given kind at a structural path with an occurrence count.
   public init(kind: FCPXMLDifferenceKind, path: String, count: Int) {
     self.kind = kind
     self.path = path

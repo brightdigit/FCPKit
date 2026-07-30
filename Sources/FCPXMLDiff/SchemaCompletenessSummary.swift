@@ -30,13 +30,19 @@
 import FCPKit
 import Foundation
 
+/// Aggregated counts of structural content dropped during a round trip.
 public struct SchemaCompletenessSummary: Codable, Equatable, Sendable {
+  /// The total number of dropped element occurrences.
   public let droppedElements: Int
+  /// The total number of dropped attribute occurrences.
   public let droppedAttributes: Int
+  /// The total number of dropped text occurrences.
   public let droppedText: Int
 
+  /// The combined count of all dropped elements, attributes, and text.
   public var total: Int { droppedElements + droppedAttributes + droppedText }
 
+  /// Creates a summary by tallying the dropped-content findings.
   public init(findings: [FCPXMLDifference]) {
     droppedElements = findings.filter { $0.kind == .droppedElement }.reduce(0) { $0 + $1.count }
     droppedAttributes = findings.filter { $0.kind == .droppedAttribute }.reduce(0) { $0 + $1.count }

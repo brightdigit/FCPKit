@@ -29,12 +29,15 @@
 
 import Foundation
 
+/// Diffs two arbitrary FCPXML documents and reports their structural differences.
 public struct RawPairAnalyzer: Sendable {
   private let parser = XMLTreeParser()
   private let engine = FCPXMLDiffEngine()
 
+  /// Creates a raw-pair analyzer.
   public init() {}
 
+  /// Parses and diffs two FCPXML documents, optionally filtering findings by path prefix.
   public func analyze(
     beforeData: Data,
     afterData: Data,

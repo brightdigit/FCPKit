@@ -63,25 +63,17 @@ import XCTest
     }
 
     internal func testTypedMulticamBuilderRoundTripsAndPreservesStructure() throws {
-      let left = VideoMetadata(
-        url: URL(fileURLWithPath: "/Users/Shared/FCPKitMedia/Left.mov"),
+      let left = makeVideoMetadata(
+        path: "/Users/Shared/FCPKitMedia/Left.mov",
         duration: CMTime(value: 240, timescale: 24),
         dimensions: CGSize(width: 1_920, height: 1_080),
-        frameRate: 24,
-        hasVideo: true,
-        hasAudio: true,
-        audioChannels: 2,
-        audioSampleRate: 48_000
+        audioChannels: 2
       )
-      let right = VideoMetadata(
-        url: URL(fileURLWithPath: "/Users/Shared/FCPKitMedia/Right.mov"),
+      let right = makeVideoMetadata(
+        path: "/Users/Shared/FCPKitMedia/Right.mov",
         duration: CMTime(value: 216, timescale: 24),
         dimensions: CGSize(width: 1_280, height: 720),
-        frameRate: 24,
-        hasVideo: true,
-        hasAudio: true,
-        audioChannels: 1,
-        audioSampleRate: 48_000
+        audioChannels: 1
       )
 
       let document = MulticamXMLBuilder().generateMulticamDocument(
@@ -108,6 +100,22 @@ import XCTest
       XCTAssertEqual(rightClip.adjustCrop?.mode, "trim")
       XCTAssertEqual(rightClip.adjustCrop?.trimRect?.left, "21.2963")
 
+      assertMediaAndAssetReferences(in: decoded, left: left, right: right)
+      try assertMulticamAngles(in: decoded)
+
+      XCTAssertFalse(try FCPXMLRoundTripAnalyzer().analyze(data: encoded).hasLoss)
+      XCTAssertFalse(
+        try parser.encodeToString(document).contains("smart-collection"),
+        "Generated multicam XML should omit smart-collection elements"
+      )
+    }
+
+    /// Asserts the angle media and asset resources reference the source videos.
+    private func assertMediaAndAssetReferences(
+      in decoded: FCPXML,
+      left: VideoMetadata,
+      right: VideoMetadata
+    ) {
       XCTAssertEqual(
         decoded.resources?.media?.first(where: { $0.id == "r3" })?.sequence?.spine?.assetClips?
           .first?.ref, "r4"
@@ -124,7 +132,10 @@ import XCTest
         decoded.resources?.assets?.first(where: { $0.id == "r7" })?.mediaRep?.first?.src,
         right.url.absoluteString
       )
+    }
 
+    /// Asserts the multicam resource exposes the expected angles and IDs.
+    private func assertMulticamAngles(in decoded: FCPXML) throws {
       let angles = try XCTUnwrap(
         decoded.resources?.media?.first(where: { $0.id == "r8" })?.multicam?.mcAngles
       )
@@ -135,88 +146,6 @@ import XCTest
       XCTAssertEqual(
         decoded.library?.events?.first?.mcClips?.first?.mcSources?.first?.angleID,
         angleIDs[0]
-      )
-
-      XCTAssertFalse(try FCPXMLRoundTripAnalyzer().analyze(data: encoded).hasLoss)
-      XCTAssertFalse(
-        try parser.encodeToString(document).contains("smart-collection"),
-        "Generated multicam XML should omit smart-collection elements"
-      )
-    }
-    /// Builds the minimal typed project used by the round-trip assertions.
-    internal func makeMinimalProject() -> FCPXML {
-      FCPXML(
-        version: "1.13",
-        resources: Resources(
-          assets: [
-            Asset(
-              id: "r2",
-              name: "Interview",
-              uid: "ASSET-UID",
-              start: "0s",
-              duration: "240/24s",
-              format: "r1",
-              hasVideo: "1",
-              hasAudio: "1",
-              audioChannels: "2",
-              audioRate: "48000",
-              mediaRep: [
-                MediaRep(
-                  kind: "original-media",
-                  sig: "ASSET-SIGNATURE",
-                  src: "file:///Users/Shared/FCPKitMedia/interview.mov"
-                )
-              ]
-            )
-          ],
-          formats: [
-            Format(
-              id: "r1",
-              name: "FFVideoFormat1920x1080p24",
-              frameDuration: "1/24s",
-              width: "1920",
-              height: "1080",
-              colorSpace: "1-1-1 (Rec. 709)"
-            )
-          ]
-        ),
-        library: Library(
-          location: "file:///Users/Shared/FCPKitTypedGeneration.fcpbundle/",
-          events: [
-            Event(
-              name: "Typed Event",
-              uid: "EVENT-UID",
-              projects: [
-                Project(
-                  name: "Typed Project",
-                  uid: "PROJECT-UID",
-                  modDate: "2026-07-17 12:00:00 -0400",
-                  sequence: Sequence(
-                    format: "r1",
-                    duration: "240/24s",
-                    tcStart: "0s",
-                    tcFormat: "NDF",
-                    audioLayout: "stereo",
-                    audioRate: "48k",
-                    spine: Spine(
-                      assetClips: [
-                        AssetClip(
-                          ref: "r2",
-                          name: "Interview",
-                          duration: "240/24s",
-                          start: "0s",
-                          format: "r1",
-                          tcFormat: "NDF",
-                          offset: "0s"
-                        )
-                      ]
-                    )
-                  )
-                )
-              ]
-            )
-          ]
-        )
       )
     }
   }

@@ -19,6 +19,17 @@ internal final class FeaturePairTests: XCTestCase {
     return (document, data)
   }
 
+  private func withFirstAssetClip(
+    _ document: inout FCPXML,
+    _ mutate: (inout AssetClip) -> Void
+  ) throws {
+    var clip = try XCTUnwrap(
+      document.library?.events?[0].projects?[0].sequence?.spine?.assetClips?[0]
+    )
+    mutate(&clip)
+    document.library?.events?[0].projects?[0].sequence?.spine?.assetClips?[0] = clip
+  }
+
   private func assertNoRoundTripLoss(
     _ data: Data, file: StaticString = #filePath, line: UInt = #line
   ) throws {
@@ -98,8 +109,9 @@ internal final class FeaturePairTests: XCTestCase {
     XCTAssertEqual(styleDef.font, "Helvetica")
     XCTAssertEqual(styleDef.fontSize, "63")
 
-    document.library?.events?[0].projects?[0].sequence?.spine?.assetClips?[0].titles?[0]
-      .textStyleDef?[0].textStyle?.fontSize = "72"
+    try withFirstAssetClip(&document) { clip in
+      clip.titles?[0].textStyleDef?[0].textStyle?.fontSize = "72"
+    }
     let encoded = try FCPXMLParser().encode(document)
     let decoded = try FCPXMLParser().parse(data: encoded)
     XCTAssertEqual(

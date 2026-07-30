@@ -30,22 +30,25 @@
 import FCPKit
 import Foundation
 
-private struct FindingKey: Hashable {
-  let kind: FCPXMLDifferenceKind
-  let path: String
-
-  init(_ finding: FCPXMLDifference) {
-    kind = finding.kind
-    path = finding.path
-  }
-}
-
+/// Measures how completely the typed FCPKit schema round-trips real FCPXML files.
 public struct SchemaCompletenessAnalyzer: Sendable {
+  private struct FindingKey: Hashable {
+    let kind: FCPXMLDifferenceKind
+    let path: String
+
+    init(_ finding: FCPXMLDifference) {
+      kind = finding.kind
+      path = finding.path
+    }
+  }
+
   private let treeParser = XMLTreeParser()
   private let diffEngine = FCPXMLDiffEngine()
 
+  /// Creates a schema-completeness analyzer.
   public init() {}
 
+  /// Analyzes the given FCPXML files and returns a schema-completeness report.
   public func analyze(
     fileURLs: [URL],
     relativeTo baseURL: URL? = nil
@@ -70,9 +73,12 @@ public struct SchemaCompletenessAnalyzer: Sendable {
     for finding in files.flatMap(\.findings) {
       aggregate[FindingKey(finding), default: 0] += finding.count
     }
-    let aggregateFindings = aggregate.map { key, count in
-      FCPXMLDifference(kind: key.kind, path: key.path, count: count)
-    }.sorted(by: findingOrdering)
+    let aggregateFindings =
+      aggregate
+      .map { key, count in
+        FCPXMLDifference(kind: key.kind, path: key.path, count: count)
+      }
+      .sorted(by: findingOrdering)
 
     return SchemaCompletenessReport(
       formatVersion: 1,

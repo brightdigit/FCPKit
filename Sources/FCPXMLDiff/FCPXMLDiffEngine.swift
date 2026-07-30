@@ -29,43 +29,22 @@
 
 import Foundation
 
-private struct Inventory {
-  var elements: [String: Int] = [:]
-  var attributes: [String: [String]] = [:]
-  var text: [String: [String]] = [:]
-
-  init(root: XMLTreeNode) {
-    collect(root, parentPath: "")
-  }
-
-  private mutating func collect(_ node: XMLTreeNode, parentPath: String) {
-    let path = "\(parentPath)/\(node.name)"
-    elements[path, default: 0] += 1
-    for (name, value) in node.attributes {
-      attributes["\(path)/@\(name)", default: []].append(value)
-    }
-    if !node.text.isEmpty && node.text != "$opaque" {
-      text["\(path)/#text", default: []].append(node.text)
-    }
-    for child in node.children {
-      collect(child, parentPath: path)
-    }
-  }
-}
-
+/// Compares two FCPXML trees and reports their structural differences.
 public struct FCPXMLDiffEngine: Sendable {
   private let normalizer = FCPXMLNormalizer()
 
+  /// Creates a diff engine.
   public init() {}
 
+  /// Compares two XML trees under the given diff mode and returns the differences found.
   public func compare(
     _ left: XMLTreeNode,
     _ right: XMLTreeNode,
     mode: FCPXMLDiffMode
   ) -> [FCPXMLDifference] {
     let normalized = normalizer.normalizePair(left, right)
-    let leftInventory = Inventory(root: normalized.left)
-    let rightInventory = Inventory(root: normalized.right)
+    let leftInventory = XMLTreeInventory(root: normalized.left)
+    let rightInventory = XMLTreeInventory(root: normalized.right)
 
     let differences: [FCPXMLDifference]
     switch mode {
@@ -77,7 +56,10 @@ public struct FCPXMLDiffEngine: Sendable {
     return differences.sorted(by: differenceOrdering)
   }
 
-  private func completenessDifferences(left: Inventory, right: Inventory) -> [FCPXMLDifference] {
+  private func completenessDifferences(
+    left: XMLTreeInventory,
+    right: XMLTreeInventory
+  ) -> [FCPXMLDifference] {
     var result: [FCPXMLDifference] = []
     appendCountDifferences(
       left.elements,
@@ -103,7 +85,10 @@ public struct FCPXMLDiffEngine: Sendable {
     return result
   }
 
-  private func symmetricDifferences(left: Inventory, right: Inventory) -> [FCPXMLDifference] {
+  private func symmetricDifferences(
+    left: XMLTreeInventory,
+    right: XMLTreeInventory
+  ) -> [FCPXMLDifference] {
     var result: [FCPXMLDifference] = []
     appendCountDifferences(
       left.elements,

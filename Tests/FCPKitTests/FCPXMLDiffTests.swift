@@ -9,10 +9,8 @@ internal final class FCPXMLDiffTests: XCTestCase {
   internal let engine = FCPXMLDiffEngine()
 
   internal func testNormalizerSuppressesChurnAndSurfacesStructuralDelta() throws {
-    let left = try tree(
-      fixture("NormalizerSuppressesChurnAndSurfacesStructuralDeltaLeft"))
-    let right = try tree(
-      fixture("NormalizerSuppressesChurnAndSurfacesStructuralDeltaRight"))
+    let left = try tree(fixture("NormalizerSuppressesChurnAndSurfacesStructuralDeltaLeft"))
+    let right = try tree(fixture("NormalizerSuppressesChurnAndSurfacesStructuralDeltaRight"))
 
     let differences = engine.compare(left, right, mode: .symmetric)
 
@@ -27,10 +25,8 @@ internal final class FCPXMLDiffTests: XCTestCase {
   }
 
   internal func testInsertedResourceDoesNotChangeLaterReferences() throws {
-    let left = try tree(
-      fixture("InsertedResourceDoesNotChangeLaterReferencesLeft"))
-    let right = try tree(
-      fixture("InsertedResourceDoesNotChangeLaterReferencesRight"))
+    let left = try tree(fixture("InsertedResourceDoesNotChangeLaterReferencesLeft"))
+    let right = try tree(fixture("InsertedResourceDoesNotChangeLaterReferencesRight"))
 
     let differences = engine.compare(left, right, mode: .symmetric)
 
@@ -39,10 +35,8 @@ internal final class FCPXMLDiffTests: XCTestCase {
   }
 
   internal func testDeletedAndReorderedResourcesDoNotChangeSurvivingReferences() throws {
-    let left = try tree(
-      fixture("DeletedAndReorderedResourcesDoNotChangeSurvivingReferencesLeft"))
-    let right = try tree(
-      fixture("DeletedAndReorderedResourcesDoNotChangeSurvivingReferencesRight"))
+    let left = try tree(fixture("DeletedAndReorderedResourcesDoNotChangeSurvivingReferencesLeft"))
+    let right = try tree(fixture("DeletedAndReorderedResourcesDoNotChangeSurvivingReferencesRight"))
 
     let differences = engine.compare(left, right, mode: .symmetric)
 
@@ -84,12 +78,13 @@ internal final class FCPXMLDiffTests: XCTestCase {
   }
 
   internal func testOpaqueMaskingKeepsElementPathsAndAttributesSignificant() throws {
-    let left = try tree(
-      fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantLeft"))
+    let left = try tree(fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantLeft"))
     let payloadOnly = try tree(
-      fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantPayloadOnly"))
+      fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantPayloadOnly")
+    )
     let changedAttribute = try tree(
-      fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantChangedAttribute"))
+      fixture("OpaqueMaskingKeepsElementPathsAndAttributesSignificantChangedAttribute")
+    )
 
     XCTAssertEqual(engine.compare(left, payloadOnly, mode: .symmetric), [])
     XCTAssertEqual(
@@ -151,22 +146,5 @@ internal final class FCPXMLDiffTests: XCTestCase {
     case .element: return "element"
     case .both: return "both"
     }
-  }
-}
-
-internal struct TestCodingKey: CodingKey {
-  let stringValue: String
-  let intValue: Int? = nil
-
-  init(_ stringValue: String) {
-    self.stringValue = stringValue
-  }
-
-  init?(stringValue: String) {
-    self.init(stringValue)
-  }
-
-  init?(intValue: Int) {
-    nil
   }
 }

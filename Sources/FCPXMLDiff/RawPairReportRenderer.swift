@@ -29,15 +29,19 @@
 
 import Foundation
 
+/// Renders a raw-pair diff report as JSON or Markdown.
 public struct RawPairReportRenderer: Sendable {
+  /// Creates a renderer.
   public init() {}
 
+  /// Encodes a raw-pair report as pretty-printed JSON data.
   public func jsonData(_ report: RawPairReport) throws -> Data {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
     return try encoder.encode(report)
   }
 
+  /// Renders a raw-pair report as Markdown.
   public func markdown(_ report: RawPairReport) -> String {
     var lines = [
       "# FCPXML Raw-Pair Diff",

@@ -29,9 +29,12 @@
 
 import Foundation
 
+/// Renders a DTD validation report as Markdown or JSON.
 public struct FCPXMLValidationReportRenderer: Sendable {
+  /// Creates a renderer.
   public init() {}
 
+  /// Renders a validation report as Markdown.
   public func markdown(_ report: FCPXMLValidationReport) -> String {
     var lines: [String] = []
     lines.append("# FCPXML DTD Validation")
@@ -56,6 +59,7 @@ public struct FCPXMLValidationReportRenderer: Sendable {
     return lines.joined(separator: "\n")
   }
 
+  /// Encodes a validation report as pretty-printed JSON data.
   public func jsonData(_ report: FCPXMLValidationReport) throws -> Data {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]

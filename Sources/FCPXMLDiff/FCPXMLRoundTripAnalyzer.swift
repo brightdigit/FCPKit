@@ -35,8 +35,10 @@ public struct FCPXMLRoundTripAnalyzer: Sendable {
   private let treeParser = XMLTreeParser()
   private let diffEngine = FCPXMLDiffEngine()
 
+  /// Creates a round-trip analyzer.
   public init() {}
 
+  /// Parses, re-encodes, and diffs the given FCPXML data to report round-trip loss.
   public func analyze(
     data: Data,
     sourcePath: String = "input.fcpxml"
@@ -51,6 +53,7 @@ public struct FCPXMLRoundTripAnalyzer: Sendable {
     )
   }
 
+  /// Diffs already-encoded output against the original data to report round-trip loss.
   public func analyze(
     originalData: Data,
     encodedData: Data,

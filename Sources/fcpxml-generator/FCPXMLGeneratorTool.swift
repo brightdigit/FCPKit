@@ -30,28 +30,21 @@
 import FCPKitMediaTools
 import Foundation
 
-#if !canImport(AVFoundation)
-
-  /// Placeholder entry point for platforms without AVFoundation.
-  ///
-  /// The generator extracts metadata from real media files, which requires AVFoundation.
-  /// The target still builds everywhere so cross-platform CI stays honest.
-  @main
-  internal enum FCPXMLGeneratorTool {
-    internal static func main() {
-      FileHandle.standardError.write(
-        Data(
-          "fcpxml-generator requires AVFoundation and is unavailable on this platform.\n".utf8
-        )
-      )
-      exit(1)
+/// Command-line entry point that generates a multicam FCPXML file from two video files.
+///
+/// The generator extracts metadata from real media files, which requires AVFoundation.
+/// On platforms without it, `main()` prints an error and exits so cross-platform CI stays honest.
+@main
+internal enum FCPXMLGeneratorTool {
+  #if canImport(AVFoundation)
+    /// Validated command-line inputs: the two source videos, output location, and project name.
+    private struct ResolvedInputs {
+      fileprivate let video1: URL
+      fileprivate let video2: URL
+      fileprivate let output: URL
+      fileprivate let projectName: String
     }
-  }
 
-#else
-
-  @main
-  internal enum FCPXMLGeneratorTool {
     internal static func main() async {
       let args = CommandLine.arguments
 
@@ -61,6 +54,25 @@ import Foundation
         return
       }
 
+      let inputs = resolveInputs(args)
+
+      print("🎬 Generating multicam FCPXML...")
+      print("📹 Video 1: \(inputs.video1.lastPathComponent)")
+      print("📹 Video 2: \(inputs.video2.lastPathComponent)")
+      print("📄 Output: \(inputs.output.lastPathComponent)")
+      print("🎯 Project: \(inputs.projectName)")
+      print()
+
+      await generate(
+        video1URL: inputs.video1,
+        video2URL: inputs.video2,
+        outputURL: inputs.output,
+        projectName: inputs.projectName
+      )
+    }
+
+    /// Parses command-line arguments into validated input, output, and project-name values.
+    private static func resolveInputs(_ args: [String]) -> ResolvedInputs {
       // Validate arguments
       guard args.count >= 3 else {
         print("Error: Not enough arguments provided.")
@@ -89,13 +101,21 @@ import Foundation
         exit(1)
       }
 
-      print("🎬 Generating multicam FCPXML...")
-      print("📹 Video 1: \(video1URL.lastPathComponent)")
-      print("📹 Video 2: \(video2URL.lastPathComponent)")
-      print("📄 Output: \(outputURL.lastPathComponent)")
-      print("🎯 Project: \(projectName)")
-      print()
+      return ResolvedInputs(
+        video1: video1URL,
+        video2: video2URL,
+        output: outputURL,
+        projectName: projectName
+      )
+    }
 
+    /// Extracts metadata from both videos, builds the multicam FCPXML, and writes it to disk.
+    private static func generate(
+      video1URL: URL,
+      video2URL: URL,
+      outputURL: URL,
+      projectName: String
+    ) async {
       do {
         // Extract metadata from both videos
         print("📊 Extracting metadata from video files...")
@@ -180,9 +200,18 @@ import Foundation
             • Standard smart collections
 
             The first video is positioned on the left, the second on the right.
-        """)
+        """
+      )
       // swiftlint:enable indentation_width
     }
-  }
-
-#endif
+  #else
+    internal static func main() {
+      FileHandle.standardError.write(
+        Data(
+          "fcpxml-generator requires AVFoundation and is unavailable on this platform.\n".utf8
+        )
+      )
+      exit(1)
+    }
+  #endif
+}

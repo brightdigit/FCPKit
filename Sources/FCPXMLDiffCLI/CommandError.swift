@@ -1,5 +1,5 @@
 //
-//  FCPXMLValidationError.swift
+//  CommandError.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,22 +29,28 @@
 
 import Foundation
 
-/// An error thrown while validating an FCPXML document against a DTD.
-public enum FCPXMLValidationError: Error, LocalizedError, Equatable {
-  case dtdNotFound(version: String)
-  case xmllintUnavailable
-  case invalidDocument(FCPXMLValidationReport)
+internal enum CommandError: Error, LocalizedError {
+  case usage
+  case noInputFiles
+  case missingInput(String)
 
-  /// A human-readable description of the validation error.
-  public var errorDescription: String? {
+  internal var errorDescription: String? {
     switch self {
-    case .dtdNotFound(let version):
-      return "No FCPXML DTD found for version \(version)"
-    case .xmllintUnavailable:
-      return "xmllint is not available on PATH"
-    case .invalidDocument(let report):
-      let details = report.issues.map(\.message).joined(separator: "; ")
-      return "FCPXML failed DTD validation: \(details)"
+    case .usage:
+      // Usage text is laid out for a terminal: the continuation lines are
+      // aligned under the first, and rewrapping them would change what users
+      // see. The layout rules measure this prose as if it were Swift.
+      // swiftlint:disable indentation_width line_length
+      return """
+        usage: fcpxml-diff schema-completeness <file-or-directory>... [--markdown path] [--json path] [--fail-if-total-exceeds count]
+               fcpxml-diff compare <before.fcpxml> <after.fcpxml> [--path structural-path] [--markdown path] [--json path]
+               fcpxml-diff validate <file.fcpxml> [--dtd path] [--markdown path] [--json path]
+        """
+    // swiftlint:enable indentation_width line_length
+    case .noInputFiles:
+      return "no .fcpxml input files found"
+    case .missingInput(let path):
+      return "input does not exist: \(path)"
     }
   }
 }

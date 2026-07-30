@@ -37,6 +37,7 @@ public enum VideoMetadataError: Error, LocalizedError {
   case noAudioTrack
   case extractionFailed(String)
 
+  /// A human-readable description of the metadata extraction error.
   public var errorDescription: String? {
     switch self {
     case .fileNotFound:

@@ -1,5 +1,5 @@
 //
-//  FCPXMLValidationError.swift
+//  FCPXMLDiffCommand.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,24 +27,50 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import FCPXMLDiff
 import Foundation
 
-/// An error thrown while validating an FCPXML document against a DTD.
-public enum FCPXMLValidationError: Error, LocalizedError, Equatable {
-  case dtdNotFound(version: String)
-  case xmllintUnavailable
-  case invalidDocument(FCPXMLValidationReport)
+@main
+internal enum FCPXMLDiffCommand {
+  /// Positional inputs plus the value of each `--flag value` pair.
+  internal struct Options {
+    internal let inputs: [String]
+    internal let values: [String: String]
 
-  /// A human-readable description of the validation error.
-  public var errorDescription: String? {
-    switch self {
-    case .dtdNotFound(let version):
-      return "No FCPXML DTD found for version \(version)"
-    case .xmllintUnavailable:
-      return "xmllint is not available on PATH"
-    case .invalidDocument(let report):
-      let details = report.issues.map(\.message).joined(separator: "; ")
-      return "FCPXML failed DTD validation: \(details)"
+    internal subscript(flag: String) -> String? { values[flag] }
+  }
+
+  internal static func main() {
+    do {
+      let accepted = try run()
+      if !accepted {
+        Foundation.exit(1)
+      }
+    } catch {
+      writeError("fcpxml-diff: \(error.localizedDescription)\n")
+      Foundation.exit(2)
     }
+  }
+
+  private static func run() throws -> Bool {
+    var arguments = Array(CommandLine.arguments.dropFirst())
+    guard let command = arguments.first else { throw CommandError.usage }
+    arguments.removeFirst()
+
+    switch command {
+    case "schema-completeness":
+      return try runSchemaCompleteness(arguments)
+    case "compare":
+      try runCompare(arguments)
+      return true
+    case "validate":
+      return try runValidate(arguments)
+    default:
+      throw CommandError.usage
+    }
+  }
+
+  internal static func writeError(_ message: String) {
+    FileHandle.standardError.write(Data(message.utf8))
   }
 }

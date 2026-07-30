@@ -30,9 +30,14 @@
 import FCPKit
 import Foundation
 
+/// Per-file round-trip loss results within a schema-completeness report.
 public struct SchemaCompletenessFileReport: Codable, Equatable, Sendable {
+  /// The path of the FCPXML document that was analyzed.
   public let path: String
+  /// The FCPXML version declared by the document, if any.
   public let fcpxmlVersion: String?
+  /// Aggregated counts of dropped elements, attributes, and text for this file.
   public let summary: SchemaCompletenessSummary
+  /// The individual structural differences detected for this file.
   public let findings: [FCPXMLDifference]
 }

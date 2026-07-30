@@ -30,13 +30,20 @@
 import FCPKit
 import Foundation
 
+/// Aggregated round-trip loss results across a corpus of FCPXML documents.
 public struct SchemaCompletenessReport: Codable, Equatable, Sendable {
+  /// The version of this report's serialized format.
   public let formatVersion: Int
+  /// Descriptions of the normalization rules applied before comparison.
   public let normalization: [String]
+  /// Loss counts summed across all analyzed files.
   public let totals: SchemaCompletenessSummary
+  /// Structural differences merged and summed across all analyzed files.
   public let aggregateFindings: [FCPXMLDifference]
+  /// The per-file reports that contributed to the aggregate results.
   public let files: [SchemaCompletenessFileReport]
 
+  /// Creates a report from aggregate totals, findings, and per-file results.
   public init(
     formatVersion: Int,
     normalization: [String],

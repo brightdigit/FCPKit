@@ -33,15 +33,23 @@ import Foundation
 /// Reports structural content that the typed model does not retain across an
 /// XML decode/encode cycle.
 public struct FCPXMLRoundTripReport: Codable, Equatable, Sendable {
+  /// The version of this report's serialized format.
   public let formatVersion: Int
+  /// The path of the FCPXML document that was analyzed.
   public let sourcePath: String
+  /// The FCPXML version declared by the source document, if any.
   public let fcpxmlVersion: String?
+  /// Descriptions of the normalization rules applied before comparison.
   public let normalization: [String]
+  /// Aggregated counts of dropped elements, attributes, and text.
   public let summary: SchemaCompletenessSummary
+  /// The individual structural differences detected by the round trip.
   public let findings: [FCPXMLDifference]
 
+  /// Whether the round trip dropped any structural content.
   public var hasLoss: Bool { summary.total > 0 }
 
+  /// Creates a report from round-trip findings for the given source document.
   public init(
     sourcePath: String,
     fcpxmlVersion: String?,

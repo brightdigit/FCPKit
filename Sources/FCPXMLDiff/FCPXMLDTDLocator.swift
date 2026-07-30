@@ -31,12 +31,15 @@ import Foundation
 
 /// Locates Apple FCPXML DTDs bundled with Final Cut Pro when present.
 public struct FCPXMLDTDLocator: Sendable {
+  /// The directories searched for versioned FCPXML DTD files.
   public var searchRoots: [URL]
 
+  /// Creates a locator that searches the given directories for DTD files.
   public init(searchRoots: [URL] = FCPXMLDTDLocator.defaultSearchRoots()) {
     self.searchRoots = searchRoots
   }
 
+  /// Returns the DTD resource directories inside known Final Cut Pro app bundles.
   public static func defaultSearchRoots() -> [URL] {
     let applications = URL(fileURLWithPath: "/Applications", isDirectory: true)
     let names = [
@@ -52,6 +55,7 @@ public struct FCPXMLDTDLocator: Sendable {
     }
   }
 
+  /// Returns the URL of the DTD file for the given FCPXML version, if one exists.
   public func dtdURL(forVersion version: String) -> URL? {
     let sanitized = version.replacingOccurrences(of: ".", with: "_")
     let fileName = "FCPXMLv\(sanitized).dtd"

@@ -29,6 +29,7 @@
 
 import Foundation
 
+/// The category of a structural difference between two FCPXML trees.
 public enum FCPXMLDifferenceKind: String, Codable, CaseIterable, Sendable {
   case droppedElement
   case droppedAttribute

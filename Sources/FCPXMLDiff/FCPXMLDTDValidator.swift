@@ -33,6 +33,7 @@ import Foundation
 public struct FCPXMLDTDValidator: Sendable {
   private let locator: FCPXMLDTDLocator
 
+  /// Creates a validator that resolves DTDs using the given locator.
   public init(locator: FCPXMLDTDLocator = FCPXMLDTDLocator()) {
     self.locator = locator
   }
@@ -41,6 +42,7 @@ public struct FCPXMLDTDValidator: Sendable {
   // WebAssembly, which has no process model.
   #if !os(WASI)
 
+    /// Validates FCPXML data against its declared version's DTD and returns a report.
     public func validate(
       data: Data,
       sourcePath: String = "input.fcpxml",

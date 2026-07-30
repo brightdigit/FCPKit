@@ -57,6 +57,38 @@ import Foundation
       internal let rightSig: String
       internal let leftFormatName: String
       internal let rightFormatName: String
+
+      /// Derives all shared identifiers, names and durations from the two source videos.
+      internal init(leftSideVideo: VideoMetadata, rightSideVideo: VideoMetadata) {
+        currentTime = FCPXMLUtilities.currentTimestamp()
+        let maxDurationTime =
+          leftSideVideo.duration > rightSideVideo.duration
+          ? leftSideVideo.duration
+          : rightSideVideo.duration
+        leftDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration)
+        rightDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration)
+        maxDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(maxDurationTime)
+        leftName = leftSideVideo.url.deletingPathExtension().lastPathComponent
+        rightName = rightSideVideo.url.deletingPathExtension().lastPathComponent
+        bothUID = FCPXMLUtilities.generateUID()
+        leftMediaUID = FCPXMLUtilities.generateUID()
+        rightMediaUID = FCPXMLUtilities.generateUID()
+        multicamUID = FCPXMLUtilities.generateUID()
+        eventUID = FCPXMLUtilities.generateUID()
+        angleBothID = FCPXMLUtilities.generateUID()
+        angleLeftID = FCPXMLUtilities.generateUID()
+        angleRightID = FCPXMLUtilities.generateUID()
+        leftSig = FCPXMLUtilities.generateAssetSignature(from: leftSideVideo)
+        rightSig = FCPXMLUtilities.generateAssetSignature(from: rightSideVideo)
+        leftFormatName = FCPXMLUtilities.generateFormatName(
+          dimensions: leftSideVideo.dimensions,
+          frameRate: leftSideVideo.frameRate
+        )
+        rightFormatName = FCPXMLUtilities.generateFormatName(
+          dimensions: rightSideVideo.dimensions,
+          frameRate: rightSideVideo.frameRate
+        )
+      }
     }
 
     /// Creates a builder.
@@ -103,60 +135,7 @@ import Foundation
       rightSideVideoLeftTrim: Double = 21.2963,
       rightSideVideoOffset: Double = 67.5926
     ) -> FCPXML {
-      let currentTime = FCPXMLUtilities.currentTimestamp()
-      let maxDurationTime =
-        leftSideVideo.duration > rightSideVideo.duration
-        ? leftSideVideo.duration
-        : rightSideVideo.duration
-
-      let leftDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(leftSideVideo.duration)
-      let rightDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(rightSideVideo.duration)
-      let maxDuration = FCPXMLUtilities.cmTimeToFCPXMLDuration(maxDurationTime)
-
-      let leftName = leftSideVideo.url.deletingPathExtension().lastPathComponent
-      let rightName = rightSideVideo.url.deletingPathExtension().lastPathComponent
-
-      let bothUID = FCPXMLUtilities.generateUID()
-      let leftMediaUID = FCPXMLUtilities.generateUID()
-      let rightMediaUID = FCPXMLUtilities.generateUID()
-      let multicamUID = FCPXMLUtilities.generateUID()
-      let eventUID = FCPXMLUtilities.generateUID()
-      let angleBothID = FCPXMLUtilities.generateUID()
-      let angleLeftID = FCPXMLUtilities.generateUID()
-      let angleRightID = FCPXMLUtilities.generateUID()
-
-      let leftSig = FCPXMLUtilities.generateAssetSignature(from: leftSideVideo)
-      let rightSig = FCPXMLUtilities.generateAssetSignature(from: rightSideVideo)
-
-      let leftFormatName = FCPXMLUtilities.generateFormatName(
-        dimensions: leftSideVideo.dimensions,
-        frameRate: leftSideVideo.frameRate
-      )
-      let rightFormatName = FCPXMLUtilities.generateFormatName(
-        dimensions: rightSideVideo.dimensions,
-        frameRate: rightSideVideo.frameRate
-      )
-
-      let context = BuildContext(
-        currentTime: currentTime,
-        leftDuration: leftDuration,
-        rightDuration: rightDuration,
-        maxDuration: maxDuration,
-        leftName: leftName,
-        rightName: rightName,
-        bothUID: bothUID,
-        leftMediaUID: leftMediaUID,
-        rightMediaUID: rightMediaUID,
-        multicamUID: multicamUID,
-        eventUID: eventUID,
-        angleBothID: angleBothID,
-        angleLeftID: angleLeftID,
-        angleRightID: angleRightID,
-        leftSig: leftSig,
-        rightSig: rightSig,
-        leftFormatName: leftFormatName,
-        rightFormatName: rightFormatName
-      )
+      let context = BuildContext(leftSideVideo: leftSideVideo, rightSideVideo: rightSideVideo)
 
       return FCPXML(
         version: FCPXMLVersion.supportedGeneration.rawValue,

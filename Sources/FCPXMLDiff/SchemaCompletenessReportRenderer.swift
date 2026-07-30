@@ -30,15 +30,19 @@
 import FCPKit
 import Foundation
 
+/// Renders a schema-completeness report as JSON or Markdown.
 public struct SchemaCompletenessReportRenderer: Sendable {
+  /// Creates a renderer.
   public init() {}
 
+  /// Encodes a schema-completeness report as pretty-printed JSON data.
   public func jsonData(_ report: SchemaCompletenessReport) throws -> Data {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
     return try encoder.encode(report)
   }
 
+  /// Renders a schema-completeness report as Markdown.
   public func markdown(_ report: SchemaCompletenessReport) -> String {
     var lines = [
       "# FCPKit Schema Completeness Report",

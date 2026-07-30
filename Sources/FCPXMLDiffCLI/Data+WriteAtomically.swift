@@ -1,5 +1,5 @@
 //
-//  FCPXMLValidationError.swift
+//  Data+WriteAtomically.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,22 +29,17 @@
 
 import Foundation
 
-/// An error thrown while validating an FCPXML document against a DTD.
-public enum FCPXMLValidationError: Error, LocalizedError, Equatable {
-  case dtdNotFound(version: String)
-  case xmllintUnavailable
-  case invalidDocument(FCPXMLValidationReport)
-
-  /// A human-readable description of the validation error.
-  public var errorDescription: String? {
-    switch self {
-    case .dtdNotFound(let version):
-      return "No FCPXML DTD found for version \(version)"
-    case .xmllintUnavailable:
-      return "xmllint is not available on PATH"
-    case .invalidDocument(let report):
-      let details = report.issues.map(\.message).joined(separator: "; ")
-      return "FCPXML failed DTD validation: \(details)"
-    }
+extension Data {
+  /// Writes atomically where the platform supports it.
+  ///
+  /// WASI has no temporary files, so `.atomic` is unavailable there and the write
+  /// is direct. Report output is written once at the end of a run, so losing
+  /// atomicity only matters if the process dies mid-write.
+  internal func writeAtomicallyIfSupported(to url: URL) throws {
+    #if os(WASI)
+      try write(to: url)
+    #else
+      try write(to: url, options: .atomic)
+    #endif
   }
 }

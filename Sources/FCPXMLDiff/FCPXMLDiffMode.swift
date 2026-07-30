@@ -29,6 +29,7 @@
 
 import Foundation
 
+/// The comparison strategy used when diffing two FCPXML trees.
 public enum FCPXMLDiffMode: Sendable {
   case completeness
   case symmetric

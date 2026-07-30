@@ -29,12 +29,18 @@
 
 import Foundation
 
+/// A lightweight, mutable representation of an XML element and its subtree.
 public struct XMLTreeNode: Equatable, Sendable {
+  /// The element name.
   public var name: String
+  /// The element's attributes keyed by attribute name.
   public var attributes: [String: String]
+  /// The concatenated, trimmed text content of the element.
   public var text: String
+  /// The child elements in document order.
   public var children: [XMLTreeNode]
 
+  /// Creates a node with the given name, attributes, text, and children.
   public init(
     name: String,
     attributes: [String: String] = [:],

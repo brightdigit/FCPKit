@@ -30,14 +30,18 @@
 import FCPKit
 import Foundation
 
+/// A threshold that decides whether a schema-completeness report is acceptable.
 public struct SchemaCompletenessAcceptance: Equatable, Sendable {
+  /// The maximum total structural loss a report may contain and still be accepted.
   public let maximumTotalLoss: Int
 
+  /// Creates an acceptance threshold with the given non-negative maximum total loss.
   public init(maximumTotalLoss: Int) {
     precondition(maximumTotalLoss >= 0, "maximumTotalLoss must not be negative")
     self.maximumTotalLoss = maximumTotalLoss
   }
 
+  /// Returns whether the report's total structural loss is within the threshold.
   public func accepts(_ report: SchemaCompletenessReport) -> Bool {
     report.totals.total <= maximumTotalLoss
   }

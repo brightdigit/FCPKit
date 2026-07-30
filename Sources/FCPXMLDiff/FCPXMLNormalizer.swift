@@ -29,7 +29,9 @@
 
 import Foundation
 
+/// Normalizes volatile FCPXML content so trees can be compared structurally.
 public struct FCPXMLNormalizer: Sendable {
+  /// Human-readable descriptions of the normalization rules applied before diffing.
   public static let rules = [
     "Resource identifiers matching r1...rN are replaced with pair-stable symbolic references.",
     "uid, sig, and modDate attribute values are replaced with a volatile placeholder.",
@@ -37,8 +39,10 @@ public struct FCPXMLNormalizer: Sendable {
     "Formatting-only whitespace and attribute ordering are ignored.",
   ]
 
+  /// Creates a normalizer.
   public init() {}
 
+  /// Normalizes two trees together, keeping resource references pair-stable.
   public func normalizePair(
     _ left: XMLTreeNode,
     _ right: XMLTreeNode

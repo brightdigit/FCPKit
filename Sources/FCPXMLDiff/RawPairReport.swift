@@ -29,16 +29,26 @@
 
 import Foundation
 
+/// The structural differences found between two arbitrary FCPXML documents.
 public struct RawPairReport: Codable, Equatable, Sendable {
+  /// The version of this report's serialized format.
   public let formatVersion: Int
+  /// The path of the first ("before") document.
   public let beforePath: String
+  /// The path of the second ("after") document.
   public let afterPath: String
+  /// The FCPXML version declared by the before document, if any.
   public let beforeFCPXMLVersion: String?
+  /// The FCPXML version declared by the after document, if any.
   public let afterFCPXMLVersion: String?
+  /// The structural path prefix used to filter findings, if any.
   public let pathFilter: String?
+  /// Descriptions of the normalization rules applied before comparison.
   public let normalization: [String]
+  /// The structural differences detected between the two documents.
   public let findings: [FCPXMLDifference]
 
+  /// Creates a report describing the differences between two documents.
   public init(
     beforePath: String,
     afterPath: String,

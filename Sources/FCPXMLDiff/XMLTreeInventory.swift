@@ -1,5 +1,5 @@
 //
-//  FCPXMLValidationError.swift
+//  XMLTreeInventory.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,22 +29,31 @@
 
 import Foundation
 
-/// An error thrown while validating an FCPXML document against a DTD.
-public enum FCPXMLValidationError: Error, LocalizedError, Equatable {
-  case dtdNotFound(version: String)
-  case xmllintUnavailable
-  case invalidDocument(FCPXMLValidationReport)
+/// A flattened path-indexed inventory of the elements, attributes, and text in an XML tree.
+internal struct XMLTreeInventory {
+  /// Occurrence counts of each element, keyed by its slash-separated path.
+  internal var elements: [String: Int] = [:]
+  /// Attribute values collected per attribute path.
+  internal var attributes: [String: [String]] = [:]
+  /// Text content collected per text-node path.
+  internal var text: [String: [String]] = [:]
 
-  /// A human-readable description of the validation error.
-  public var errorDescription: String? {
-    switch self {
-    case .dtdNotFound(let version):
-      return "No FCPXML DTD found for version \(version)"
-    case .xmllintUnavailable:
-      return "xmllint is not available on PATH"
-    case .invalidDocument(let report):
-      let details = report.issues.map(\.message).joined(separator: "; ")
-      return "FCPXML failed DTD validation: \(details)"
+  /// Creates an inventory by walking the tree rooted at `root`.
+  internal init(root: XMLTreeNode) {
+    collect(root, parentPath: "")
+  }
+
+  private mutating func collect(_ node: XMLTreeNode, parentPath: String) {
+    let path = "\(parentPath)/\(node.name)"
+    elements[path, default: 0] += 1
+    for (name, value) in node.attributes {
+      attributes["\(path)/@\(name)", default: []].append(value)
+    }
+    if !node.text.isEmpty && node.text != "$opaque" {
+      text["\(path)/#text", default: []].append(node.text)
+    }
+    for child in node.children {
+      collect(child, parentPath: path)
     }
   }
 }

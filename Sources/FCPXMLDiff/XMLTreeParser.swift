@@ -33,71 +33,12 @@ import Foundation
   import FoundationXML
 #endif
 
-private final class TreeParserDelegate: NSObject, XMLParserDelegate {
-  private struct Builder {
-    var name: String
-    var attributes: [String: String]
-    var text = ""
-    var children: [XMLTreeNode] = []
-
-    func build() -> XMLTreeNode {
-      XMLTreeNode(
-        name: name,
-        attributes: attributes,
-        text: text.trimmingCharacters(in: .whitespacesAndNewlines),
-        children: children
-      )
-    }
-  }
-
-  private var stack: [Builder] = []
-  fileprivate var root: XMLTreeNode?
-
-  func parser(
-    _ parser: XMLParser,
-    didStartElement elementName: String,
-    namespaceURI: String?,
-    qualifiedName qName: String?,
-    attributes attributeDict: [String: String] = [:]
-  ) {
-    stack.append(Builder(name: qName ?? elementName, attributes: attributeDict))
-  }
-
-  func parser(_ parser: XMLParser, foundCharacters string: String) {
-    guard !stack.isEmpty else {
-      return
-    }
-    stack[stack.count - 1].text += string
-  }
-
-  func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
-    guard !stack.isEmpty, let string = String(data: CDATABlock, encoding: .utf8) else {
-      return
-    }
-    stack[stack.count - 1].text += string
-  }
-
-  func parser(
-    _ parser: XMLParser,
-    didEndElement elementName: String,
-    namespaceURI: String?,
-    qualifiedName qName: String?
-  ) {
-    guard let builder = stack.popLast() else {
-      return
-    }
-    let node = builder.build()
-    if stack.isEmpty {
-      root = node
-    } else {
-      stack[stack.count - 1].children.append(node)
-    }
-  }
-}
-
+/// Parses raw XML data into an `XMLTreeNode` tree.
 public struct XMLTreeParser: Sendable {
+  /// Creates an XML tree parser.
   public init() {}
 
+  /// Parses the given XML data and returns the root tree node.
   public func parse(_ data: Data) throws -> XMLTreeNode {
     let delegate = TreeParserDelegate()
     let parser = XMLParser(data: data)

@@ -29,10 +29,12 @@
 
 import Foundation
 
+/// An error thrown while parsing XML data into an `XMLTreeNode` tree.
 public enum XMLTreeParserError: Error, LocalizedError {
   case invalidDocument(String)
   case missingRootElement
 
+  /// A human-readable description of the parsing error.
   public var errorDescription: String? {
     switch self {
     case .invalidDocument(let message):

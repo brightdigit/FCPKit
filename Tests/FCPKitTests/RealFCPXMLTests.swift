@@ -178,32 +178,8 @@ internal final class RealFCPXMLTests: XCTestCase {
     XCTAssertTrue(angleNames.contains("Leo"))
     XCTAssertTrue(angleNames.contains("Rachel"))
 
-    // Test library event
-    let events = try XCTUnwrap(library.events)
-    XCTAssertFalse(events.isEmpty)
-
-    let firstEvent = try XCTUnwrap(events.first)
-    XCTAssertEqual(firstEvent.name, "EAS-202")
-
-    // Check ref-clips in event
-    let refClips = try XCTUnwrap(firstEvent.refClips)
-    XCTAssertEqual(refClips.count, 3)  // Both, Leo, Rachel
-
-    let eventMulticam = try XCTUnwrap(firstEvent.mcClips?.first)
-    XCTAssertEqual(eventMulticam.name, "Multicam Clip")
-    XCTAssertEqual(eventMulticam.mcSources?.first?.angleID, "lecA7YF4SLCbdYmLe/clVg")
-    XCTAssertEqual(eventMulticam.mcSources?.first?.srcEnable, "all")
-
-    // Test assets
-    let assets = try XCTUnwrap(resources.assets)
-    XCTAssertEqual(assets.count, 2)  // Leo and Rachel video assets
-
-    // Verify both assets have media representations
-    for asset in assets {
-      XCTAssertNotNil(asset.mediaRep)
-      XCTAssertEqual(asset.hasVideo, "1")
-      XCTAssertEqual(asset.hasAudio, "1")
-    }
+    // Test library event, ref-clips, multicam clip, and assets
+    try assertBothMulticamLibrary(library, resources: resources)
 
     print("✅ Successfully parsed Both-Multicam FCPXML file with version \(fcpxml.version)")
     print("✅ Found \(mediaElements.count) media elements including multicam")

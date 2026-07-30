@@ -4,15 +4,8 @@ import XCTest
 
 extension RealFCPXMLTests {
   internal func testCrossDissolveCanBeReadMutatedAndRoundTripped() throws {
-    let fileURL = try XCTUnwrap(
-      Bundle.module.url(
-        forResource: "UntitledXML",
-        withExtension: "fcpxml",
-        subdirectory: "TestData"
-      )
-    )
     let parser = FCPXMLParser()
-    var document = try parser.parse(fileURL: fileURL)
+    var document = try loadUntitledDocument()
     let originalTransition = try crossDissolve(in: document)
     let videoFilter = try XCTUnwrap(originalTransition.filterVideo?.first)
     let audioFilter = try XCTUnwrap(originalTransition.filterAudio?.first)
@@ -33,12 +26,13 @@ extension RealFCPXMLTests {
     let mediaIndex = try XCTUnwrap(
       document.resources?.media?.firstIndex { $0.name == "Music Intro" }
     )
+    let transition = document.resources?.media?[mediaIndex].sequence?.spine?.transitions?[0]
     let amountIndex = try XCTUnwrap(
-      document.resources?.media?[mediaIndex].sequence?.spine?.transitions?[0]
-        .filterVideo?[0].param?.firstIndex { $0.name == "Amount" }
+      transition?.filterVideo?[0].param?.firstIndex { $0.name == "Amount" }
     )
-    document.resources?.media?[mediaIndex].sequence?.spine?.transitions?[0]
-      .filterVideo?[0].param?[amountIndex].value = "65"
+    try withSpine(in: &document, mediaAt: mediaIndex) {
+      $0.transitions?[0].filterVideo?[0].param?[amountIndex].value = "65"
+    }
 
     let encoded = try parser.encode(document)
     let reparsed = try parser.parse(data: encoded)
@@ -52,15 +46,8 @@ extension RealFCPXMLTests {
   }
 
   internal func testSharedParametersAnimationsAndFadesCanBeReadAndMutated() throws {
-    let fileURL = try XCTUnwrap(
-      Bundle.module.url(
-        forResource: "UntitledXML",
-        withExtension: "fcpxml",
-        subdirectory: "TestData"
-      )
-    )
     let parser = FCPXMLParser()
-    var document = try parser.parse(fileURL: fileURL)
+    var document = try loadUntitledDocument()
     let assetClips =
       document.resources?.media?.flatMap {
         $0.sequence?.spine?.assetClips ?? []
@@ -97,8 +84,9 @@ extension RealFCPXMLTests {
     XCTAssertEqual(volume.fadeOut?.duration, "1947511/720000s")
     XCTAssertEqual(volume.keyframeAnimation?.keyframes?.count, 3)
 
-    document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
-      .adjustVolume?.param?[0].keyframeAnimation?.keyframes?[2].value = "-3dB"
+    try withAssetClip(in: &document, mediaAt: mediaIndex, at: assetIndex) {
+      $0.adjustVolume?.param?[0].keyframeAnimation?.keyframes?[2].value = "-3dB"
+    }
     let reparsed = try parser.parse(data: parser.encode(document))
     let changedVolume = try XCTUnwrap(
       reparsed.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
@@ -112,15 +100,8 @@ extension RealFCPXMLTests {
   }
 
   internal func testTitleTextAndStyleCanBeMutatedWithoutBreakingReferences() throws {
-    let fileURL = try XCTUnwrap(
-      Bundle.module.url(
-        forResource: "UntitledXML",
-        withExtension: "fcpxml",
-        subdirectory: "TestData"
-      )
-    )
     let parser = FCPXMLParser()
-    var document = try parser.parse(fileURL: fileURL)
+    var document = try loadUntitledDocument()
     let mediaIndex = try XCTUnwrap(
       document.resources?.media?.firstIndex { media in
         media.sequence?.spine?.assetClips?.contains {
@@ -133,14 +114,11 @@ extension RealFCPXMLTests {
         $0.titles?.contains { $0.name?.contains("SyntaxKit") == true } == true
       }
     )
+    let clips = document.resources?.media?[mediaIndex].sequence?.spine?.assetClips
     let titleIndex = try XCTUnwrap(
-      document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
-        .titles?.firstIndex { $0.name?.contains("SyntaxKit") == true }
+      clips?[assetIndex].titles?.firstIndex { $0.name?.contains("SyntaxKit") == true }
     )
-    let originalTitle = try XCTUnwrap(
-      document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
-        .titles?[titleIndex]
-    )
+    let originalTitle = try XCTUnwrap(clips?[assetIndex].titles?[titleIndex])
 
     XCTAssertEqual(originalTitle.text?.flatMap { $0.textStyle ?? [] }.map(\.ref), ["ts1", "ts2"])
     XCTAssertEqual(originalTitle.textStyleDef?.map(\.id), ["ts1", "ts2"])
@@ -149,16 +127,14 @@ extension RealFCPXMLTests {
     XCTAssertEqual(originalTitle.textStyleDef?.first?.textStyle?.bold, "1")
     XCTAssertEqual(originalTitle.textStyleDef?.first?.textStyle?.kerning, "-1.7751")
 
-    document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
-      .titles?[titleIndex].text?[0].textStyle?[0].content = "FCPKit"
-    document.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
-      .titles?[titleIndex].textStyleDef?[0].textStyle?.fontColor = "1 0.5 0 1"
+    try withAssetClip(in: &document, mediaAt: mediaIndex, at: assetIndex) {
+      $0.titles?[titleIndex].text?[0].textStyle?[0].content = "FCPKit"
+      $0.titles?[titleIndex].textStyleDef?[0].textStyle?.fontColor = "1 0.5 0 1"
+    }
 
     let reparsed = try parser.parse(data: parser.encode(document))
-    let changedTitle = try XCTUnwrap(
-      reparsed.resources?.media?[mediaIndex].sequence?.spine?.assetClips?[assetIndex]
-        .titles?[titleIndex]
-    )
+    let changedClips = reparsed.resources?.media?[mediaIndex].sequence?.spine?.assetClips
+    let changedTitle = try XCTUnwrap(changedClips?[assetIndex].titles?[titleIndex])
 
     XCTAssertEqual(changedTitle.text?[0].textStyle?[0].content, "FCPKit")
     XCTAssertEqual(changedTitle.textStyleDef?[0].textStyle?.fontColor, "1 0.5 0 1")
@@ -169,15 +145,8 @@ extension RealFCPXMLTests {
   }
 
   internal func testNestedTimelineMutationPreservesSiblingReferencesAndTiming() throws {
-    let fileURL = try XCTUnwrap(
-      Bundle.module.url(
-        forResource: "UntitledXML",
-        withExtension: "fcpxml",
-        subdirectory: "TestData"
-      )
-    )
     let parser = FCPXMLParser()
-    var document = try parser.parse(fileURL: fileURL)
+    var document = try loadUntitledDocument()
     let mediaIndex = try XCTUnwrap(
       document.resources?.media?.firstIndex { media in
         media.sequence?.spine?.refClips?.contains { $0.refClips?.isEmpty == false } == true
@@ -195,8 +164,9 @@ extension RealFCPXMLTests {
     let originalReferences = children.map(\.ref)
     let originalTiming = children.map { [$0.offset, $0.start, $0.duration] }
 
-    document.resources?.media?[mediaIndex].sequence?.spine?.refClips?[parentIndex]
-      .refClips?[childIndex].adjustTransform?.position = "10 20"
+    try withSpine(in: &document, mediaAt: mediaIndex) {
+      $0.refClips?[parentIndex].refClips?[childIndex].adjustTransform?.position = "10 20"
+    }
     let reparsed = try parser.parse(data: parser.encode(document))
     let changedChildren = try XCTUnwrap(
       reparsed.resources?.media?[mediaIndex].sequence?.spine?.refClips?[parentIndex].refClips

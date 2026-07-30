@@ -38,7 +38,10 @@ import Foundation
 /// The trailing newline every text file ends with is stripped, so the returned
 /// string matches what the equivalent multi-line string literal produced.
 ///
-/// - Parameter name: Fixture file name without the `.fcpxml` extension.
+/// - Parameters:
+///   - name: Fixture file name without the `.fcpxml` extension.
+///   - file: Caller location used in the failure message.
+///   - line: Caller location used in the failure message.
 /// - Returns: The fixture's contents.
 internal func fixture(
   _ name: String,

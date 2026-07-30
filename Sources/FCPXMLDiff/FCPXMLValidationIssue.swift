@@ -29,10 +29,14 @@
 
 import Foundation
 
+/// A single issue reported while validating an FCPXML document against a DTD.
 public struct FCPXMLValidationIssue: Codable, Equatable, Sendable {
+  /// The coarse structural path of the offending element, when it can be inferred.
   public let path: String?
+  /// The raw validator message describing the issue.
   public let message: String
 
+  /// Creates an issue with an optional structural path and a validator message.
   public init(path: String?, message: String) {
     self.path = path
     self.message = message

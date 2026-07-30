@@ -70,10 +70,8 @@ extension FCPXMLDiffTests {
   }
 
   internal func testRawPairReportsAddedRemovedAndChangedStructures() throws {
-    let before = Data(
-      fixture("RawPairReportsAddedRemovedAndChangedStructuresBefore").utf8)
-    let after = Data(
-      fixture("RawPairReportsAddedRemovedAndChangedStructuresAfter").utf8)
+    let before = Data(fixture("RawPairReportsAddedRemovedAndChangedStructuresBefore").utf8)
+    let after = Data(fixture("RawPairReportsAddedRemovedAndChangedStructuresAfter").utf8)
 
     let report = try RawPairAnalyzer().analyze(beforeData: before, afterData: after)
 
@@ -95,12 +93,10 @@ extension FCPXMLDiffTests {
 
   internal func testRawPairNormalizationIdentityFilteringAndRenderingAreDeterministic() throws {
     let before = Data(
-      "<fcpxml version=\"1.13\" uid=\"old\"><resources><format id=\"r1\"/></resources><library format=\"r1\"><marker value=\"old\"/></library></fcpxml>"
-        .utf8
+      fixture("RawPairNormalizationIdentityFilteringAndRenderingAreDeterministicBefore").utf8
     )
     let after = Data(
-      "<fcpxml version=\"1.13\" uid=\"new\"><resources><format id=\"r9\"/></resources><library format=\"r9\"><marker value=\"new\"/></library></fcpxml>"
-        .utf8
+      fixture("RawPairNormalizationIdentityFilteringAndRenderingAreDeterministicAfter").utf8
     )
     let analyzer = RawPairAnalyzer()
     let report = try analyzer.analyze(
