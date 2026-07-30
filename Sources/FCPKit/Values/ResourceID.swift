@@ -37,15 +37,15 @@ public struct ResourceID: XMLAttributeValue {
   public let rawValue: String
 
   /// The FCPXML attribute string for this identifier.
-  public var fcpxmlString: String {
+  public var description: String {
     rawValue
   }
 
   /// Creates an identifier from a non-empty string without whitespace.
-  public init?(fcpxmlString: String) {
-    guard !fcpxmlString.isEmpty, !fcpxmlString.contains(where: \.isWhitespace) else {
+  public init?(_ description: String) {
+    guard !description.isEmpty, !description.contains(where: \.isWhitespace) else {
       return nil
     }
-    self.rawValue = fcpxmlString
+    self.rawValue = description
   }
 }

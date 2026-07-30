@@ -34,32 +34,32 @@ import Testing
 internal struct ResourceRefTests {
   @Test
   internal func resourceIDRoundTripsIdentifiers() throws {
-    let identifier = try #require(ResourceID(fcpxmlString: "r1"))
+    let identifier = try #require(ResourceID("r1"))
     #expect(identifier.rawValue == "r1")
-    #expect(identifier.fcpxmlString == "r1")
+    #expect(identifier.description == "r1")
   }
 
   @Test(arguments: ["", "r 1", " r1", "r1 ", "\tr1"])
   internal func resourceIDRejectsEmptyOrWhitespace(_ raw: String) {
-    #expect(ResourceID(fcpxmlString: raw) == nil)
+    #expect(ResourceID(raw) == nil)
   }
 
   @Test
   internal func typedReferencesRoundTripAnyIdentifier() throws {
-    let asset = try #require(ResourceRef<AssetKind>(fcpxmlString: "r2"))
+    let asset = try #require(ResourceRef<AssetKind>("r2"))
     #expect(asset.rawValue == "r2")
-    #expect(asset.fcpxmlString == "r2")
+    #expect(asset.description == "r2")
 
-    let format = try #require(ResourceRef<FormatKind>(fcpxmlString: "r1"))
-    let effect = try #require(ResourceRef<EffectKind>(fcpxmlString: "r3"))
-    let media = try #require(ResourceRef<MediaKind>(fcpxmlString: "not-an-r-id"))
-    #expect(format.fcpxmlString == "r1")
-    #expect(effect.fcpxmlString == "r3")
-    #expect(media.fcpxmlString == "not-an-r-id")
+    let format = try #require(ResourceRef<FormatKind>("r1"))
+    let effect = try #require(ResourceRef<EffectKind>("r3"))
+    let media = try #require(ResourceRef<MediaKind>("not-an-r-id"))
+    #expect(format.description == "r1")
+    #expect(effect.description == "r3")
+    #expect(media.description == "not-an-r-id")
   }
 
   @Test(arguments: ["", "r 1"])
   internal func typedReferencesRejectEmptyOrWhitespace(_ raw: String) {
-    #expect(ResourceRef<AssetKind>(fcpxmlString: raw) == nil)
+    #expect(ResourceRef<AssetKind>(raw) == nil)
   }
 }

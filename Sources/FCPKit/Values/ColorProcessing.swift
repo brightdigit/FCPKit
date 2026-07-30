@@ -29,9 +29,8 @@
 
 /// The `colorProcessing` attribute: a library or project's color processing pipeline.
 ///
-/// DTD vocabulary: `(standard | wide | wide-hdr)`. Out-of-vocabulary values decode
-/// as ``unknown(_:)`` by default; see ``XMLEnumDecodingMode`` for strict decoding.
-public enum ColorProcessing: XMLAttributeEnum {
+/// DTD vocabulary: `(standard | wide | wide-hdr)`. Out-of-vocabulary values fail decoding.
+public enum ColorProcessing: String, XMLAttributeCase {
   /// Standard-gamut processing, written `"standard"`.
   case standard
 
@@ -39,28 +38,15 @@ public enum ColorProcessing: XMLAttributeEnum {
   case wide
 
   /// Wide-gamut HDR processing, written `"wide-hdr"`.
-  case wideHDR
+  case wideHDR = "wide-hdr"
 
-  /// An out-of-vocabulary value preserved for round-tripping.
-  case unknown(String)
-
-  /// The FCPXML attribute string for this value.
-  public var fcpxmlString: String {
-    switch self {
-    case .standard: "standard"
-    case .wide: "wide"
-    case .wideHDR: "wide-hdr"
-    case .unknown(let rawValue): rawValue
-    }
+  /// Decodes from a single-value FCPXML attribute string via ``allCases`` lookup.
+  public init(from decoder: any Decoder) throws {
+    self = try Self.decodeXMLAttribute(from: decoder)
   }
 
-  /// Creates a value from the known `colorProcessing` vocabulary.
-  public static func known(fcpxmlString: String) -> ColorProcessing? {
-    switch fcpxmlString {
-    case "standard": .standard
-    case "wide": .wide
-    case "wide-hdr": .wideHDR
-    default: nil
-    }
+  /// Encodes as a single-value FCPXML attribute string.
+  public func encode(to encoder: any Encoder) throws {
+    try encodeXMLAttribute(to: encoder)
   }
 }

@@ -59,7 +59,7 @@ public struct FCPTime: XMLAttributeValue, Comparable {
   public let form: Form
 
   /// The FCPXML attribute string, rendered per ``form`` and never as decimal seconds.
-  public var fcpxmlString: String {
+  public var description: String {
     switch form {
     case .whole: "\(numerator)s"
     case .rational: "\(numerator)/\(denominator)s"
@@ -88,8 +88,8 @@ public struct FCPTime: XMLAttributeValue, Comparable {
   /// Legal forms are `-?digits s` and `-?digits / digits s` with a positive
   /// denominator, such as `"5s"`, `"-3600s"`, or `"1001/30000s"`. Decimal
   /// seconds, whitespace, explicit plus signs, and zero denominators are illegal.
-  public init?(fcpxmlString: String) {
-    guard fcpxmlString.hasSuffix("s"), let parsed = Self.parse(body: fcpxmlString.dropLast())
+  public init?(_ description: String) {
+    guard description.hasSuffix("s"), let parsed = Self.parse(body: description.dropLast())
     else {
       return nil
     }

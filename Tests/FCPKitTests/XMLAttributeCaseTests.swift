@@ -1,5 +1,5 @@
 //
-//  XMLAttributeEnumTests.swift
+//  XMLAttributeCaseTests.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -33,7 +33,7 @@ import Testing
 import XMLCoder
 
 @Suite
-internal struct XMLAttributeEnumTests {
+internal struct XMLAttributeCaseTests {
   internal struct SequenceFixture: Codable {
     internal var tcFormat: TCFormat
   }
@@ -58,7 +58,9 @@ internal struct XMLAttributeEnumTests {
 
   @Test
   internal func srcEnableKnownValuesRoundTrip() {
-    expectRoundTrip([(SrcEnable.all, "all"), (.audio, "audio"), (.video, "video")])
+    expectRoundTrip([
+      (SrcEnable.all, "all"), (.audio, "audio"), (.video, "video"), (.none, "none"),
+    ])
   }
 
   @Test
@@ -83,48 +85,38 @@ internal struct XMLAttributeEnumTests {
   }
 
   @Test
-  internal func unknownValuesPassThrough() {
-    let format = TCFormat(fcpxmlString: "PAL")
-    #expect(format == .unknown("PAL"))
-    #expect(format.fcpxmlString == "PAL")
-    #expect(format.isUnknown)
-
-    let rate = AudioRate(fcpxmlString: "384k")
-    #expect(rate == .unknown("384k"))
-    #expect(rate.fcpxmlString == "384k")
+  internal func unknownValuesFailInit() {
+    #expect(TCFormat("PAL") == nil)
+    #expect(AudioRate("384k") == nil)
+    #expect(SrcEnable("maybe") == nil)
   }
 
   @Test
-  internal func passThroughDecodingPreservesUnknownValues() throws {
-    let xml = Data(#"<sequence tcFormat="PAL"/>"#.utf8)
-    let decoded = try XMLDecoder().decode(SequenceFixture.self, from: xml)
-    #expect(decoded.tcFormat == .unknown("PAL"))
-  }
-
-  @Test
-  internal func strictDecodingRejectsUnknownValues() {
-    let decoder = XMLDecoder()
-    decoder.userInfo[XMLEnumDecodingMode.userInfoKey] = XMLEnumDecodingMode.strict
+  internal func decodingRejectsUnknownValues() {
     let xml = Data(#"<sequence tcFormat="PAL"/>"#.utf8)
     #expect(throws: DecodingError.self) {
-      _ = try decoder.decode(SequenceFixture.self, from: xml)
+      _ = try XMLDecoder().decode(SequenceFixture.self, from: xml)
     }
   }
 
   @Test
-  internal func strictDecodingAcceptsKnownValues() throws {
-    let decoder = XMLDecoder()
-    decoder.userInfo[XMLEnumDecodingMode.userInfoKey] = XMLEnumDecodingMode.strict
+  internal func decodingAcceptsKnownValues() throws {
     let xml = Data(#"<sequence tcFormat="NDF"/>"#.utf8)
-    let decoded = try decoder.decode(SequenceFixture.self, from: xml)
+    let decoded = try XMLDecoder().decode(SequenceFixture.self, from: xml)
     #expect(decoded.tcFormat == .nonDropFrame)
   }
 
-  private func expectRoundTrip<Value: XMLAttributeEnum>(_ pairs: [(Value, String)]) {
+  @Test
+  internal func allCasesMatchDTDVocabulary() {
+    #expect(Set(TCFormat.allCases.map(\.rawValue)) == ["DF", "NDF"])
+    #expect(Set(SrcEnable.allCases.map(\.rawValue)) == ["all", "audio", "video", "none"])
+  }
+
+  private func expectRoundTrip<Value: XMLAttributeCase>(_ pairs: [(Value, String)]) {
     for (value, raw) in pairs {
-      #expect(Value.known(fcpxmlString: raw) == value)
-      #expect(value.fcpxmlString == raw)
-      #expect(!value.isUnknown)
+      #expect(Value(raw) == value)
+      #expect(value.rawValue == raw)
+      #expect(value.description == raw)
     }
   }
 }

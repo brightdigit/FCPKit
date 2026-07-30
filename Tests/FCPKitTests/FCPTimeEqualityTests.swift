@@ -34,54 +34,54 @@ import Testing
 internal struct FCPTimeEqualityTests {
   @Test
   internal func equalityIgnoresRenderingForm() throws {
-    let unreduced = try #require(FCPTime(fcpxmlString: "22800/2400s"))
-    let reduced = try #require(FCPTime(fcpxmlString: "19/2s"))
+    let unreduced = try #require(FCPTime("22800/2400s"))
+    let reduced = try #require(FCPTime("19/2s"))
     let scaled = FCPTime(numerator: 95, denominator: 10)
     #expect(unreduced == reduced)
     #expect(unreduced == scaled)
 
-    let whole = try #require(FCPTime(fcpxmlString: "5s"))
-    let fraction = try #require(FCPTime(fcpxmlString: "5/1s"))
+    let whole = try #require(FCPTime("5s"))
+    let fraction = try #require(FCPTime("5/1s"))
     #expect(whole == fraction)
   }
 
   @Test
   internal func distinctValuesAreNotEqual() throws {
-    let ntsc = try #require(FCPTime(fcpxmlString: "1001/30000s"))
-    let ideal = try #require(FCPTime(fcpxmlString: "1/30s"))
+    let ntsc = try #require(FCPTime("1001/30000s"))
+    let ideal = try #require(FCPTime("1/30s"))
     #expect(ntsc != ideal)
   }
 
   @Test
   internal func equalValuesHashEqually() throws {
-    let unreduced = try #require(FCPTime(fcpxmlString: "22800/2400s"))
-    let reduced = try #require(FCPTime(fcpxmlString: "19/2s"))
+    let unreduced = try #require(FCPTime("22800/2400s"))
+    let reduced = try #require(FCPTime("19/2s"))
     #expect(unreduced.hashValue == reduced.hashValue)
 
-    let whole = try #require(FCPTime(fcpxmlString: "5s"))
-    let fraction = try #require(FCPTime(fcpxmlString: "5/1s"))
+    let whole = try #require(FCPTime("5s"))
+    let fraction = try #require(FCPTime("5/1s"))
     #expect(whole.hashValue == fraction.hashValue)
   }
 
   @Test
   internal func identicalFormattingIsStricterThanEquality() throws {
-    let whole = try #require(FCPTime(fcpxmlString: "5s"))
-    let fraction = try #require(FCPTime(fcpxmlString: "5/1s"))
+    let whole = try #require(FCPTime("5s"))
+    let fraction = try #require(FCPTime("5/1s"))
     #expect(whole.isIdenticallyFormatted(to: whole))
     #expect(!whole.isIdenticallyFormatted(to: fraction))
 
-    let unreduced = try #require(FCPTime(fcpxmlString: "22800/2400s"))
-    let reduced = try #require(FCPTime(fcpxmlString: "19/2s"))
+    let unreduced = try #require(FCPTime("22800/2400s"))
+    let reduced = try #require(FCPTime("19/2s"))
     #expect(!unreduced.isIdenticallyFormatted(to: reduced))
   }
 
   @Test
   internal func comparesByMathematicalValue() throws {
-    let ntsc = try #require(FCPTime(fcpxmlString: "1001/30000s"))
-    let ideal = try #require(FCPTime(fcpxmlString: "1/30s"))
+    let ntsc = try #require(FCPTime("1001/30000s"))
+    let ideal = try #require(FCPTime("1/30s"))
     #expect(ideal < ntsc)
 
-    let negative = try #require(FCPTime(fcpxmlString: "-1s"))
+    let negative = try #require(FCPTime("-1s"))
     #expect(negative < FCPTime.zero)
     #expect(FCPTime.zero < ntsc)
   }
@@ -98,7 +98,7 @@ internal struct FCPTimeEqualityTests {
 
   @Test
   internal func exposesApproximateSeconds() throws {
-    let time = try #require(FCPTime(fcpxmlString: "22800/2400s"))
+    let time = try #require(FCPTime("22800/2400s"))
     #expect(time.seconds == 9.5)
   }
 }

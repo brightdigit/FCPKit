@@ -29,33 +29,21 @@
 
 /// The `tcFormat` attribute: whether timecode displays as drop frame or non-drop frame.
 ///
-/// DTD vocabulary: `(DF | NDF)`. Out-of-vocabulary values decode as ``unknown(_:)``
-/// by default; see ``XMLEnumDecodingMode`` for strict decoding.
-public enum TCFormat: XMLAttributeEnum {
+/// DTD vocabulary: `(DF | NDF)`. Out-of-vocabulary values fail decoding.
+public enum TCFormat: String, XMLAttributeCase {
   /// Drop-frame timecode, written `"DF"`.
-  case dropFrame
+  case dropFrame = "DF"
 
   /// Non-drop-frame timecode, written `"NDF"`.
-  case nonDropFrame
+  case nonDropFrame = "NDF"
 
-  /// An out-of-vocabulary value preserved for round-tripping.
-  case unknown(String)
-
-  /// The FCPXML attribute string for this value.
-  public var fcpxmlString: String {
-    switch self {
-    case .dropFrame: "DF"
-    case .nonDropFrame: "NDF"
-    case .unknown(let rawValue): rawValue
-    }
+  /// Decodes from a single-value FCPXML attribute string via ``allCases`` lookup.
+  public init(from decoder: any Decoder) throws {
+    self = try Self.decodeXMLAttribute(from: decoder)
   }
 
-  /// Creates a value from the known `tcFormat` vocabulary.
-  public static func known(fcpxmlString: String) -> TCFormat? {
-    switch fcpxmlString {
-    case "DF": .dropFrame
-    case "NDF": .nonDropFrame
-    default: nil
-    }
+  /// Encodes as a single-value FCPXML attribute string.
+  public func encode(to encoder: any Encoder) throws {
+    try encodeXMLAttribute(to: encoder)
   }
 }

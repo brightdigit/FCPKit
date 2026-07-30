@@ -55,7 +55,7 @@ internal struct XMLAttributeValueCodingTests {
   @Test
   internal func decodesTypedValuesFromAttributes() throws {
     let decoded = try XMLDecoder().decode(ClipFixture.self, from: Self.fixtureXML)
-    #expect(decoded.offset.fcpxmlString == "1001/30000s")
+    #expect(decoded.offset.description == "1001/30000s")
     #expect(decoded.offset == FCPTime(numerator: 1_001, denominator: 30_000))
     #expect(decoded.enabled.value)
     #expect(decoded.tcFormat == .nonDropFrame)

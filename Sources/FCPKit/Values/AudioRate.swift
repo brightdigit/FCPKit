@@ -32,59 +32,36 @@
 /// DTD vocabulary (`%audioHz;`): `(32k | 44.1k | 48k | 88.2k | 96k | 176.4k | 192k)`.
 /// This is the `sequence`/`multicam` value space; `asset.audioRate` is a plain
 /// integer in hertz (for example `"48000"`) and must not use this type.
-/// Out-of-vocabulary values decode as ``unknown(_:)`` by default; see
-/// ``XMLEnumDecodingMode`` for strict decoding.
-public enum AudioRate: XMLAttributeEnum {
+/// Out-of-vocabulary values fail decoding.
+public enum AudioRate: String, XMLAttributeCase {
   /// 32,000 Hz, written `"32k"`.
-  case hz32000
+  case hz32000 = "32k"
 
   /// 44,100 Hz, written `"44.1k"`.
-  case hz44100
+  case hz44100 = "44.1k"
 
   /// 48,000 Hz, written `"48k"`.
-  case hz48000
+  case hz48000 = "48k"
 
   /// 88,200 Hz, written `"88.2k"`.
-  case hz88200
+  case hz88200 = "88.2k"
 
   /// 96,000 Hz, written `"96k"`.
-  case hz96000
+  case hz96000 = "96k"
 
   /// 176,400 Hz, written `"176.4k"`.
-  case hz176400
+  case hz176400 = "176.4k"
 
   /// 192,000 Hz, written `"192k"`.
-  case hz192000
+  case hz192000 = "192k"
 
-  /// An out-of-vocabulary value preserved for round-tripping.
-  case unknown(String)
-
-  private static let knownValues: [String: AudioRate] = [
-    "32k": .hz32000,
-    "44.1k": .hz44100,
-    "48k": .hz48000,
-    "88.2k": .hz88200,
-    "96k": .hz96000,
-    "176.4k": .hz176400,
-    "192k": .hz192000,
-  ]
-
-  /// The FCPXML attribute string for this value.
-  public var fcpxmlString: String {
-    switch self {
-    case .hz32000: "32k"
-    case .hz44100: "44.1k"
-    case .hz48000: "48k"
-    case .hz88200: "88.2k"
-    case .hz96000: "96k"
-    case .hz176400: "176.4k"
-    case .hz192000: "192k"
-    case .unknown(let rawValue): rawValue
-    }
+  /// Decodes from a single-value FCPXML attribute string via ``allCases`` lookup.
+  public init(from decoder: any Decoder) throws {
+    self = try Self.decodeXMLAttribute(from: decoder)
   }
 
-  /// Creates a value from the known `audioRate` vocabulary.
-  public static func known(fcpxmlString: String) -> AudioRate? {
-    knownValues[fcpxmlString]
+  /// Encodes as a single-value FCPXML attribute string.
+  public func encode(to encoder: any Encoder) throws {
+    try encodeXMLAttribute(to: encoder)
   }
 }

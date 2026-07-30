@@ -29,10 +29,9 @@
 
 /// The `srcEnable` attribute: which parts of a clip's source media are enabled.
 ///
-/// DTD vocabulary: `(all | audio | video)`, defaulting to `all` in the schema.
-/// Out-of-vocabulary values decode as ``unknown(_:)`` by default; see
-/// ``XMLEnumDecodingMode`` for strict decoding.
-public enum SrcEnable: XMLAttributeEnum {
+/// Most clip elements use `(all | audio | video)` (default `all`). `mc-source`
+/// also allows `none`. Out-of-vocabulary values fail decoding.
+public enum SrcEnable: String, XMLAttributeCase {
   /// Both audio and video are enabled, written `"all"`.
   case all
 
@@ -42,26 +41,16 @@ public enum SrcEnable: XMLAttributeEnum {
   /// Only video is enabled, written `"video"`.
   case video
 
-  /// An out-of-vocabulary value preserved for round-tripping.
-  case unknown(String)
+  /// Neither audio nor video is enabled, written `"none"` (`mc-source` only).
+  case none
 
-  /// The FCPXML attribute string for this value.
-  public var fcpxmlString: String {
-    switch self {
-    case .all: "all"
-    case .audio: "audio"
-    case .video: "video"
-    case .unknown(let rawValue): rawValue
-    }
+  /// Decodes from a single-value FCPXML attribute string via ``allCases`` lookup.
+  public init(from decoder: any Decoder) throws {
+    self = try Self.decodeXMLAttribute(from: decoder)
   }
 
-  /// Creates a value from the known `srcEnable` vocabulary.
-  public static func known(fcpxmlString: String) -> SrcEnable? {
-    switch fcpxmlString {
-    case "all": .all
-    case "audio": .audio
-    case "video": .video
-    default: nil
-    }
+  /// Encodes as a single-value FCPXML attribute string.
+  public func encode(to encoder: any Encoder) throws {
+    try encodeXMLAttribute(to: encoder)
   }
 }

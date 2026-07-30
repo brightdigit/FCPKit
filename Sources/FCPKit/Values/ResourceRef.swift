@@ -38,15 +38,15 @@ public struct ResourceRef<Kind: ResourceKind>: XMLAttributeValue {
   public let rawValue: String
 
   /// The FCPXML attribute string for this reference.
-  public var fcpxmlString: String {
+  public var description: String {
     rawValue
   }
 
   /// Creates a reference from a non-empty identifier string without whitespace.
-  public init?(fcpxmlString: String) {
-    guard !fcpxmlString.isEmpty, !fcpxmlString.contains(where: \.isWhitespace) else {
+  public init?(_ description: String) {
+    guard !description.isEmpty, !description.contains(where: \.isWhitespace) else {
       return nil
     }
-    self.rawValue = fcpxmlString
+    self.rawValue = description
   }
 }

@@ -29,9 +29,8 @@
 
 /// The `audioLayout` attribute: the channel layout of sequence audio.
 ///
-/// DTD vocabulary: `(mono | stereo | surround)`. Out-of-vocabulary values decode
-/// as ``unknown(_:)`` by default; see ``XMLEnumDecodingMode`` for strict decoding.
-public enum AudioLayout: XMLAttributeEnum {
+/// DTD vocabulary: `(mono | stereo | surround)`. Out-of-vocabulary values fail decoding.
+public enum AudioLayout: String, XMLAttributeCase {
   /// Single-channel audio, written `"mono"`.
   case mono
 
@@ -41,26 +40,13 @@ public enum AudioLayout: XMLAttributeEnum {
   /// Multi-channel surround audio, written `"surround"`.
   case surround
 
-  /// An out-of-vocabulary value preserved for round-tripping.
-  case unknown(String)
-
-  /// The FCPXML attribute string for this value.
-  public var fcpxmlString: String {
-    switch self {
-    case .mono: "mono"
-    case .stereo: "stereo"
-    case .surround: "surround"
-    case .unknown(let rawValue): rawValue
-    }
+  /// Decodes from a single-value FCPXML attribute string via ``allCases`` lookup.
+  public init(from decoder: any Decoder) throws {
+    self = try Self.decodeXMLAttribute(from: decoder)
   }
 
-  /// Creates a value from the known `audioLayout` vocabulary.
-  public static func known(fcpxmlString: String) -> AudioLayout? {
-    switch fcpxmlString {
-    case "mono": .mono
-    case "stereo": .stereo
-    case "surround": .surround
-    default: nil
-    }
+  /// Encodes as a single-value FCPXML attribute string.
+  public func encode(to encoder: any Encoder) throws {
+    try encodeXMLAttribute(to: encoder)
   }
 }

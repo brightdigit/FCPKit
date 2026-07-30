@@ -29,10 +29,10 @@
 
 /// The `timept` element's `interp` attribute: retime keypoint interpolation.
 ///
-/// DTD vocabulary: `(smooth2 | linear | smooth)`, defaulting to `smooth2` in the
-/// schema. Out-of-vocabulary values decode as ``unknown(_:)`` by default; see
-/// ``XMLEnumDecodingMode`` for strict decoding.
-public enum TimeptInterp: XMLAttributeEnum {
+/// DTD vocabulary: `(smooth2 | linear | smooth)`, defaulting to `smooth2`.
+/// (`smooth` is deprecated but still legal.) Out-of-vocabulary values fail decoding.
+/// Do not use this type for `keyframe`’s `interp`, which is a different vocabulary.
+public enum TimeptInterp: String, XMLAttributeCase {
   /// The current smooth interpolation, written `"smooth2"`.
   case smooth2
 
@@ -42,26 +42,13 @@ public enum TimeptInterp: XMLAttributeEnum {
   /// The legacy smooth interpolation, written `"smooth"`.
   case smooth
 
-  /// An out-of-vocabulary value preserved for round-tripping.
-  case unknown(String)
-
-  /// The FCPXML attribute string for this value.
-  public var fcpxmlString: String {
-    switch self {
-    case .smooth2: "smooth2"
-    case .linear: "linear"
-    case .smooth: "smooth"
-    case .unknown(let rawValue): rawValue
-    }
+  /// Decodes from a single-value FCPXML attribute string via ``allCases`` lookup.
+  public init(from decoder: any Decoder) throws {
+    self = try Self.decodeXMLAttribute(from: decoder)
   }
 
-  /// Creates a value from the known `interp` vocabulary.
-  public static func known(fcpxmlString: String) -> TimeptInterp? {
-    switch fcpxmlString {
-    case "smooth2": .smooth2
-    case "linear": .linear
-    case "smooth": .smooth
-    default: nil
-    }
+  /// Encodes as a single-value FCPXML attribute string.
+  public func encode(to encoder: any Encoder) throws {
+    try encodeXMLAttribute(to: encoder)
   }
 }

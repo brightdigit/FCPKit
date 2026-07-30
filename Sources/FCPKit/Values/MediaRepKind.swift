@@ -30,33 +30,21 @@
 /// The `media-rep` element's `kind` attribute: which representation of an asset it locates.
 ///
 /// DTD vocabulary: `(original-media | proxy-media)`, defaulting to
-/// `original-media` in the schema. Out-of-vocabulary values decode as
-/// ``unknown(_:)`` by default; see ``XMLEnumDecodingMode`` for strict decoding.
-public enum MediaRepKind: XMLAttributeEnum {
+/// `original-media`. Out-of-vocabulary values fail decoding.
+public enum MediaRepKind: String, XMLAttributeCase {
   /// The original media file, written `"original-media"`.
-  case originalMedia
+  case originalMedia = "original-media"
 
   /// A proxy transcode of the media, written `"proxy-media"`.
-  case proxyMedia
+  case proxyMedia = "proxy-media"
 
-  /// An out-of-vocabulary value preserved for round-tripping.
-  case unknown(String)
-
-  /// The FCPXML attribute string for this value.
-  public var fcpxmlString: String {
-    switch self {
-    case .originalMedia: "original-media"
-    case .proxyMedia: "proxy-media"
-    case .unknown(let rawValue): rawValue
-    }
+  /// Decodes from a single-value FCPXML attribute string via ``allCases`` lookup.
+  public init(from decoder: any Decoder) throws {
+    self = try Self.decodeXMLAttribute(from: decoder)
   }
 
-  /// Creates a value from the known `kind` vocabulary.
-  public static func known(fcpxmlString: String) -> MediaRepKind? {
-    switch fcpxmlString {
-    case "original-media": .originalMedia
-    case "proxy-media": .proxyMedia
-    default: nil
-    }
+  /// Encodes as a single-value FCPXML attribute string.
+  public func encode(to encoder: any Encoder) throws {
+    try encodeXMLAttribute(to: encoder)
   }
 }

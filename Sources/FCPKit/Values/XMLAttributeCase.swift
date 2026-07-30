@@ -1,5 +1,5 @@
 //
-//  XMLAttributeValue.swift
+//  XMLAttributeCase.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,20 +27,35 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A strongly typed FCPXML attribute value that encodes as a single-value string.
+/// A closed DTD vocabulary attribute: finite known cases, fail on unknown wire text.
 ///
-/// Conformers parse from and render via ``LosslessStringConvertible``, so
-/// XMLCoder sees the same single-value `String` it sees for plain `String`
-/// properties today. Attribute-versus-element dispatch stays key-based in
-/// ``FCPNodeEncodable``, so adopting a conformer requires no node-encoding
-/// changes at the container type.
-public protocol XMLAttributeValue: Codable, Hashable, LosslessStringConvertible, Sendable {}
+/// Conformers expose a wire-form ``rawValue`` and ``CaseIterable/allCases``. The
+/// default ``init?(_:)`` succeeds only when the string matches some case — used
+/// by both `String` raw enums and string-backed static vocabularies. A pre-release
+/// unknowns scan can compare fixture attribute values against
+/// `Set(Self.allCases.map(\.rawValue))`.
+public protocol XMLAttributeCase: XMLAttributeValue, CaseIterable, Equatable {
+  /// Wire-form string compared during ``init?(_:)`` lookup.
+  var rawValue: String { get }
+}
 
-extension XMLAttributeValue {
-  /// Decodes the value from a single-value string container.
+extension XMLAttributeCase {
+  /// The FCPXML attribute string for this value.
+  public var description: String { rawValue }
+
+  /// Succeeds only when `description` matches some ``allCases`` entry’s `rawValue`.
+  public init?(_ description: String) {
+    guard let match = Self.allCases.first(where: { $0.rawValue == description }) else {
+      return nil
+    }
+    self = match
+  }
+
+  /// Decodes from a single-value string, looking up ``allCases``.
   ///
-  /// - Throws: `DecodingError.dataCorrupted` when the string is not a legal value.
-  public init(from decoder: any Decoder) throws {
+  /// Concrete enums must call this from their own `init(from:)` so it overrides
+  /// Swift’s synthesized case-name `Codable` (which is wrong for FCPXML attributes).
+  public static func decodeXMLAttribute(from decoder: any Decoder) throws -> Self {
     let raw = try decoder.singleValueContainer().decode(String.self)
     guard let value = Self(raw) else {
       throw DecodingError.dataCorrupted(
@@ -50,14 +65,12 @@ extension XMLAttributeValue {
         )
       )
     }
-    self = value
+    return value
   }
 
-  /// Encodes the value into a single-value string container.
-  ///
-  /// - Throws: Any error thrown by the underlying encoder.
-  public func encode(to encoder: any Encoder) throws {
+  /// Encodes as a single-value wire string.
+  public func encodeXMLAttribute(to encoder: any Encoder) throws {
     var container = encoder.singleValueContainer()
-    try container.encode(description)
+    try container.encode(rawValue)
   }
 }

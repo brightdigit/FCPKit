@@ -34,31 +34,31 @@ import Testing
 internal struct FCPTimeArithmeticTests {
   @Test
   internal func addsExactlyOverCommonDenominator() throws {
-    let frame = try #require(FCPTime(fcpxmlString: "1001/30000s"))
+    let frame = try #require(FCPTime("1001/30000s"))
     let sum = try frame.adding(frame)
-    #expect(sum.fcpxmlString == "2002/30000s")
+    #expect(sum.description == "2002/30000s")
 
-    let five = try #require(FCPTime(fcpxmlString: "5s"))
+    let five = try #require(FCPTime("5s"))
     let mixed = try five.adding(FCPTime(numerator: 1, denominator: 2))
-    #expect(mixed.fcpxmlString == "11/2s")
+    #expect(mixed.description == "11/2s")
   }
 
   @Test
   internal func wholeResultsRenderAsWholeSeconds() throws {
-    let five = try #require(FCPTime(fcpxmlString: "5s"))
+    let five = try #require(FCPTime("5s"))
     let sum = try five.adding(five)
-    #expect(sum.fcpxmlString == "10s")
+    #expect(sum.description == "10s")
   }
 
   @Test
   internal func subtractsExactlyOverCommonDenominator() throws {
-    let five = try #require(FCPTime(fcpxmlString: "5s"))
-    let frame = try #require(FCPTime(fcpxmlString: "1001/30000s"))
+    let five = try #require(FCPTime("5s"))
+    let frame = try #require(FCPTime("1001/30000s"))
     let difference = try five.subtracting(frame)
-    #expect(difference.fcpxmlString == "148999/30000s")
+    #expect(difference.description == "148999/30000s")
 
     let negative = try FCPTime.zero.subtracting(five)
-    #expect(negative.fcpxmlString == "-5s")
+    #expect(negative.description == "-5s")
   }
 
   @Test
@@ -66,8 +66,8 @@ internal struct FCPTimeArithmeticTests {
     let tenTwentyFourths = FCPTime(numerator: 10, denominator: 24)
     let third = FCPTime(numerator: 1, denominator: 3)
     let sum = try tenTwentyFourths.adding(third)
-    #expect(!sum.fcpxmlString.contains("."))
-    #expect(sum.fcpxmlString == "18/24s")
+    #expect(!sum.description.contains("."))
+    #expect(sum.description == "18/24s")
     #expect(sum == FCPTime(numerator: 3, denominator: 4))
   }
 
@@ -93,9 +93,9 @@ internal struct FCPTimeArithmeticTests {
 
   @Test
   internal func convertsFrameCountsExactly() throws {
-    let frameDuration = try #require(FCPTime(fcpxmlString: "1001/30000s"))
+    let frameDuration = try #require(FCPTime("1001/30000s"))
     let duration = try FCPTime.frames(120, at: frameDuration)
-    #expect(duration.fcpxmlString == "120120/30000s")
+    #expect(duration.description == "120120/30000s")
     #expect(throws: FCPTimeError.overflow) {
       _ = try FCPTime.frames(Int64.max, at: frameDuration)
     }
@@ -103,12 +103,12 @@ internal struct FCPTimeArithmeticTests {
 
   @Test
   internal func reductionIsExplicitlyOptIn() throws {
-    let unreduced = try #require(FCPTime(fcpxmlString: "22800/2400s"))
+    let unreduced = try #require(FCPTime("22800/2400s"))
     let reduced = unreduced.reduced()
-    #expect(unreduced.fcpxmlString == "22800/2400s")
-    #expect(reduced.fcpxmlString == "19/2s")
+    #expect(unreduced.description == "22800/2400s")
+    #expect(reduced.description == "19/2s")
 
-    let unitDenominator = try #require(FCPTime(fcpxmlString: "5/1s"))
-    #expect(unitDenominator.reduced().fcpxmlString == "5s")
+    let unitDenominator = try #require(FCPTime("5/1s"))
+    #expect(unitDenominator.reduced().description == "5s")
   }
 }

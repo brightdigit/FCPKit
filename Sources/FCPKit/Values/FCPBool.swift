@@ -36,7 +36,7 @@ public struct FCPBool: ExpressibleByBooleanLiteral, XMLAttributeValue {
   public var value: Bool
 
   /// The FCPXML attribute string: `"1"` for true, `"0"` for false.
-  public var fcpxmlString: String {
+  public var description: String {
     value ? "1" : "0"
   }
 
@@ -51,8 +51,8 @@ public struct FCPBool: ExpressibleByBooleanLiteral, XMLAttributeValue {
   }
 
   /// Creates a value from `"1"` or `"0"`; any other string is illegal.
-  public init?(fcpxmlString: String) {
-    switch fcpxmlString {
+  public init?(_ description: String) {
+    switch description {
     case "1":
       self.init(true)
     case "0":

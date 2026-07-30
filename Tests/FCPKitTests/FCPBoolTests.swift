@@ -34,18 +34,18 @@ import Testing
 internal struct FCPBoolTests {
   @Test
   internal func parsesOneAndZero() throws {
-    let enabled = try #require(FCPBool(fcpxmlString: "1"))
+    let enabled = try #require(FCPBool("1"))
     #expect(enabled.value)
-    #expect(enabled.fcpxmlString == "1")
+    #expect(enabled.description == "1")
 
-    let disabled = try #require(FCPBool(fcpxmlString: "0"))
+    let disabled = try #require(FCPBool("0"))
     #expect(!disabled.value)
-    #expect(disabled.fcpxmlString == "0")
+    #expect(disabled.description == "0")
   }
 
   @Test(arguments: ["", "true", "false", "2", "01", "yes", " 1", "1 "])
   internal func rejectsAnythingElse(_ raw: String) {
-    #expect(FCPBool(fcpxmlString: raw) == nil)
+    #expect(FCPBool(raw) == nil)
   }
 
   @Test

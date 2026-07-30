@@ -38,8 +38,8 @@ internal struct FCPTimeParsingTests {
     ]
   )
   internal func roundTripsByteIdentically(_ raw: String) throws {
-    let time = try #require(FCPTime(fcpxmlString: raw))
-    #expect(time.fcpxmlString == raw)
+    let time = try #require(FCPTime(raw))
+    #expect(time.description == raw)
     #expect(time.description == raw)
   }
 
@@ -51,17 +51,17 @@ internal struct FCPTimeParsingTests {
     ]
   )
   internal func rejectsIllegalStrings(_ raw: String) {
-    #expect(FCPTime(fcpxmlString: raw) == nil)
+    #expect(FCPTime(raw) == nil)
   }
 
   @Test
   internal func remembersWrittenForm() throws {
-    let whole = try #require(FCPTime(fcpxmlString: "5s"))
+    let whole = try #require(FCPTime("5s"))
     #expect(whole.form == .whole)
     #expect(whole.numerator == 5)
     #expect(whole.denominator == 1)
 
-    let rational = try #require(FCPTime(fcpxmlString: "1001/30000s"))
+    let rational = try #require(FCPTime("1001/30000s"))
     #expect(rational.form == .rational)
     #expect(rational.numerator == 1_001)
     #expect(rational.denominator == 30_000)
@@ -69,29 +69,29 @@ internal struct FCPTimeParsingTests {
 
   @Test
   internal func neverReducesOrRewritesFractions() throws {
-    let unreduced = try #require(FCPTime(fcpxmlString: "22800/2400s"))
-    #expect(unreduced.fcpxmlString == "22800/2400s")
+    let unreduced = try #require(FCPTime("22800/2400s"))
+    #expect(unreduced.description == "22800/2400s")
 
-    let unitDenominator = try #require(FCPTime(fcpxmlString: "5/1s"))
-    #expect(unitDenominator.fcpxmlString == "5/1s")
+    let unitDenominator = try #require(FCPTime("5/1s"))
+    #expect(unitDenominator.description == "5/1s")
     #expect(unitDenominator.form == .rational)
   }
 
   @Test
   internal func constructionPicksNaturalForm() {
-    #expect(FCPTime(numerator: 5).fcpxmlString == "5s")
-    #expect(FCPTime(numerator: 5, denominator: 2).fcpxmlString == "5/2s")
-    #expect(FCPTime(numerator: 5, denominator: 1, form: .rational).fcpxmlString == "5/1s")
-    #expect(FCPTime.zero.fcpxmlString == "0s")
+    #expect(FCPTime(numerator: 5).description == "5s")
+    #expect(FCPTime(numerator: 5, denominator: 2).description == "5/2s")
+    #expect(FCPTime(numerator: 5, denominator: 1, form: .rational).description == "5/1s")
+    #expect(FCPTime.zero.description == "0s")
   }
 
   @Test
   internal func parsesNegativeWholeAndRationalTimes() throws {
-    let negativeWhole = try #require(FCPTime(fcpxmlString: "-3600s"))
+    let negativeWhole = try #require(FCPTime("-3600s"))
     #expect(negativeWhole.numerator == -3_600)
     #expect(negativeWhole.denominator == 1)
 
-    let negativeRational = try #require(FCPTime(fcpxmlString: "-1001/30000s"))
+    let negativeRational = try #require(FCPTime("-1001/30000s"))
     #expect(negativeRational.numerator == -1_001)
     #expect(negativeRational.denominator == 30_000)
   }
