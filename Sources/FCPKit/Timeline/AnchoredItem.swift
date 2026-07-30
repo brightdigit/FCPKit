@@ -31,7 +31,7 @@ import Foundation
 import XMLCoder
 
 /// An ordered element within an `%anchor_item;` sequence.
-public enum AnchoredItem: Codable {
+public enum AnchoredItem: XMLChoiceCodable {
   /// A `clip` element.
   case clip(Clip)
   /// A `gap` element.
@@ -80,7 +80,11 @@ public enum AnchoredItem: Codable {
     case spine
   }
 
-  private static var fields: [XMLChoiceField<AnchoredItem, CodingKeys>] {
+  internal typealias ChoiceKey = CodingKeys
+
+  internal static var unsupportedChoice: AnchoredItem { .unsupported }
+
+  internal static var choiceFields: [XMLChoiceField<AnchoredItem, CodingKeys>] {
     [
       .init(key: .clip, wrap: AnchoredItem.clip, unwrap: { $0.clip }),
       .init(key: .gap, wrap: AnchoredItem.gap, unwrap: { $0.gap }),
@@ -97,26 +101,5 @@ public enum AnchoredItem: Codable {
       .init(key: .video, wrap: AnchoredItem.video, unwrap: { $0.video }),
       .init(key: .spine, wrap: AnchoredItem.spine, unwrap: { $0.spine }),
     ]
-  }
-
-  /// Creates an anchored item by decoding from the given decoder.
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    for field in Self.fields where container.contains(field.key) {
-      self = try field.decode(from: container)
-      return
-    }
-    self = .unsupported
-  }
-
-  /// Encodes this anchored item into the given encoder.
-  public func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self)
-    for field in Self.fields {
-      guard try field.encode(self, into: &container) else {
-        continue
-      }
-      return
-    }
   }
 }

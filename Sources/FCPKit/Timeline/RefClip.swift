@@ -30,8 +30,6 @@
 import Foundation
 import XMLCoder
 
-// swiftlint:disable file_length
-
 /// A `ref-clip` element referencing a compound clip or other media resource.
 public struct RefClip: Codable {
   internal enum CodingKeys: String, CodingKey {
@@ -45,8 +43,9 @@ public struct RefClip: Codable {
     case modDate
     case useAudioSubroles
 
-    // swiftlint:disable:next line_length
-    // DTD line 488: note?, %timing-params;, %intrinsic-params;, (%anchor_item;)*, (%marker_item;)*, audio-role-source*, (%video_filter_item;)*, filter-audio*, metadata?
+    // DTD line 488:
+    // note?, %timing-params;, %intrinsic-params;, (%anchor_item;)*, (%marker_item;)*,
+    // audio-role-source*, (%video_filter_item;)*, filter-audio*, metadata?
     case note
     case conformRate = "conform-rate"
     case timeMap
@@ -105,62 +104,23 @@ public struct RefClip: Codable {
 
   /// Nested `asset-clip` elements anchored to the clip.
   public var assetClips: [AssetClip]? {
-    get { getAnchored(\.assetClip) }
-    set { setAnchored(newValue, isType: \.isAssetClip, wrap: AnchoredItem.assetClip) }
+    get { anchoredPayloads(\.assetClip) }
+    set { setAnchoredPayloads(newValue, extract: \.assetClip, wrap: AnchoredItem.assetClip) }
   }
 
   /// Nested `video` elements anchored to the clip.
   public var video: [Video]? {
-    get { getAnchored(\.video) }
-    set { setAnchored(newValue, isType: \.isVideo, wrap: AnchoredItem.video) }
+    get { anchoredPayloads(\.video) }
+    set { setAnchoredPayloads(newValue, extract: \.video, wrap: AnchoredItem.video) }
   }
 
   /// Nested `ref-clip` elements anchored to the clip.
   public var refClips: [RefClip]? {
-    get { getAnchored(\.refClip) }
-    set { setAnchored(newValue, isType: \.isRefClip, wrap: AnchoredItem.refClip) }
+    get { anchoredPayloads(\.refClip) }
+    set { setAnchoredPayloads(newValue, extract: \.refClip, wrap: AnchoredItem.refClip) }
   }
 
   /// Creates a reference clip by decoding from the given decoder.
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
-    self.name = try container.decodeIfPresent(String.self, forKey: .name)
-    self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
-    self.start = try container.decodeIfPresent(String.self, forKey: .start)
-    self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
-    self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
-    self.modDate = try container.decodeIfPresent(String.self, forKey: .modDate)
-    self.useAudioSubroles = try container.decodeIfPresent(String.self, forKey: .useAudioSubroles)
-
-    self.note = try container.decodeIfPresent(String.self, forKey: .note)
-    self.conformRate = try container.decodeIfPresent(ConformRate.self, forKey: .conformRate)
-    self.timeMap = try container.decodeIfPresent(TimeMap.self, forKey: .timeMap)
-    self.adjustTransform = try container.decodeIfPresent(
-      AdjustTransform.self,
-      forKey: .adjustTransform
-    )
-    self.adjustCrop = try container.decodeIfPresent(AdjustCrop.self, forKey: .adjustCrop)
-    self.adjustVolume = try container.decodeIfPresent(AdjustVolume.self, forKey: .adjustVolume)
-    self.markers = try container.decodeIfPresent([Marker].self, forKey: .markers)
-    self.rating = try container.decodeIfPresent(Rating.self, forKey: .rating)
-    self.chapterMarkers = try container.decodeIfPresent(
-      [ChapterMarker].self,
-      forKey: .chapterMarkers
-    )
-    self.filterVideo = try container.decodeIfPresent([FilterVideo].self, forKey: .filterVideo)
-    self.filterAudio = try container.decodeIfPresent([FilterAudio].self, forKey: .filterAudio)
-
-    let itemsContainer = try decoder.singleValueContainer()
-    let decodedItems = (try? itemsContainer.decode([AnchoredItem].self)) ?? []
-    let filteredItems = decodedItems.filter { item in
-      if case .unsupported = item {
-        return false
-      }
-      return true
-    }
-    self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
-  }
 
   /// Creates a reference clip with the given attributes and contents.
   public init(
@@ -218,51 +178,9 @@ public struct RefClip: Codable {
     )
     self.anchoredItems = items.isEmpty ? nil : items
   }
-
-  private func getAnchored<T>(_ extract: (AnchoredItem) -> T?) -> [T]? {
-    guard let anchoredItems else {
-      return nil
-    }
-    let list = anchoredItems.compactMap(extract)
-    if list.isEmpty {
-      return nil
-    }
-    return list
-  }
-
-  private mutating func setAnchored<T>(
-    _ newValue: [T]?,
-    isType: (AnchoredItem) -> Bool,
-    wrap: (T) -> AnchoredItem
-  ) {
-    guard let newValue else {
-      anchoredItems?.removeAll(where: isType)
-      if anchoredItems?.isEmpty == true {
-        anchoredItems = nil
-      }
-      return
-    }
-    var items = anchoredItems ?? []
-    var newIndex = 0
-    var indicesToRemove = [Int]()
-    for index in items.indices where isType(items[index]) {
-      if newIndex < newValue.count {
-        items[index] = wrap(newValue[newIndex])
-        newIndex += 1
-      } else {
-        indicesToRemove.append(index)
-      }
-    }
-    for index in indicesToRemove.reversed() {
-      items.remove(at: index)
-    }
-    while newIndex < newValue.count {
-      items.append(wrap(newValue[newIndex]))
-      newIndex += 1
-    }
-    anchoredItems = items
-  }
 }
+
+extension RefClip: AnchoredChoiceContainer {}
 
 extension RefClip: FCPNodeEncodable {
   /// Encodes elements and remaining keys as attributes.

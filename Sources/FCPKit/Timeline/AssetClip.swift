@@ -30,8 +30,6 @@
 import Foundation
 import XMLCoder
 
-// swiftlint:disable file_length
-
 /// An `asset-clip` element referencing a media asset placed on the timeline.
 public struct AssetClip: Codable {
   internal enum CodingKeys: String, CodingKey {
@@ -52,8 +50,10 @@ public struct AssetClip: Codable {
     case audioStart
     case audioDuration
 
-    // swiftlint:disable:next line_length
-    // DTD line 516: note?, conform-rate?, timeMap?, %intrinsic-params;, (%anchor_item;)*, (%marker_item;)*, audio-channel-source*, (%video_filter_item;)*, filter-audio*, metadata?
+    // DTD line 516:
+    // note?, conform-rate?, timeMap?, %intrinsic-params;, (%anchor_item;)*,
+    // (%marker_item;)*, audio-channel-source*, (%video_filter_item;)*,
+    // filter-audio*, metadata?
     case note
     case conformRate = "conform-rate"
     case timeMap
@@ -132,77 +132,6 @@ public struct AssetClip: Codable {
   /// The retiming map applied to the clip.
   public var timeMap: TimeMap?
 
-  /// The title clips anchored to this clip.
-  public var titles: [Title]? {
-    get { getAnchored(\.title) }
-    set { setAnchored(newValue, isType: \.isTitle, wrap: AnchoredItem.title) }
-  }
-
-  /// The asset clips anchored to this clip.
-  public var assetClips: [AssetClip]? {
-    get { getAnchored(\.assetClip) }
-    set { setAnchored(newValue, isType: \.isAssetClip, wrap: AnchoredItem.assetClip) }
-  }
-
-  /// The video elements anchored to this clip.
-  public var video: [Video]? {
-    get { getAnchored(\.video) }
-    set { setAnchored(newValue, isType: \.isVideo, wrap: AnchoredItem.video) }
-  }
-
-  /// Creates an asset clip by decoding from the given decoder.
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
-    self.name = try container.decodeIfPresent(String.self, forKey: .name)
-    self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
-    self.start = try container.decodeIfPresent(String.self, forKey: .start)
-    self.format = try container.decodeIfPresent(String.self, forKey: .format)
-    self.tcFormat = try container.decodeIfPresent(String.self, forKey: .tcFormat)
-    self.audioChannels = try container.decodeIfPresent(String.self, forKey: .audioChannels)
-    self.audioRate = try container.decodeIfPresent(String.self, forKey: .audioRate)
-    self.audioRole = try container.decodeIfPresent(String.self, forKey: .audioRole)
-    self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
-    self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
-    self.useAudioSubroles = try container.decodeIfPresent(String.self, forKey: .useAudioSubroles)
-    self.modDate = try container.decodeIfPresent(String.self, forKey: .modDate)
-    self.audioStart = try container.decodeIfPresent(String.self, forKey: .audioStart)
-    self.audioDuration = try container.decodeIfPresent(String.self, forKey: .audioDuration)
-    self.note = try container.decodeIfPresent(String.self, forKey: .note)
-    self.conformRate = try container.decodeIfPresent(ConformRate.self, forKey: .conformRate)
-    self.timeMap = try container.decodeIfPresent(TimeMap.self, forKey: .timeMap)
-    self.adjustTransform = try container.decodeIfPresent(
-      AdjustTransform.self,
-      forKey: .adjustTransform
-    )
-    self.adjustCrop = try container.decodeIfPresent(AdjustCrop.self, forKey: .adjustCrop)
-    self.adjustBlend = try container.decodeIfPresent(AdjustBlend.self, forKey: .adjustBlend)
-    self.adjustVolume = try container.decodeIfPresent(AdjustVolume.self, forKey: .adjustVolume)
-    self.markers = try container.decodeIfPresent([Marker].self, forKey: .markers)
-    self.rating = try container.decodeIfPresent(Rating.self, forKey: .rating)
-    self.chapterMarkers = try container.decodeIfPresent(
-      [ChapterMarker].self,
-      forKey: .chapterMarkers
-    )
-    self.keywords = try container.decodeIfPresent([Keyword].self, forKey: .keywords)
-    self.audioChannelSource = try container.decodeIfPresent(
-      [AudioChannelSource].self,
-      forKey: .audioChannelSource
-    )
-    self.filterVideo = try container.decodeIfPresent([FilterVideo].self, forKey: .filterVideo)
-    self.filterAudio = try container.decodeIfPresent([FilterAudio].self, forKey: .filterAudio)
-
-    let itemsContainer = try decoder.singleValueContainer()
-    let decodedItems = (try? itemsContainer.decode([AnchoredItem].self)) ?? []
-    let filteredItems = decodedItems.filter { item in
-      if case .unsupported = item {
-        return false
-      }
-      return true
-    }
-    self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
-  }
-
   /// Creates an asset clip with the given attributes and contained elements.
   public init(
     ref: String? = nil,
@@ -279,51 +208,8 @@ public struct AssetClip: Codable {
     )
     self.anchoredItems = items.isEmpty ? nil : items
   }
-
-  private func getAnchored<T>(_ extract: (AnchoredItem) -> T?) -> [T]? {
-    guard let anchoredItems else {
-      return nil
-    }
-    let list = anchoredItems.compactMap(extract)
-    if list.isEmpty {
-      return nil
-    }
-    return list
-  }
-
-  private mutating func setAnchored<T>(
-    _ newValue: [T]?,
-    isType: (AnchoredItem) -> Bool,
-    wrap: (T) -> AnchoredItem
-  ) {
-    guard let newValue else {
-      anchoredItems?.removeAll(where: isType)
-      if anchoredItems?.isEmpty == true {
-        anchoredItems = nil
-      }
-      return
-    }
-    var items = anchoredItems ?? []
-    var newIndex = 0
-    var indicesToRemove = [Int]()
-    for index in items.indices where isType(items[index]) {
-      if newIndex < newValue.count {
-        items[index] = wrap(newValue[newIndex])
-        newIndex += 1
-      } else {
-        indicesToRemove.append(index)
-      }
-    }
-    for index in indicesToRemove.reversed() {
-      items.remove(at: index)
-    }
-    while newIndex < newValue.count {
-      items.append(wrap(newValue[newIndex]))
-      newIndex += 1
-    }
-    anchoredItems = items
-  }
 }
+
 
 extension AssetClip: FCPNodeEncodable {
   /// Returns whether the given coding key encodes as an XML attribute or element.

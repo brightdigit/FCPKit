@@ -30,8 +30,6 @@
 import Foundation
 import XMLCoder
 
-// swiftlint:disable file_length
-
 /// A `clip` element representing a basic clip in a storyline.
 public struct Clip: Codable {
   internal enum CodingKeys: String, CodingKey {
@@ -48,8 +46,10 @@ public struct Clip: Codable {
     case offset
     case modDate
 
-    // swiftlint:disable:next line_length
-    // DTD line 476: note?, %timing-params;, %intrinsic-params;, (spine | (%clip_item;) | caption)*, (%marker_item;)*, audio-channel-source*, (%video_filter_item;)*, filter-audio*, metadata?
+    // DTD line 476:
+    // note?, %timing-params;, %intrinsic-params;, (spine | (%clip_item;) | caption)*,
+    // (%marker_item;)*, audio-channel-source*, (%video_filter_item;)*, filter-audio*,
+    // metadata?
     case note
     case conformRate = "conform-rate"
     case timeMap
@@ -119,53 +119,6 @@ public struct Clip: Codable {
   public var filterAudio: [FilterAudio]?
 
   /// Creates a clip by decoding from the given decoder.
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.name = try container.decodeIfPresent(String.self, forKey: .name)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
-    self.format = try container.decodeIfPresent(String.self, forKey: .format)
-    self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
-    self.start = try container.decodeIfPresent(String.self, forKey: .start)
-    self.tcFormat = try container.decodeIfPresent(String.self, forKey: .tcFormat)
-    self.audioChannels = try container.decodeIfPresent(String.self, forKey: .audioChannels)
-    self.audioRate = try container.decodeIfPresent(String.self, forKey: .audioRate)
-    self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
-    self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
-    self.modDate = try container.decodeIfPresent(String.self, forKey: .modDate)
-
-    self.note = try container.decodeIfPresent(String.self, forKey: .note)
-    self.conformRate = try container.decodeIfPresent(ConformRate.self, forKey: .conformRate)
-    self.timeMap = try container.decodeIfPresent(TimeMap.self, forKey: .timeMap)
-    self.adjustTransform = try container.decodeIfPresent(
-      AdjustTransform.self,
-      forKey: .adjustTransform
-    )
-    self.adjustCrop = try container.decodeIfPresent(AdjustCrop.self, forKey: .adjustCrop)
-    self.adjustBlend = try container.decodeIfPresent(AdjustBlend.self, forKey: .adjustBlend)
-    self.adjustVolume = try container.decodeIfPresent(AdjustVolume.self, forKey: .adjustVolume)
-    self.markers = try container.decodeIfPresent([Marker].self, forKey: .markers)
-    self.rating = try container.decodeIfPresent(Rating.self, forKey: .rating)
-    self.chapterMarkers = try container.decodeIfPresent(
-      [ChapterMarker].self,
-      forKey: .chapterMarkers
-    )
-    self.audioChannelSource = try container.decodeIfPresent(
-      [AudioChannelSource].self,
-      forKey: .audioChannelSource
-    )
-    self.filterVideo = try container.decodeIfPresent([FilterVideo].self, forKey: .filterVideo)
-    self.filterAudio = try container.decodeIfPresent([FilterAudio].self, forKey: .filterAudio)
-
-    let itemsContainer = try decoder.singleValueContainer()
-    let decodedItems = (try? itemsContainer.decode([AnchoredItem].self)) ?? []
-    let filteredItems = decodedItems.filter { item in
-      if case .unsupported = item {
-        return false
-      }
-      return true
-    }
-    self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
-  }
 
   /// Creates a clip with the given attributes and contained elements.
   public init(

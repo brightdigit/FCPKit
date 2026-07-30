@@ -59,32 +59,32 @@ public struct Storyline: Codable {
 
   /// The `clip` elements in the storyline.
   public var clips: [Clip]? {
-    get { getAnchored(\.clip) }
-    set { setAnchored(newValue, isType: \.isClip, wrap: AnchoredItem.clip) }
+    get { anchoredPayloads(\.clip) }
+    set { setAnchoredPayloads(newValue, extract: \.clip, wrap: AnchoredItem.clip) }
   }
 
   /// The `asset-clip` elements referencing asset resources.
   public var assetClips: [AssetClip]? {
-    get { getAnchored(\.assetClip) }
-    set { setAnchored(newValue, isType: \.isAssetClip, wrap: AnchoredItem.assetClip) }
+    get { anchoredPayloads(\.assetClip) }
+    set { setAnchoredPayloads(newValue, extract: \.assetClip, wrap: AnchoredItem.assetClip) }
   }
 
   /// The `ref-clip` elements referencing compound clips or other media resources.
   public var refClips: [RefClip]? {
-    get { getAnchored(\.refClip) }
-    set { setAnchored(newValue, isType: \.isRefClip, wrap: AnchoredItem.refClip) }
+    get { anchoredPayloads(\.refClip) }
+    set { setAnchoredPayloads(newValue, extract: \.refClip, wrap: AnchoredItem.refClip) }
   }
 
   /// The `title` elements in the storyline.
   public var titles: [Title]? {
-    get { getAnchored(\.title) }
-    set { setAnchored(newValue, isType: \.isTitle, wrap: AnchoredItem.title) }
+    get { anchoredPayloads(\.title) }
+    set { setAnchoredPayloads(newValue, extract: \.title, wrap: AnchoredItem.title) }
   }
 
   /// The `generator` elements referencing generator effects.
   public var generators: [Generator]? {
-    get { getAnchored(\.generator) }
-    set { setAnchored(newValue, isType: \.isGenerator, wrap: AnchoredItem.generator) }
+    get { anchoredPayloads(\.generator) }
+    set { setAnchoredPayloads(newValue, extract: \.generator, wrap: AnchoredItem.generator) }
   }
 
   /// Creates a storyline by decoding from the given decoder.
@@ -140,50 +140,9 @@ public struct Storyline: Codable {
     self.anchoredItems = items.isEmpty ? nil : items
   }
 
-  private func getAnchored<T>(_ extract: (AnchoredItem) -> T?) -> [T]? {
-    guard let anchoredItems else {
-      return nil
-    }
-    let list = anchoredItems.compactMap(extract)
-    if list.isEmpty {
-      return nil
-    }
-    return list
-  }
-
-  private mutating func setAnchored<T>(
-    _ newValue: [T]?,
-    isType: (AnchoredItem) -> Bool,
-    wrap: (T) -> AnchoredItem
-  ) {
-    guard let newValue else {
-      anchoredItems?.removeAll(where: isType)
-      if anchoredItems?.isEmpty == true {
-        anchoredItems = nil
-      }
-      return
-    }
-    var items = anchoredItems ?? []
-    var newIndex = 0
-    var indicesToRemove = [Int]()
-    for index in items.indices where isType(items[index]) {
-      if newIndex < newValue.count {
-        items[index] = wrap(newValue[newIndex])
-        newIndex += 1
-      } else {
-        indicesToRemove.append(index)
-      }
-    }
-    for index in indicesToRemove.reversed() {
-      items.remove(at: index)
-    }
-    while newIndex < newValue.count {
-      items.append(wrap(newValue[newIndex]))
-      newIndex += 1
-    }
-    anchoredItems = items
-  }
 }
+
+extension Storyline: AnchoredChoiceContainer {}
 
 extension Storyline: FCPNodeEncodable {
   /// Encodes child clip content as XML elements and remaining keys as attributes.
