@@ -83,10 +83,6 @@ if [ -z "$CI" ]; then
 	$PACKAGE_DIR/Scripts/header.sh -d $PACKAGE_DIR/Sources -c "Leo Dion" -o "BrightDigit" -p "FCPKit"
 fi
 
-if [ -z "$CI" ]; then
-	run_command $TOOL_CMD periphery scan $PERIPHERY_OPTIONS --disable-update-check
-fi
-
 popd
 
 # Exit with error code if any errors occurred
