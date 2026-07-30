@@ -120,8 +120,6 @@ public struct RefClip: Codable {
     set { setAnchoredPayloads(newValue, extract: \.refClip, wrap: AnchoredItem.refClip) }
   }
 
-  /// Creates a reference clip by decoding from the given decoder.
-
   /// Creates a reference clip with the given attributes and contents.
   public init(
     ref: String? = nil,

@@ -99,8 +99,6 @@ public struct MCClip: Codable {
     set { setAnchoredPayloads(newValue, extract: \.video, wrap: AnchoredItem.video) }
   }
 
-  /// Creates a multicam clip by decoding from the given decoder.
-
   /// Creates a multicam clip with the given attributes and contents.
   public init(
     ref: String? = nil,

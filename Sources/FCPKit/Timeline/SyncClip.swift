@@ -114,8 +114,6 @@ public struct SyncClip: Codable {
     set { setAnchoredPayloads(newValue, extract: \.video, wrap: AnchoredItem.video) }
   }
 
-  /// Creates a sync clip by decoding from the given decoder.
-
   /// Creates a sync clip with the given attributes and contents.
   public init(
     offset: String? = nil,

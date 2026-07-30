@@ -118,8 +118,6 @@ public struct Clip: Codable {
   /// The audio filter effects.
   public var filterAudio: [FilterAudio]?
 
-  /// Creates a clip by decoding from the given decoder.
-
   /// Creates a clip with the given attributes and contained elements.
   public init(
     name: String? = nil,
