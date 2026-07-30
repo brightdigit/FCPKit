@@ -112,6 +112,31 @@ Multicam split-screen documents can also be built from two `VideoMetadata`
 values via `FCPKitMediaTools.MulticamXMLBuilder` (typed encode; no smart
 collections).
 
+### Scripting inspector (macOS)
+
+`FCPKitScripting` is a read-only ScriptingBridge inspector for the running Final
+Cut Pro application (libraries → events → projects/sequences). It shares
+`FCPTime` with the Codable model and does not automate export.
+
+```swift
+import FCPKitScripting
+
+if FCPApplication.isFinalCutRunning() {
+    let inspector = FCPLibraryInspector()
+    let libraries = try inspector.libraries()
+    for library in libraries {
+        print(library.name, library.events.count)
+    }
+}
+```
+
+macOS apps that call into `FCPKitScripting` must declare
+`NSAppleEventsUsageDescription` in `Info.plist` (explaining why the app needs to
+control Final Cut Pro) and enable the
+`com.apple.security.automation.apple-events` entitlement in the app target's
+entitlements file. Without both, ScriptingBridge calls fail at runtime with a
+sandbox/TCC error.
+
 ### Encoding Back to XML
 
 ```swift

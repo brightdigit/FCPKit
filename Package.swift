@@ -21,6 +21,10 @@ let package = Package(
             targets: ["FCPKitMediaTools"]
         ),
         .library(
+            name: "FCPKitScripting",
+            targets: ["FCPKitScripting"]
+        ),
+        .library(
             name: "FCPXMLDiff",
             targets: ["FCPXMLDiff"]
         ),
@@ -46,6 +50,10 @@ let package = Package(
             dependencies: ["FCPKit"]
         ),
         .target(
+            name: "FCPKitScripting",
+            dependencies: ["FCPKit"]
+        ),
+        .target(
             name: "FCPXMLDiff",
             dependencies: ["FCPKit", "XMLCoder"]
         ),
@@ -66,6 +74,10 @@ let package = Package(
             resources: [
                 .copy("TestData")
             ]
+        ),
+        .testTarget(
+            name: "FCPKitScriptingTests",
+            dependencies: ["FCPKitScripting", "FCPKit"]
         ),
     ]
 )
