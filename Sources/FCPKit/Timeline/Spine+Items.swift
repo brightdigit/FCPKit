@@ -184,5 +184,4 @@ extension Spine {
       OrderedChoiceItems.replace(&items, with: newValue, extract: \.video, wrap: SpineItem.video)
     }
   }
-
 }
