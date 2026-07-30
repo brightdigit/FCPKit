@@ -58,8 +58,8 @@ public struct MCClip: Codable {
     case filterAudio = "filter-audio"
   }
 
-  /// The identifier of the referenced multicam media resource.
-  public var ref: String?
+  /// The multicam media resource reference.
+  public var ref: ResourceRef<MediaKind>?
   /// The clip's start position on the parent timeline, as a rational time string.
   public var offset: String?
   /// The display name of the clip.
@@ -103,7 +103,7 @@ public struct MCClip: Codable {
   /// Creates a multicam clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.ref = try container.decodeIfPresent(ResourceRef<MediaKind>.self, forKey: .ref)
     self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
@@ -137,7 +137,7 @@ public struct MCClip: Codable {
 
   /// Creates a multicam clip with the given attributes and contents.
   public init(
-    ref: String? = nil,
+    ref: ResourceRef<MediaKind>? = nil,
     offset: String? = nil,
     name: String? = nil,
     start: String? = nil,

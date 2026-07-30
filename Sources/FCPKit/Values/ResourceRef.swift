@@ -33,7 +33,7 @@
 /// passed where a format reference is expected — but the typing is advisory:
 /// the DTD only declares these attributes as `IDREF`, so decoding accepts any
 /// non-empty string without whitespace and real documents always load.
-public struct ResourceRef<Kind: ResourceKind>: XMLAttributeValue {
+public struct ResourceRef<Kind: ResourceKind>: ExpressibleByStringLiteral, XMLAttributeValue {
   /// The referenced resource identifier exactly as written, such as `"r1"`.
   public let rawValue: String
 
@@ -48,5 +48,13 @@ public struct ResourceRef<Kind: ResourceKind>: XMLAttributeValue {
       return nil
     }
     self.rawValue = description
+  }
+
+  /// Creates a reference from a string literal.
+  public init(stringLiteral value: String) {
+    guard let ref = ResourceRef(value) else {
+      preconditionFailure("Invalid ResourceRef string literal: '\(value)'")
+    }
+    self = ref
   }
 }

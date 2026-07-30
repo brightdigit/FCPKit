@@ -49,8 +49,8 @@ public struct Storyline: Codable {
   public var offset: String?
   /// The display name of the storyline.
   public var name: String?
-  /// The identifier of the `format` resource describing the storyline's video format.
-  public var format: String?
+  /// The format resource reference describing the storyline's video format.
+  public var format: ResourceRef<FormatKind>?
 
   /// The nested `spine` element, if present.
   public var spine: Spine?
@@ -93,7 +93,7 @@ public struct Storyline: Codable {
     self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
     self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
-    self.format = try container.decodeIfPresent(String.self, forKey: .format)
+    self.format = try container.decodeIfPresent(ResourceRef<FormatKind>.self, forKey: .format)
     self.spine = try container.decodeIfPresent(Spine.self, forKey: .spine)
 
     let itemsContainer = try decoder.singleValueContainer()
@@ -112,7 +112,7 @@ public struct Storyline: Codable {
     lane: String? = nil,
     offset: String? = nil,
     name: String? = nil,
-    format: String? = nil,
+    format: ResourceRef<FormatKind>? = nil,
     spine: Spine? = nil,
     clips: [Clip]? = nil,
     assetClips: [AssetClip]? = nil,

@@ -61,8 +61,8 @@ public struct RefClip: Codable {
     case filterAudio = "filter-audio"
   }
 
-  /// The identifier of the referenced media resource.
-  public var ref: String?
+  /// The media resource reference.
+  public var ref: ResourceRef<MediaKind>?
   /// The display name of the clip.
   public var name: String?
   /// The playback duration of the clip, as a rational time string.
@@ -124,7 +124,7 @@ public struct RefClip: Codable {
   /// Creates a reference clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.ref = try container.decodeIfPresent(ResourceRef<MediaKind>.self, forKey: .ref)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
@@ -164,7 +164,7 @@ public struct RefClip: Codable {
 
   /// Creates a reference clip with the given attributes and contents.
   public init(
-    ref: String? = nil,
+    ref: ResourceRef<MediaKind>? = nil,
     offset: String? = nil,
     name: String? = nil,
     duration: String? = nil,

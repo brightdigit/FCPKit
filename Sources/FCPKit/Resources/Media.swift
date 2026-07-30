@@ -43,11 +43,11 @@ public struct Media: Codable {
   }
 
   /// The resource identifier other elements use to reference this media, e.g. "r4".
-  public let id: String?
+  public var id: ResourceID?
   /// The media's display name as shown in the browser.
   public var name: String?
   /// A globally unique identifier for the media.
-  public let uid: String?
+  public var uid: String?
   /// The media's last modification date, e.g. "2026-01-01 12:00:00 -0500".
   public var modDate: String?
   /// The compound clip's `sequence` content, if this media is a compound clip.
@@ -59,7 +59,7 @@ public struct Media: Codable {
 
   /// Creates a `media` resource wrapping a compound clip sequence or multicam.
   public init(
-    id: String,
+    id: ResourceID? = nil,
     name: String? = nil,
     uid: String? = nil,
     modDate: String? = nil,

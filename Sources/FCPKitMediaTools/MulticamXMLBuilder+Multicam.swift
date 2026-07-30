@@ -83,7 +83,7 @@ import Foundation
         angleID: angleID,
         refClips: [
           RefClip(
-            ref: ref,
+            ref: ResourceRef(ref),
             offset: "0s",
             name: name,
             duration: duration,

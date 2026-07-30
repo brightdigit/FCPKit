@@ -68,16 +68,16 @@ public struct Clip: Codable {
 
   /// The display name of the clip.
   public var name: String?
-  /// The identifier of the referenced resource.
-  public var ref: String?
+  /// The asset resource reference.
+  public var ref: ResourceRef<AssetKind>?
   /// The format resource reference.
-  public var format: String?
+  public var format: ResourceRef<FormatKind>?
   /// The clip's duration, as a rational time string.
   public var duration: String?
   /// The start time within the source media, as a rational time string.
   public var start: String?
   /// The timecode format, either `DF` (drop frame) or `NDF` (non-drop frame).
-  public var tcFormat: String?
+  public var tcFormat: TCFormat?
   /// The number of audio channels in the source media.
   public var audioChannels: String?
   /// The audio sample rate of the source media, in hertz.
@@ -122,11 +122,11 @@ public struct Clip: Codable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
-    self.format = try container.decodeIfPresent(String.self, forKey: .format)
+    self.ref = try container.decodeIfPresent(ResourceRef<AssetKind>.self, forKey: .ref)
+    self.format = try container.decodeIfPresent(ResourceRef<FormatKind>.self, forKey: .format)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
-    self.tcFormat = try container.decodeIfPresent(String.self, forKey: .tcFormat)
+    self.tcFormat = try container.decodeIfPresent(TCFormat.self, forKey: .tcFormat)
     self.audioChannels = try container.decodeIfPresent(String.self, forKey: .audioChannels)
     self.audioRate = try container.decodeIfPresent(String.self, forKey: .audioRate)
     self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
@@ -170,11 +170,11 @@ public struct Clip: Codable {
   /// Creates a clip with the given attributes and contained elements.
   public init(
     name: String? = nil,
-    ref: String? = nil,
-    format: String? = nil,
+    ref: ResourceRef<AssetKind>? = nil,
+    format: ResourceRef<FormatKind>? = nil,
     duration: String? = nil,
     start: String? = nil,
-    tcFormat: String? = nil,
+    tcFormat: TCFormat? = nil,
     audioChannels: String? = nil,
     audioRate: String? = nil,
     lane: String? = nil,

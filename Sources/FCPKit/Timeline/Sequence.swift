@@ -43,18 +43,18 @@ public struct Sequence: Codable {
     case spine
   }
 
-  /// The identifier of the `format` resource describing the sequence's video format.
-  public var format: String?
+  /// The format resource reference describing the sequence's video format.
+  public var format: ResourceRef<FormatKind>?
   /// The total duration of the sequence, as a rational time string.
   public var duration: String?
   /// The starting timecode of the sequence, as a rational time string.
   public var tcStart: String?
   /// The timecode format, such as `DF` (drop frame) or `NDF` (non-drop frame).
-  public var tcFormat: String?
+  public var tcFormat: TCFormat?
   /// The audio channel layout, such as `mono`, `stereo`, or `surround`.
-  public var audioLayout: String?
+  public var audioLayout: AudioLayout?
   /// The audio sample rate, such as `48k`.
-  public var audioRate: String?
+  public var audioRate: AudioRate?
   /// The codec identifier used for render files.
   public var renderFormat: String?
   /// The `spine` element containing the sequence's primary storyline.
@@ -62,12 +62,12 @@ public struct Sequence: Codable {
 
   /// Creates a sequence with the given settings and spine.
   public init(
-    format: String? = nil,
+    format: ResourceRef<FormatKind>? = nil,
     duration: String? = nil,
     tcStart: String? = nil,
-    tcFormat: String? = nil,
-    audioLayout: String? = nil,
-    audioRate: String? = nil,
+    tcFormat: TCFormat? = nil,
+    audioLayout: AudioLayout? = nil,
+    audioRate: AudioRate? = nil,
     renderFormat: String? = nil,
     spine: Spine? = nil
   ) {

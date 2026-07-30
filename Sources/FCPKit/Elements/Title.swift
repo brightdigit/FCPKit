@@ -57,8 +57,8 @@ public struct Title: Codable {
     case filterVideo = "filter-video"
   }
 
-  /// The `id` of the `effect` resource that renders this title.
-  public var ref: String?
+  /// The effect resource reference that renders this title.
+  public var ref: ResourceRef<EffectKind>?
   /// The display name of the title clip.
   public var name: String?
   /// The clip's duration, as a rational time string.
@@ -98,7 +98,7 @@ public struct Title: Codable {
   /// Creates a title clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.ref = try container.decodeIfPresent(ResourceRef<EffectKind>.self, forKey: .ref)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
@@ -136,7 +136,7 @@ public struct Title: Codable {
 
   /// Creates a title clip with the given attributes and contained elements.
   public init(
-    ref: String? = nil,
+    ref: ResourceRef<EffectKind>? = nil,
     name: String? = nil,
     duration: String? = nil,
     start: String? = nil,

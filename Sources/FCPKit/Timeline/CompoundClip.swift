@@ -50,8 +50,8 @@ public struct CompoundClip: Codable {
     case chapterMarkers = "chapter-marker"
   }
 
-  /// The identifier of the referenced media resource.
-  public var ref: String?
+  /// The media resource reference.
+  public var ref: ResourceRef<MediaKind>?
   /// The clip's start position on the parent timeline, as a rational time string.
   public var offset: String?
   /// The display name of the clip.
@@ -62,8 +62,8 @@ public struct CompoundClip: Codable {
   public var duration: String?
   /// Whether the clip's audio subroles are active, as `1` or `0`.
   public var useAudioSubroles: String?
-  /// The identifier of the referenced format resource.
-  public var format: String?
+  /// The format resource reference.
+  public var format: ResourceRef<FormatKind>?
   /// The vertical lane position.
   public var lane: String?
 
@@ -81,13 +81,13 @@ public struct CompoundClip: Codable {
   /// Creates a compound clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.ref = try container.decodeIfPresent(ResourceRef<MediaKind>.self, forKey: .ref)
     self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
     self.useAudioSubroles = try container.decodeIfPresent(String.self, forKey: .useAudioSubroles)
-    self.format = try container.decodeIfPresent(String.self, forKey: .format)
+    self.format = try container.decodeIfPresent(ResourceRef<FormatKind>.self, forKey: .format)
     self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
 
     self.note = try container.decodeIfPresent(String.self, forKey: .note)
@@ -111,13 +111,13 @@ public struct CompoundClip: Codable {
 
   /// Creates a compound clip with the given attributes and contents.
   public init(
-    ref: String? = nil,
+    ref: ResourceRef<MediaKind>? = nil,
     offset: String? = nil,
     name: String? = nil,
     start: String? = nil,
     duration: String? = nil,
     useAudioSubroles: String? = nil,
-    format: String? = nil,
+    format: ResourceRef<FormatKind>? = nil,
     lane: String? = nil,
     note: String? = nil,
     anchoredItems: [AnchoredItem]? = nil,

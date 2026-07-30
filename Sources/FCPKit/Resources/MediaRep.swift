@@ -36,6 +36,7 @@ public struct MediaRep: Codable {
     case kind
     case sig
     case src
+    case format
     case bookmark
   }
 
@@ -45,6 +46,8 @@ public struct MediaRep: Codable {
   public var sig: String?
   /// The URL of the media file for this representation.
   public var src: String?
+  /// The format resource reference.
+  public var format: ResourceRef<FormatKind>?
   /// A security-scoped bookmark, base64-encoded, for locating the media file.
   public var bookmark: String?
 
@@ -53,11 +56,13 @@ public struct MediaRep: Codable {
     kind: MediaRepKind? = nil,
     sig: String? = nil,
     src: String? = nil,
+    format: ResourceRef<FormatKind>? = nil,
     bookmark: String? = nil
   ) {
     self.kind = kind
     self.sig = sig
     self.src = src
+    self.format = format
     self.bookmark = bookmark
   }
 }

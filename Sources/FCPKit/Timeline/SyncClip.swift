@@ -68,9 +68,9 @@ public struct SyncClip: Codable {
   /// The playback duration of the clip, as a rational time string.
   public var duration: String?
   /// The timecode format, such as `DF` (drop frame) or `NDF` (non-drop frame).
-  public var tcFormat: String?
-  /// The identifier of the `format` resource describing the clip's video format.
-  public var format: String?
+  public var tcFormat: TCFormat?
+  /// The format resource reference describing the clip's video format.
+  public var format: ResourceRef<FormatKind>?
   /// The start time within the clip's local timeline, as a rational time string.
   public var start: String?
   /// The date the clip was last modified.
@@ -121,8 +121,8 @@ public struct SyncClip: Codable {
     self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
-    self.tcFormat = try container.decodeIfPresent(String.self, forKey: .tcFormat)
-    self.format = try container.decodeIfPresent(String.self, forKey: .format)
+    self.tcFormat = try container.decodeIfPresent(TCFormat.self, forKey: .tcFormat)
+    self.format = try container.decodeIfPresent(ResourceRef<FormatKind>.self, forKey: .format)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
     self.modDate = try container.decodeIfPresent(String.self, forKey: .modDate)
 
@@ -161,8 +161,8 @@ public struct SyncClip: Codable {
     offset: String? = nil,
     name: String? = nil,
     duration: String? = nil,
-    tcFormat: String? = nil,
-    format: String? = nil,
+    tcFormat: TCFormat? = nil,
+    format: ResourceRef<FormatKind>? = nil,
     start: String? = nil,
     modDate: String? = nil,
     note: String? = nil,

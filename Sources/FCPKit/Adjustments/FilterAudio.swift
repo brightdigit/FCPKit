@@ -39,14 +39,27 @@ public struct FilterAudio: Codable {
     case param
   }
 
-  /// The ID of the referenced `effect` resource.
-  public let ref: String?
+  /// The effect resource reference.
+  public var ref: ResourceRef<EffectKind>?
   /// The display name of the audio filter.
-  public let name: String?
-  /// Whether the filter is enabled ("0" or "1").
-  public let enabled: String?
+  public var name: String?
+  /// Whether the filter is enabled.
+  public var enabled: FCPBool?
   /// Nested `param` elements holding the filter's parameter values.
   public var param: [ParamElement]?
+
+  /// Creates an audio filter with the given effect reference and parameters.
+  public init(
+    ref: ResourceRef<EffectKind>? = nil,
+    name: String? = nil,
+    enabled: FCPBool? = nil,
+    param: [ParamElement]? = nil
+  ) {
+    self.ref = ref
+    self.name = name
+    self.enabled = enabled
+    self.param = param
+  }
 }
 
 extension FilterAudio: FCPNodeEncodable {
