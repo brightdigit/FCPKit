@@ -1,0 +1,48 @@
+---
+description: Table-driven XML choice Codable — no large if/switch ladders
+globs: Sources/FCPKit/**/*.swift
+alwaysApply: false
+---
+
+# XML choice Codable
+
+Large `if` / `else if` chains and large `switch` / `case` ladders for choice
+decode, encode, or seeding ordered items are an anti-pattern. Do not silence
+them with `swiftlint:disable cyclomatic_complexity`.
+
+## Bad
+
+```swift
+if container.contains(.clip) {
+  self = .clip(try container.decode(Clip.self, forKey: .clip))
+} else if container.contains(.gap) {
+  self = .gap(try container.decode(Gap.self, forKey: .gap))
+} // …
+
+if let clips {
+  items.append(contentsOf: clips.map(SpineItem.clip))
+}
+if let gaps {
+  items.append(contentsOf: gaps.map(SpineItem.gap))
+}
+```
+
+## Good
+
+Use `XMLChoiceField` (decode/encode) and `OrderedChoiceItems.appending` (seed
+inits), walked with a for-loop:
+
+```swift
+for field in Self.fields where container.contains(field.key) {
+  self = try field.decode(from: container)
+  return
+}
+
+self.items = OrderedChoiceItems.appending([
+  clips?.map(SpineItem.clip),
+  gaps?.map(SpineItem.gap),
+])
+```
+
+Dispatch choice decode with `container.contains(_:)` only — never try/catch
+chaining across cases.
