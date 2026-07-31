@@ -12,8 +12,8 @@
     "type": "ios",
     "runs-on": "xcode-27",
     "xcode": "/Applications/Xcode_27.0.app",
-    "deviceName": "iPhone 17",
-    "osVersion": "26.5",
+    "deviceName": "iPhone 17 Pro",
+    "osVersion": "27.0",
     "download-platform": true
   },
   {
@@ -21,7 +21,7 @@
     "runs-on": "xcode-27",
     "xcode": "/Applications/Xcode_27.0.app",
     "deviceName": "Apple Watch Ultra 3 (49mm)",
-    "osVersion": "26.5",
+    "osVersion": "27.0",
     "download-platform": true
   },
   {
@@ -29,7 +29,7 @@
     "runs-on": "xcode-27",
     "xcode": "/Applications/Xcode_27.0.app",
     "deviceName": "Apple TV 4K (3rd generation)",
-    "osVersion": "26.5",
+    "osVersion": "27.0",
     "download-platform": true
   }
 ]
