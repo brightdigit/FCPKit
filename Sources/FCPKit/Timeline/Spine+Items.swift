@@ -30,158 +30,85 @@
 extension Spine {
   /// The `clip` elements in the spine.
   public var clips: [Clip]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.clip) }
-    set {
-      OrderedChoiceItems.replace(&items, with: newValue, extract: \.clip, wrap: SpineItem.clip)
-    }
+    get { payloads(\.clip) }
+    set { replace(with: newValue, extract: \.clip, wrap: SpineItem.clip) }
   }
 
   /// The `gap` elements filling empty stretches of the spine.
   public var gaps: [Gap]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.gap) }
-    set {
-      OrderedChoiceItems.replace(&items, with: newValue, extract: \.gap, wrap: SpineItem.gap)
-    }
+    get { payloads(\.gap) }
+    set { replace(with: newValue, extract: \.gap, wrap: SpineItem.gap) }
   }
 
   /// The `mc-clip` elements referencing multicam media resources.
   public var mcClips: [MCClip]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.mcClip) }
-    set {
-      OrderedChoiceItems.replace(&items, with: newValue, extract: \.mcClip, wrap: SpineItem.mcClip)
-    }
+    get { payloads(\.mcClip) }
+    set { replace(with: newValue, extract: \.mcClip, wrap: SpineItem.mcClip) }
   }
 
   /// The `ref-clip` elements referencing compound clips or other media resources.
   public var refClips: [RefClip]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.refClip) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.refClip,
-        wrap: SpineItem.refClip
-      )
-    }
+    get { payloads(\.refClip) }
+    set { replace(with: newValue, extract: \.refClip, wrap: SpineItem.refClip) }
   }
 
   /// The `sync-clip` elements containing synchronized audio and video.
   public var syncClips: [SyncClip]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.syncClip) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.syncClip,
-        wrap: SpineItem.syncClip
-      )
-    }
+    get { payloads(\.syncClip) }
+    set { replace(with: newValue, extract: \.syncClip, wrap: SpineItem.syncClip) }
   }
 
   /// The `asset-clip` elements referencing asset resources.
   public var assetClips: [AssetClip]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.assetClip) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.assetClip,
-        wrap: SpineItem.assetClip
-      )
-    }
+    get { payloads(\.assetClip) }
+    set { replace(with: newValue, extract: \.assetClip, wrap: SpineItem.assetClip) }
   }
 
   /// The `title` elements in the spine.
   public var titles: [Title]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.title) }
-    set {
-      OrderedChoiceItems.replace(&items, with: newValue, extract: \.title, wrap: SpineItem.title)
-    }
+    get { payloads(\.title) }
+    set { replace(with: newValue, extract: \.title, wrap: SpineItem.title) }
   }
 
   /// The `generator` elements referencing generator effects.
   public var generators: [Generator]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.generator) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.generator,
-        wrap: SpineItem.generator
-      )
-    }
+    get { payloads(\.generator) }
+    set { replace(with: newValue, extract: \.generator, wrap: SpineItem.generator) }
   }
 
   /// The `transition` elements joining adjacent story elements.
   public var transitions: [Transition]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.transition) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.transition,
-        wrap: SpineItem.transition
-      )
-    }
+    get { payloads(\.transition) }
+    set { replace(with: newValue, extract: \.transition, wrap: SpineItem.transition) }
   }
 
   /// Nested `storyline` elements connected to the spine.
   public var storylines: [Storyline]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.storyline) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.storyline,
-        wrap: SpineItem.storyline
-      )
-    }
+    get { payloads(\.storyline) }
+    set { replace(with: newValue, extract: \.storyline, wrap: SpineItem.storyline) }
   }
 
   /// The `compound-clip` elements in the spine.
   public var compoundClips: [CompoundClip]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.compoundClip) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.compoundClip,
-        wrap: SpineItem.compoundClip
-      )
-    }
+    get { payloads(\.compoundClip) }
+    set { replace(with: newValue, extract: \.compoundClip, wrap: SpineItem.compoundClip) }
   }
 
   /// The `retime-clip` elements applying retiming to their contents.
   public var retimeClips: [RetimeClip]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.retimeClip) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.retimeClip,
-        wrap: SpineItem.retimeClip
-      )
-    }
+    get { payloads(\.retimeClip) }
+    set { replace(with: newValue, extract: \.retimeClip, wrap: SpineItem.retimeClip) }
   }
 
   /// The `caption` elements in the spine.
   public var captions: [Caption]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.caption) }
-    set {
-      OrderedChoiceItems.replace(
-        &items,
-        with: newValue,
-        extract: \.caption,
-        wrap: SpineItem.caption
-      )
-    }
+    get { payloads(\.caption) }
+    set { replace(with: newValue, extract: \.caption, wrap: SpineItem.caption) }
   }
 
   /// The `video` elements in the spine.
   public var video: [Video]? {
-    get { OrderedChoiceItems.payloads(in: items, extract: \.video) }
-    set {
-      OrderedChoiceItems.replace(&items, with: newValue, extract: \.video, wrap: SpineItem.video)
-    }
+    get { payloads(\.video) }
+    set { replace(with: newValue, extract: \.video, wrap: SpineItem.video) }
   }
 }

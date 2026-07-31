@@ -198,7 +198,7 @@ public struct AssetClip: Codable {
     self.adjustCrop = adjustCrop
     self.timeMap = timeMap
 
-    let items = OrderedChoiceItems.appending(
+    let items = Self.appending(
       [
         titles?.map(AnchoredItem.title),
         assetClips?.map(AnchoredItem.assetClip),

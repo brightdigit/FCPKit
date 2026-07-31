@@ -27,8 +27,8 @@ if let clips {
 ## Good
 
 - Choice enums conform to `XMLChoiceCodable` and declare `choiceFields`.
-- Seed ordered items with `OrderedChoiceItems.appending`.
-- Typed slices use `OrderedChoiceItems.payloads` / `replace`, or
+- Seed ordered items with `Self.appending` from `OrderedChoiceContainer`.
+- Typed slices use `payloads` / `replace` on `OrderedChoiceContainer`, or
   `AnchoredChoiceContainer` for hosts with `anchoredItems`.
 - Do not re-copy Codable loops or get/set helpers per type.
 
@@ -38,7 +38,7 @@ public enum SpineItem: XMLChoiceCodable {
   static var unsupportedChoice: SpineItem { .unsupported }
 }
 
-self.items = OrderedChoiceItems.appending([
+self.items = Self.appending([
   clips?.map(SpineItem.clip),
   gaps?.map(SpineItem.gap),
 ])

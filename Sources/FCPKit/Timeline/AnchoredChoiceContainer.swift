@@ -30,14 +30,19 @@
 import Foundation
 
 /// A timeline element that stores ordered ``AnchoredItem`` children.
-internal protocol AnchoredChoiceContainer {
+internal protocol AnchoredChoiceContainer: OrderedChoiceContainer where Item == AnchoredItem {
   var anchoredItems: [AnchoredItem]? { get set }
 }
 
 extension AnchoredChoiceContainer {
+  internal var orderedItems: [AnchoredItem] {
+    get { anchoredItems ?? [] }
+    set { anchoredItems = newValue.isEmpty ? nil : newValue }
+  }
+
   /// Returns non-empty payloads extracted from ``anchoredItems``.
   internal func anchoredPayloads<T>(_ extract: (AnchoredItem) -> T?) -> [T]? {
-    OrderedChoiceItems.payloads(in: anchoredItems ?? [], extract: extract)
+    payloads(extract)
   }
 
   /// Replaces matching anchored payloads, clearing the array when empty.
@@ -46,8 +51,6 @@ extension AnchoredChoiceContainer {
     extract: @escaping (AnchoredItem) -> T?,
     wrap: (T) -> AnchoredItem
   ) {
-    var items = anchoredItems ?? []
-    OrderedChoiceItems.replace(&items, with: newValue, extract: extract, wrap: wrap)
-    anchoredItems = items.isEmpty ? nil : items
+    replace(with: newValue, extract: extract, wrap: wrap)
   }
 }

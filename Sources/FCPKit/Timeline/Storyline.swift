@@ -127,7 +127,7 @@ public struct Storyline: Codable {
     self.format = format
     self.spine = spine
 
-    let items = OrderedChoiceItems.appending(
+    let items = Self.appending(
       [
         clips?.map(AnchoredItem.clip),
         assetClips?.map(AnchoredItem.assetClip),
