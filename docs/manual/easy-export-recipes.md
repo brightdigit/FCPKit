@@ -5,13 +5,22 @@ If you change anything else (name, trim, effects, color), start over.
 
 ## Before you start (once)
 
-1. Open **Final Cut Pro**.
-2. Use the blue and orange test movies:
-   - `/Users/Shared/FCPKitMedia/Left.mov`
-   - `/Users/Shared/FCPKitMedia/Right.mov` (only if a recipe says so)
-3. Make a new library (or use `FCPKit-Sample` if you already have it).
-4. Make a new **Project** (not a compound clip).
-5. Drag **Left.mov** onto the project timeline so there is **one** clip.
+1. Generate the blue and orange test movies (requires `ffmpeg`):
+
+   ```sh
+   ./Scripts/generate-test-media.sh
+   ```
+
+   That writes:
+   - `/Users/Shared/FCPKitMedia/Left.mov` (10s, 1080p24, blue)
+   - `/Users/Shared/FCPKitMedia/Right.mov` (9s, 720p24, orange)
+
+   Override the destination with `MEDIA_DIR=/some/path ./Scripts/generate-test-media.sh`.
+2. Open **Final Cut Pro**.
+3. Use those movies (Right only if a recipe says so).
+4. Make a new library (or use `FCPKit-Sample` if you already have it).
+5. Make a new **Project** (not a compound clip).
+6. Drag **Left.mov** onto the project timeline so there is **one** clip.
 
 ### How to export (every recipe)
 
