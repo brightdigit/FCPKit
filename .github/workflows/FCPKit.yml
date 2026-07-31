@@ -35,9 +35,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
-env:
-  PACKAGE_NAME: FCPKit
-
 jobs:
   configure:
     name: Configure Matrix
@@ -213,7 +210,8 @@ jobs:
         name: Build and Test
         uses: brightdigit/swift-build@v1
         with:
-          scheme: ${{ env.PACKAGE_NAME }}
+          # Omit scheme so swift-build derives FCPKit-Package (multi-product package).
+          # An explicit "FCPKit" scheme is library-only and has no test action.
           type: ${{ matrix.type }}
           xcode: ${{ matrix.xcode }}
           deviceName: ${{ matrix.deviceName }}

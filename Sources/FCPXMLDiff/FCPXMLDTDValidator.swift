@@ -38,9 +38,22 @@ public struct FCPXMLDTDValidator: Sendable {
     self.locator = locator
   }
 
-  // Validation spawns `/usr/bin/xmllint`; `Foundation.Process` is unavailable on
-  // WebAssembly, which has no process model.
-  #if !os(WASI)
+  // Validation spawns `/usr/bin/xmllint`. `Foundation.Process` is unavailable on
+  // iOS/tvOS/watchOS/visionOS and on WebAssembly (no process model).
+  #if os(iOS) || os(tvOS) || os(watchOS) || os(visionOS) || os(WASI)
+
+    /// DTD validation shells out to `xmllint`, which requires `Foundation.Process`.
+    /// On platforms without Process the API stays present so callers still compile;
+    /// it reports the tool as unavailable, the same path taken on a host that
+    /// simply lacks xmllint.
+    public func validate(
+      data: Data,
+      sourcePath: String = "input.fcpxml",
+      dtdURL: URL? = nil
+    ) throws -> FCPXMLValidationReport {
+      throw FCPXMLValidationError.xmllintUnavailable
+    }
+  #else
 
     /// Validates FCPXML data against its declared version's DTD and returns a report.
     public func validate(
@@ -99,19 +112,6 @@ public struct FCPXMLDTDValidator: Sendable {
 
     private func xmllintAvailable() -> Bool {
       FileManager.default.isExecutableFile(atPath: "/usr/bin/xmllint")
-    }
-  #else
-
-    /// DTD validation shells out to `xmllint`, and WebAssembly has no process model
-    /// (`Foundation.Process` does not exist there). The API stays present so callers
-    /// still compile; it reports the tool as unavailable, the same path taken on a
-    /// host that simply lacks xmllint.
-    public func validate(
-      data: Data,
-      sourcePath: String = "input.fcpxml",
-      dtdURL: URL? = nil
-    ) throws -> FCPXMLValidationReport {
-      throw FCPXMLValidationError.xmllintUnavailable
     }
   #endif
 
