@@ -36,32 +36,36 @@
 
   @Suite
   internal struct FCPLibraryInspectorMockTests {
+    // The mock keys pin the sdef *term-name* contract that live SBObject
+    // proxies resolve (verified against a running Final Cut Pro, #27). Do
+    // not switch these to the sdef cocoa keys (`displayName`,
+    // `uniqueIdentifier`, `durationDict`, …) — those crash live.
     private static var sampleApplication: FCPScriptingObjectMock {
       let sequence = FCPScriptingObjectMock(
         strings: [
-          "displayName": "Main Sequence",
-          "mediaIdentifier": "seq-1",
+          "name": "Main Sequence",
+          "id": "seq-1",
         ],
         mediaTimes: [
-          "durationDict": FCPTime(numerator: 240, denominator: 24),
-          "frameDurationDict": FCPTime(numerator: 1, denominator: 24),
-          "startTimeDict": FCPTime(numerator: 0, denominator: 1),
+          "duration": FCPTime(numerator: 240, denominator: 24),
+          "frameDuration": FCPTime(numerator: 1, denominator: 24),
+          "startTime": FCPTime(numerator: 0, denominator: 1),
         ],
         timecodeFormats: ["timecodeFormat": .dropFrame]
       )
       let project = FCPScriptingObjectMock(
         strings: [
-          "displayName": "Project A",
-          "uniqueIdentifier": "proj-1",
-          "persistent ID": "deadbeef",
+          "name": "Project A",
+          "id": "proj-1",
+          "persistentID": "deadbeef",
         ],
         childObjects: ["sequence": [sequence]]
       )
       let event = FCPScriptingObjectMock(
         strings: [
-          "displayName": "Event 1",
-          "uniqueIdentifier": "event-1",
-          "persistent ID": "cafebabe",
+          "name": "Event 1",
+          "id": "event-1",
+          "persistentID": "cafebabe",
         ],
         childObjects: [
           "projects": [project],
@@ -70,11 +74,11 @@
       )
       let library = FCPScriptingObjectMock(
         strings: [
-          "displayName": "Library",
-          "uniqueIdentifier": "lib-1",
-          "persistent ID": "feedface",
+          "name": "Library",
+          "id": "lib-1",
+          "persistentID": "feedface",
         ],
-        urls: ["URL": URL(fileURLWithPath: "/tmp/Library.fcpbundle")],
+        urls: ["file": URL(fileURLWithPath: "/tmp/Library.fcpbundle")],
         childObjects: ["events": [event]]
       )
       return FCPScriptingObjectMock(childObjects: ["libraries": [library]])
@@ -86,6 +90,7 @@
       let libraries = try inspector.libraries()
       #expect(libraries.count == 1)
       #expect(libraries[0].name == "Library")
+      #expect(libraries[0].persistentID == "feedface")
       #expect(libraries[0].fileURL?.path == "/tmp/Library.fcpbundle")
       #expect(libraries[0].events.count == 1)
       #expect(libraries[0].events[0].projects.count == 1)

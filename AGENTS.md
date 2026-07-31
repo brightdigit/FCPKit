@@ -37,8 +37,10 @@ and can be intentionally read, changed, and encoded.
   `export(version:)` to the Codable model.
 - `Sources/FCPKitScripting/` is a macOS-only read-only ScriptingBridge
   inspector for a running Final Cut Pro (libraries → events →
-  projects/sequences). Known issue: the SBObject bridge crashes against a live
-  FCP ([#27](https://github.com/brightdigit/FCPKit/issues/27)).
+  projects/sequences). The SBObject bridge must use sdef *term names*
+  (`name`, `id`, `duration`, `file`, …), never the sdef cocoa keys — cocoa
+  keys raise an uncatchable `NSUnknownKeyException` against a live FCP, and
+  Swift cannot catch ObjC exceptions ([#27](https://github.com/brightdigit/FCPKit/issues/27)).
 - `Sources/FCPKitMediaTools/MulticamXMLBuilder.swift` generates split-screen
   multicam documents through the typed Codable model (no raw XML templates).
   Final Cut import/re-export gate evidence lives in

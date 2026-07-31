@@ -178,12 +178,6 @@ control Final Cut Pro) and enable the
 entitlements file. Without both, ScriptingBridge calls fail at runtime with a
 sandbox/TCC error.
 
-> **Known issue** ([#27](https://github.com/brightdigit/FCPKit/issues/27)):
-> against a real running Final Cut Pro, `FCPLibraryInspector.libraries()`
-> currently raises an uncatchable `NSUnknownKeyException` — the SBObject
-> bridge resolves sdef term names, not the cocoa keys it is given. The
-> inspector works against mocks but not live FCP in v0.1.0.
-
 ### Encoding Back to XML
 
 ```swift

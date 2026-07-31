@@ -35,9 +35,9 @@ internal enum FCPScriptingTimecodeFormatParser {
       .trimmingCharacters(in: .whitespacesAndNewlines)
       .lowercased()
     switch normalized {
-    case "drop frame", "dropframe", "df":
+    case "drop frame", "dropframe", "df", "drop":
       return .dropFrame
-    case "non drop frame", "non-drop frame", "nondropframe", "ndf", "non dropframe":
+    case "non drop frame", "non-drop frame", "nondropframe", "ndf", "non dropframe", "ndrp":
       return .nonDropFrame
     default:
       return .unspecified
@@ -51,9 +51,23 @@ internal enum FCPScriptingTimecodeFormatParser {
     case let text as NSString:
       text as String
     case let number as NSNumber:
-      number.stringValue
+      fourCharCode(from: number) ?? number.stringValue
     default:
       ""
     }
+  }
+
+  /// Decodes the sdef `timecode formats` enumerator codes (`drop`, `ndrp`,
+  /// `unsp`) that a live ScriptingBridge proxy returns as an OSType number.
+  private static func fourCharCode(from number: NSNumber) -> String? {
+    let raw = number.uint32Value
+    let bytes = [
+      UInt8((raw >> 24) & 0xFF), UInt8((raw >> 16) & 0xFF),
+      UInt8((raw >> 8) & 0xFF), UInt8(raw & 0xFF),
+    ]
+    guard bytes.allSatisfy({ $0 >= 0x20 && $0 < 0x7F }) else {
+      return nil
+    }
+    return String(bytes: bytes, encoding: .ascii)
   }
 }
