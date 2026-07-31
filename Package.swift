@@ -37,6 +37,10 @@ let package = Package(
             targets: ["fcpxml-generator"]
         ),
         .executable(
+            name: "fcpxml-dsl",
+            targets: ["fcpxml-dsl"]
+        ),
+        .executable(
             name: "fcpxml-diff",
             targets: ["FCPXMLDiffCLI"]
         ),
@@ -68,6 +72,10 @@ let package = Package(
         .executableTarget(
             name: "fcpxml-generator",
             dependencies: ["FCPKitMediaTools"]
+        ),
+        .executableTarget(
+            name: "fcpxml-dsl",
+            dependencies: ["FCPKit", "FCPKitDSL", "FCPKitMediaTools"]
         ),
         .executableTarget(
             name: "FCPXMLDiffCLI",
