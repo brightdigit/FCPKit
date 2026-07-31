@@ -38,6 +38,11 @@ public struct TextElement: Codable {
 
   /// The `text-style` runs that carry the text content and its styling.
   public var textStyle: [TextStyle]?
+
+  /// Creates a `text` element with the given styled runs.
+  public init(textStyle: [TextStyle]? = nil) {
+    self.textStyle = textStyle
+  }
 }
 
 extension TextElement: DynamicNodeEncoding {

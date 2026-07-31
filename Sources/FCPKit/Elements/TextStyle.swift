@@ -65,6 +65,31 @@ public struct TextStyle: Codable {
   public var param: [ParamElement]?
   /// The run's text content, stored as the element's character data.
   public var content: String?
+
+  /// Creates a `text-style` run with the given attributes and content.
+  public init(
+    ref: String? = nil,
+    font: String? = nil,
+    fontSize: String? = nil,
+    fontFace: String? = nil,
+    fontColor: String? = nil,
+    bold: String? = nil,
+    kerning: String? = nil,
+    alignment: String? = nil,
+    param: [ParamElement]? = nil,
+    content: String? = nil
+  ) {
+    self.ref = ref
+    self.font = font
+    self.fontSize = fontSize
+    self.fontFace = fontFace
+    self.fontColor = fontColor
+    self.bold = bold
+    self.kerning = kerning
+    self.alignment = alignment
+    self.param = param
+    self.content = content
+  }
 }
 
 extension TextStyle: DynamicNodeEncoding {

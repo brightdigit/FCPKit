@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  Anchor.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,25 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-import XMLCoder
+import FCPKit
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+internal struct Anchor: DSLNode {
+  internal let lane: Int
+  internal let offset: FCPTime
+  internal let content: any DSLNode
+  internal func build(_ resources: inout ResourceStore) throws -> Built {
+    guard lane != 0 else { throw BuildError.invalidLane }
+    switch try content.build(&resources) {
+    case .item(.title(var title)):
+      title.lane = String(lane)
+      title.offset = offset.description
+      return .item(.title(title))
+    case .item(.assetClip(var clip)):
+      clip.lane = String(lane)
+      clip.offset = offset.description
+      return .item(.assetClip(clip))
+    case .spine(let spine): return .spine(spine)
+    default: throw BuildError.unsupportedContent
+    }
   }
-
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
-  }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
 }

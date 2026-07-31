@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  AssetClip+Modifiers.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,26 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-import XMLCoder
+import FCPKit
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+extension AssetClip {
+  /// Assigns an audio role such as `dialogue` or `music`.
+  public func audioRole(_ role: String) -> AssetClip {
+    replacing(audioRole: role)
   }
-
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
+  /// Anchors content on a connected lane. `lane` must be nonzero.
+  public func anchor(
+    lane: Int,
+    offset: FCPTime = .zero,
+    @DocumentBuilder content: () -> DocumentGroup
+  ) -> AssetClip {
+    replacing(
+      anchors: content().contents.compactMap { value in
+        guard let node = value as? any DSLNode else {
+          return nil
+        }
+        return Anchor(lane: lane, offset: offset, content: node)
+      }
+    )
   }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
 }

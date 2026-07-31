@@ -59,6 +59,27 @@ public struct ParamElement: Codable {
   public var fadeOut: Fade?
   /// The keyframe animation that varies the parameter's value over time.
   public var keyframeAnimation: KeyframeAnimation?
+
+  /// Creates a `param` element with the given attributes and nested content.
+  public init(
+    name: String? = nil,
+    key: String? = nil,
+    value: String? = nil,
+    param: [ParamElement]? = nil,
+    data: [DataElement]? = nil,
+    fadeIn: Fade? = nil,
+    fadeOut: Fade? = nil,
+    keyframeAnimation: KeyframeAnimation? = nil
+  ) {
+    self.name = name
+    self.key = key
+    self.value = value
+    self.param = param
+    self.data = data
+    self.fadeIn = fadeIn
+    self.fadeOut = fadeOut
+    self.keyframeAnimation = keyframeAnimation
+  }
 }
 
 extension ParamElement: FCPNodeEncodable {

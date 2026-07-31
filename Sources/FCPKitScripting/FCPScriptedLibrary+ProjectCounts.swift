@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  FCPScriptedLibrary+ProjectCounts.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,28 +28,34 @@
 //
 
 import Foundation
-import XMLCoder
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+extension FCPScriptedLibrary {
+  /// Flattens open projects to their display names, duplicates preserved.
+  ///
+  /// Import verification compares snapshots taken before and after sending an
+  /// FCPXML document to Final Cut Pro: a name whose count increased was imported.
+  public static func projectNames(in libraries: [FCPScriptedLibrary]) -> [String] {
+    libraries.flatMap { library in
+      library.events.flatMap { event in
+        event.projects.map(\.name)
+      }
+    }
   }
 
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
+  /// Returns the expected names whose project count increased between two snapshots.
+  public static func newlyImportedNames(
+    expected: [String],
+    before: [String],
+    after: [String]
+  ) -> [String] {
+    let beforeCounts = counts(of: before)
+    let afterCounts = counts(of: after)
+    return expected.filter { afterCounts[$0, default: 0] > beforeCounts[$0, default: 0] }
   }
-}
 
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
+  private static func counts(of names: [String]) -> [String: Int] {
+    names.reduce(into: [:]) { counts, name in
+      counts[name, default: 0] += 1
+    }
+  }
 }

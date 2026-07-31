@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  DocumentBuilder.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,36 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-import XMLCoder
-
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+/// Builds a document or story body from declarative child values.
+@resultBuilder
+public enum DocumentBuilder {
+  /// Joins child content values into a ``DocumentGroup``.
+  public static func buildBlock(_ components: any DocumentContent...) -> DocumentGroup {
+    DocumentGroup(components)
   }
 
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
+  /// Passes an expression through as document content.
+  public static func buildExpression(_ expression: any DocumentContent) -> any DocumentContent {
+    expression
   }
-}
 
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
+  /// Builds an optional child for `if` without `else`.
+  public static func buildOptional(_ component: DocumentGroup?) -> DocumentGroup {
+    component ?? DocumentGroup([])
+  }
+
+  /// Builds the first branch of `if`/`else`.
+  public static func buildEither(first component: DocumentGroup) -> DocumentGroup {
+    component
+  }
+
+  /// Builds the second branch of `if`/`else`.
+  public static func buildEither(second component: DocumentGroup) -> DocumentGroup {
+    component
+  }
+
+  /// Flattens `for`/`in` results into one group.
+  public static func buildArray(_ components: [DocumentGroup]) -> DocumentGroup {
+    DocumentGroup(components.flatMap(\.contents))
+  }
 }

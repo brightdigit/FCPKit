@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  FCPXMLDSLMediaProbe.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,22 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import FCPKit
+import FCPKitMediaTools
 import Foundation
-import XMLCoder
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
-  }
-
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
-  }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
+internal enum FCPXMLDSLMediaProbe {
+  #if canImport(AVFoundation)
+    internal static func duration(of url: URL) async throws -> FCPTime {
+      guard FileManager.default.fileExists(atPath: url.path) else {
+        throw FCPXMLDSLCommandError.fileNotFound(url.path)
+      }
+      let metadata = try await VideoMetadataExtractor().extractMetadata(from: url)
+      let description = FCPXMLUtilities.cmTimeToFCPXMLDuration(metadata.duration)
+      guard let time = FCPTime(description), time > .zero else {
+        throw FCPXMLDSLCommandError.invalidDuration(url.path)
+      }
+      return time
+    }
+  #endif
 }

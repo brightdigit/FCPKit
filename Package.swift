@@ -28,9 +28,17 @@ let package = Package(
             name: "FCPXMLDiff",
             targets: ["FCPXMLDiff"]
         ),
+        .library(
+            name: "FCPKitDSL",
+            targets: ["FCPKitDSL"]
+        ),
         .executable(
             name: "fcpxml-generator",
             targets: ["fcpxml-generator"]
+        ),
+        .executable(
+            name: "fcpxml-dsl",
+            targets: ["fcpxml-dsl"]
         ),
         .executable(
             name: "fcpxml-diff",
@@ -57,9 +65,17 @@ let package = Package(
             name: "FCPXMLDiff",
             dependencies: ["FCPKit", "XMLCoder"]
         ),
+        .target(
+            name: "FCPKitDSL",
+            dependencies: ["FCPKit"]
+        ),
         .executableTarget(
             name: "fcpxml-generator",
             dependencies: ["FCPKitMediaTools"]
+        ),
+        .executableTarget(
+            name: "fcpxml-dsl",
+            dependencies: ["FCPKit", "FCPKitDSL", "FCPKitMediaTools", "FCPKitScripting"]
         ),
         .executableTarget(
             name: "FCPXMLDiffCLI",
@@ -78,6 +94,10 @@ let package = Package(
         .testTarget(
             name: "FCPKitScriptingTests",
             dependencies: ["FCPKitScripting", "FCPKit"]
+        ),
+        .testTarget(
+            name: "FCPKitDSLTests",
+            dependencies: ["FCPKitDSL", "FCPKit", "FCPXMLDiff"]
         ),
     ]
 )

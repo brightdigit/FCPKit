@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  Transition.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,34 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-import XMLCoder
+import FCPKit
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+/// A transition between adjacent story items.
+public struct Transition: DSLNode {
+  internal let preset: TransitionPreset
+  internal let duration: FCPTime
+
+  /// Creates a transition from a preset. Default duration is one second.
+  public init(_ preset: TransitionPreset, duration: FCPTime = FCPTime(numerator: 1)) {
+    self.preset = preset
+    self.duration = duration
   }
 
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
+  internal func build(_ resources: inout ResourceStore) throws -> Built {
+    let video = try resources.effect(name: "Cross Dissolve", uid: TransitionPreset.videoUID)
+    let audio = try resources.effect(name: "Audio Crossfade", uid: TransitionPreset.audioUID)
+    let filters =
+      preset == .crossDissolve
+      ? CrossDissolveFilters.make(video: video, audio: audio) : (nil, nil)
+    return .item(
+      .transition(
+        FCPKit.Transition(
+          duration: duration.description,
+          name: "Cross Dissolve",
+          filterVideo: filters.0,
+          filterAudio: filters.1
+        )
+      )
+    )
   }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
 }

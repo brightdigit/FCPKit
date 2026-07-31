@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  Spine.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,22 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-import XMLCoder
+import FCPKit
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+/// A connected storyline permitted only as anchored content.
+public struct Spine: DSLNode {
+  internal let content: DocumentGroup
+
+  /// Creates a nested spine for use inside ``AssetClip/anchor(lane:offset:content:)``.
+  public init(@DocumentBuilder content: () -> DocumentGroup) {
+    self.content = content()
   }
 
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
+  internal func build(_ resources: inout ResourceStore) throws -> Built {
+    let packed = try Layout.pack(
+      storyItems(content.contents, resources: &resources),
+      frameDuration: FormatPreset.p1080p24.format.frameDuration
+    )
+    return .spine(FCPKit.Spine(items: packed.items))
   }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
 }

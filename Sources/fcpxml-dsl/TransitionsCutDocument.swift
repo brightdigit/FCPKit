@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  TransitionsCutDocument.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,27 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import FCPKit
+import FCPKitDSL
 import Foundation
-import XMLCoder
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+/// Two clips joined by a Cross Dissolve, for Final Cut import smoke tests.
+internal struct TransitionsCutDocument: Document {
+  internal let leftURL: URL
+  internal let rightURL: URL
+  internal let leftDuration: FCPTime
+  internal let rightDuration: FCPTime
+  internal let projectName: String
+
+  internal var body: some DocumentContent {
+    Project(name: projectName) {
+      Sequence(format: .p1080p24) {
+        AssetClip(leftURL, duration: leftDuration)
+          .audioRole("dialogue")
+        Transition(.crossDissolve)
+        AssetClip(rightURL, duration: rightDuration)
+          .audioRole("dialogue")
+      }
+    }
   }
-
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
-  }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
 }
