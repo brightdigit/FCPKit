@@ -28,7 +28,32 @@
 //
 
 import FCPKit
+import Foundation
 
 internal protocol DSLNode: DocumentContent {
   func build(_ resources: inout ResourceStore) throws -> Built
+}
+
+/// A DSL clip node whose duration can be set or updated via `.duration(...)`.
+public protocol DSLNodeWithDuration: DocumentContent {
+  /// Sets the clip duration.
+  func duration(_ duration: FCPTime) -> Self
+}
+
+extension DSLNodeWithDuration {
+  /// Sets duration using a `TimeInterval` in seconds.
+  public func duration(_ interval: TimeInterval) -> Self {
+    duration(.seconds(interval))
+  }
+
+  /// Sets duration using an `Int` in seconds.
+  public func duration(_ seconds: Int) -> Self {
+    duration(.seconds(seconds))
+  }
+
+  /// Sets duration using Swift's `Duration` type.
+  @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
+  public func duration(_ duration: Swift.Duration) -> Self {
+    self.duration(FCPTime(duration))
+  }
 }

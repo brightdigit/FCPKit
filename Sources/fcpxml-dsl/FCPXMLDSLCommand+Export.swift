@@ -73,6 +73,16 @@ extension FCPXMLDSLCommand {
       try write(document: document, to: output, version: version)
       print("Wrote titles cut → \(output.path)")
     }
+
+    internal static func exportRGB(
+      output: URL,
+      projectName: String,
+      version: FCPXMLVersion
+    ) async throws {
+      let document = RGBDocument(projectName: projectName)
+      try write(document: document, to: output, version: version)
+      print("Wrote RGB cut → \(output.path)")
+    }
   #endif
 
   private static func write(

@@ -31,12 +31,23 @@ import FCPKit
 import Foundation
 
 /// An `asset-clip` story item with optional anchors and audio role.
-public struct AssetClip: DSLNode {
+public struct AssetClip: DSLNode, DSLNodeWithDuration {
   internal let source: AssetSource
-  internal let duration: FCPTime?
+  public let duration: FCPTime?
   internal let name: String?
   internal let anchors: [any DSLNode]
   internal let audioRole: String?
+
+  /// Sets the clip duration.
+  public func duration(_ duration: FCPTime) -> AssetClip {
+    AssetClip(
+      source: source,
+      duration: duration,
+      name: name,
+      anchors: anchors,
+      audioRole: audioRole
+    )
+  }
 
   /// Creates a clip from an ``AssetSource``.
   public init(_ source: AssetSource, duration: FCPTime? = nil, name: String? = nil) {
@@ -107,6 +118,7 @@ public struct AssetClip: DSLNode {
     switch try node.build(&resources) {
     case .item(.title(let title)): return .title(title)
     case .item(.assetClip(let clip)): return .assetClip(clip)
+    case .item(.generator(let gen)): return .generator(gen)
     case .spine(let spine): return .spine(spine)
     default: throw BuildError.unsupportedContent
     }

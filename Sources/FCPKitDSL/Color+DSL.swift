@@ -1,5 +1,5 @@
 //
-//  TitlePreset.swift
+//  Color+DSL.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,12 +27,24 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A fixture-backed title effect preset.
-public enum TitlePreset: Equatable, Sendable {
-  /// Final Cut Pro's default Basic Title.
-  case basicTitle
-  /// Alias for ``basicTitle``.
-  public static let basic = TitlePreset.basicTitle
-  internal static let uid =
-    ".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti"
+import FCPKit
+
+/// Re-export ``Color`` for FCPKitDSL users.
+public typealias Color = FCPKit.Color
+
+extension Color: DSLNode, DSLNodeWithDuration {
+  /// Returns a copy of this color with the specified clip duration.
+  public func duration(_ duration: FCPTime) -> Color {
+    var copy = self
+    copy.duration = duration
+    return copy
+  }
+
+  internal func build(_ resources: inout ResourceStore) throws -> Built {
+    guard let duration else {
+      throw BuildError.missingDuration("color generator")
+    }
+    let generator = Generator(.custom, duration: duration).color(self)
+    return try generator.build(&resources)
+  }
 }

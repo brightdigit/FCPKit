@@ -30,15 +30,19 @@
 import FCPKit
 
 /// A title clip, typically anchored onto an asset clip.
-public struct Title: DSLNode {
+public struct Title: DSLNode, DSLNodeWithDuration {
   internal let preset: TitlePreset
   internal let text: String
-  internal let duration: FCPTime
+  public let duration: FCPTime
   internal let lane: Int?
   internal let offset: FCPTime?
-  /// Creates a title from a preset, text, and duration.
-  public init(_ preset: TitlePreset, text: String, duration: FCPTime) {
-    self.init(preset: preset, text: text, duration: duration, lane: nil, offset: nil)
+  /// Creates a title from a preset, text, and optional duration.
+  public init(_ preset: TitlePreset, text: String, duration: FCPTime? = nil) {
+    self.init(preset: preset, text: text, duration: duration ?? .zero, lane: nil, offset: nil)
+  }
+  /// Sets the title clip duration.
+  public func duration(_ duration: FCPTime) -> Title {
+    Title(preset: preset, text: text, duration: duration, lane: lane, offset: offset)
   }
   private init(preset: TitlePreset, text: String, duration: FCPTime, lane: Int?, offset: FCPTime?) {
     self.preset = preset

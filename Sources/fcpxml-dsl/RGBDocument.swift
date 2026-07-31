@@ -1,5 +1,5 @@
 //
-//  TitlePreset.swift
+//  RGBDocument.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,12 +27,26 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A fixture-backed title effect preset.
-public enum TitlePreset: Equatable, Sendable {
-  /// Final Cut Pro's default Basic Title.
-  case basicTitle
-  /// Alias for ``basicTitle``.
-  public static let basic = TitlePreset.basicTitle
-  internal static let uid =
-    ".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti"
+/// A sample document creating a sequence of red, green, and blue solid generator clips.
+
+import FCPKitDSL
+
+public struct RGBDocument: Document {
+  public let projectName: String
+
+  public init(projectName: String = "DSL RGB") {
+    self.projectName = projectName
+  }
+
+  public var body: some DocumentContent {
+    Project(name: projectName) {
+      Sequence {
+        Color.red.duration(.seconds(5.0))
+        Transition(.crossDissolve)
+        Color.green.duration(.seconds(5.0))
+        Transition(.crossDissolve)
+        Color.blue.duration(.seconds(5.0))
+      }
+    }
+  }
 }

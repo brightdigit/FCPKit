@@ -27,6 +27,8 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import Foundation
+
 /// A rational FCPXML time value that preserves the exact textual form it was written in.
 ///
 /// FCPXML times are rational seconds — `"5s"`, `"0s"`, `"1001/30000s"`,
@@ -176,5 +178,59 @@ public struct FCPTime: XMLAttributeValue, Comparable {
   /// `"22800/2400s"`; it is the byte-stability check for round-trip tests.
   public func isIdenticallyFormatted(to other: FCPTime) -> Bool {
     numerator == other.numerator && denominator == other.denominator && form == other.form
+  }
+}
+
+// MARK: - Time Interval & Duration Extensions
+
+extension FCPTime {
+  /// Creates an ``FCPTime`` from a floating-point `TimeInterval` (seconds).
+  public init(_ interval: TimeInterval) {
+    self = FCPTime.seconds(interval)
+  }
+
+  /// Creates an ``FCPTime`` from Swift's `Duration` type.
+  @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
+  public init(_ duration: Swift.Duration) {
+    let (seconds, attoseconds) = duration.components
+    let fractional = Double(attoseconds) / 1e18
+    let total = Double(seconds) + fractional
+    self = FCPTime.seconds(total)
+  }
+
+  /// Creates an ``FCPTime`` from seconds.
+  public static func seconds(_ seconds: Double) -> FCPTime {
+    if seconds.truncatingRemainder(dividingBy: 1) == 0 {
+      return FCPTime(numerator: Int64(seconds), denominator: 1, form: .whole)
+    } else {
+      let scale: Int32 = 1000
+      let num = Int64((seconds * Double(scale)).rounded())
+      return FCPTime(numerator: num, denominator: scale, form: .rational)
+    }
+  }
+
+  /// Creates an ``FCPTime`` from seconds.
+  public static func seconds(_ seconds: Int) -> FCPTime {
+    FCPTime.seconds(Double(seconds))
+  }
+
+  /// Creates an ``FCPTime`` from minutes (1 minute = 60 seconds).
+  public static func minutes(_ minutes: Double) -> FCPTime {
+    FCPTime.seconds(minutes * 60.0)
+  }
+
+  /// Creates an ``FCPTime`` from minutes (1 minute = 60 seconds).
+  public static func minutes(_ minutes: Int) -> FCPTime {
+    FCPTime.minutes(Double(minutes))
+  }
+
+  /// Creates an ``FCPTime`` from hours (1 hour = 3600 seconds).
+  public static func hours(_ hours: Double) -> FCPTime {
+    FCPTime.seconds(hours * 3600.0)
+  }
+
+  /// Creates an ``FCPTime`` from hours (1 hour = 3600 seconds).
+  public static func hours(_ hours: Int) -> FCPTime {
+    FCPTime.hours(Double(hours))
   }
 }

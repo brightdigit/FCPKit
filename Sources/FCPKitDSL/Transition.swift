@@ -30,14 +30,19 @@
 import FCPKit
 
 /// A transition between adjacent story items.
-public struct Transition: DSLNode {
+public struct Transition: DSLNode, DSLNodeWithDuration {
   internal let preset: TransitionPreset
-  internal let duration: FCPTime
+  public let duration: FCPTime
 
   /// Creates a transition from a preset. Default duration is one second.
   public init(_ preset: TransitionPreset, duration: FCPTime = FCPTime(numerator: 1)) {
     self.preset = preset
     self.duration = duration
+  }
+
+  /// Sets the transition duration.
+  public func duration(_ duration: FCPTime) -> Transition {
+    Transition(preset, duration: duration)
   }
 
   internal func build(_ resources: inout ResourceStore) throws -> Built {

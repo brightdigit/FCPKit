@@ -1,5 +1,5 @@
 //
-//  TitlePreset.swift
+//  GeneratorPreset.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,12 +27,22 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A fixture-backed title effect preset.
-public enum TitlePreset: Equatable, Sendable {
-  /// Final Cut Pro's default Basic Title.
-  case basicTitle
-  /// Alias for ``basicTitle``.
-  public static let basic = TitlePreset.basicTitle
-  internal static let uid =
-    ".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti"
+/// A fixture-backed or custom generator effect preset.
+public struct GeneratorPreset: Equatable, Sendable {
+  /// The generator effect resource name.
+  public let name: String
+  /// The generator effect resource unique identifier.
+  public let uid: String
+
+  /// Creates a generator preset from an effect name and UID.
+  public init(name: String, uid: String) {
+    self.name = name
+    self.uid = uid
+  }
+
+  /// Final Cut Pro's default Solids > Custom generator.
+  public static let custom = GeneratorPreset(
+    name: "Custom",
+    uid: "FFB3BDE8-E5F3-4E11-9C67-9D8CFB57A076"
+  )
 }

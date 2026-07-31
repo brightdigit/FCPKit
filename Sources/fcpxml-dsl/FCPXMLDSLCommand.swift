@@ -84,6 +84,8 @@ internal enum FCPXMLDSLCommand {
           titleText: options["text"] ?? "Title",
           version: version
         )
+      case "rgb":
+        try await exportRGBCommand(positionals, projectName: projectName, version: version)
       default:
         throw FCPXMLDSLCommandError.usage
       }
@@ -127,6 +129,19 @@ internal enum FCPXMLDSLCommand {
         version: version
       )
     }
+
+    private static func exportRGBCommand(
+      _ positionals: [String],
+      projectName: String,
+      version: FCPXMLVersion
+    ) async throws {
+      let output = URL(fileURLWithPath: positionals.first ?? "rgb.fcpxml")
+      try await exportRGB(
+        output: output,
+        projectName: projectName,
+        version: version
+      )
+    }
   #endif
 
   private static func parseOptions(_ arguments: inout [String]) throws -> [String: String] {
@@ -153,6 +168,8 @@ internal enum FCPXMLDSLCommand {
       return "DSL Transitions"
     case "titles":
       return "DSL Titles"
+    case "rgb":
+      return "DSL RGB"
     default:
       return "DSL Export"
     }
@@ -167,6 +184,7 @@ internal enum FCPXMLDSLCommand {
       USAGE:
           fcpxml-dsl export transitions <left> <right> [output.fcpxml]
           fcpxml-dsl export titles <media> [output.fcpxml]
+          fcpxml-dsl export rgb [output.fcpxml]
           fcpxml-dsl verify-import <file.fcpxml>
 
       OPTIONS:
@@ -179,8 +197,8 @@ internal enum FCPXMLDSLCommand {
       EXAMPLES:
           fcpxml-dsl export transitions Left.mov Right.mov transitions.fcpxml
           fcpxml-dsl export titles Left.mov titles.fcpxml --text "Hello"
-          fcpxml-dsl export transitions a.mov b.mov out.fcpxml --project "Gate"
-          fcpxml-dsl verify-import transitions.fcpxml
+          fcpxml-dsl export rgb rgb.fcpxml
+          fcpxml-dsl verify-import rgb.fcpxml
 
       DESCRIPTION:
           `export` probes media durations with AVFoundation, builds a typed DSL
