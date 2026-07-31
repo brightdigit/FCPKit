@@ -159,7 +159,7 @@ public struct SyncClip: Codable {
     self.filterVideo = filterVideo
     self.filterAudio = filterAudio
 
-    let items = OrderedChoiceItems.appending(
+    let items = Self.appending(
       [
         assetClips?.map(AnchoredItem.assetClip),
         video?.map(AnchoredItem.video),

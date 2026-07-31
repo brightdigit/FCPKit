@@ -137,7 +137,7 @@ public struct MCClip: Codable {
     self.chapterMarkers = chapterMarkers
     self.filterAudio = filterAudio
 
-    let items = OrderedChoiceItems.appending(
+    let items = Self.appending(
       [
         video?.map(AnchoredItem.video)
       ],

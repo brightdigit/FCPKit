@@ -1,5 +1,5 @@
 //
-//  OrderedChoiceItems.swift
+//  OrderedChoiceContainer.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,10 +29,15 @@
 
 import Foundation
 
-/// Helpers for building and mutating ordered choice-item arrays.
-internal enum OrderedChoiceItems {
+/// A timeline element that stores ordered choice-item children.
+internal protocol OrderedChoiceContainer {
+  associatedtype Item
+  var orderedItems: [Item] { get set }
+}
+
+extension OrderedChoiceContainer {
   /// Appends each non-nil batch onto `base` in declaration order.
-  internal static func appending<Item>(
+  internal static func appending(
     _ batches: [[Item]?],
     onto base: [Item] = []
   ) -> [Item] {
@@ -45,43 +50,39 @@ internal enum OrderedChoiceItems {
     return items
   }
 
-  /// Returns non-empty payloads extracted from `items`, or `nil` when none match.
-  internal static func payloads<Item, T>(
-    in items: [Item],
-    extract: (Item) -> T?
-  ) -> [T]? {
-    let list = items.compactMap(extract)
+  /// Returns non-empty payloads extracted from ``orderedItems``, or `nil` when none match.
+  internal func payloads<T>(_ extract: (Item) -> T?) -> [T]? {
+    let list = orderedItems.compactMap(extract)
     return list.isEmpty ? nil : list
   }
 
   /// Replaces items matching `extract` with `newValue`, preserving relative order.
   ///
   /// Matching uses `extract($0) != nil`. Passing `nil` removes all matching items.
-  internal static func replace<Item, T>(
-    _ items: inout [Item],
+  internal mutating func replace<T>(
     with newValue: [T]?,
     extract: @escaping (Item) -> T?,
     wrap: (T) -> Item
   ) {
     guard let newValue else {
-      items.removeAll { extract($0) != nil }
+      orderedItems.removeAll { extract($0) != nil }
       return
     }
     var newIndex = 0
     var indicesToRemove = [Int]()
-    for index in items.indices where extract(items[index]) != nil {
+    for index in orderedItems.indices where extract(orderedItems[index]) != nil {
       if newIndex < newValue.count {
-        items[index] = wrap(newValue[newIndex])
+        orderedItems[index] = wrap(newValue[newIndex])
         newIndex += 1
       } else {
         indicesToRemove.append(index)
       }
     }
     for index in indicesToRemove.reversed() {
-      items.remove(at: index)
+      orderedItems.remove(at: index)
     }
     while newIndex < newValue.count {
-      items.append(wrap(newValue[newIndex]))
+      orderedItems.append(wrap(newValue[newIndex]))
       newIndex += 1
     }
   }
