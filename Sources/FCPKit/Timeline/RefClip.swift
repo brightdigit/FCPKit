@@ -33,29 +33,35 @@ import XMLCoder
 /// A `ref-clip` element referencing a compound clip or other media resource.
 public struct RefClip: Codable {
   internal enum CodingKeys: String, CodingKey {
+    // Attributes
     case ref
-    case offset
     case name
     case duration
     case start
     case lane
+    case offset
     case modDate
     case useAudioSubroles
+
+    // DTD line 488:
+    // note?, %timing-params;, %intrinsic-params;, (%anchor_item;)*, (%marker_item;)*,
+    // audio-role-source*, (%video_filter_item;)*, filter-audio*, metadata?
+    case note
     case conformRate = "conform-rate"
     case timeMap
-    case adjustCrop = "adjust-crop"
     case adjustTransform = "adjust-transform"
-    case assetClips = "asset-clip"
-    case video
-    case refClips = "ref-clip"
+    case adjustCrop = "adjust-crop"
     case adjustVolume = "adjust-volume"
+    case anchoredItems = ""
+    case markers = "marker"
+    case rating
+    case chapterMarkers = "chapter-marker"
     case filterVideo = "filter-video"
+    case filterAudio = "filter-audio"
   }
 
   /// The identifier of the referenced media resource.
   public var ref: String?
-  /// The clip's start position on the parent timeline, as a rational time string.
-  public var offset: String?
   /// The display name of the clip.
   public var name: String?
   /// The playback duration of the clip, as a rational time string.
@@ -64,28 +70,55 @@ public struct RefClip: Codable {
   public var start: String?
   /// The vertical lane the clip occupies when connected to a primary storyline item.
   public var lane: String?
+  /// The clip's start position on the parent timeline, as a rational time string.
+  public var offset: String?
   /// The date the clip was last modified.
   public var modDate: String?
   /// Whether the referenced media's audio subroles are active (`1`) or not (`0`).
   public var useAudioSubroles: String?
+
+  /// A user-entered note about the clip.
+  public var note: String?
   /// The `conform-rate` element describing frame-rate conforming behavior.
   public var conformRate: ConformRate?
   /// The `timeMap` element applying retiming to the clip.
   public var timeMap: TimeMap?
-  /// The `adjust-crop` element applying crop adjustments to the clip.
-  public var adjustCrop: AdjustCrop?
   /// The `adjust-transform` element applying position, scale, and rotation adjustments.
   public var adjustTransform: AdjustTransform?
-  /// Nested `asset-clip` elements anchored to the clip.
-  public var assetClips: [AssetClip]?
-  /// Nested `video` elements anchored to the clip.
-  public var video: [Video]?
-  /// Nested `ref-clip` elements anchored to the clip.
-  public var refClips: [RefClip]?
+  /// The `adjust-crop` element applying crop adjustments to the clip.
+  public var adjustCrop: AdjustCrop?
   /// The `adjust-volume` element applying an audio volume adjustment.
   public var adjustVolume: AdjustVolume?
+  /// The ordered anchored items attached to this clip.
+  public var anchoredItems: [AnchoredItem]?
+  /// The markers placed on the clip.
+  public var markers: [Marker]?
+  /// The rating applied to the clip.
+  public var rating: Rating?
+  /// The chapter markers placed on the clip.
+  public var chapterMarkers: [ChapterMarker]?
   /// The `filter-video` elements applying video effects to the clip.
   public var filterVideo: [FilterVideo]?
+  /// The `filter-audio` elements applying audio effects to the clip.
+  public var filterAudio: [FilterAudio]?
+
+  /// Nested `asset-clip` elements anchored to the clip.
+  public var assetClips: [AssetClip]? {
+    get { anchoredPayloads(\.assetClip) }
+    set { setAnchoredPayloads(newValue, extract: \.assetClip, wrap: AnchoredItem.assetClip) }
+  }
+
+  /// Nested `video` elements anchored to the clip.
+  public var video: [Video]? {
+    get { anchoredPayloads(\.video) }
+    set { setAnchoredPayloads(newValue, extract: \.video, wrap: AnchoredItem.video) }
+  }
+
+  /// Nested `ref-clip` elements anchored to the clip.
+  public var refClips: [RefClip]? {
+    get { anchoredPayloads(\.refClip) }
+    set { setAnchoredPayloads(newValue, extract: \.refClip, wrap: AnchoredItem.refClip) }
+  }
 
   /// Creates a reference clip with the given attributes and contents.
   public init(
@@ -97,15 +130,21 @@ public struct RefClip: Codable {
     lane: String? = nil,
     modDate: String? = nil,
     useAudioSubroles: String? = nil,
+    note: String? = nil,
     conformRate: ConformRate? = nil,
     timeMap: TimeMap? = nil,
     adjustTransform: AdjustTransform? = nil,
     adjustCrop: AdjustCrop? = nil,
+    adjustVolume: AdjustVolume? = nil,
     assetClips: [AssetClip]? = nil,
     video: [Video]? = nil,
     refClips: [RefClip]? = nil,
-    adjustVolume: AdjustVolume? = nil,
-    filterVideo: [FilterVideo]? = nil
+    anchoredItems: [AnchoredItem]? = nil,
+    markers: [Marker]? = nil,
+    rating: Rating? = nil,
+    chapterMarkers: [ChapterMarker]? = nil,
+    filterVideo: [FilterVideo]? = nil,
+    filterAudio: [FilterAudio]? = nil
   ) {
     self.ref = ref
     self.offset = offset
@@ -115,23 +154,37 @@ public struct RefClip: Codable {
     self.lane = lane
     self.modDate = modDate
     self.useAudioSubroles = useAudioSubroles
+    self.note = note
     self.conformRate = conformRate
     self.timeMap = timeMap
     self.adjustTransform = adjustTransform
     self.adjustCrop = adjustCrop
-    self.assetClips = assetClips
-    self.video = video
-    self.refClips = refClips
     self.adjustVolume = adjustVolume
+    self.markers = markers
+    self.rating = rating
+    self.chapterMarkers = chapterMarkers
     self.filterVideo = filterVideo
+    self.filterAudio = filterAudio
+
+    let items = Self.appending(
+      [
+        assetClips?.map(AnchoredItem.assetClip),
+        video?.map(AnchoredItem.video),
+        refClips?.map(AnchoredItem.refClip),
+      ],
+      onto: anchoredItems ?? []
+    )
+    self.anchoredItems = items.isEmpty ? nil : items
   }
 }
 
+extension RefClip: AnchoredChoiceContainer {}
+
 extension RefClip: FCPNodeEncodable {
-  /// Encodes child clip content as XML elements and remaining keys as attributes.
+  /// Encodes elements and remaining keys as attributes.
   public static let elementKeys: Set<String> = [
-    "conform-rate", "timeMap", "adjust-transform", "adjust-crop", "asset-clip",
-    "video",
-    "ref-clip", "adjust-volume", "filter-video",
+    "", "note", "conform-rate", "timeMap", "adjust-transform",
+    "adjust-crop", "adjust-volume", "marker", "rating",
+    "chapter-marker", "filter-video", "filter-audio",
   ]
 }

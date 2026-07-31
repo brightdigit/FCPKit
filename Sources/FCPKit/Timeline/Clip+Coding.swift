@@ -1,5 +1,5 @@
 //
-//  Gap.swift
+//  Clip+Coding.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -30,58 +30,44 @@
 import Foundation
 import XMLCoder
 
-/// A `gap` element representing empty space in a storyline.
-public struct Gap: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    // Attributes
-    case name
-    case offset
-    case duration
-    case start
-
-    // DTD line 558: note?, (%anchor_item;)*, (%marker_item;)*, metadata?
-    case note
-    case anchoredItems = ""
-    case markers = "marker"
-    case rating
-    case chapterMarkers = "chapter-marker"
-  }
-
-  /// The display name of the gap.
-  public var name: String?
-  /// The gap's start position on the parent timeline, as a rational time string.
-  public var offset: String?
-  /// The gap's duration, as a rational time string.
-  public var duration: String?
-  /// The gap's local timeline start time, as a rational time string.
-  public var start: String?
-
-  /// A user-entered note about the gap.
-  public var note: String?
-  /// The ordered anchored items attached to this gap.
-  public var anchoredItems: [AnchoredItem]?
-  /// The markers placed on the gap.
-  public var markers: [Marker]?
-  /// The rating applied to the gap.
-  public var rating: Rating?
-  /// The chapter markers placed on the gap.
-  public var chapterMarkers: [ChapterMarker]?
-
-  /// Creates a gap clip by decoding from the given decoder.
+extension Clip {
+  /// Creates a clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
-    self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
+    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.format = try container.decodeIfPresent(String.self, forKey: .format)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
+    self.tcFormat = try container.decodeIfPresent(String.self, forKey: .tcFormat)
+    self.audioChannels = try container.decodeIfPresent(String.self, forKey: .audioChannels)
+    self.audioRate = try container.decodeIfPresent(String.self, forKey: .audioRate)
+    self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
+    self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
+    self.modDate = try container.decodeIfPresent(String.self, forKey: .modDate)
 
     self.note = try container.decodeIfPresent(String.self, forKey: .note)
+    self.conformRate = try container.decodeIfPresent(ConformRate.self, forKey: .conformRate)
+    self.timeMap = try container.decodeIfPresent(TimeMap.self, forKey: .timeMap)
+    self.adjustTransform = try container.decodeIfPresent(
+      AdjustTransform.self,
+      forKey: .adjustTransform
+    )
+    self.adjustCrop = try container.decodeIfPresent(AdjustCrop.self, forKey: .adjustCrop)
+    self.adjustBlend = try container.decodeIfPresent(AdjustBlend.self, forKey: .adjustBlend)
+    self.adjustVolume = try container.decodeIfPresent(AdjustVolume.self, forKey: .adjustVolume)
     self.markers = try container.decodeIfPresent([Marker].self, forKey: .markers)
     self.rating = try container.decodeIfPresent(Rating.self, forKey: .rating)
     self.chapterMarkers = try container.decodeIfPresent(
       [ChapterMarker].self,
       forKey: .chapterMarkers
     )
+    self.audioChannelSource = try container.decodeIfPresent(
+      [AudioChannelSource].self,
+      forKey: .audioChannelSource
+    )
+    self.filterVideo = try container.decodeIfPresent([FilterVideo].self, forKey: .filterVideo)
+    self.filterAudio = try container.decodeIfPresent([FilterAudio].self, forKey: .filterAudio)
 
     let itemsContainer = try decoder.singleValueContainer()
     let decodedItems = (try? itemsContainer.decode([AnchoredItem].self)) ?? []
@@ -93,34 +79,4 @@ public struct Gap: Codable {
     }
     self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
   }
-
-  /// Creates a gap clip with the given attributes and contained elements.
-  public init(
-    name: String? = nil,
-    offset: String? = nil,
-    duration: String? = nil,
-    start: String? = nil,
-    note: String? = nil,
-    anchoredItems: [AnchoredItem]? = nil,
-    markers: [Marker]? = nil,
-    rating: Rating? = nil,
-    chapterMarkers: [ChapterMarker]? = nil
-  ) {
-    self.name = name
-    self.offset = offset
-    self.duration = duration
-    self.start = start
-    self.note = note
-    self.anchoredItems = anchoredItems
-    self.markers = markers
-    self.rating = rating
-    self.chapterMarkers = chapterMarkers
-  }
-}
-
-extension Gap: FCPNodeEncodable {
-  /// Encodes elements and remaining keys as attributes.
-  public static let elementKeys: Set<String> = [
-    "", "note", "marker", "rating", "chapter-marker",
-  ]
 }

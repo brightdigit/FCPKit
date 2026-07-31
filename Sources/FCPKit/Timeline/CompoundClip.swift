@@ -33,6 +33,7 @@ import XMLCoder
 /// A `compound-clip` element referencing a compound clip media resource.
 public struct CompoundClip: Codable {
   internal enum CodingKeys: String, CodingKey {
+    // Attributes
     case ref
     case offset
     case name
@@ -40,25 +41,109 @@ public struct CompoundClip: Codable {
     case duration
     case useAudioSubroles
     case format
+    case lane
+
+    case note
+    case anchoredItems = ""
+    case markers = "marker"
+    case rating
+    case chapterMarkers = "chapter-marker"
   }
 
   /// The identifier of the referenced media resource.
-  public let ref: String?
+  public var ref: String?
   /// The clip's start position on the parent timeline, as a rational time string.
-  public let offset: String?
+  public var offset: String?
   /// The display name of the clip.
-  public let name: String?
+  public var name: String?
   /// The start time within the referenced media, as a rational time string.
-  public let start: String?
+  public var start: String?
   /// The clip's duration, as a rational time string.
-  public let duration: String?
+  public var duration: String?
   /// Whether the clip's audio subroles are active, as `1` or `0`.
-  public let useAudioSubroles: String?
+  public var useAudioSubroles: String?
   /// The identifier of the referenced format resource.
-  public let format: String?
+  public var format: String?
+  /// The vertical lane position.
+  public var lane: String?
+
+  /// A user-entered note.
+  public var note: String?
+  /// The ordered anchored items in the clip.
+  public var anchoredItems: [AnchoredItem]?
+  /// The markers placed on the clip.
+  public var markers: [Marker]?
+  /// The rating applied to the clip.
+  public var rating: Rating?
+  /// The chapter markers placed on the clip.
+  public var chapterMarkers: [ChapterMarker]?
+
+  /// Creates a compound clip by decoding from the given decoder.
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
+    self.name = try container.decodeIfPresent(String.self, forKey: .name)
+    self.start = try container.decodeIfPresent(String.self, forKey: .start)
+    self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
+    self.useAudioSubroles = try container.decodeIfPresent(String.self, forKey: .useAudioSubroles)
+    self.format = try container.decodeIfPresent(String.self, forKey: .format)
+    self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
+
+    self.note = try container.decodeIfPresent(String.self, forKey: .note)
+    self.markers = try container.decodeIfPresent([Marker].self, forKey: .markers)
+    self.rating = try container.decodeIfPresent(Rating.self, forKey: .rating)
+    self.chapterMarkers = try container.decodeIfPresent(
+      [ChapterMarker].self,
+      forKey: .chapterMarkers
+    )
+
+    let itemsContainer = try decoder.singleValueContainer()
+    let decodedItems = (try? itemsContainer.decode([AnchoredItem].self)) ?? []
+    let filteredItems = decodedItems.filter { item in
+      if case .unsupported = item {
+        return false
+      }
+      return true
+    }
+    self.anchoredItems = filteredItems.isEmpty ? nil : filteredItems
+  }
+
+  /// Creates a compound clip with the given attributes and contents.
+  public init(
+    ref: String? = nil,
+    offset: String? = nil,
+    name: String? = nil,
+    start: String? = nil,
+    duration: String? = nil,
+    useAudioSubroles: String? = nil,
+    format: String? = nil,
+    lane: String? = nil,
+    note: String? = nil,
+    anchoredItems: [AnchoredItem]? = nil,
+    markers: [Marker]? = nil,
+    rating: Rating? = nil,
+    chapterMarkers: [ChapterMarker]? = nil
+  ) {
+    self.ref = ref
+    self.offset = offset
+    self.name = name
+    self.start = start
+    self.duration = duration
+    self.useAudioSubroles = useAudioSubroles
+    self.format = format
+    self.lane = lane
+    self.note = note
+    self.anchoredItems = anchoredItems
+    self.markers = markers
+    self.rating = rating
+    self.chapterMarkers = chapterMarkers
+  }
 }
 
-extension CompoundClip: DynamicNodeEncoding {
-  /// Encodes every coding key as an XML attribute.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .attribute }
+extension CompoundClip: FCPNodeEncodable {
+  /// Encodes elements and remaining keys as attributes.
+  public static let elementKeys: Set<String> = [
+    "", "note", "marker", "rating", "chapter-marker",
+  ]
 }

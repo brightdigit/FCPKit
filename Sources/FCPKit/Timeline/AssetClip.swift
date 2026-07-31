@@ -33,6 +33,7 @@ import XMLCoder
 /// An `asset-clip` element referencing a media asset placed on the timeline.
 public struct AssetClip: Codable {
   internal enum CodingKeys: String, CodingKey {
+    // Attributes
     case ref
     case name
     case duration
@@ -48,23 +49,26 @@ public struct AssetClip: Codable {
     case modDate
     case audioStart
     case audioDuration
-    case keywords = "keyword"
+
+    // DTD line 516:
+    // note?, conform-rate?, timeMap?, %intrinsic-params;, (%anchor_item;)*,
+    // (%marker_item;)*, audio-channel-source*, (%video_filter_item;)*,
+    // filter-audio*, metadata?
     case note
     case conformRate = "conform-rate"
-    case adjustVolume = "adjust-volume"
+    case timeMap
+    case adjustTransform = "adjust-transform"
+    case adjustCrop = "adjust-crop"
     case adjustBlend = "adjust-blend"
-    case audioChannelSource = "audio-channel-source"
+    case adjustVolume = "adjust-volume"
+    case anchoredItems = ""
     case markers = "marker"
     case rating
     case chapterMarkers = "chapter-marker"
-    case filterAudio = "filter-audio"
+    case keywords = "keyword"
+    case audioChannelSource = "audio-channel-source"
     case filterVideo = "filter-video"
-    case titles = "title"
-    case assetClips = "asset-clip"
-    case video
-    case adjustTransform = "adjust-transform"
-    case adjustCrop = "adjust-crop"
-    case timeMap
+    case filterAudio = "filter-audio"
   }
 
   /// The identifier of the referenced asset resource.
@@ -119,12 +123,8 @@ public struct AssetClip: Codable {
   public var filterAudio: [FilterAudio]?
   /// The video filter effects applied to the clip.
   public var filterVideo: [FilterVideo]?
-  /// The title clips anchored to this clip.
-  public var titles: [Title]?
-  /// The asset clips anchored to this clip.
-  public var assetClips: [AssetClip]?
-  /// The video elements anchored to this clip.
-  public var video: [Video]?
+  /// The ordered anchored items attached to this clip.
+  public var anchoredItems: [AnchoredItem]?
   /// The position, scale, and rotation adjustment applied to the clip.
   public var adjustTransform: AdjustTransform?
   /// The crop adjustment applied to the clip.
@@ -163,6 +163,7 @@ public struct AssetClip: Codable {
     titles: [Title]? = nil,
     assetClips: [AssetClip]? = nil,
     video: [Video]? = nil,
+    anchoredItems: [AnchoredItem]? = nil,
     adjustTransform: AdjustTransform? = nil,
     adjustCrop: AdjustCrop? = nil,
     timeMap: TimeMap? = nil
@@ -193,22 +194,28 @@ public struct AssetClip: Codable {
     self.chapterMarkers = chapterMarkers
     self.filterAudio = filterAudio
     self.filterVideo = filterVideo
-    self.titles = titles
-    self.assetClips = assetClips
-    self.video = video
     self.adjustTransform = adjustTransform
     self.adjustCrop = adjustCrop
     self.timeMap = timeMap
+
+    let items = Self.appending(
+      [
+        titles?.map(AnchoredItem.title),
+        assetClips?.map(AnchoredItem.assetClip),
+        video?.map(AnchoredItem.video),
+      ],
+      onto: anchoredItems ?? []
+    )
+    self.anchoredItems = items.isEmpty ? nil : items
   }
 }
 
 extension AssetClip: FCPNodeEncodable {
   /// Returns whether the given coding key encodes as an XML attribute or element.
   public static let elementKeys: Set<String> = [
-    "keyword", "note", "conform-rate", "adjust-volume", "adjust-blend",
-    "audio-channel-source", "marker", "rating", "chapter-marker",
-    "filter-audio", "filter-video",
-    "title",
-    "asset-clip", "video", "adjust-transform", "adjust-crop", "timeMap",
+    "", "note", "conform-rate", "timeMap", "adjust-transform",
+    "adjust-crop", "adjust-blend", "adjust-volume",
+    "marker", "rating", "chapter-marker", "keyword",
+    "audio-channel-source", "filter-video", "filter-audio",
   ]
 }
