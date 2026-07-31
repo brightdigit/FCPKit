@@ -33,3 +33,4 @@ Running log of user corrections and standing always/never directives for this re
 - 2026-07-29: Do not rely on external host tools like ffprobe for MediaTools; prefer something that can be built into the library.
 
 - 2026-07-30: Never `swiftlint:disable cyclomatic_complexity` for choice Codable or stacked if-let seed chains; use `XMLChoiceCodable` / `XMLChoiceField` / `OrderedChoiceContainer` / `AnchoredChoiceContainer` instead (large if/switch ladders are an anti-pattern; do not re-copy Codable loops or get/set helpers).
+- 2026-07-31: Always check branch/merge state against the fetched remote (`git fetch` + `origin/*` refs), never local refs; and because PRs are squash-merged, verify "unmerged" claims by content (`git diff` / tree hash), not commit ranges.

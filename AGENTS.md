@@ -26,15 +26,29 @@ and can be intentionally read, changed, and encoded.
 
 ## Current Architecture
 
-- `Sources/FCPKit/FCPXML.swift`, `FCPXMLExtended.swift`, and
-  `FCPXMLMissingElements.swift` contain the XMLCoder-backed Codable model.
+- `Sources/FCPKit/` contains the XMLCoder-backed Codable model: story
+  elements and resources in DTD `CodingKeys` order, ordered choice containers
+  (`Spine.items`, `AnchoredItem`), and strong value types under
+  `Sources/FCPKit/Values/` (`FCPTime`, `ResourceID`, `ResourceRef`, …).
 - `Sources/FCPKit/FCPXMLParser.swift` is the public decode/encode entry point.
+- `Sources/FCPKitDSL/` is the create-first authoring surface (ADR 0002):
+  `Document` + result builders (`Project` / `Sequence` / `AssetClip` /
+  `Transition` / `Title` / `Gap`, `.anchor(lane:)`) exporting via
+  `export(version:)` to the Codable model.
+- `Sources/FCPKitScripting/` is a macOS-only read-only ScriptingBridge
+  inspector for a running Final Cut Pro (libraries → events →
+  projects/sequences). Known issue: the SBObject bridge crashes against a live
+  FCP ([#27](https://github.com/brightdigit/FCPKit/issues/27)).
 - `Sources/FCPKitMediaTools/MulticamXMLBuilder.swift` generates split-screen
   multicam documents through the typed Codable model (no raw XML templates).
   Final Cut import/re-export gate evidence lives in
-  `docs/manual/typed-generation-gate.md`.
+  `docs/manual/typed-generation-gate.md` (multicam Codable and DSL create-path
+  gates).
 - `Sources/FCPXMLDiff/` and `Sources/FCPXMLDiffCLI/` provide the structural
   differential harness and the `fcpxml-diff` executable.
+- Executables: `fcpxml-diff` (diff/validate/schema-completeness), `fcpxml-dsl`
+  (export the DSL smoke-test cuts, `verify-import` against a running FCP), and
+  `fcpxml-generator` (multicam generation).
 - `Tests/FCPKitTests/TestData/` contains real Final Cut Pro exports used as
   schema evidence and regression fixtures.
 
@@ -52,14 +66,14 @@ succeeds. Treat that loss as a schema-completeness signal.
 A second, subtler loss mode is **child ordering**, and the schema-completeness
 gate cannot see it. `Inventory` in `Sources/FCPXMLDiff/FCPXMLDiffEngine.swift`
 keys a multiset by ancestor path with no sibling ordering, so a reordered spine
-reports zero loss.
+reports zero loss. Keep that limitation in mind when reading zero-loss reports.
 
-The live example is `Spine` in `Sources/FCPKit/FCPXML.swift:297`: it stores
-children as 14 parallel arrays, while the DTD declares
-`<!ELEMENT spine (%clip_item; | transition)*>` — a single ordered heterogeneous
-sequence. `Tests/FCPKitTests/FeaturePairs/transitions/after.fcpxml` is
-`asset-clip, transition, asset-clip` on disk and re-encodes as
-`asset-clip, asset-clip, transition`, which Final Cut rejects. Analysis:
+The historical example — `Spine` storing children as 14 parallel arrays and
+re-encoding `asset-clip, transition, asset-clip` as
+`asset-clip, asset-clip, transition` — was **fixed in v0.1.0 Step 3**: `Spine`
+now stores a single ordered `items` array matching
+`<!ELEMENT spine (%clip_item; | transition)*>`, via the ordered choice
+containers. Analysis of the original defect:
 [docs/planning/v0.1.0-investigation-findings.md](docs/planning/v0.1.0-investigation-findings.md).
 Accepted fix and create-first scope:
 [docs/adr/0002-create-first-ordered-typed-model.md](docs/adr/0002-create-first-ordered-typed-model.md).
@@ -67,7 +81,8 @@ Accepted fix and create-first scope:
 Note that XMLCoder emits child elements in `CodingKeys` declaration order (it
 sorts only under `.sortedKeys`, which `FCPXMLParser` does not set). Ordered DTD
 content models therefore depend on `CodingKeys` order being transcribed from the
-DTD — an invariant currently untested.
+DTD — an invariant guarded by the Step 0 ordering tests; keep new types'
+`CodingKeys` in DTD order and extend those tests when adding ordered content.
 
 Do not infer completeness from README claims. Use real fixtures, structural
 round-trip diffs, focused access assertions, and tests. Zero measured loss is
@@ -169,8 +184,10 @@ gate platform-specific tests through a centralized `Platform` helper with
 `.enabled(if:)` traits (see the guide's platform-compatibility page). Use
 `withKnownIssue { }` where XCTest would have used `XCTExpectFailure`.
 
-The existing suite is **XCTest** — all ten files under `Tests/FCPKitTests/` use
-`XCTestCase`, and they stay that way for now. Migrating them is a separate,
+The suite is currently **mixed** across three test targets (`FCPKitTests`,
+`FCPKitDSLTests`, `FCPKitScriptingTests`): the pre-v0.1.0 files use `XCTest`
+and stay that way for now, while tests authored during v0.1.0 use Swift
+Testing. Migrating the remaining XCTest files is a separate,
 no-behavior-change change proposed for after v0.1.0; that deferral does not
 apply to newly authored tests.
 
