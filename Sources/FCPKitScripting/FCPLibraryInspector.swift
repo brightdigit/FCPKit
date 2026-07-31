@@ -85,19 +85,19 @@ public struct FCPLibraryInspector: Sendable {
 
     private static func library(from object: any FCPScriptingObject) throws -> FCPScriptedLibrary {
       FCPScriptedLibrary(
-        name: try object.string(forKey: "displayName"),
-        id: try object.string(forKey: "uniqueIdentifier"),
-        persistentID: try object.string(forKey: "persistent ID"),
-        fileURL: try object.url(forKey: "URL"),
+        name: try object.string(forKey: "name"),
+        id: try object.string(forKey: "id"),
+        persistentID: try? object.string(forKey: "persistentID"),
+        fileURL: try object.url(forKey: "file"),
         events: try object.children(forKey: "events").map { try event(from: $0) }
       )
     }
 
     private static func event(from object: any FCPScriptingObject) throws -> FCPScriptedEvent {
       FCPScriptedEvent(
-        name: try object.string(forKey: "displayName"),
-        id: try object.string(forKey: "uniqueIdentifier"),
-        persistentID: try object.string(forKey: "persistent ID"),
+        name: try object.string(forKey: "name"),
+        id: try object.string(forKey: "id"),
+        persistentID: try? object.string(forKey: "persistentID"),
         projects: try object.children(forKey: "projects").map { try project(from: $0) },
         sequences: try object.children(forKey: "sequences").compactMap { try sequence(from: $0) }
       )
@@ -107,24 +107,24 @@ public struct FCPLibraryInspector: Sendable {
       let sequenceObjects = try object.children(forKey: "sequence")
       let sequence = try sequenceObjects.first.flatMap { try sequence(from: $0) }
       return FCPScriptedProject(
-        name: try object.string(forKey: "displayName"),
-        id: try object.string(forKey: "uniqueIdentifier"),
-        persistentID: try object.string(forKey: "persistent ID"),
+        name: try object.string(forKey: "name"),
+        id: try object.string(forKey: "id"),
+        persistentID: try? object.string(forKey: "persistentID"),
         sequence: sequence
       )
     }
 
     private static func sequence(from object: any FCPScriptingObject) throws -> FCPScriptedSequence?
     {
-      guard let duration = try object.mediaTime(forKey: "durationDict"),
-        let frameDuration = try object.mediaTime(forKey: "frameDurationDict")
+      guard let duration = try object.mediaTime(forKey: "duration"),
+        let frameDuration = try object.mediaTime(forKey: "frameDuration")
       else {
         return nil
       }
       return FCPScriptedSequence(
-        name: try object.string(forKey: "displayName"),
-        id: try object.string(forKey: "mediaIdentifier"),
-        startTime: try object.mediaTime(forKey: "startTimeDict"),
+        name: try object.string(forKey: "name"),
+        id: try object.string(forKey: "id"),
+        startTime: try object.mediaTime(forKey: "startTime"),
         duration: duration,
         frameDuration: frameDuration,
         timecodeFormat: try object.timecodeFormat(forKey: "timecodeFormat")

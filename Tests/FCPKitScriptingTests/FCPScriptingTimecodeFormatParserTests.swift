@@ -1,5 +1,5 @@
 //
-//  FCPLibraryInspectorLiveTests.swift
+//  FCPScriptingTimecodeFormatParserTests.swift
 //  FCPKitScriptingTests
 //
 //  Created by Leo Dion.
@@ -29,34 +29,34 @@
 
 #if os(macOS)
 
-  import FCPKitScripting
+  @testable import FCPKitScripting
+  import Foundation
   import Testing
 
   @Suite
-  internal struct FCPLibraryInspectorLiveTests {
+  internal struct FCPScriptingTimecodeFormatParserTests {
+    // Live ScriptingBridge proxies return the sdef `timecode formats`
+    // enumerator as an OSType number ('drop' / 'ndrp' / 'unsp'), verified
+    // against a running Final Cut Pro (#27).
     @Test
-    internal func readsLibrariesWhenFinalCutIsRunning() throws {
-      guard FCPLibraryInspector.isFinalCutRunning() else {
-        return
-      }
-      let inspector = FCPLibraryInspector()
-      let libraries = try inspector.libraries()
-      // Final Cut always has at least the current library open, and every
-      // scripted object must surface non-empty name/id term properties.
-      #expect(!libraries.isEmpty)
-      for library in libraries {
-        #expect(!library.name.isEmpty)
-        #expect(!library.id.isEmpty)
-        for event in library.events {
-          #expect(!event.name.isEmpty)
-          #expect(!event.id.isEmpty)
-        }
-      }
+    internal func parsesLiveFourCharCodeNumbers() {
+      #expect(
+        FCPScriptingTimecodeFormatParser.parse(NSNumber(value: 0x6472_6F70 as UInt32))
+          == .dropFrame)
+      #expect(
+        FCPScriptingTimecodeFormatParser.parse(NSNumber(value: 0x6E64_7270 as UInt32))
+          == .nonDropFrame)
+      #expect(
+        FCPScriptingTimecodeFormatParser.parse(NSNumber(value: 0x756E_7370 as UInt32))
+          == .unspecified)
     }
 
     @Test
-    internal func applicationEntryMatchesInspectorRunningCheck() {
-      #expect(FCPApplication.isFinalCutRunning() == FCPLibraryInspector.isFinalCutRunning())
+    internal func parsesDescriptiveStrings() {
+      #expect(FCPScriptingTimecodeFormatParser.parse("Drop Frame") == .dropFrame)
+      #expect(FCPScriptingTimecodeFormatParser.parse("non drop frame") == .nonDropFrame)
+      #expect(FCPScriptingTimecodeFormatParser.parse(nil) == .unspecified)
+      #expect(FCPScriptingTimecodeFormatParser.parse(NSNumber(value: 12)) == .unspecified)
     }
   }
 

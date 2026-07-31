@@ -1,6 +1,6 @@
 ---
 name: fcp-scripting-live-facts
-description: Live-verified FCP scripting facts — inspector KVC keys crash against real FCP; AppleScript census works; DTD/xmllint quirks
+description: Live-verified FCP scripting facts — SBObject term-name contract (#27 fixed); AppleScript census works; DTD/xmllint quirks
 metadata:
   node_type: memory
   type: project
@@ -11,22 +11,24 @@ metadata:
 Verified against Final Cut Pro Creator Studio on Leo's machine while building
 `fcpxml-dsl verify-import` (step 6 branch).
 
-## FCPLibraryInspector crashes against a real running FCP (open bug)
+## SBObject KVC contract (bug #27, FIXED 2026-07-31)
 
-- `FCPLibraryInspector.libraries()` raises `NSUnknownKeyException`
-  (`valueForUndefinedKey: displayName`) the moment FCP is running. ObjC
-  exceptions are uncatchable from Swift, so **`swift test` crashes the whole
-  `FCPKitScriptingTests` binary whenever FCP is open** — the live test
-  `readsLibrariesWhenFinalCutIsRunning` only ever ran its early-return path.
-- Root cause: `SBObject+FCPScriptingObject.swift` passes the sdef **cocoa
-  keys** (`displayName`, `uniqueIdentifier`, `durationDict`, `URL`, …) to
-  `value(forKey:)`, but SBObject proxies resolve the sdef **term names**
-  (`name`, `id`, `duration`, `file`, …). The mock tests pin the cocoa keys, so
-  they pass while the live path is broken.
+- SBObject proxies resolve the sdef **term names** via `value(forKey:)` —
+  `name`, `id`, `file`, `duration`, `frameDuration`, `startTime`,
+  `timecodeFormat`, children `libraries`/`events`/`projects`/`sequences` and
+  project's `sequence`. Passing the sdef **cocoa keys** (`displayName`,
+  `uniqueIdentifier`, `durationDict`, `URL`, `persistent ID`, …) raises
+  `NSUnknownKeyException`, which Swift cannot catch, killing the process.
+  Fixed in `FCPLibraryInspector`; the mock tests now pin the term names.
+- Live shapes (probed key-by-key in child processes against a running FCP):
+  `media time` records arrive as `NSDictionary` with `value`/`timescale`/
+  `epoch`/`flags` NSNumber entries; `timecode format` arrives as an NSNumber
+  **OSType** (`drop`/`ndrp`/`unsp`). `persistentID` resolves but is always
+  nil — FCP declares `persistent ID` in the sdef but errors (-1728) even in
+  AppleScript, so the model field is optional.
 - FCP's sdef: `Contents/Resources/ProEditor.sdef` (or `sdef "/Applications/Final
   Cut Pro Creator Studio.app"`). Read-only suite `com.apple.FinalCut.library.inspection`;
-  classes library/event/project/sequence; `name`→cocoa `displayName`,
-  `file`→cocoa `URL`, records `media time` for duration/start.
+  classes library/event/project/sequence.
 
 ## What does work live
 

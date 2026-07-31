@@ -84,16 +84,16 @@ Human gates: the DSL create-path Final Cut import gate
 ([#14](https://github.com/brightdigit/FCPKit/issues/14)) is **Accepted** —
 evidence in [manual/typed-generation-gate.md](manual/typed-generation-gate.md).
 
-**Known issue shipped with v0.1.0:**
-[#27](https://github.com/brightdigit/FCPKit/issues/27) — the `FCPKitScripting`
-SBObject bridge passes cocoa keys where SBObject resolves sdef term names, so
-`FCPLibraryInspector` crashes against a real running Final Cut Pro (mock-backed
-tests pass). Fix scheduled after v0.1.0.
+[#27](https://github.com/brightdigit/FCPKit/issues/27) (the SBObject bridge
+passed sdef cocoa keys where live proxies resolve term names, crashing against
+a running Final Cut Pro) was fixed before release: the inspector now uses the
+live-verified term-name contract, the mocks pin those keys, and the live test
+asserts real content when Final Cut is running. `persistentID` became optional
+because Final Cut declares but does not implement it, and the timecode format
+parser accepts the OSType enumerator numbers live proxies return.
 
 ## Frontier (after v0.1.0)
 
-- [#27](https://github.com/brightdigit/FCPKit/issues/27) — fix the scripting
-  bridge key mapping and repin the mocks to the sdef term-name contract.
 - [#16](https://github.com/brightdigit/FCPKit/issues/16) — MediaTools
   in-library probe path for Ubuntu and Windows (no host `ffprobe`).
 - Deferred DSL design items from

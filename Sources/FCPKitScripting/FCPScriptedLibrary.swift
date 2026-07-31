@@ -38,7 +38,10 @@ public struct FCPScriptedLibrary: Hashable, Sendable {
   public var id: String
 
   /// The stable hexadecimal persistent identifier from Final Cut Pro.
-  public var persistentID: String
+  ///
+  /// Declared in the scripting dictionary but not returned by current
+  /// Final Cut Pro releases, so live inspection yields `nil`.
+  public var persistentID: String?
 
   /// The on-disk library bundle URL when available.
   public var fileURL: URL?
@@ -50,7 +53,7 @@ public struct FCPScriptedLibrary: Hashable, Sendable {
   public init(
     name: String,
     id: String,
-    persistentID: String,
+    persistentID: String? = nil,
     fileURL: URL? = nil,
     events: [FCPScriptedEvent] = []
   ) {
