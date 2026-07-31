@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  BuildError.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,20 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-import XMLCoder
-
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
-  }
-
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
-  }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
+/// A required timeline or resource value could not be inferred during export.
+public enum BuildError: Error, Equatable, Sendable {
+  /// The document body did not resolve to a single root content value.
+  case invalidDocumentBody
+  /// A builder received a content value it cannot place in that position.
+  case unsupportedContent
+  /// A clip or gap is missing a duration after defaults were applied.
+  case missingDuration(String)
+  /// An anchored item used lane `0`, which the DTD reserves for the primary storyline.
+  case invalidLane
+  /// Two different resource specs requested the same explicit resource id.
+  case conflictingResourceID(String)
+  /// A format was required but could not be resolved.
+  case missingFormat
+  /// A resource identifier string was illegal.
+  case invalidResourceID(String)
 }

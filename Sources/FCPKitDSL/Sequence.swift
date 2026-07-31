@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  Sequence.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,36 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-import XMLCoder
+import FCPKit
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+/// The primary storyline. Use ``Spine`` only inside an anchor.
+public struct Sequence: DSLNode {
+  internal let format: FormatPreset?
+  internal let content: DocumentGroup
+
+  /// Creates a sequence that hides its primary spine under the builder content.
+  public init(format: FormatPreset? = .p1080p24, @DocumentBuilder content: () -> DocumentGroup) {
+    self.format = format
+    self.content = content()
   }
 
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
-
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
+  internal func build(_ resources: inout ResourceStore) throws -> Built {
+    let formatRef = try format.map { try resources.format($0) }
+    let packed = try Layout.pack(
+      storyItems(content.contents, resources: &resources),
+      frameDuration: format?.format.frameDuration
+    )
+    return .sequence(
+      FCPKit.Sequence(
+        format: formatRef,
+        duration: packed.duration,
+        tcStart: "0s",
+        tcFormat: .nonDropFrame,
+        audioLayout: .stereo,
+        audioRate: .hz48000,
+        renderFormat: "FFRenderFormatProRes422HQ",
+        spine: FCPKit.Spine(items: packed.items)
+      )
+    )
   }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
 }

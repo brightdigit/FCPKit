@@ -1,5 +1,5 @@
 //
-//  TextStyleDef.swift
+//  FormatPreset.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,29 +27,45 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-import XMLCoder
+import FCPKit
 
-/// A `text-style-def` element defining a reusable named text style referenced by text runs.
-public struct TextStyleDef: Codable {
-  internal enum CodingKeys: String, CodingKey {
-    case id
-    case textStyle = "text-style"
+/// A video format preset or custom format whose id is assigned on export.
+public struct FormatPreset {
+  /// 1080p24 Rec. 709, matching `FFVideoFormat1080p24`.
+  public static var p1080p24: FormatPreset {
+    FormatPreset(
+      FCPKit.Format(
+        id: ResourceStore.draftID,
+        name: "FFVideoFormat1080p24",
+        frameDuration: "100/2400s",
+        width: "1920",
+        height: "1080",
+        colorSpace: "1-1-1 (Rec. 709)"
+      )
+    )
+  }
+  /// 720p24 Rec. 709, matching `FFVideoFormat720p24`.
+  public static var p720p24: FormatPreset {
+    FormatPreset(
+      FCPKit.Format(
+        id: ResourceStore.draftID,
+        name: "FFVideoFormat720p24",
+        frameDuration: "100/2400s",
+        width: "1280",
+        height: "720",
+        colorSpace: "1-1-1 (Rec. 709)"
+      )
+    )
   }
 
-  /// The identifier that `text-style` runs use to reference this definition (for example `ts1`).
-  public let id: String?
-  /// The `text-style` element describing the styling attributes of this definition.
-  public var textStyle: TextStyle?
+  internal let format: FCPKit.Format
+  internal let explicitID: ResourceID?
 
-  /// Creates a `text-style-def` with the given identifier and style.
-  public init(id: String? = nil, textStyle: TextStyle? = nil) {
-    self.id = id
-    self.textStyle = textStyle
+  /// Wraps a format resource as a preset.
+  public init(_ format: FCPKit.Format, id: ResourceID? = nil) {
+    var copy = format
+    copy.id = id ?? ResourceStore.draftID
+    self.format = copy
+    self.explicitID = id
   }
-}
-
-extension TextStyleDef: FCPNodeEncodable {
-  /// Encodes `text-style` as a child element and all other keys as XML attributes.
-  public static let elementKeys: Set<String> = ["text-style"]
 }

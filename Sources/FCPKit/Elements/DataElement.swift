@@ -41,6 +41,12 @@ public struct DataElement: Codable {
   public let key: String?
   /// The data payload, stored as the element's character data.
   public var value: String?
+
+  /// Creates a `data` element with the given key and payload.
+  public init(key: String? = nil, value: String? = nil) {
+    self.key = key
+    self.value = value
+  }
 }
 
 extension DataElement: DynamicNodeEncoding {
