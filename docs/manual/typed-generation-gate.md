@@ -39,3 +39,39 @@ relationships.
 Generated multicam documents no longer emit `smart-collection` elements.
 `SmartCollection` remains in the Codable model so real fixture exports that
 include them still decode.
+
+## DSL Create-Path Import Gate (Accepted)
+
+Status: **Accepted** (July 31, 2026) — closes
+[#14](https://github.com/brightdigit/FCPKit/issues/14)
+
+DSL-generated FCPXML from the `FCPKitDSL` create path imported into Final Cut
+Pro and was visually verified. Documents were generated at `v0.1.x`
+commit `ff9169f` with:
+
+```sh
+swift run fcpxml-dsl export            # → transitions.fcpxml, titles.fcpxml
+```
+
+Test media regenerates with `Scripts/generate-test-media.sh`
+(`/Users/Shared/FCPKitMediaLeft.mov` / `…Right.mov`).
+
+### Verified
+
+- `transitions.fcpxml` imported without rejection; the cross dissolve sits
+  **between** the two clips on the timeline, not after both.
+- `titles.fcpxml` imported without rejection; the title renders on its
+  anchored lane above the clip.
+- Both documents validate against the FCPXML DTD (`asset` emits `media-rep`
+  rather than the pre-1.6 `src` attribute).
+
+### Repeatable check
+
+`swift run fcpxml-dsl verify-import <file>` sends the document to a running
+Final Cut Pro via `open -b com.apple.FinalCutApp` and takes an AppleScript
+project census (`name of every project of every event of every library`) to
+confirm the project appeared. Timeline layout (dissolve placement, lanes)
+still needs eyes on the timeline.
+
+Export outputs stay off-repo (`/transitions.fcpxml`, `/titles.fcpxml` are
+gitignored); regenerate them with the commands above.

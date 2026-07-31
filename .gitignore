@@ -138,3 +138,7 @@ xcuserdata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,xcode,swift,swiftpackagemanager
+
+# fcpxml-dsl export outputs (regenerate with: swift run fcpxml-dsl export)
+/transitions.fcpxml
+/titles.fcpxml
