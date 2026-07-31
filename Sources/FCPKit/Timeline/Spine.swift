@@ -33,50 +33,22 @@ import XMLCoder
 /// A `spine` element containing the ordered story elements of a storyline.
 public struct Spine: Codable {
   internal enum CodingKeys: String, CodingKey {
-    case clips = "clip"
-    case gaps = "gap"
-    case mcClips = "mc-clip"
-    case refClips = "ref-clip"
-    case syncClips = "sync-clip"
-    case assetClips = "asset-clip"
-    case titles = "title"
-    case generators = "generator"
-    case transitions = "transition"
-    case storylines = "storyline"
-    case compoundClips = "compound-clip"
-    case retimeClips = "retime-clip"
-    case captions = "caption"
-    case video
+    case items = ""
   }
 
-  /// The `clip` elements in the spine.
-  public var clips: [Clip]?
-  /// The `gap` elements filling empty stretches of the spine.
-  public var gaps: [Gap]?
-  /// The `mc-clip` elements referencing multicam media resources.
-  public var mcClips: [MCClip]?
-  /// The `ref-clip` elements referencing compound clips or other media resources.
-  public var refClips: [RefClip]?
-  /// The `sync-clip` elements containing synchronized audio and video.
-  public var syncClips: [SyncClip]?
-  /// The `asset-clip` elements referencing asset resources.
-  public var assetClips: [AssetClip]?
-  /// The `title` elements in the spine.
-  public var titles: [Title]?
-  /// The `generator` elements referencing generator effects.
-  public var generators: [Generator]?
-  /// The `transition` elements joining adjacent story elements.
-  public var transitions: [Transition]?
-  /// Nested `storyline` elements connected to the spine.
-  public var storylines: [Storyline]?
-  /// The `compound-clip` elements in the spine.
-  public var compoundClips: [CompoundClip]?
-  /// The `retime-clip` elements applying retiming to their contents.
-  public var retimeClips: [RetimeClip]?
-  /// The `caption` elements in the spine.
-  public var captions: [Caption]?
-  /// The `video` elements in the spine.
-  public var video: [Video]?
+  /// The ordered elements in the spine.
+  public var items: [SpineItem]
+
+  /// Creates a spine with the given ordered items.
+  public init(items: [SpineItem] = []) {
+    self.items = items
+  }
+
+  /// Creates a spine from a decoder.
+  public init(from decoder: Decoder) throws {
+    let itemsContainer = try decoder.singleValueContainer()
+    self.items = (try? itemsContainer.decode([SpineItem].self)) ?? []
+  }
 
   /// Creates a spine with the given story elements.
   public init(
@@ -95,24 +67,35 @@ public struct Spine: Codable {
     captions: [Caption]? = nil,
     video: [Video]? = nil
   ) {
-    self.clips = clips
-    self.gaps = gaps
-    self.mcClips = mcClips
-    self.refClips = refClips
-    self.syncClips = syncClips
-    self.assetClips = assetClips
-    self.titles = titles
-    self.generators = generators
-    self.transitions = transitions
-    self.storylines = storylines
-    self.compoundClips = compoundClips
-    self.retimeClips = retimeClips
-    self.captions = captions
-    self.video = video
+    self.items = Self.appending([
+      clips?.map(SpineItem.clip),
+      gaps?.map(SpineItem.gap),
+      mcClips?.map(SpineItem.mcClip),
+      refClips?.map(SpineItem.refClip),
+      syncClips?.map(SpineItem.syncClip),
+      assetClips?.map(SpineItem.assetClip),
+      titles?.map(SpineItem.title),
+      generators?.map(SpineItem.generator),
+      transitions?.map(SpineItem.transition),
+      storylines?.map(SpineItem.storyline),
+      compoundClips?.map(SpineItem.compoundClip),
+      retimeClips?.map(SpineItem.retimeClip),
+      captions?.map(SpineItem.caption),
+      video?.map(SpineItem.video),
+    ])
+  }
+}
+
+extension Spine: OrderedChoiceContainer {
+  internal var orderedItems: [SpineItem] {
+    get { items }
+    set { items = newValue }
   }
 }
 
 extension Spine: DynamicNodeEncoding {
   /// Encodes every key as an XML element.
-  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding { .element }
+  public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    key.stringValue.isEmpty ? .element : .attribute
+  }
 }

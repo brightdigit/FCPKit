@@ -44,18 +44,6 @@ internal final class SpineOrderTests: XCTestCase {
     let encoded = try FCPXMLParser().encode(document)
     let root = try XMLTreeParser().parse(encoded)
     let spine = try XCTUnwrap(firstNode(named: "spine", in: root))
-    #if canImport(ObjectiveC)
-      // Strict by default: once #8 lands ordered Spine.items, this wrapper
-      // must be removed or the test fails for succeeding unexpectedly.
-      XCTExpectFailure(
-        "Spine buckets children into parallel typed arrays; ordered Spine.items (#8) flips this"
-      ) {
-        XCTAssertEqual(spine.children.map(\.name), ["asset-clip", "transition", "asset-clip"])
-      }
-    #else
-      throw XCTSkip(
-        "XCTExpectFailure unavailable on corelibs-xctest; tracked by the Darwin leg until #8"
-      )
-    #endif
+    XCTAssertEqual(spine.children.map(\.name), ["asset-clip", "transition", "asset-clip"])
   }
 }

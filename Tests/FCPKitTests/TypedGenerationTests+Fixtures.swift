@@ -76,15 +76,17 @@ import XCTest
                   audioLayout: "stereo",
                   audioRate: "48k",
                   spine: Spine(
-                    assetClips: [
-                      AssetClip(
-                        ref: "r2",
-                        name: "Interview",
-                        duration: "240/24s",
-                        start: "0s",
-                        format: "r1",
-                        tcFormat: "NDF",
-                        offset: "0s"
+                    items: [
+                      .assetClip(
+                        AssetClip(
+                          ref: "r2",
+                          name: "Interview",
+                          duration: "240/24s",
+                          start: "0s",
+                          format: "r1",
+                          tcFormat: "NDF",
+                          offset: "0s"
+                        )
                       )
                     ]
                   )
