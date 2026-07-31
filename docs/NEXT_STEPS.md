@@ -33,15 +33,15 @@ of complete FCPXML 1.13/1.14 coverage. XMLCoder silently ignores unmodeled
 content, so parsing without an error is not sufficient evidence of support.
 DTD validation similarly proves DTD conformance, not full semantic coverage.
 
-**The completeness gate is also order-blind, and a confirmed round-trip defect
-hides behind it.** `Inventory` in `Sources/FCPXMLDiff/FCPXMLDiffEngine.swift`
-keys a multiset by ancestor path with no sibling ordering, so a reordered spine
-scores zero loss. `Spine` (`Sources/FCPKit/FCPXML.swift:297`) stores children as
-14 parallel arrays, while the DTD declares
-`<!ELEMENT spine (%clip_item; | transition)*>` — one ordered sequence. The
-`transitions` FeaturePair is `asset-clip, transition, asset-clip` on disk and
-re-encodes as `asset-clip, asset-clip, transition`, which Final Cut rejects.
-Evidence and analysis:
+**The completeness gate is order-blind.** `Inventory` in
+`Sources/FCPXMLDiff/FCPXMLDiffEngine.swift` keys a multiset by ancestor path
+with no sibling ordering, so a reordered spine scores zero loss. The defect
+that used to hide behind this — `Spine` storing children as parallel arrays
+and re-encoding `asset-clip, transition, asset-clip` as
+`asset-clip, asset-clip, transition` — was fixed in v0.1.0 Step 3 (`Spine`
+now stores one ordered `items` array), but the gate itself still cannot see
+ordering regressions; the Step 0 ordering tests are what guard them.
+Original evidence and analysis:
 [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md).
 
 [ADR 0001](adr/0001-supported-schema-and-best-effort-editing.md)
@@ -59,55 +59,54 @@ establishes the current compatibility policy:
 Gate evidence:
 [manual/typed-generation-gate.md](manual/typed-generation-gate.md).
 
-## Accepted Next Milestone: v0.1.0
+## v0.1.0: Implemented (July 2026)
 
-[ADR 0002](adr/0002-create-first-ordered-typed-model.md) accepts the create-first,
-ordered, typed working version. **Implementation has not started.** Create-from-scratch
-authoring is the acceptance bar; editing existing exports stays best-effort
+[ADR 0002](adr/0002-create-first-ordered-typed-model.md) accepted the
+create-first, ordered, typed working version; **Steps 0–8 have all landed on
+`v0.1.x`**. Create-from-scratch authoring was the acceptance bar; editing
+existing exports stays best-effort
 ([ADR 0001](adr/0001-supported-schema-and-best-effort-editing.md)).
 
-### Resume later (reading order)
+| Step | Issue | Landed |
+| --- | --- | --- |
+| Scaffolding (Swift 6.4, CI) | [#4](https://github.com/brightdigit/FCPKit/issues/4) | `3e59e49` |
+| 0 — XMLCoder ordering guardrails | [#5](https://github.com/brightdigit/FCPKit/issues/5) | `a1954ba` |
+| 1 — `FCPTime` + value types | [#6](https://github.com/brightdigit/FCPKit/issues/6) | `dd6a3c8` |
+| 2 — Leaf types | [#7](https://github.com/brightdigit/FCPKit/issues/7) | `0c3b23f` |
+| 3 — Ordered `Spine.items` | [#8](https://github.com/brightdigit/FCPKit/issues/8) | `649db20` |
+| 4 — Story elements + `AnchoredItem` | [#9](https://github.com/brightdigit/FCPKit/issues/9) | `a3c0509` |
+| 5 — Resources + document shells | [#10](https://github.com/brightdigit/FCPKit/issues/10) | `f0dd01f` |
+| 6 — `FCPKitDSL` create path + `fcpxml-dsl` CLI | [#11](https://github.com/brightdigit/FCPKit/issues/11) | `ff9169f` |
+| 7 — `FCPKitScripting` inspector | [#12](https://github.com/brightdigit/FCPKit/issues/12) | `6baa9e6` |
+| 8 — Docs sync | [#13](https://github.com/brightdigit/FCPKit/issues/13) | this change |
 
-1. [ADR 0002](adr/0002-create-first-ordered-typed-model.md) — accepted decisions
-2. [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
-   — full plan; **§3 is the locked `FCPKitDSL` surface**
-3. [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
-   — evidence, rejected alternatives, resolved questions, deferred DSL grill list (§10)
-4. [planning/v0.1.0-issues.md](planning/v0.1.0-issues.md) — GitHub issues #4–#14
-5. [planning/v0.1.0-worktree-plan.md](planning/v0.1.0-worktree-plan.md) — parallel lanes
-6. This section — where to code next
+Human gates: the DSL create-path Final Cut import gate
+([#14](https://github.com/brightdigit/FCPKit/issues/14)) is **Accepted** —
+evidence in [manual/typed-generation-gate.md](manual/typed-generation-gate.md).
 
-**Worktrees:** This planning branch is `swift-package-plan`. Implementation evolves
-`v0.1.x` (sibling worktree). Before Step 0 code: merge or cherry-pick these planning/ADR
-commits onto `v0.1.x` (or continue implementing here only if that branch is intentionally
-repurposed — default is **code on `v0.1.x` with docs present**). Then follow the
-[worktree plan](planning/v0.1.0-worktree-plan.md): `v0.1-scaffold` for [#4](https://github.com/brightdigit/FCPKit/issues/4),
-`v0.1.x` for the model chain starting at [#5](https://github.com/brightdigit/FCPKit/issues/5),
-`v0.1-scripting` for [#12](https://github.com/brightdigit/FCPKit/issues/12) after Step 1.
+**Known issue shipped with v0.1.0:**
+[#27](https://github.com/brightdigit/FCPKit/issues/27) — the `FCPKitScripting`
+SBObject bridge passes cocoa keys where SBObject resolves sdef term names, so
+`FCPLibraryInspector` crashes against a real running Final Cut Pro (mock-backed
+tests pass). Fix scheduled after v0.1.0.
 
-**Frontier (ready now):**
+## Frontier (after v0.1.0)
 
-- [#4](https://github.com/brightdigit/FCPKit/issues/4) — BrightDigit Swift package scaffolding
-  (CI, lint/format, package hygiene)
-- [#5](https://github.com/brightdigit/FCPKit/issues/5) — Step 0: XMLCoder ordering guardrails +
-  Spine choice spike + `XCTExpectFailure` on
-  `Tests/FCPKitTests/FeaturePairs/transitions/after.fcpxml`
+- [#27](https://github.com/brightdigit/FCPKit/issues/27) — fix the scripting
+  bridge key mapping and repin the mocks to the sdef term-name contract.
+- [#16](https://github.com/brightdigit/FCPKit/issues/16) — MediaTools
+  in-library probe path for Ubuntu and Windows (no host `ffprobe`).
+- Deferred DSL design items from
+  [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
+  §10: markers / roles / retiming modifier shapes; time literals (`10s`);
+  `RefClip` / `<media>` authoring; transition-overlap algorithm write-up;
+  preset catalog membership; `URL` vs `filePath` spelling.
+- Swift Testing migration of the remaining XCTest files (no behavior change).
 
-DSL code is Step 6 / [#11](https://github.com/brightdigit/FCPKit/issues/11) (`FCPKitDSL` product).
-
-**Still open (design, not blocking Steps 0–5):** markers / roles / retiming modifier shapes;
-time literals (`10s`); `RefClip` / `<media>` authoring; exact transition-overlap algorithm
-write-up; preset catalog membership; `URL` vs `filePath` spelling. Listed under findings §10.
-
-- [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
-  — accepted plan: ordered content models, strong value types (`FCPTime` and
-  friends), **`FCPKitDSL`** (`Document` + result builders), and a read-only
-  ScriptingBridge inspector, sequenced into Steps 0–8. DSL surface grilled
-  2026-07-28 (§3).
-- [planning/v0.1.0-investigation-findings.md](planning/v0.1.0-investigation-findings.md)
-  — supporting evidence and the resolved decision table.
-- [planning/v0.1.0-issues.md](planning/v0.1.0-issues.md) — tracker map for #4–#14.
-- [planning/v0.1.0-worktree-plan.md](planning/v0.1.0-worktree-plan.md) — parallel lanes.
+Planning references: [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
+(**§3 is the locked `FCPKitDSL` surface**),
+[planning/v0.1.0-issues.md](planning/v0.1.0-issues.md),
+[planning/v0.1.0-worktree-plan.md](planning/v0.1.0-worktree-plan.md).
 
 ## Completed Foundation
 
@@ -157,7 +156,10 @@ AppleScript cannot automate exports.
 **Child-simple recipes:** [manual/easy-export-recipes.md](manual/easy-export-recipes.md)
 
 1. Optional follow-up pairs from that guide: title style only; speed ramp.
-2. Import/re-export gate when generation APIs expand again.
+2. Import/re-export gate when generation APIs expand again — including
+   re-running the DSL create-path import gate
+   ([manual/typed-generation-gate.md](manual/typed-generation-gate.md)) when
+   the `FCPKitDSL` surface grows.
 3. Re-export after Final Cut upgrades that change FCPXML output.
 4. Privacy review for any new exports that leave Shared/generic paths.
 

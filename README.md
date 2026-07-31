@@ -6,13 +6,20 @@ through typed Codable models (XMLCoder).
 ## Features
 
 - **Typed FCPXML model**: Schema-shaped Swift types for the explicitly tested
-  vocabulary (currently evidenced against checked-in FCPXML 1.13 fixtures)
+  vocabulary (evidenced against checked-in FCPXML 1.13 and 1.14 fixtures),
+  with ordered spine/anchored content and strong value types (`FCPTime`,
+  `ResourceID`, …)
+- **Create-first DSL** (`FCPKitDSL`): `Document` + result builders for
+  authoring cuts from scratch — clips, cross dissolves, titles, anchored
+  lanes — exported through the typed model (see ADR 0002)
 - **Best-effort editing**: Supported content round-trips; unsupported XML may be
   omitted on encode (see [ADR 0001](docs/adr/0001-supported-schema-and-best-effort-editing.md))
 - **Loss diagnostics**: `fcpxml-diff` reports dropped elements, attributes, and
   text after decode/re-encode
 - **Typed generation**: Public initializers and `MulticamXMLBuilder` construct
   documents without raw XML templates
+- **Scripting inspector** (`FCPKitScripting`, macOS): read-only ScriptingBridge
+  view of a running Final Cut Pro
 - **Version inspection**: Callers can classify declared versions as supported,
   older, newer, or malformed without treating a version string as full coverage
 
@@ -22,7 +29,7 @@ Add FCPKit to your Swift package dependencies in `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "path/to/FCPKit", from: "1.0.0")
+    .package(url: "path/to/FCPKit", from: "0.1.0")
 ]
 ```
 
@@ -112,6 +119,40 @@ Multicam split-screen documents can also be built from two `VideoMetadata`
 values via `FCPKitMediaTools.MulticamXMLBuilder` (typed encode; no smart
 collections).
 
+### Authoring with FCPKitDSL
+
+`FCPKitDSL` is the create-first authoring surface: declare a `Document` with
+result builders and export it through the typed model.
+
+```swift
+import FCPKit
+import FCPKitDSL
+
+struct TransitionsCut: Document {
+    var body: some DocumentContent {
+        Project(name: "DSL Transitions") {
+            Sequence(format: .p1080p24) {
+                AssetClip(leftURL, duration: FCPTime(numerator: 240, denominator: 24))
+                    .audioRole("dialogue")
+                Transition(.crossDissolve)
+                AssetClip(rightURL, duration: FCPTime(numerator: 216, denominator: 24))
+                    .audioRole("dialogue")
+            }
+        }
+    }
+}
+
+let model = try TransitionsCut().export()   // -> FCPXML Codable model
+try FCPXMLParser().write(model, to: URL(fileURLWithPath: "cut.fcpxml"))
+```
+
+Offsets pack automatically and transitions overlap the adjacent clips;
+anchored content (titles, connected clips) attaches with
+`.anchor(lane:)`. The `fcpxml-dsl` executable exports two smoke-test cuts
+(`swift run fcpxml-dsl export`) and can send them to a running Final Cut Pro
+(`swift run fcpxml-dsl verify-import`). Import verification evidence lives in
+[`docs/manual/typed-generation-gate.md`](docs/manual/typed-generation-gate.md).
+
 ### Scripting inspector (macOS)
 
 `FCPKitScripting` is a read-only ScriptingBridge inspector for the running Final
@@ -136,6 +177,12 @@ control Final Cut Pro) and enable the
 `com.apple.security.automation.apple-events` entitlement in the app target's
 entitlements file. Without both, ScriptingBridge calls fail at runtime with a
 sandbox/TCC error.
+
+> **Known issue** ([#27](https://github.com/brightdigit/FCPKit/issues/27)):
+> against a real running Final Cut Pro, `FCPLibraryInspector.libraries()`
+> currently raises an uncatchable `NSUnknownKeyException` — the SBObject
+> bridge resolves sdef term names, not the cocoa keys it is given. The
+> inspector works against mocks but not live FCP in v0.1.0.
 
 ### Encoding Back to XML
 
@@ -177,7 +224,7 @@ do {
 
 ## Requirements
 
-- Swift 6.1+
+- Swift 6.4+
 - macOS 13+, iOS 16+, tvOS 16+, watchOS 9+
 - XMLCoder 0.17.0+
 
@@ -191,7 +238,8 @@ swift run fcpxml-diff schema-completeness Tests/FCPKitTests/TestData \
   --fail-if-total-exceeds 0
 ```
 
-Checked-in real exports live under `Tests/FCPKitTests/TestData/` (FCPXML 1.13).
+Checked-in real exports live under `Tests/FCPKitTests/TestData/` (FCPXML 1.13
+and 1.14).
 A zero-loss report is a regression signal for those fixtures, not proof of
 complete schema coverage. Roadmap and remaining human evidence work are in
 [`docs/NEXT_STEPS.md`](docs/NEXT_STEPS.md).
