@@ -68,16 +68,16 @@ public struct Clip: Codable {
 
   /// The display name of the clip.
   public var name: String?
-  /// The identifier of the referenced resource.
-  public var ref: String?
+  /// The asset resource reference.
+  public var ref: ResourceRef<AssetKind>?
   /// The format resource reference.
-  public var format: String?
+  public var format: ResourceRef<FormatKind>?
   /// The clip's duration, as a rational time string.
   public var duration: String?
   /// The start time within the source media, as a rational time string.
   public var start: String?
   /// The timecode format, either `DF` (drop frame) or `NDF` (non-drop frame).
-  public var tcFormat: String?
+  public var tcFormat: TCFormat?
   /// The number of audio channels in the source media.
   public var audioChannels: String?
   /// The audio sample rate of the source media, in hertz.
@@ -121,11 +121,11 @@ public struct Clip: Codable {
   /// Creates a clip with the given attributes and contained elements.
   public init(
     name: String? = nil,
-    ref: String? = nil,
-    format: String? = nil,
+    ref: ResourceRef<AssetKind>? = nil,
+    format: ResourceRef<FormatKind>? = nil,
     duration: String? = nil,
     start: String? = nil,
-    tcFormat: String? = nil,
+    tcFormat: TCFormat? = nil,
     audioChannels: String? = nil,
     audioRate: String? = nil,
     lane: String? = nil,

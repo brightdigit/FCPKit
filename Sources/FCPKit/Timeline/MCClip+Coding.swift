@@ -34,7 +34,7 @@ extension MCClip {
   /// Creates a multicam clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.ref = try container.decodeIfPresent(ResourceRef<MediaKind>.self, forKey: .ref)
     self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)

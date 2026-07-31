@@ -39,14 +39,27 @@ public struct FilterVideo: Codable {
     case param
   }
 
-  /// The ID of the referenced `effect` resource.
-  public let ref: String?
+  /// The effect resource reference.
+  public var ref: ResourceRef<EffectKind>?
   /// The display name of the video filter.
-  public let name: String?
+  public var name: String?
   /// Nested `data` elements carrying opaque effect data.
   public var data: [DataElement]?
   /// Nested `param` elements holding the filter's parameter values.
   public var param: [ParamElement]?
+
+  /// Creates a video filter with the given effect reference and parameters.
+  public init(
+    ref: ResourceRef<EffectKind>? = nil,
+    name: String? = nil,
+    data: [DataElement]? = nil,
+    param: [ParamElement]? = nil
+  ) {
+    self.ref = ref
+    self.name = name
+    self.data = data
+    self.param = param
+  }
 }
 
 extension FilterVideo: FCPNodeEncodable {

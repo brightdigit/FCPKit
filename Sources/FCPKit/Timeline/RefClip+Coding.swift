@@ -34,7 +34,7 @@ extension RefClip {
   /// Creates a reference clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.ref = try container.decodeIfPresent(ResourceRef<MediaKind>.self, forKey: .ref)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)

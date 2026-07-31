@@ -42,20 +42,39 @@ public struct Generator: Codable {
     case param
   }
 
-  /// The `id` of the `effect` resource that generates this clip's content.
-  public let ref: String?
+  /// The effect resource reference that generates this clip's content.
+  public var ref: ResourceRef<EffectKind>?
   /// The clip's position on its parent timeline, as a rational time string.
-  public let offset: String?
+  public var offset: String?
   /// The clip's duration, as a rational time string.
-  public let duration: String?
+  public var duration: String?
   /// The display name of the generator clip.
-  public let name: String?
+  public var name: String?
   /// The start time within the generator's local timeline, as a rational time string.
-  public let start: String?
+  public var start: String?
   /// The lane number for vertical placement relative to the primary storyline.
-  public let lane: String?
+  public var lane: String?
   /// The effect parameters applied to the generator.
-  public let param: [ParamElement]?
+  public var param: [ParamElement]?
+
+  /// Creates a generator clip with the given attributes and parameters.
+  public init(
+    ref: ResourceRef<EffectKind>? = nil,
+    offset: String? = nil,
+    duration: String? = nil,
+    name: String? = nil,
+    start: String? = nil,
+    lane: String? = nil,
+    param: [ParamElement]? = nil
+  ) {
+    self.ref = ref
+    self.offset = offset
+    self.duration = duration
+    self.name = name
+    self.start = start
+    self.lane = lane
+    self.param = param
+  }
 }
 
 extension Generator: FCPNodeEncodable {

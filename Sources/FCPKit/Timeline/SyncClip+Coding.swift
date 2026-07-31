@@ -37,8 +37,8 @@ extension SyncClip {
     self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
-    self.tcFormat = try container.decodeIfPresent(String.self, forKey: .tcFormat)
-    self.format = try container.decodeIfPresent(String.self, forKey: .format)
+    self.tcFormat = try container.decodeIfPresent(TCFormat.self, forKey: .tcFormat)
+    self.format = try container.decodeIfPresent(ResourceRef<FormatKind>.self, forKey: .format)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
     self.modDate = try container.decodeIfPresent(String.self, forKey: .modDate)
 

@@ -60,8 +60,8 @@ public struct RefClip: Codable {
     case filterAudio = "filter-audio"
   }
 
-  /// The identifier of the referenced media resource.
-  public var ref: String?
+  /// The media resource reference.
+  public var ref: ResourceRef<MediaKind>?
   /// The display name of the clip.
   public var name: String?
   /// The playback duration of the clip, as a rational time string.
@@ -122,7 +122,7 @@ public struct RefClip: Codable {
 
   /// Creates a reference clip with the given attributes and contents.
   public init(
-    ref: String? = nil,
+    ref: ResourceRef<MediaKind>? = nil,
     offset: String? = nil,
     name: String? = nil,
     duration: String? = nil,

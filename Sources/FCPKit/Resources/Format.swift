@@ -42,7 +42,7 @@ public struct Format: Codable {
   }
 
   /// The resource identifier other elements use to reference this format, e.g. "r1".
-  public let id: String
+  public var id: ResourceID
   /// The format's descriptive name, e.g. "FFVideoFormat1080p30".
   public var name: String?
   /// The duration of a single frame as a rational time value, e.g. "100/3000s".
@@ -56,7 +56,7 @@ public struct Format: Codable {
 
   /// Creates a `format` resource with the given identifier and video characteristics.
   public init(
-    id: String,
+    id: ResourceID,
     name: String? = nil,
     frameDuration: String? = nil,
     width: String? = nil,

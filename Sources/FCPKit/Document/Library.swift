@@ -41,8 +41,8 @@ public struct Library: Codable {
 
   /// The file URL of the library bundle on disk.
   public var location: String?
-  /// The library's color-processing mode (for example, `"wide-gamut-hdr"`).
-  public var colorProcessing: String?
+  /// The library's color-processing mode (for example, `.wideHDR`).
+  public var colorProcessing: ColorProcessing?
   /// The `event` elements grouped inside the library.
   public var events: [Event]?
   /// The library-level `smart-collection` elements.
@@ -51,7 +51,7 @@ public struct Library: Codable {
   /// Creates a `library` element with the given location, color processing, and contents.
   public init(
     location: String? = nil,
-    colorProcessing: String? = nil,
+    colorProcessing: ColorProcessing? = nil,
     events: [Event]? = nil,
     smartCollections: [SmartCollection]? = nil
   ) {

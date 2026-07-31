@@ -60,8 +60,8 @@ public struct Video: Codable {
     case filterVideo = "filter-video"
   }
 
-  /// The identifier of the referenced media resource.
-  public var ref: String?
+  /// The asset resource reference.
+  public var ref: ResourceRef<AssetKind>?
   /// The vertical lane the element occupies when connected to a primary storyline item.
   public var lane: String?
   /// The element's start position on the parent timeline, as a rational time string.
@@ -105,7 +105,7 @@ public struct Video: Codable {
   /// Creates a video element by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.ref = try container.decodeIfPresent(ResourceRef<AssetKind>.self, forKey: .ref)
     self.lane = try container.decodeIfPresent(String.self, forKey: .lane)
     self.offset = try container.decodeIfPresent(String.self, forKey: .offset)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -148,7 +148,7 @@ public struct Video: Codable {
 
   /// Creates a video element with the given attributes and contents.
   public init(
-    ref: String? = nil,
+    ref: ResourceRef<AssetKind>? = nil,
     lane: String? = nil,
     offset: String? = nil,
     name: String? = nil,

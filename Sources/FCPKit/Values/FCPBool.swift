@@ -31,7 +31,7 @@
 ///
 /// FCPXML boolean attributes (for example `enabled="1"`) use exactly these two
 /// strings; any other input is illegal and fails parsing.
-public struct FCPBool: ExpressibleByBooleanLiteral, XMLAttributeValue {
+public struct FCPBool: ExpressibleByBooleanLiteral, ExpressibleByStringLiteral, XMLAttributeValue {
   /// The wrapped boolean value.
   public var value: Bool
 
@@ -48,6 +48,14 @@ public struct FCPBool: ExpressibleByBooleanLiteral, XMLAttributeValue {
   /// Creates a value from a boolean literal.
   public init(booleanLiteral value: Bool) {
     self.init(value)
+  }
+
+  /// Creates a value from a string literal ("1" or "0").
+  public init(stringLiteral value: String) {
+    guard let boolVal = FCPBool(value) else {
+      preconditionFailure("Invalid FCPBool string literal: '\(value)'")
+    }
+    self = boolVal
   }
 
   /// Creates a value from `"1"` or `"0"`; any other string is illegal.

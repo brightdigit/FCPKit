@@ -57,8 +57,8 @@ public struct MCClip: Codable {
     case filterAudio = "filter-audio"
   }
 
-  /// The identifier of the referenced multicam media resource.
-  public var ref: String?
+  /// The multicam media resource reference.
+  public var ref: ResourceRef<MediaKind>?
   /// The clip's start position on the parent timeline, as a rational time string.
   public var offset: String?
   /// The display name of the clip.
@@ -101,7 +101,7 @@ public struct MCClip: Codable {
 
   /// Creates a multicam clip with the given attributes and contents.
   public init(
-    ref: String? = nil,
+    ref: ResourceRef<MediaKind>? = nil,
     offset: String? = nil,
     name: String? = nil,
     start: String? = nil,

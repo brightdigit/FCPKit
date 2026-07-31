@@ -32,7 +32,7 @@
 /// The DTD only declares resource ids as XML `ID`, so any non-empty string
 /// without whitespace is accepted; typed matching against references is
 /// advisory and happens through ``ResourceRef``.
-public struct ResourceID: XMLAttributeValue {
+public struct ResourceID: ExpressibleByStringLiteral, XMLAttributeValue {
   /// The identifier exactly as written, such as `"r1"`.
   public let rawValue: String
 
@@ -47,5 +47,13 @@ public struct ResourceID: XMLAttributeValue {
       return nil
     }
     self.rawValue = description
+  }
+
+  /// Creates an identifier from a string literal.
+  public init(stringLiteral value: String) {
+    guard let id = ResourceID(value) else {
+      preconditionFailure("Invalid ResourceID string literal: '\(value)'")
+    }
+    self = id
   }
 }

@@ -40,10 +40,10 @@ public struct MCSource: Codable {
   /// The identifier of the multicam angle this source refers to.
   public let angleID: String?
   /// Which media of the angle is enabled: `all`, `audio`, `video`, or `none`.
-  public var srcEnable: String?
+  public var srcEnable: SrcEnable?
 
   /// Creates a multicam source selection for the given angle.
-  public init(angleID: String, srcEnable: String? = nil) {
+  public init(angleID: String, srcEnable: SrcEnable? = nil) {
     self.angleID = angleID
     self.srcEnable = srcEnable
   }

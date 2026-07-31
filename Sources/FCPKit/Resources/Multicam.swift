@@ -36,28 +36,43 @@ public struct Multicam: Codable {
     case format
     case tcStart
     case tcFormat
+    case renderFormat
+    case audioLayout
+    case audioRate
     case mcAngles = "mc-angle"
   }
 
-  /// The `id` of the `format` resource describing the multicam's video characteristics.
-  public var format: String?
+  /// The format resource reference describing the multicam's video characteristics.
+  public var format: ResourceRef<FormatKind>?
   /// The starting timecode of the multicam, as a rational time value.
   public var tcStart: String?
-  /// The timecode format, either "DF" (drop frame) or "NDF" (non-drop frame).
-  public var tcFormat: String?
+  /// The timecode format, either `DF` (drop frame) or `NDF` (non-drop frame).
+  public var tcFormat: TCFormat?
+  /// The codec identifier used for render files.
+  public var renderFormat: String?
+  /// The audio channel layout.
+  public var audioLayout: AudioLayout?
+  /// The audio sample rate vocabulary for multicam.
+  public var audioRate: AudioRate?
   /// The `mc-angle` elements holding each camera angle's clips.
   public var mcAngles: [MCAngle]?
 
   /// Creates a `multicam` element with the given format, timecode, and camera angles.
   public init(
-    format: String? = nil,
+    format: ResourceRef<FormatKind>? = nil,
     tcStart: String? = nil,
-    tcFormat: String? = nil,
+    tcFormat: TCFormat? = nil,
+    renderFormat: String? = nil,
+    audioLayout: AudioLayout? = nil,
+    audioRate: AudioRate? = nil,
     mcAngles: [MCAngle]? = nil
   ) {
     self.format = format
     self.tcStart = tcStart
     self.tcFormat = tcFormat
+    self.renderFormat = renderFormat
+    self.audioLayout = audioLayout
+    self.audioRate = audioRate
     self.mcAngles = mcAngles
   }
 }

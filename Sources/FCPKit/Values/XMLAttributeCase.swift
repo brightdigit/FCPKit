@@ -34,7 +34,9 @@
 /// by both `String` raw enums and string-backed static vocabularies. A pre-release
 /// unknowns scan can compare fixture attribute values against
 /// `Set(Self.allCases.map(\.rawValue))`.
-public protocol XMLAttributeCase: XMLAttributeValue, CaseIterable, Equatable {
+public protocol XMLAttributeCase: ExpressibleByStringLiteral, XMLAttributeValue, CaseIterable,
+  Equatable
+{
   /// Wire-form string compared during ``init?(_:)`` lookup.
   var rawValue: String { get }
 }
@@ -42,6 +44,14 @@ public protocol XMLAttributeCase: XMLAttributeValue, CaseIterable, Equatable {
 extension XMLAttributeCase {
   /// The FCPXML attribute string for this value.
   public var description: String { rawValue }
+
+  /// Creates a value from a string literal.
+  public init(stringLiteral value: String) {
+    guard let match = Self(value) else {
+      preconditionFailure("Invalid \(Self.self) string literal: '\(value)'")
+    }
+    self = match
+  }
 
   /// Succeeds only when `description` matches some ``allCases`` entry’s `rawValue`.
   public init?(_ description: String) {

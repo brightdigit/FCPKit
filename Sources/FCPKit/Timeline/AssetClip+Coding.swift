@@ -34,12 +34,12 @@ extension AssetClip {
   /// Creates an asset clip by decoding from the given decoder.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.ref = try container.decodeIfPresent(String.self, forKey: .ref)
+    self.ref = try container.decodeIfPresent(ResourceRef<AssetKind>.self, forKey: .ref)
     self.name = try container.decodeIfPresent(String.self, forKey: .name)
     self.duration = try container.decodeIfPresent(String.self, forKey: .duration)
     self.start = try container.decodeIfPresent(String.self, forKey: .start)
-    self.format = try container.decodeIfPresent(String.self, forKey: .format)
-    self.tcFormat = try container.decodeIfPresent(String.self, forKey: .tcFormat)
+    self.format = try container.decodeIfPresent(ResourceRef<FormatKind>.self, forKey: .format)
+    self.tcFormat = try container.decodeIfPresent(TCFormat.self, forKey: .tcFormat)
     self.audioChannels = try container.decodeIfPresent(String.self, forKey: .audioChannels)
     self.audioRate = try container.decodeIfPresent(String.self, forKey: .audioRate)
     self.audioRole = try container.decodeIfPresent(String.self, forKey: .audioRole)

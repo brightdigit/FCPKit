@@ -71,18 +71,18 @@ public struct AssetClip: Codable {
     case filterAudio = "filter-audio"
   }
 
-  /// The identifier of the referenced asset resource.
-  public var ref: String?
+  /// The asset resource reference.
+  public var ref: ResourceRef<AssetKind>?
   /// The display name of the clip.
   public var name: String?
   /// The clip's duration, as a rational time string.
   public var duration: String?
   /// The start time within the source media, as a rational time string.
   public var start: String?
-  /// The identifier of the referenced format resource.
-  public var format: String?
+  /// The format resource reference.
+  public var format: ResourceRef<FormatKind>?
   /// The timecode format, either `DF` (drop frame) or `NDF` (non-drop frame).
-  public var tcFormat: String?
+  public var tcFormat: TCFormat?
   /// The number of audio channels in the source media.
   public var audioChannels: String?
   /// The audio sample rate of the source media, in hertz.
@@ -134,12 +134,12 @@ public struct AssetClip: Codable {
 
   /// Creates an asset clip with the given attributes and contained elements.
   public init(
-    ref: String? = nil,
+    ref: ResourceRef<AssetKind>? = nil,
     name: String? = nil,
     duration: String? = nil,
     start: String? = nil,
-    format: String? = nil,
-    tcFormat: String? = nil,
+    format: ResourceRef<FormatKind>? = nil,
+    tcFormat: TCFormat? = nil,
     audioChannels: String? = nil,
     audioRate: String? = nil,
     audioRole: String? = nil,

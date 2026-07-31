@@ -52,23 +52,23 @@ public struct Asset: Codable {
   }
 
   /// The resource identifier other elements use to reference this asset, e.g. "r2".
-  public let id: String
+  public var id: ResourceID
   /// The asset's display name as shown in the browser.
   public var name: String?
   /// A globally unique identifier for the asset's source media.
-  public let uid: String?
+  public var uid: String?
   /// The URL of the asset's original media file.
   public var src: String?
   /// The start time of the asset's available media, as a rational time value.
   public var start: String?
   /// The total duration of the asset's media, as a rational time value.
   public var duration: String?
-  /// The `id` of the `format` resource describing this asset's video characteristics.
-  public var format: String?
-  /// Whether the asset contains video, as "0" or "1".
-  public var hasVideo: String?
-  /// Whether the asset contains audio, as "0" or "1".
-  public var hasAudio: String?
+  /// The format resource reference describing this asset's video characteristics.
+  public var format: ResourceRef<FormatKind>?
+  /// Whether the asset contains video.
+  public var hasVideo: FCPBool?
+  /// Whether the asset contains audio.
+  public var hasAudio: FCPBool?
   /// The number of audio channels in the asset's media.
   public var audioChannels: String?
   /// The audio sample rate in hertz, e.g. "48000".
@@ -86,15 +86,15 @@ public struct Asset: Codable {
 
   /// Creates an `asset` resource with the given identifier and media attributes.
   public init(
-    id: String,
+    id: ResourceID,
     name: String? = nil,
     uid: String? = nil,
     src: String? = nil,
     start: String? = nil,
     duration: String? = nil,
-    format: String? = nil,
-    hasVideo: String? = nil,
-    hasAudio: String? = nil,
+    format: ResourceRef<FormatKind>? = nil,
+    hasVideo: FCPBool? = nil,
+    hasAudio: FCPBool? = nil,
     audioChannels: String? = nil,
     audioRate: String? = nil,
     videoRate: String? = nil,

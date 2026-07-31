@@ -40,13 +40,26 @@ public struct Effect: Codable {
   }
 
   /// The resource identifier other elements use to reference this effect, e.g. "r3".
-  public let id: String
+  public var id: ResourceID
   /// The effect's display name, e.g. "Cross Dissolve".
-  public let name: String?
+  public var name: String?
   /// The unique identifier of the effect's Motion template or plug-in.
-  public let uid: String?
+  public var uid: String?
   /// The URL of the effect's source template file.
-  public let src: String?
+  public var src: String?
+
+  /// Creates an `effect` resource with the given identifier and template attributes.
+  public init(
+    id: ResourceID,
+    name: String? = nil,
+    uid: String? = nil,
+    src: String? = nil
+  ) {
+    self.id = id
+    self.name = name
+    self.uid = uid
+    self.src = src
+  }
 }
 
 extension Effect: DynamicNodeEncoding {

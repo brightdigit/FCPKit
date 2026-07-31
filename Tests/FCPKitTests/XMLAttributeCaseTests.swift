@@ -86,9 +86,14 @@ internal struct XMLAttributeCaseTests {
 
   @Test
   internal func unknownValuesFailInit() {
-    #expect(TCFormat("PAL") == nil)
-    #expect(AudioRate("384k") == nil)
-    #expect(SrcEnable("maybe") == nil)
+    // Route through `String` so `init?(_:)` is selected — a string literal would
+    // hit `ExpressibleByStringLiteral` and precondition-fail on unknown values.
+    let unknownTCFormat = "PAL"
+    let unknownAudioRate = "384k"
+    let unknownSrcEnable = "maybe"
+    #expect(TCFormat(unknownTCFormat) == nil)
+    #expect(AudioRate(unknownAudioRate) == nil)
+    #expect(SrcEnable(unknownSrcEnable) == nil)
   }
 
   @Test
