@@ -119,6 +119,7 @@ public struct AssetClip: DSLNode, DSLNodeWithDuration {
     case .item(.title(let title)): return .title(title)
     case .item(.assetClip(let clip)): return .assetClip(clip)
     case .item(.generator(let gen)): return .generator(gen)
+    case .item(.video(let vid)): return .video(vid)
     case .spine(let spine): return .spine(spine)
     default: throw BuildError.unsupportedContent
     }

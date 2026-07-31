@@ -27,18 +27,17 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A sample document creating a sequence of red, green, and blue solid generator clips.
-
 import FCPKitDSL
 
-public struct RGBDocument: Document {
-  public let projectName: String
+/// A sample document creating a sequence of red, green, and blue solid generator clips.
+internal struct RGBDocument: Document {
+  internal let projectName: String
 
-  public init(projectName: String = "DSL RGB") {
+  internal init(projectName: String = "DSL RGB") {
     self.projectName = projectName
   }
 
-  public var body: some DocumentContent {
+  internal var body: some DocumentContent {
     Project(name: projectName) {
       Sequence {
         Color.red.duration(.seconds(5.0))

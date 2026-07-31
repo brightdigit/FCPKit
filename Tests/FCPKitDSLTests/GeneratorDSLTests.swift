@@ -71,15 +71,16 @@ internal struct GeneratorDSLTests {
 
     // Assert effect resource
     let effects = try #require(exported.resources?.effects)
-    #expect(effects.contains(where: { $0.name == "Custom" && $0.uid == GeneratorPreset.custom.uid }))
+    #expect(
+      effects.contains(where: { $0.name == "Custom" && $0.uid == GeneratorPreset.custom.uid }))
 
     // Assert generator spine element
     let sequence = try #require(exported.library?.events?.first?.projects?.first?.sequence)
     let items = try #require(sequence.spine?.items)
     #expect(items.count == 1)
 
-    guard case .generator(let gen) = items[0] else {
-      Issue.record("Expected spine item to be .generator")
+    guard case .video(let gen) = items[0] else {
+      Issue.record("Expected spine item to be .video")
       return
     }
 
@@ -89,7 +90,7 @@ internal struct GeneratorDSLTests {
     let params = try #require(gen.param)
     #expect(params.count == 1)
     #expect(params[0].name == "Color")
-    #expect(params[0].value == "1 0 0 1")
+    #expect(params[0].value == "1 0 0")
   }
 
   @Test
@@ -116,14 +117,14 @@ internal struct GeneratorDSLTests {
 
     let anchored = try #require(clip.anchoredItems)
     #expect(anchored.count == 1)
-    guard case .generator(let gen) = anchored[0] else {
-      Issue.record("Expected anchored item to be .generator")
+    guard case .video(let gen) = anchored[0] else {
+      Issue.record("Expected anchored item to be .video")
       return
     }
 
     #expect(gen.lane == "1")
     #expect(gen.duration == "5s")
     let params = try #require(gen.param)
-    #expect(params[0].value == "0 0 1 1")
+    #expect(params[0].value == "0 0 1")
   }
 }

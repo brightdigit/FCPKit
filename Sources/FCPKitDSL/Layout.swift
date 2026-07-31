@@ -92,6 +92,34 @@ internal enum Layout {
         longest = max(longest, cursor)
         output.append(.title(title))
 
+      case .video(var video):
+        let original = try ticks(video.duration, tickDenominator, "video")
+        let start = previousOverlap
+        let duration = original - start - nextOverlap
+        let offset = cursor
+        video.offset = render(offset, tickDenominator)
+        video.start = start == 0 ? nil : render(start, tickDenominator)
+        video.duration = render(duration, tickDenominator)
+        longest = max(
+          longest,
+          offset + duration,
+          offset + anchoredExtent(video.anchoredItems, tickDenominator)
+        )
+        cursor += duration
+        output.append(.video(video))
+
+      case .generator(var gen):
+        let original = try ticks(gen.duration, tickDenominator, "generator")
+        let start = previousOverlap
+        let duration = original - start - nextOverlap
+        let offset = cursor
+        gen.offset = render(offset, tickDenominator)
+        gen.start = start == 0 ? nil : render(start, tickDenominator)
+        gen.duration = render(duration, tickDenominator)
+        cursor += duration
+        longest = max(longest, cursor)
+        output.append(.generator(gen))
+
       default:
         output.append(items[index])
       }

@@ -47,6 +47,19 @@ import Foundation
 
 /// An RGBA color representation for FCPXML generator and effect parameters.
 public struct Color: Equatable, Sendable, CustomStringConvertible {
+  /// Pure Red (1, 0, 0, 1).
+  public static let red = Color(red: 1, green: 0, blue: 0)
+  /// Pure Green (0, 1, 0, 1).
+  public static let green = Color(red: 0, green: 1, blue: 0)
+  /// Pure Blue (0, 0, 1, 1).
+  public static let blue = Color(red: 0, green: 0, blue: 1)
+  /// Pure Black (0, 0, 0, 1).
+  public static let black = Color(red: 0, green: 0, blue: 0)
+  /// Pure White (1, 1, 1, 1).
+  public static let white = Color(red: 1, green: 1, blue: 1)
+  /// Clear / Transparent (0, 0, 0, 0).
+  public static let clear = Color(red: 0, green: 0, blue: 0, alpha: 0)
+
   /// Red component between 0.0 and 1.0.
   public var red: Double
   /// Green component between 0.0 and 1.0.
@@ -58,13 +71,21 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
   /// Optional duration when used as a generator clip in FCPKitDSL.
   public var duration: FCPTime?
 
-  /// Formatted FCPXML rational color string (e.g. `"1 0 0 1"`).
+  /// Formatted FCPXML rational color string (e.g. `"1 0 0"` or `"1 0 0 1"`).
   public var description: String {
-    "\(Self.formatComponent(red)) \(Self.formatComponent(green)) \(Self.formatComponent(blue)) \(Self.formatComponent(alpha))"
+    if alpha == 1.0 {
+      return
+        "\(Self.formatComponent(red)) \(Self.formatComponent(green)) \(Self.formatComponent(blue))"
+    } else {
+      return
+        "\(Self.formatComponent(red)) \(Self.formatComponent(green)) \(Self.formatComponent(blue)) \(Self.formatComponent(alpha))"
+    }
   }
 
   /// Creates a color from red, green, blue, and alpha components.
-  public init(red: Double, green: Double, blue: Double, alpha: Double = 1.0, duration: FCPTime? = nil) {
+  public init(
+    red: Double, green: Double, blue: Double, alpha: Double = 1.0, duration: FCPTime? = nil
+  ) {
     self.red = red
     self.green = green
     self.blue = blue
@@ -100,39 +121,26 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
     guard scanner.scanHexInt64(&hexNumber) else { return nil }
 
     switch cleanHex.count {
-    case 3: // RGB (12-bit)
-      let r = Double((hexNumber & 0xF00) >> 8) / 15.0
-      let g = Double((hexNumber & 0x0F0) >> 4) / 15.0
-      let b = Double(hexNumber & 0x00F) / 15.0
-      self.init(red: r, green: g, blue: b, alpha: 1.0)
-    case 6: // RGB (24-bit)
-      let r = Double((hexNumber & 0xFF0000) >> 16) / 255.0
-      let g = Double((hexNumber & 0x00FF00) >> 8) / 255.0
-      let b = Double(hexNumber & 0x0000FF) / 255.0
-      self.init(red: r, green: g, blue: b, alpha: 1.0)
-    case 8: // RGBA (32-bit)
-      let r = Double((hexNumber & 0xFF000000) >> 24) / 255.0
-      let g = Double((hexNumber & 0x00FF0000) >> 16) / 255.0
-      let b = Double((hexNumber & 0x0000FF00) >> 8) / 255.0
-      let a = Double(hexNumber & 0x000000FF) / 255.0
-      self.init(red: r, green: g, blue: b, alpha: a)
+    case 3:  // RGB (12-bit)
+      let redVal = Double((hexNumber & 0xF00) >> 8) / 15.0
+      let greenVal = Double((hexNumber & 0x0F0) >> 4) / 15.0
+      let blueVal = Double(hexNumber & 0x00F) / 15.0
+      self.init(red: redVal, green: greenVal, blue: blueVal, alpha: 1.0)
+    case 6:  // RGB (24-bit)
+      let redVal = Double((hexNumber & 0xFF0000) >> 16) / 255.0
+      let greenVal = Double((hexNumber & 0x00FF00) >> 8) / 255.0
+      let blueVal = Double(hexNumber & 0x0000FF) / 255.0
+      self.init(red: redVal, green: greenVal, blue: blueVal, alpha: 1.0)
+    case 8:  // RGBA (32-bit)
+      let redVal = Double((hexNumber & 0xFF00_0000) >> 24) / 255.0
+      let greenVal = Double((hexNumber & 0x00FF_0000) >> 16) / 255.0
+      let blueVal = Double((hexNumber & 0x0000_FF00) >> 8) / 255.0
+      let alphaVal = Double(hexNumber & 0x0000_00FF) / 255.0
+      self.init(red: redVal, green: greenVal, blue: blueVal, alpha: alphaVal)
     default:
       return nil
     }
   }
-
-  /// Pure Red (1, 0, 0, 1).
-  public static let red = Color(red: 1, green: 0, blue: 0)
-  /// Pure Green (0, 1, 0, 1).
-  public static let green = Color(red: 0, green: 1, blue: 0)
-  /// Pure Blue (0, 0, 1, 1).
-  public static let blue = Color(red: 0, green: 0, blue: 1)
-  /// Pure Black (0, 0, 0, 1).
-  public static let black = Color(red: 0, green: 0, blue: 0)
-  /// Pure White (1, 1, 1, 1).
-  public static let white = Color(red: 1, green: 1, blue: 1)
-  /// Clear / Transparent (0, 0, 0, 0).
-  public static let clear = Color(red: 0, green: 0, blue: 0, alpha: 0)
 
   private static func formatComponent(_ val: Double) -> String {
     if val.truncatingRemainder(dividingBy: 1) == 0 {
@@ -156,11 +164,11 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
       else {
         return nil
       }
-      let r = Double(components[0])
-      let g = Double(components[1])
-      let b = Double(components[2])
-      let a = components.count >= 4 ? Double(components[3]) : 1.0
-      self.init(red: r, green: g, blue: b, alpha: a)
+      let redVal = Double(components[0])
+      let greenVal = Double(components[1])
+      let blueVal = Double(components[2])
+      let alphaVal = components.count >= 4 ? Double(components[3]) : 1.0
+      self.init(red: redVal, green: greenVal, blue: blueVal, alpha: alphaVal)
     }
   }
 #endif
@@ -189,12 +197,17 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
   extension Color {
     /// Creates a ``Color`` from a `UIColor`.
     public init(_ uiColor: UIColor) {
-      var r: CGFloat = 0
-      var g: CGFloat = 0
-      var b: CGFloat = 0
-      var a: CGFloat = 0
-      if uiColor.getRed(&r, green: &g, blue: &b, alpha: &a) {
-        self.init(red: Double(r), green: Double(g), blue: Double(b), alpha: Double(a))
+      var redVal: CGFloat = 0
+      var greenVal: CGFloat = 0
+      var blueVal: CGFloat = 0
+      var alphaVal: CGFloat = 0
+      if uiColor.getRed(&redVal, green: &greenVal, blue: &blueVal, alpha: &alphaVal) {
+        self.init(
+          red: Double(redVal),
+          green: Double(greenVal),
+          blue: Double(blueVal),
+          alpha: Double(alphaVal)
+        )
       } else if let converted = Color(uiColor.cgColor) {
         self = converted
       } else {

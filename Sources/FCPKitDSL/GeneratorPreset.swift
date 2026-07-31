@@ -43,6 +43,6 @@ public struct GeneratorPreset: Equatable, Sendable {
   /// Final Cut Pro's default Solids > Custom generator.
   public static let custom = GeneratorPreset(
     name: "Custom",
-    uid: "FFB3BDE8-E5F3-4E11-9C67-9D8CFB57A076"
+    uid: ".../Generators.localized/Solids.localized/Custom.localized/Custom.motn"
   )
 }

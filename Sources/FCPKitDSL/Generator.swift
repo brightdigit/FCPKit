@@ -39,7 +39,7 @@ public struct Generator: DSLNode, DSLNodeWithDuration {
   internal let offset: FCPTime?
 
   /// Default parameter key used by Final Cut Pro for Solids > Custom color parameter.
-  public static let customColorKey = "9999/999166631/999166633/1/100/101"
+  public static let customColorKey = "9999/10008/10006/2/1/1"
 
   /// Creates a generator clip from a preset and optional duration.
   public init(_ preset: GeneratorPreset = .custom, duration: FCPTime? = nil, name: String? = nil) {
@@ -98,7 +98,8 @@ public struct Generator: DSLNode, DSLNodeWithDuration {
   public func param(name: String, key: String? = nil, value: String? = nil) -> Generator {
     var updated = params
     if let index = updated.firstIndex(where: { $0.name == name }) {
-      updated[index] = ParamElement(name: name, key: key ?? updated[index].key, value: value ?? updated[index].value)
+      updated[index] = ParamElement(
+        name: name, key: key ?? updated[index].key, value: value ?? updated[index].value)
     } else {
       updated.append(ParamElement(name: name, key: key, value: value))
     }
@@ -107,16 +108,16 @@ public struct Generator: DSLNode, DSLNodeWithDuration {
 
   internal func build(_ resources: inout ResourceStore) throws -> Built {
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
-    let generatorElement = FCPKit.Generator(
-      ref: ref,
+    let videoElement = FCPKit.Video(
+      ref: ResourceRef<AssetKind>(ref.rawValue),
+      lane: lane.map(String.init),
       offset: offset?.description ?? "0s",
-      duration: duration.description,
       name: name ?? (preset == .custom ? "Color Solid" : preset.name),
       start: "0s",
-      lane: lane.map(String.init),
+      duration: duration.description,
       param: params.isEmpty ? nil : params
     )
-    return .item(.generator(generatorElement))
+    return .item(.video(videoElement))
   }
 
   private func replacing(

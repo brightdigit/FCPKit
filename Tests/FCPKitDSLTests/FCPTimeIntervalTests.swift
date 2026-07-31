@@ -70,44 +70,60 @@ internal struct FCPTimeIntervalTests {
     }
   }
 
+  private struct TestRGBDocument: Document {
+    var body: some DocumentContent {
+      Project {
+        Sequence {
+          Color.red.duration(.seconds(5.0))
+          Transition(.crossDissolve)
+          Color.green.duration(.seconds(5.0))
+          Transition(.crossDissolve)
+          Color.blue.duration(.seconds(5.0))
+        }
+      }
+    }
+  }
+
   @Test
   internal func rgbDocumentExportsThreeColorGeneratorsAndTransitions() throws {
-    let doc = RGBDocument()
+    let doc = TestRGBDocument()
     let exported = try doc.export()
 
     let sequence = try #require(exported.library?.events?.first?.projects?.first?.sequence)
     let spine = try #require(sequence.spine)
     #expect(spine.items.count == 5)
 
-    guard case .generator(let g1) = spine.items[0] else {
-      Issue.record("Expected spine item 0 to be generator")
+    guard case .video(let g1) = spine.items[0] else {
+      Issue.record("Expected spine item 0 to be video generator")
       return
     }
-    #expect(g1.duration == "5s")
-    #expect(g1.param?.first?.value == "1 0 0 1")
+    #expect(g1.offset == "0s")
+    #expect(g1.param?.first?.value == "1 0 0")
 
-    guard case .transition = spine.items[1] else {
+    guard case .transition(let t1) = spine.items[1] else {
       Issue.record("Expected spine item 1 to be transition")
       return
     }
+    #expect(t1.offset == "4s")
 
-    guard case .generator(let g2) = spine.items[2] else {
-      Issue.record("Expected spine item 2 to be generator")
+    guard case .video(let g2) = spine.items[2] else {
+      Issue.record("Expected spine item 2 to be video generator")
       return
     }
-    #expect(g2.duration == "5s")
-    #expect(g2.param?.first?.value == "0 1 0 1")
+    #expect(g2.offset == "10800/2400s")
+    #expect(g2.param?.first?.value == "0 1 0")
 
-    guard case .transition = spine.items[3] else {
+    guard case .transition(let t2) = spine.items[3] else {
       Issue.record("Expected spine item 3 to be transition")
       return
     }
+    #expect(t2.offset == "8s")
 
-    guard case .generator(let g3) = spine.items[4] else {
-      Issue.record("Expected spine item 4 to be generator")
+    guard case .video(let g3) = spine.items[4] else {
+      Issue.record("Expected spine item 4 to be video generator")
       return
     }
-    #expect(g3.duration == "5s")
-    #expect(g3.param?.first?.value == "0 0 1 1")
+    #expect(g3.offset == "20400/2400s")
+    #expect(g3.param?.first?.value == "0 0 1")
   }
 }

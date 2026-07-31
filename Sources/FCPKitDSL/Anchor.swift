@@ -48,6 +48,10 @@ internal struct Anchor: DSLNode {
       gen.lane = String(lane)
       gen.offset = offset.description
       return .item(.generator(gen))
+    case .item(.video(var vid)):
+      vid.lane = String(lane)
+      vid.offset = offset.description
+      return .item(.video(vid))
     case .spine(let spine): return .spine(spine)
     default: throw BuildError.unsupportedContent
     }

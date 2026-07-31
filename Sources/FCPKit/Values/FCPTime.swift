@@ -203,7 +203,7 @@ extension FCPTime {
     if seconds.truncatingRemainder(dividingBy: 1) == 0 {
       return FCPTime(numerator: Int64(seconds), denominator: 1, form: .whole)
     } else {
-      let scale: Int32 = 1000
+      let scale: Int32 = 1_000
       let num = Int64((seconds * Double(scale)).rounded())
       return FCPTime(numerator: num, denominator: scale, form: .rational)
     }
@@ -226,7 +226,7 @@ extension FCPTime {
 
   /// Creates an ``FCPTime`` from hours (1 hour = 3600 seconds).
   public static func hours(_ hours: Double) -> FCPTime {
-    FCPTime.seconds(hours * 3600.0)
+    FCPTime.seconds(hours * 3_600.0)
   }
 
   /// Creates an ``FCPTime`` from hours (1 hour = 3600 seconds).
