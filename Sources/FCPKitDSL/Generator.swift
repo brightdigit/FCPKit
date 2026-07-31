@@ -30,7 +30,7 @@
 import FCPKit
 
 /// A generator story item (such as Solids > Custom).
-public struct Generator: DSLNode, DSLNodeWithDuration {
+public struct Generator: DSLNode {
   internal let preset: GeneratorPreset
   public let duration: FCPTime
   internal let name: String?

@@ -32,7 +32,7 @@ import FCPKit
 /// Re-export ``Color`` for FCPKitDSL users.
 public typealias Color = FCPKit.Color
 
-extension Color: DSLNode, DSLNodeWithDuration {
+extension Color: DSLNode {
   /// Returns a copy of this color with the specified clip duration.
   public func duration(_ duration: FCPTime) -> Color {
     var copy = self

@@ -27,5 +27,32 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import FCPKit
+import Foundation
+
 /// A value accepted as document or story content by the DSL builders.
-public protocol DocumentContent {}
+public protocol DocumentContent {
+  /// Sets clip duration. Default is a no-op; types that carry duration override this.
+  func duration(_ duration: FCPTime) -> Self
+}
+
+extension DocumentContent {
+  /// No-op by default. Types that carry duration override this.
+  public func duration(_ duration: FCPTime) -> Self { self }
+
+  /// Sets duration using a `TimeInterval` in seconds.
+  public func duration(_ interval: TimeInterval) -> Self {
+    duration(FCPTime.seconds(interval))
+  }
+
+  /// Sets duration using an `Int` in seconds.
+  public func duration(_ seconds: Int) -> Self {
+    duration(FCPTime.seconds(seconds))
+  }
+
+  /// Sets duration using Swift's `Duration` type.
+  @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
+  public func duration(_ duration: Swift.Duration) -> Self {
+    self.duration(FCPTime(duration))
+  }
+}

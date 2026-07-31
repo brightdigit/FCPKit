@@ -71,15 +71,9 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
   /// Optional duration when used as a generator clip in FCPKitDSL.
   public var duration: FCPTime?
 
-  /// Formatted FCPXML rational color string (e.g. `"1 0 0"` or `"1 0 0 1"`).
+  /// Formatted FCPXML rational color string (e.g. `"1 0 0 1"`).
   public var description: String {
-    if alpha == 1.0 {
-      return
-        "\(Self.formatComponent(red)) \(Self.formatComponent(green)) \(Self.formatComponent(blue))"
-    } else {
-      return
-        "\(Self.formatComponent(red)) \(Self.formatComponent(green)) \(Self.formatComponent(blue)) \(Self.formatComponent(alpha))"
-    }
+    "\(Self.formatComponent(red)) \(Self.formatComponent(green)) \(Self.formatComponent(blue)) \(Self.formatComponent(alpha))"
   }
 
   /// Creates a color from red, green, blue, and alpha components.

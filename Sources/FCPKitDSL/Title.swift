@@ -30,7 +30,7 @@
 import FCPKit
 
 /// A title clip, typically anchored onto an asset clip.
-public struct Title: DSLNode, DSLNodeWithDuration {
+public struct Title: DSLNode {
   internal let preset: TitlePreset
   internal let text: String
   public let duration: FCPTime

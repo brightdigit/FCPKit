@@ -90,7 +90,7 @@ internal struct GeneratorDSLTests {
     let params = try #require(gen.param)
     #expect(params.count == 1)
     #expect(params[0].name == "Color")
-    #expect(params[0].value == "1 0 0")
+    #expect(params[0].value == "1 0 0 1")
   }
 
   @Test
@@ -125,6 +125,6 @@ internal struct GeneratorDSLTests {
     #expect(gen.lane == "1")
     #expect(gen.duration == "5s")
     let params = try #require(gen.param)
-    #expect(params[0].value == "0 0 1")
+    #expect(params[0].value == "0 0 1 1")
   }
 }

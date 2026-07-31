@@ -98,7 +98,7 @@ internal struct FCPTimeIntervalTests {
       return
     }
     #expect(g1.offset == "0s")
-    #expect(g1.param?.first?.value == "1 0 0")
+    #expect(g1.param?.first?.value == "1 0 0 1")
 
     guard case .transition(let t1) = spine.items[1] else {
       Issue.record("Expected spine item 1 to be transition")
@@ -111,7 +111,7 @@ internal struct FCPTimeIntervalTests {
       return
     }
     #expect(g2.offset == "10800/2400s")
-    #expect(g2.param?.first?.value == "0 1 0")
+    #expect(g2.param?.first?.value == "0 1 0 1")
 
     guard case .transition(let t2) = spine.items[3] else {
       Issue.record("Expected spine item 3 to be transition")
@@ -124,6 +124,6 @@ internal struct FCPTimeIntervalTests {
       return
     }
     #expect(g3.offset == "20400/2400s")
-    #expect(g3.param?.first?.value == "0 0 1")
+    #expect(g3.param?.first?.value == "0 0 1 1")
   }
 }

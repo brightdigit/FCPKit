@@ -31,7 +31,7 @@ import FCPKit
 import Foundation
 
 /// An `asset-clip` story item with optional anchors and audio role.
-public struct AssetClip: DSLNode, DSLNodeWithDuration {
+public struct AssetClip: DSLNode {
   internal let source: AssetSource
   public let duration: FCPTime?
   internal let name: String?

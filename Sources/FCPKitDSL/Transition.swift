@@ -30,7 +30,7 @@
 import FCPKit
 
 /// A transition between adjacent story items.
-public struct Transition: DSLNode, DSLNodeWithDuration {
+public struct Transition: DSLNode {
   internal let preset: TransitionPreset
   public let duration: FCPTime
 

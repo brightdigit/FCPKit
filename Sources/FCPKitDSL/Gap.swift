@@ -30,7 +30,7 @@
 import FCPKit
 
 /// A gap on the storyline. Duration is required — set in initializer or via `.duration(...)`.
-public struct Gap: DSLNode, DSLNodeWithDuration {
+public struct Gap: DSLNode {
   public let duration: FCPTime?
 
   /// Creates a gap. Export fails when `duration` is omitted.
