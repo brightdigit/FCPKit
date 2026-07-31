@@ -32,4 +32,4 @@ Running log of user corrections and standing always/never directives for this re
 - 2026-07-29: Foundation and FoundationXML are available on all OSes.
 - 2026-07-29: Do not rely on external host tools like ffprobe for MediaTools; prefer something that can be built into the library.
 
-- 2026-07-30: Never `swiftlint:disable cyclomatic_complexity` for choice Codable or stacked if-let seed chains; use `XMLChoiceCodable` / `XMLChoiceField` / `OrderedChoiceItems` / `AnchoredChoiceContainer` instead (large if/switch ladders are an anti-pattern; do not re-copy Codable loops or get/set helpers).
+- 2026-07-30: Never `swiftlint:disable cyclomatic_complexity` for choice Codable or stacked if-let seed chains; use `XMLChoiceCodable` / `XMLChoiceField` / `OrderedChoiceContainer` / `AnchoredChoiceContainer` instead (large if/switch ladders are an anti-pattern; do not re-copy Codable loops or get/set helpers).

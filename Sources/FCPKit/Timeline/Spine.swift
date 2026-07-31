@@ -67,7 +67,7 @@ public struct Spine: Codable {
     captions: [Caption]? = nil,
     video: [Video]? = nil
   ) {
-    self.items = OrderedChoiceItems.appending([
+    self.items = Self.appending([
       clips?.map(SpineItem.clip),
       gaps?.map(SpineItem.gap),
       mcClips?.map(SpineItem.mcClip),
@@ -83,6 +83,13 @@ public struct Spine: Codable {
       captions?.map(SpineItem.caption),
       video?.map(SpineItem.video),
     ])
+  }
+}
+
+extension Spine: OrderedChoiceContainer {
+  internal var orderedItems: [SpineItem] {
+    get { items }
+    set { items = newValue }
   }
 }
 
