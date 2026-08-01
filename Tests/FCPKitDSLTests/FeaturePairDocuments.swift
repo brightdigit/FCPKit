@@ -77,7 +77,7 @@ internal enum FeaturePairDocuments {
                 .audioRole("dialogue")
                 .anchor(lane: 1) {
                   Title(
-                    .basicTitle,
+                    .basic,
                     text: "Title",
                     duration: FCPTime(numerator: 24_100, denominator: 2_400)
                   )

@@ -33,26 +33,17 @@ import Foundation
 /// An `asset-clip` story item with optional anchors and audio role.
 public struct AssetClip: DSLNode {
   internal let source: AssetSource
+  /// Clip duration on the storyline, when set explicitly.
   public let duration: FCPTime?
   internal let name: String?
   internal let anchors: [any DSLNode]
   internal let audioRole: String?
 
-  /// Sets the clip duration.
-  public func duration(_ duration: FCPTime) -> AssetClip {
-    AssetClip(
-      source: source,
-      duration: duration,
-      name: name,
-      anchors: anchors,
-      audioRole: audioRole
-    )
-  }
-
   /// Creates a clip from an ``AssetSource``.
   public init(_ source: AssetSource, duration: FCPTime? = nil, name: String? = nil) {
     self.init(source: source, duration: duration, name: name, anchors: [], audioRole: nil)
   }
+
   /// Creates a clip from a model asset and optional format.
   public init(
     _ asset: FCPKit.Asset,
@@ -67,10 +58,12 @@ public struct AssetClip: DSLNode {
       name: name
     )
   }
+
   /// Creates a clip from a media URL.
   public init(_ url: URL, duration: FCPTime? = nil, name: String? = nil) {
     self.init(AssetSource(url: url, name: name, duration: duration), duration: duration, name: name)
   }
+
   private init(
     source: AssetSource,
     duration: FCPTime?,
@@ -84,6 +77,18 @@ public struct AssetClip: DSLNode {
     self.anchors = anchors
     self.audioRole = audioRole
   }
+
+  /// Sets the clip duration.
+  public func duration(_ duration: FCPTime) -> AssetClip {
+    AssetClip(
+      source: source,
+      duration: duration,
+      name: name,
+      anchors: anchors,
+      audioRole: audioRole
+    )
+  }
+
   internal func build(_ resources: inout ResourceStore) throws -> Built {
     let ref = try resources.asset(source)
     guard let value = duration?.description ?? source.asset.duration, FCPTime(value) != nil else {
@@ -103,6 +108,7 @@ public struct AssetClip: DSLNode {
     clip.anchoredItems = items.isEmpty ? nil : items
     return .item(.assetClip(clip))
   }
+
   internal func replacing(audioRole: String? = nil, anchors: [any DSLNode]? = nil) -> AssetClip {
     AssetClip(
       source: source,
@@ -112,6 +118,7 @@ public struct AssetClip: DSLNode {
       audioRole: audioRole ?? self.audioRole
     )
   }
+
   private func anchoredItem(_ node: any DSLNode, resources: inout ResourceStore) throws
     -> FCPKit.AnchoredItem
   {

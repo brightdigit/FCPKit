@@ -27,12 +27,22 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A fixture-backed title effect preset.
-public enum TitlePreset: Equatable, Sendable {
+/// A fixture-backed or custom title effect preset.
+public struct TitlePreset: Equatable, Sendable {
   /// Final Cut Pro's default Basic Title.
-  case basicTitle
-  /// Alias for ``basicTitle``.
-  public static let basic = TitlePreset.basicTitle
-  internal static let uid =
-    ".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti"
+  public static let basic = TitlePreset(
+    name: "Basic Title",
+    uid: ".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti"
+  )
+
+  /// The title effect resource name.
+  public let name: String
+  /// The title effect resource unique identifier.
+  public let uid: String
+
+  /// Creates a title preset from an effect name and UID.
+  public init(name: String, uid: String) {
+    self.name = name
+    self.uid = uid
+  }
 }

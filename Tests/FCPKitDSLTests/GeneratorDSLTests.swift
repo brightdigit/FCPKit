@@ -39,12 +39,6 @@ internal struct GeneratorDSLTests {
     let color: Color?
     let name: String?
 
-    init(duration: FCPTime, color: Color? = nil, name: String? = nil) {
-      self.duration = duration
-      self.color = color
-      self.name = name
-    }
-
     var body: some DocumentContent {
       Sequence(format: .p1080p24) {
         if let color, let name {
@@ -61,6 +55,12 @@ internal struct GeneratorDSLTests {
           Generator(.custom, duration: duration)
         }
       }
+    }
+
+    init(duration: FCPTime, color: Color? = nil, name: String? = nil) {
+      self.duration = duration
+      self.color = color
+      self.name = name
     }
   }
 

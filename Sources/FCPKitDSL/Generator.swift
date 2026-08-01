@@ -31,15 +31,16 @@ import FCPKit
 
 /// A generator story item (such as Solids > Custom).
 public struct Generator: DSLNode {
+  /// Default parameter key used by Final Cut Pro for Solids > Custom color parameter.
+  public static let customColorKey = "9999/10008/10006/2/1/1"
+
   internal let preset: GeneratorPreset
+  /// Clip duration on the storyline.
   public let duration: FCPTime
   internal let name: String?
   internal let params: [ParamElement]
   internal let lane: Int?
   internal let offset: FCPTime?
-
-  /// Default parameter key used by Final Cut Pro for Solids > Custom color parameter.
-  public static let customColorKey = "9999/10008/10006/2/1/1"
 
   /// Creates a generator clip from a preset and optional duration.
   public init(_ preset: GeneratorPreset = .custom, duration: FCPTime? = nil, name: String? = nil) {
@@ -99,7 +100,10 @@ public struct Generator: DSLNode {
     var updated = params
     if let index = updated.firstIndex(where: { $0.name == name }) {
       updated[index] = ParamElement(
-        name: name, key: key ?? updated[index].key, value: value ?? updated[index].value)
+        name: name,
+        key: key ?? updated[index].key,
+        value: value ?? updated[index].value
+      )
     } else {
       updated.append(ParamElement(name: name, key: key, value: value))
     }

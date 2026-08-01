@@ -1,5 +1,5 @@
 //
-//  RGBDocument.swift
+//  Color+CoreGraphics.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,28 +27,24 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
+#if canImport(CoreGraphics)
+  import CoreGraphics
 
-/// A sample document creating a sequence of red, green, and blue solid generator clips.
-public struct RGBDocument: Document {
-  /// The Final Cut Pro project name written into the exported document.
-  public let projectName: String
-
-  /// Red, green, and blue generator clips separated by cross-dissolve transitions.
-  public var body: some DocumentContent {
-    Project(name: projectName) {
-      Sequence {
-        Color.red.duration(.seconds(5.0))
-        Transition(.crossDissolve)
-        Color.green.duration(.seconds(5.0))
-        Transition(.crossDissolve)
-        Color.blue.duration(.seconds(5.0))
+  extension Color {
+    /// Creates a ``Color`` from a `CGColor`.
+    public init?(_ cgColor: CGColor) {
+      guard let srgbSpace = CGColorSpace(name: CGColorSpace.sRGB),
+        let converted = cgColor.converted(to: srgbSpace, intent: .defaultIntent, options: nil),
+        let components = converted.components,
+        components.count >= 3
+      else {
+        return nil
       }
+      let redVal = Double(components[0])
+      let greenVal = Double(components[1])
+      let blueVal = Double(components[2])
+      let alphaVal = components.count >= 4 ? Double(components[3]) : 1.0
+      self.init(red: redVal, green: greenVal, blue: blueVal, alpha: alphaVal)
     }
   }
-
-  /// Creates an RGB sample document with an optional project name.
-  public init(projectName: String = "DSL RGB") {
-    self.projectName = projectName
-  }
-}
+#endif

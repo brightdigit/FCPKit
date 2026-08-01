@@ -29,6 +29,12 @@
 
 /// A fixture-backed or custom generator effect preset.
 public struct GeneratorPreset: Equatable, Sendable {
+  /// Final Cut Pro's default Solids > Custom generator.
+  public static let custom = GeneratorPreset(
+    name: "Custom",
+    uid: ".../Generators.localized/Solids.localized/Custom.localized/Custom.motn"
+  )
+
   /// The generator effect resource name.
   public let name: String
   /// The generator effect resource unique identifier.
@@ -39,10 +45,4 @@ public struct GeneratorPreset: Equatable, Sendable {
     self.name = name
     self.uid = uid
   }
-
-  /// Final Cut Pro's default Solids > Custom generator.
-  public static let custom = GeneratorPreset(
-    name: "Custom",
-    uid: ".../Generators.localized/Solids.localized/Custom.localized/Custom.motn"
-  )
 }

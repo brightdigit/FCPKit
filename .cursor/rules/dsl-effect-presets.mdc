@@ -1,0 +1,30 @@
+---
+description: DSL effect presets are structs with name/UID fields, not single-case enums
+globs: Sources/FCPKitDSL/**/*.swift
+alwaysApply: false
+---
+
+# DSL effect presets
+
+Effect presets (`TitlePreset`, `GeneratorPreset`, `TransitionPreset`) are
+**structs**, not single-case enums.
+
+## Single-effect presets
+
+Follow ``GeneratorPreset``:
+
+- Stored `name` and `uid`
+- Public `init(name:uid:)` for custom effects
+- Named `static let` built-ins (e.g. `.basic`, `.custom`)
+- DSL `build` registers effects from the preset’s fields — do not hardcode
+  UIDs or names beside the preset
+
+## Transition presets
+
+FCP transitions such as Cross Dissolve are an A/V pair. ``TransitionPreset``
+may also store an `audioUID` (and uses `videoUID` for the video effect).
+
+## Out of scope
+
+``FormatPreset`` wraps a format resource, not an effect — it is not covered by
+this rule.

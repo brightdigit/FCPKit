@@ -45,7 +45,7 @@ internal struct TitlesCutDocument: Document {
         AssetClip(mediaURL, duration: mediaDuration)
           .audioRole("dialogue")
           .anchor(lane: 1) {
-            Title(.basicTitle, text: titleText, duration: titleDuration)
+            Title(.basic, text: titleText, duration: titleDuration)
           }
       }
     }

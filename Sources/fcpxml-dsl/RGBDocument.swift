@@ -33,10 +33,6 @@ import FCPKitDSL
 internal struct RGBDocument: Document {
   internal let projectName: String
 
-  internal init(projectName: String = "DSL RGB") {
-    self.projectName = projectName
-  }
-
   internal var body: some DocumentContent {
     Project(name: projectName) {
       Sequence {
@@ -47,5 +43,9 @@ internal struct RGBDocument: Document {
         Color.blue.duration(.seconds(5.0))
       }
     }
+  }
+
+  internal init(projectName: String = "DSL RGB") {
+    self.projectName = projectName
   }
 }

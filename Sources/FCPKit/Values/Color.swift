@@ -29,22 +29,6 @@
 
 import Foundation
 
-#if canImport(CoreGraphics)
-  import CoreGraphics
-#endif
-
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
-  import AppKit
-#endif
-
-#if canImport(UIKit)
-  import UIKit
-#endif
-
-#if canImport(SwiftUI)
-  import SwiftUI
-#endif
-
 /// An RGBA color representation for FCPXML generator and effect parameters.
 public struct Color: Equatable, Sendable, CustomStringConvertible {
   /// Pure Red (1, 0, 0, 1).
@@ -73,7 +57,8 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
 
   /// Formatted FCPXML rational color string (e.g. `"1 0 0 1"`).
   public var description: String {
-    "\(Self.formatComponent(red)) \(Self.formatComponent(green)) \(Self.formatComponent(blue)) \(Self.formatComponent(alpha))"
+    let components = [red, green, blue, alpha].map(Self.formatComponent)
+    return components.joined(separator: " ")
   }
 
   /// Creates a color from red, green, blue, and alpha components.
@@ -97,7 +82,9 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
     let parts = fcpString.trimmingCharacters(in: .whitespacesAndNewlines)
       .components(separatedBy: .whitespaces)
       .compactMap(Double.init)
-    guard parts.count >= 3 else { return nil }
+    guard parts.count >= 3 else {
+      return nil
+    }
     self.red = parts[0]
     self.green = parts[1]
     self.blue = parts[2]
@@ -112,7 +99,9 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
     }
     let scanner = Scanner(string: cleanHex)
     var hexNumber: UInt64 = 0
-    guard scanner.scanHexInt64(&hexNumber) else { return nil }
+    guard scanner.scanHexInt64(&hexNumber) else {
+      return nil
+    }
 
     switch cleanHex.count {
     case 3:  // RGB (12-bit)
@@ -144,88 +133,3 @@ public struct Color: Equatable, Sendable, CustomStringConvertible {
     }
   }
 }
-
-// MARK: - Native Color Conversions
-
-#if canImport(CoreGraphics)
-  extension Color {
-    /// Creates a ``Color`` from a `CGColor`.
-    public init?(_ cgColor: CGColor) {
-      guard let srgbSpace = CGColorSpace(name: CGColorSpace.sRGB),
-        let converted = cgColor.converted(to: srgbSpace, intent: .defaultIntent, options: nil),
-        let components = converted.components,
-        components.count >= 3
-      else {
-        return nil
-      }
-      let redVal = Double(components[0])
-      let greenVal = Double(components[1])
-      let blueVal = Double(components[2])
-      let alphaVal = components.count >= 4 ? Double(components[3]) : 1.0
-      self.init(red: redVal, green: greenVal, blue: blueVal, alpha: alphaVal)
-    }
-  }
-#endif
-
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
-  extension Color {
-    /// Creates a ``Color`` from an `NSColor`.
-    public init(_ nsColor: NSColor) {
-      if let srgb = nsColor.usingColorSpace(.sRGB) {
-        self.init(
-          red: Double(srgb.redComponent),
-          green: Double(srgb.greenComponent),
-          blue: Double(srgb.blueComponent),
-          alpha: Double(srgb.alphaComponent)
-        )
-      } else if let converted = Color(nsColor.cgColor) {
-        self = converted
-      } else {
-        self.init(red: 0, green: 0, blue: 0, alpha: 1)
-      }
-    }
-  }
-#endif
-
-#if canImport(UIKit)
-  extension Color {
-    /// Creates a ``Color`` from a `UIColor`.
-    public init(_ uiColor: UIColor) {
-      var redVal: CGFloat = 0
-      var greenVal: CGFloat = 0
-      var blueVal: CGFloat = 0
-      var alphaVal: CGFloat = 0
-      if uiColor.getRed(&redVal, green: &greenVal, blue: &blueVal, alpha: &alphaVal) {
-        self.init(
-          red: Double(redVal),
-          green: Double(greenVal),
-          blue: Double(blueVal),
-          alpha: Double(alphaVal)
-        )
-      } else if let converted = Color(uiColor.cgColor) {
-        self = converted
-      } else {
-        self.init(red: 0, green: 0, blue: 0, alpha: 1)
-      }
-    }
-  }
-#endif
-
-#if canImport(SwiftUI)
-  extension Color {
-    /// Creates a ``Color`` from a `SwiftUI.Color`.
-    public init?(_ color: SwiftUI.Color) {
-      if let cgColor = color.cgColor, let converted = Color(cgColor) {
-        self = converted
-        return
-      }
-      #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        self.init(NSColor(color))
-      #elseif canImport(UIKit)
-        self.init(UIColor(color))
-      #else
-        return nil
-      #endif
-    }
-  }
-#endif
