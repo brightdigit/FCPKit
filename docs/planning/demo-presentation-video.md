@@ -15,7 +15,8 @@ The deck is **media-free** — no `.mov` files, no `ffmpeg` prerequisite, no
 
 Three library gaps block this today. One of them is a latent correctness bug that a
 multi-slide deck would trigger immediately. This document decomposes the work into
-six independently reviewable issues.
+six independently reviewable issues, plus two optional issues (7 and 8) that widen
+what the deck can show without blocking it.
 
 ## Why the Final Cut export step is manual
 
@@ -71,11 +72,18 @@ Cut release before revisiting.
 
 ```
 Issue 1 (text-style-def ids)  ─┐
-Issue 2 (Anchorable)           ├─→ Issue 4 (PresentationDocument) ─→ Issue 5 (CLI) ─→ Issue 6 (record + README)
-Issue 3 (Title styling)       ─┘
+Issue 2 (StoryItem)            ├─→ Issue 4 (PresentationDocument) ─→ Issue 5 (CLI) ─→ Issue 6 (share + export)
+Issue 3 (Title style/position)─┘
+
+Issue 7 (clip modifiers, #33) ─── independent; enriches the Issue 4 deck
+Issue 8 (effect vocab,   #34) ─── independent; enriches the Issue 4 deck
 ```
 
 Issues 1, 2, and 3 are mutually independent and can be worked in parallel.
+
+Issues 7 and 8 are **not blockers** for the demo. They expand what the deck can show
+(goofier transitions, blend modes, opacity, masking) and are tracked as separate
+GitHub issues so the demo can ship on cross dissolves and be revisited.
 
 ## Conventions for every issue below
 
@@ -189,7 +197,7 @@ New `Tests/FCPKitDSLTests/TextStyleIDTests.swift`:
 
 ---
 
-## Issue 2 — `Anchorable`: lift `.anchor` off `AssetClip`
+## Issue 2 — `StoryItem`: lift `.anchor` off `AssetClip`
 
 **Labels:** `enhancement`, `ready-for-agent`
 
@@ -205,27 +213,46 @@ title, assetClip, generator, and video, and already throws `BuildError.invalidLa
 for lane 0. Only the *storage* (`AssetClip.anchors`) and the *public modifier* are
 `AssetClip`-specific. This is a lift, not a rewrite.
 
-### Design constraint (verified with the compiler)
+### `DSLNode` becomes public
 
-`DSLNode` is an **internal** protocol, so it cannot appear in a public protocol
-requirement:
+An earlier draft of this issue routed around `DSLNode` being `internal` with a
+structurally opaque public wrapper, because a public protocol requirement cannot
+mention an internal type:
 
 ```
 error: method cannot be declared public because its parameter uses an internal type
 ```
 
-The naive `public protocol Anchorable { func replacing(anchors: [any DSLNode]) -> Self }`
-does not compile. A public but structurally opaque wrapper is required to carry the
-internal existential through a public signature. Justify this in the PR description —
-it looks odd without the compiler error as context.
+**That constraint is lifted: `DSLNode` becomes `public`** (decision recorded
+2026-08-02 — pre-1.0, DSL API churn is acceptable). The wrapper is deleted from this
+design. `public protocol StoryItem` can name `any DSLNode` directly.
+
+Note `DSLNode.build`'s signature is expected to change again in Issue 3 (deferred
+transform resolution). Making it public does not freeze it; it is documented as
+evolving until 1.0.
+
+### One protocol or two
+
+`StoryItem` — "I can sit in a spine" — is the protocol, not `Anchorable`.
+`.anchor(lane:offset:content:)` hangs off `StoryItem` directly.
+
+This admits `Transition().anchor(lane: 1) { … }`, which compiles and is a **no-op**:
+`Anchor.swift` maps only title/assetClip/generator/video into
+`%anchor_item;`, so a transition's anchors are silently not emitted. That is the
+accepted trade (decision 2026-08-02) — one protocol matching the DTD's `%clip_item;`
+entity beats two protocols splitting hairs over which story items host lanes.
+
+**Pin it with a test** (`transitionAnchorsAreIgnored`) so the no-op is documented
+behavior rather than an accident a later change "fixes" into a throw.
 
 ### Files
 
-- Create `Sources/FCPKitDSL/Anchorable.swift` — protocol, wrapper, shared modifier
+- Create `Sources/FCPKitDSL/StoryItem.swift` — protocol + shared `.anchor` modifier
 - Create `Sources/FCPKitDSL/AnchoredItemBuilder.swift` — hoist the anchored-item
   mapping currently private to `AssetClip`
 - Create `Sources/FCPKitDSL/Generator+Modifiers.swift` — `Generator` conformance
   (keeps `Generator.swift`, already 144 lines, under the length warning)
+- Modify `Sources/FCPKitDSL/DSLNode.swift` — make the protocol `public`
 - Modify `Sources/FCPKitDSL/AssetClip.swift` — conform
 - Modify `Sources/FCPKitDSL/AssetClip+Modifiers.swift` — **remove** `.anchor`, keep
   `.audioRole`
@@ -238,24 +265,21 @@ it looks odd without the compiler error as context.
 ### API
 
 ```swift
-/// Opaque anchored content produced by ``Anchorable/anchor(lane:offset:content:)``.
-public struct AnchoredContent {
-  internal let node: any DSLNode
-  internal init(_ node: any DSLNode) { self.node = node }
-}
-
-/// A story item that accepts anchored content on connected lanes.
-public protocol Anchorable: DocumentContent {
+/// A story item: content that can sit in a spine, per the DTD's `%clip_item;` entity.
+public protocol StoryItem: DocumentContent {
   /// The type produced by anchoring; usually `Self`.
   associatedtype Anchored: DocumentContent
   /// The anchors already attached to this item.
-  var anchoredContents: [AnchoredContent] { get }
+  var anchors: [any DSLNode] { get }
   /// Returns a copy carrying the given anchors.
-  func replacingAnchoredContents(_ contents: [AnchoredContent]) -> Anchored
+  func replacingAnchors(_ anchors: [any DSLNode]) -> Anchored
 }
 
-extension Anchorable {
+extension StoryItem {
   /// Anchors content on a connected lane. `lane` must be nonzero.
+  ///
+  /// Anchoring onto a ``Transition`` has no effect: the FCPXML DTD does not admit
+  /// anchored items on transitions, so they are not emitted.
   public func anchor(
     lane: Int,
     offset: FCPTime = .zero,
@@ -273,21 +297,24 @@ Conformances:
 | `AssetClip` | `AssetClip` | Behavior identical to today |
 | `Generator` | `Generator` | New `anchors` storage |
 | `Color` | `Generator` | **Promotes** — see below |
+| `Title` | `Title` | Anchors emitted; also a spine item in its own right |
+| `Gap` | `Gap` | Anchors emitted |
+| `Transition` | `Transition` | Anchors accepted, **not** emitted (see above) |
 
 **Why `Color` promotes.** `Color` is `FCPKit.Color`, a model type in a different
 module; it cannot gain stored properties. The `associatedtype Anchored` exists
 precisely to allow this. It is also semantically honest: `Color.build` already
 desugars to `Generator(.custom).color(self)`, so `.anchor` just performs that
 desugaring one step earlier. Chaining still works, since `Generator` is itself
-`Anchorable`.
+a `StoryItem`.
 
 ```swift
-extension Color: Anchorable {
-  public var anchoredContents: [AnchoredContent] { [] }
-  public func replacingAnchoredContents(_ contents: [AnchoredContent]) -> Generator {
+extension Color: StoryItem {
+  public var anchors: [any DSLNode] { [] }
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> Generator {
     Generator(.custom, duration: duration ?? .zero)
       .color(self)
-      .replacingAnchoredContents(contents)
+      .replacingAnchors(anchors)
   }
 }
 ```
@@ -314,13 +341,16 @@ generators/colors contribute extent.
 ### Tests
 
 Extend `Tests/FCPKitDSLTests/GeneratorDSLTests.swift` and add
-`Tests/FCPKitDSLTests/AnchorableTests.swift`:
+`Tests/FCPKitDSLTests/StoryItemTests.swift`:
 
 - `Generator.anchor(lane: 1) { Title }` → spine item `.video` with one anchored
   `.title` at `lane == "1"`.
 - `Color.red.duration(...).anchor(lane: 1) { Title }` → same shape, and the color
   param survives (`param[0].value == "1 0 0 1"`).
 - Lane 0 throws `BuildError.invalidLane` on both new conformers.
+- `transitionAnchorsAreIgnored` — `Transition(.crossDissolve).anchor(lane: 1) { Title }`
+  builds successfully and emits a `<transition>` with **no** anchored children.
+  Pins the documented no-op.
 - Sequence duration accounts for an anchored title longer than its background
   (exercises the new `anchoredExtent` case).
 - A nested `Spine { }` inside `Generator.anchor` still passes through.
@@ -331,26 +361,33 @@ Extend `Tests/FCPKitDSLTests/GeneratorDSLTests.swift` and add
 ### Acceptance criteria
 
 - `AssetClip+Modifiers.swift` no longer declares `.anchor`; no call site changes.
+- `DSLNode` is `public` with doc comments on every requirement.
 - Full existing suite green with zero fixture changes.
 - `swift-format lint` and `swiftlint` clean; `Generator.swift` stays under 225 lines.
 
 ---
 
-## Issue 3 — Title styling modifiers
+## Issue 3 — Title styling and positioning modifiers
 
 **Labels:** `enhancement`, `ready-for-agent`
 
 ### Problem
 
 `Sources/FCPKitDSL/Title.swift:64-76` hardcodes Helvetica 63pt Regular white centered
-for every title. A slide deck needs to distinguish a heading from body text.
+for every title. A slide deck needs to distinguish a heading from body text, and needs
+to place text somewhere other than dead center — independent of whatever the title
+preset does internally.
 
 ### Files
 
 - Create `Sources/FCPKitDSL/TitleStyle.swift` — public style value type
 - Create `Sources/FCPKitDSL/Title+Modifiers.swift` — the public modifiers
-- Modify `Sources/FCPKitDSL/Title.swift` — add a `style` payload, thread through the
-  inits and `duration(_:)`, consume in `build`
+- Create `Sources/FCPKitDSL/FramePosition.swift` — position value type + alignment
+- Create `Sources/FCPKitDSL/BuildEnvironment.swift` — internal environment + keys
+- Modify `Sources/FCPKitDSL/Title.swift` — add `style` and `position` payloads, thread
+  through the inits and `duration(_:)`, consume in `build`
+- Modify `Sources/FCPKit/Adjustments/AdjustTransform.swift` — add the DTD's missing
+  `rotation` and `anchor` attributes (see below)
 
 ### API
 
@@ -391,6 +428,119 @@ extension Title {
 }
 ```
 
+### Positioning within the frame
+
+Text must be placeable independent of the title preset's own layout. This is a
+sibling `<adjust-transform>` on the clip, which composes over whatever the preset
+does internally.
+
+**The public surface is alignment-first**, in the SwiftUI spirit — developers should
+not do coordinate math:
+
+```swift
+Title("FCPKit")                            // centered; emits no adjust-transform
+Title("FCPKit").position(.topLeading)      // alignment — the common case
+Title("FCPKit").position(.bottom, inset: 40)
+Title("FCPKit").position(x: 960, y: 200)   // absolute pixels — escape hatch
+```
+
+```swift
+/// A position within the video frame.
+public struct FramePosition: Equatable, Sendable {
+  /// The nine standard frame alignments.
+  public enum Alignment: Equatable, Sendable {
+    case topLeading, top, topTrailing
+    case leading, center, trailing
+    case bottomLeading, bottom, bottomTrailing
+  }
+}
+
+extension Title {
+  /// Positions the title at a frame alignment, optionally inset in points.
+  public func position(_ alignment: FramePosition.Alignment, inset: Double = 0) -> Title
+  /// Positions the title at absolute pixel coordinates, origin top-left.
+  ///
+  /// Requires an enclosing ``Sequence`` with a format; otherwise ``BuildError``
+  /// `missingFrameSize` is thrown at `export()`.
+  public func position(x: Double, y: Double) -> Title
+}
+```
+
+**No `adjust-transform` is emitted unless a position modifier is applied**, so
+existing output is byte-identical.
+
+### The coordinate unit (verified against fixtures and the DTD)
+
+`FCPXMLv1_9.dtd:266-271` declares:
+
+```
+<!ATTLIST adjust-transform position CDATA "0 0">
+<!ATTLIST adjust-transform scale    CDATA "1 1">
+<!ATTLIST adjust-transform rotation CDATA "0">
+<!ATTLIST adjust-transform anchor   CDATA "0 0">
+```
+
+`position` is **percent of frame height on both axes**, measured from frame center,
+Y-up. Confirmed from `Tests/FCPKitTests/TestData`: on a 1920×1080 sequence,
+`position="-17.8241 7.77778"` has a Y of `84/1080 × 100`. The multicam split-screen
+values (`67.5926`, `-33.9193`) are consistent with the same unit.
+
+Conversion from absolute pixels (origin top-left):
+
+```
+xPercent = (absX - width / 2)  / height * 100
+yPercent = (height / 2 - absY) / height * 100
+```
+
+The divisor is `height` on **both** axes — that is what makes the 16:9 fixture values
+land correctly. Assert this formula directly in tests using the fixture numbers above.
+
+Alignment cases need **no frame size at all**: they map to fixed percentages
+(`.leading` is `-50 × aspect`… but expressed in height-percent it depends only on the
+aspect ratio, and `.top`/`.bottom` are exactly `±50` minus inset). Only
+`.position(x:y:)` requires the actual pixel dimensions.
+
+### Deferred resolution (`Built` carries unresolved transforms)
+
+`build` is a single eager bottom-up pass: `Title.build` finishes *before* the
+enclosing `Sequence.build` runs, so a title cannot read the sequence format at the
+moment it builds. Rather than mutating shared state on the way down, **resolution is
+deferred** (decision 2026-08-02):
+
+- `Title.build` emits its `FCPKit.Title` with the position still *symbolic*.
+- The ancestor that knows the format resolves symbolic positions into
+  `adjust-transform position="…"` on the way out.
+
+```swift
+/// Ambient values supplied by ancestors during a build.
+internal struct BuildEnvironment {
+  internal var frameSize: (width: Double, height: Double)?
+}
+```
+
+The environment and its keys are **internal**. Only `.position(…)` is public; there is
+no public `@Environment`-style injection API, and third-party `DSLNode` conformers
+cannot participate. That keeps the resolver total over values it created. Revisit if
+an external need appears.
+
+**Ordering invariant.** `Built` feeds the ordered `Spine.items` array, whose DTD order
+guarantee came from v0.1.0 Step 3. The resolution pass must rebuild items **in place**,
+preserving index order exactly. Extend the Step 0 ordering tests to run against
+post-resolution output, not just build output — the existing tests would not catch a
+reordering introduced by the resolver.
+
+**Missing format is an error, not a silent default.** `.position(x:y:)` with no
+enclosing format throws `BuildError.missingFrameSize` at `export()`. Alignment cases
+never throw.
+
+### `AdjustTransform` is missing two DTD attributes
+
+`Sources/FCPKit/Adjustments/AdjustTransform.swift` models only `position` and `scale`.
+The DTD also declares `rotation` and `anchor`, which are **silently dropped today** —
+a schema-completeness hole. Add both (as `String?`, matching the existing style, in
+DTD `CodingKeys` order: `position, scale, rotation, anchor`) while this type is being
+touched. `enabled` is also declared; add it for completeness.
+
 ### Matching real Final Cut output
 
 `Tests/FCPKitTests/FeaturePairs/titles/after.fcpxml:37` shows exactly what FCP emits:
@@ -422,10 +572,27 @@ New `Tests/FCPKitDSLTests/TitleStyleTests.swift`:
 - `.fontSize(63.5)` → `"63.5"`; `.fontSize(63)` → `"63"`.
 - A styled multi-title document DTD-validates.
 
+New `Tests/FCPKitDSLTests/FramePositionTests.swift`:
+
+- A `Title` with no position modifier emits **no** `adjust-transform` — regression
+  guard for existing output.
+- `.position(x: 1920/2, y: 1080/2)` on a 1080p sequence → `position == "0 0"`.
+- The fixture formula: on 1920×1080, absolute `(0, 84)` → Y component `7.77778`.
+  Assert against the real value from `TestData`.
+- `.position(.top)` and `.position(.bottom)` produce symmetric Y values.
+- `.position(.center)` → `"0 0"`.
+- `.position(x:y:)` with no enclosing format throws `BuildError.missingFrameSize`;
+  `.position(.topLeading)` in the same document does **not** throw.
+- **Ordering:** a spine of `[clip, transition, clip]` where a clip carries a deferred
+  position still emits in that order after resolution.
+- `AdjustTransform` round-trips `rotation` and `anchor` (new attributes).
+
 ### Acceptance criteria
 
 - `titlesFeaturePairMatchesAfterNormalize` passes unchanged — a structural diff
   against a real Final Cut export is the strongest available parity proof.
+- Schema-completeness total does not increase; `rotation`/`anchor` may decrease it.
+- Step 0 ordering tests extended to cover post-resolution output.
 - Every new public declaration carries a doc comment.
 
 ### Open question for Final Cut verification
@@ -447,11 +614,25 @@ included for completeness but is likewise unverified.
 
 - Create `Sources/FCPKitDSL/PresentationSlide.swift`
 - Create `Sources/FCPKitDSL/PresentationDocument.swift`
+- **Delete** `Sources/FCPKitDSL/RGBDocument.swift`
+- Modify `Tests/FCPKitDSLTests/FCPTimeIntervalTests.swift` — see below
 
-Both public and shipped in the library, so users browsing `FCPKitDSL` can read the
-showcase and tests can import it. **Do not** duplicate into `Sources/fcpxml-dsl/` —
-the CLI already imports `FCPKitDSL`. (`RGBDocument` is currently duplicated across
-both; that is pre-existing debt, intentionally left alone here.)
+### Placement: library type, thin CLI command
+
+`PresentationDocument` and `PresentationSlide` are **public and shipped in the
+library**, so users browsing `FCPKitDSL` can read the showcase and tests can import
+it. The executable holds only a thin command that invokes the library type — **not**
+a duplicated copy (decision 2026-08-02).
+
+`RGBDocument` is the counter-example to clean up in the same pass. It is currently
+duplicated across `Sources/FCPKitDSL/RGBDocument.swift` and
+`Sources/fcpxml-dsl/RGBDocument.swift`. **Demo scaffolding belongs only in the CLI**,
+so delete the library copy and keep the executable's.
+
+That deletion breaks `Tests/FCPKitDSLTests/FCPTimeIntervalTests.swift`, which imports
+the library copy. That test is really about `FCPTimeInterval`, not about
+`RGBDocument` — **give it a small local fixture document** rather than moving it to a
+CLI test target.
 
 ### API
 
@@ -522,17 +703,33 @@ formula in tests.
 Seven slides at 6s with 1s dissolves lands ~36s, inside the 30-45s target. Assert on
 the packer's computed sequence duration rather than hand arithmetic.
 
-| # | Heading | Background |
-|---|---|---|
-| 1 | FCPKit | near-black `Color(white: 0.08)` |
-| 2 | Typed FCPXML model | deep blue |
-| 3 | Ordered spine, preserved | teal |
-| 4 | SwiftUI-shaped DSL | purple |
-| 5 | Resource interning | orange |
-| 6 | DTD-validated output | green |
-| 7 | brightdigit/FCPKit | near-black |
+| # | Heading | Background | Showcases |
+|---|---|---|---|
+| 1 | FCPKit | near-black `Color(white: 0.08)` | title positioning |
+| 2 | Typed FCPXML model | deep blue | — |
+| 3 | Ordered spine, preserved | teal | — |
+| 4 | SwiftUI-shaped DSL | purple | alignment-positioned subheading |
+| 5 | Resource interning | orange | — |
+| 6 | DTD-validated output | green | — |
+| 7 | brightdigit/FCPKit | near-black | — |
 
 Use Helvetica so the video reproduces on any machine.
+
+**Show more than cross dissolves.** A deck with seven identical dissolves undersells
+the library. Once Issues 7 and 8 land, vary the transitions and apply at least a few
+clip modifiers (opacity, blend mode, scale) across the deck so the video demonstrates
+range rather than repetition.
+
+Two constraints on that variety:
+
+- The 30-45s target is a **soft** guide, not a hard gate. If showing more capability
+  costs a few seconds, take the seconds — but assert on the packer's computed
+  duration so the number is never guessed.
+- Every effect used must have a UID that is either derivable from the Motion template
+  catalog or captured from a real Final Cut export (see Issue 8). Do not invent UIDs.
+
+Until Issues 7 and 8 land, the deck ships with cross dissolves and is revisited
+afterward; this issue is not blocked on them.
 
 ### Tests
 
@@ -573,6 +770,11 @@ and an `exportPresentationCommand`, mirroring `exportRGBCommand`
 (`FCPXMLDSLCommand.swift:133-144`) exactly: optional positional output defaulting to
 `presentation.fcpxml`, plus `--project` and `--version`.
 
+**Keep this command thin.** It parses arguments and invokes
+`FCPKitDSL.PresentationDocument`; the deck itself lives in the library (Issue 4). Do
+not re-create a copy of the document here — that is exactly the `RGBDocument`
+duplication Issue 4 cleans up.
+
 Add `case "presentation": return "FCPKit Presentation"` to `defaultProjectName`
 (`FCPXMLDSLCommand.swift:165-176`), and update `printUsage()` — the USAGE block and
 the EXAMPLES block both list the export kinds.
@@ -594,18 +796,22 @@ inside for consistency with its siblings and to avoid restructuring the conditio
 
 ---
 
-## Issue 6 — Record the demo and embed it in the README
+## Issue 6 — Share and export the demo, then embed it in the README
 
 **Labels:** `documentation`, `ready-for-human`
 **Depends on:** Issue 5
 
-Human-only; requires Final Cut Pro.
+Human-only; requires Final Cut Pro. This is the **Share and Export** step: generate
+the `.fcpxml`, import it, confirm it renders, then use Final Cut's Share → Master File
+to produce the `.mp4`. It is manual because Final Cut exposes no scripting verb for
+export (see "Why the Final Cut export step is manual" above).
 
 ### Procedure
 
 1. `swift run fcpxml-dsl export presentation presentation.fcpxml`
 2. `swift run fcpxml-dsl verify-import presentation.fcpxml`
-3. Confirm visually in Final Cut that the slides and dissolves render as intended.
+3. Confirm visually in Final Cut that the slides and dissolves render as intended —
+   in particular that anchored titles appear over their generator backgrounds.
 4. Share → Master File, H.264, 1080p24.
 5. Drag the resulting `.mp4` into a GitHub issue or PR comment. GitHub returns a
    permanent `https://github.com/user-attachments/assets/<uuid>` URL.
@@ -659,3 +865,153 @@ negative result is evidence worth keeping.
 - No new files at the repo root (per the `AGENTS.md` docs-layout rule).
 - `docs/manual/presentation-demo.md` records versions, the sdef rationale, and the
   two verification outcomes.
+
+---
+
+## Issue 7 — Expressive clip modifiers
+
+**Filed as [#33](https://github.com/brightdigit/FCPKit/issues/33)**
+**Labels:** `enhancement`, `ready-for-agent`
+**Depends on:** nothing (independent of Issues 1-6)
+
+### Problem
+
+`FCPKitDSL` can set duration, color, and anchors, but nothing about how a clip
+*looks*. Opacity, blend mode, rotation, scale, and cropping are all in the DTD and
+partly in the model, with no DSL surface reaching them. A demo deck without them
+undersells what the library can express.
+
+### Scope
+
+`FCPXMLv1_9.dtd` declares these adjustments; the model covers them unevenly:
+
+| DTD element | Attributes | Model status |
+|---|---|---|
+| `adjust-transform` | `position`, `scale`, `rotation`, `anchor`, `enabled` | `position`/`scale` only |
+| `adjust-blend` | `amount`, `mode` | not modeled |
+| `adjust-crop` | `mode` + `trim-rect`/`crop-rect` children | partially |
+
+Issue 3 adds `rotation`/`anchor`/`enabled` to `AdjustTransform` as a side effect of
+positioning; if Issue 3 has not landed, do it here instead. The two issues must not
+both add them — whichever lands second should find them present.
+
+### API
+
+```swift
+extension StoryItem {
+  /// Sets clip opacity, from 0 (transparent) to 1 (opaque).
+  public func opacity(_ value: Double) -> Self
+  /// Sets the blend mode, such as `.screen` or `.multiply`.
+  public func blendMode(_ mode: BlendMode) -> Self
+  /// Rotates the clip in degrees.
+  public func rotation(_ degrees: Double) -> Self
+  /// Scales the clip; 1.0 is unscaled.
+  public func scale(x: Double, y: Double) -> Self
+  /// Crops the clip to a trim rectangle.
+  public func crop(left: Double, right: Double, top: Double, bottom: Double) -> Self
+}
+```
+
+`BlendMode` is a public enum over the DTD's `adjust-blend mode` vocabulary. Capture
+the exact spelling FCP writes from a real export before finalizing the raw values —
+do not guess the strings.
+
+### Constraints
+
+- Emit **nothing** when a modifier is not applied, so existing fixtures stay
+  byte-identical. Same rule as Issue 3's positioning.
+- These hang off `StoryItem` (Issue 2), so they apply uniformly to clips, generators,
+  colors, and titles. If Issue 2 has not landed, scope to `AssetClip` and `Generator`
+  and generalize later.
+- Keep `CodingKeys` in DTD order per `AGENTS.md`; extend the Step 0 ordering tests.
+
+### Tests
+
+- Each modifier round-trips through decode → encode unchanged.
+- An unmodified clip emits no adjustment elements — regression guard.
+- Schema-completeness total does not increase.
+- A document using every modifier DTD-validates.
+
+### Acceptance criteria
+
+- `swift test` green; schema-completeness at or below baseline.
+- `BlendMode` raw values verified against a real Final Cut export, not invented.
+
+---
+
+## Issue 8 — Transition and effect vocabulary
+
+**Filed as [#34](https://github.com/brightdigit/FCPKit/issues/34)**
+**Labels:** `enhancement`, `ready-for-agent`
+**Depends on:** nothing (independent of Issues 1-6)
+
+### Problem
+
+`TransitionPreset` offers Cross Dissolve and nothing else. Final Cut ships **88
+built-in transitions** and over a thousand effects, titles, and generators. The demo
+deck is limited to one transition purely by DSL vocabulary.
+
+### The UID problem is smaller than it looks
+
+Effects fall into two classes, and only one needs manual capture:
+
+**1. Motion templates — UID is a path, derivable without any export.** FCP ships the
+catalog inside the app bundle:
+
+```
+Final Cut Pro.app/Contents/PlugIns/MediaProviders/MotionEffect.fxp/Contents/Resources/
+  Templates.localized/{Transitions,Effects,Titles,Generators}.localized/
+```
+
+Counts on FCP Creator Studio as of 2026-08-02: **169 `.motr`** (transitions),
+**592 `.moti`** (titles), **258 `.moef`** (effects), **116 `.motn`** (generators).
+The `Templates.localized/Transitions.localized` tree alone holds 88.
+
+Their `uid` is the template path, exactly as seen in our own fixtures:
+
+```
+Gaussian           → …/Effects.localized/Blur.localized/Gaussian.localized/Gaussian.moef
+Lower Third Basic  → …/Titles.localized/Social.localized/Lower Third Basic.localized/…moti
+```
+
+**2. FxPlug built-ins — opaque GUIDs, must be captured from a real export.** Only
+these need a fixture. Known from `Tests/FCPKitTests/TestData`:
+
+| Name | UID |
+|---|---|
+| Cross Dissolve | `FxPlug:4731E73A-8DAC-4113-9A30-AE85B1761265` |
+| Drop Shadow | `FxPlug:9C13F991-BC99-4DC8-B150-381D7CCE183B` |
+| Green Screen Keyer | `FxPlug:41122549-B8A6-470E-94DA-211294D20B62` |
+| Color Correction | `FFColorCorrectionHDREffect` |
+| Audio Crossfade | `FFAudioTransition` |
+
+### Work
+
+- Expand `TransitionPreset` with the Motion-template transitions, deriving each `uid`
+  from its catalog path.
+- Add an `EffectPreset` equivalent for `.moef` effects and `.moti` titles.
+- Keep the five known FxPlug/FF UIDs above as explicit constants.
+- **Do not invent UIDs.** Any effect whose UID is neither path-derivable nor in the
+  table above is out of scope until someone captures a fixture for it.
+
+### Caveat to document
+
+These paths live inside the Final Cut Pro app bundle and **can move between
+releases**. The generated presets are a snapshot to validate on import, not a stable
+contract. Record the FCP version the catalog was read from, and re-verify after a
+Final Cut upgrade. Localized path components (`.localized` directories) are another
+fragility: confirm whether FCP accepts the base-language path on a non-English system
+before claiming portability.
+
+### Tests
+
+- A document using a template-derived transition DTD-validates.
+- Effect interning still dedups when several slides share a transition.
+- The five FxPlug constants match the fixture values exactly.
+
+### Acceptance criteria
+
+- `swift test` green.
+- A generated preset list is checked in with the FCP version it came from.
+- At least one non-Cross-Dissolve transition round-trips through Final Cut import
+  (this one gate needs a human with FCP).

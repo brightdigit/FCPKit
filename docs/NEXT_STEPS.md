@@ -173,10 +173,13 @@ evidence: [planning/demo-presentation-video.md](planning/demo-presentation-video
    the `FCPKitDSL` surface grows.
 3. Re-export after Final Cut upgrades that change FCPXML output.
 4. Privacy review for any new exports that leave Shared/generic paths.
-5. Record the README demo movie once the DSL work in
+5. Share and export the README demo movie once the DSL work in
    [planning/demo-presentation-video.md](planning/demo-presentation-video.md)
-   lands (import the deck, confirm anchored titles render over generator
-   backgrounds, Share → Master File, then embed).
+   lands. This is a manual Final Cut step, because Final Cut exposes no
+   scripting verb for export: generate the deck with
+   `fcpxml-dsl export presentation`, import it, confirm anchored titles render
+   over their generator backgrounds, then Share → Master File and embed the
+   resulting `.mp4` in the README.
 
 
 ## Documentation Accuracy
