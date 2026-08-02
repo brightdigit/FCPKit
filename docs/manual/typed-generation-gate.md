@@ -75,3 +75,81 @@ still needs eyes on the timeline.
 
 Export outputs stay off-repo (`/transitions.fcpxml`, `/titles.fcpxml` are
 gitignored); regenerate them with the commands above.
+
+## Generator Dissolve Gate (Accepted)
+
+Status: **Accepted** (August 2, 2026)
+
+Media-free generator clips separated by cross dissolves imported into Final Cut
+Pro and rendered correctly. This retires the open structural risk recorded in
+[planning/demo-presentation-video.md](../planning/demo-presentation-video.md):
+
+> Do cross dissolves between two generators behave like dissolves between asset
+> clips? Transition packing assumes T/2 overlap on both neighbors. Generators
+> have no media handles beyond their declared duration, so Final Cut may object
+> to the overlap.
+
+**They do behave the same.** Final Cut accepted the T/2 overlap with no
+objection — no red media, no missing-handle warning. The mitigation the spec
+held in reserve (extending each generator by T/2 per side) is **not needed**.
+
+### Generated with
+
+```sh
+swift run fcpxml-dsl export rgb rgb.fcpxml    # defaults to version 1.14
+```
+
+Red / green / blue `Color Solid` generators, 5s each, 1s cross dissolves.
+No media files, no `Scripts/generate-test-media.sh` run.
+
+### Verified
+
+- Imported without rejection into Final Cut Pro Creator Studio.
+- Both transitions render as dissolve bars **between** adjacent clips.
+- Sequence reads `13:00` on the Final Cut timeline, matching the generated
+  `<sequence duration="13s">` — Final Cut did not re-time the spine.
+- Per-clip timing survives exactly as packed:
+
+  | Clip | offset | duration | Trimmed |
+  | --- | --- | --- | --- |
+  | red | `0s` | `10800/2400s` (4.5s) | tail only |
+  | dissolve | `4s` | `1s` | — |
+  | green | `10800/2400s` | `4s` | both sides |
+  | dissolve | `8s` | `1s` | — |
+  | blue | `20400/2400s` | `10800/2400s` (4.5s) | head only |
+
+  The middle clip is shortened by T/2 on both sides while the outer two are
+  trimmed on one side each — `placeOverlapping` in `Layout+Packing.swift` agrees
+  with Final Cut.
+- Validates against Final Cut's own `FCPXMLv1_14.dtd` via `xmllint`.
+
+### Not covered by this gate
+
+Anchored titles over generator backgrounds. The RGB document contains no
+titles, so lane-1 rendering over a `<video>`-backed generator remains
+**unverified** — it needs
+[#35](https://github.com/brightdigit/FCPKit/issues/35),
+[#36](https://github.com/brightdigit/FCPKit/issues/36), and
+[#37](https://github.com/brightdigit/FCPKit/issues/37) first, and is the
+remaining unknown for
+[#40](https://github.com/brightdigit/FCPKit/issues/40).
+
+### Version caveat
+
+This gate covers **1.14 only**. The same document exported at `--version 1.13`
+is invalid: the DSL emits `<match-analysis-type>`, an element that does not
+exist before 1.14. Tracked as
+[#41](https://github.com/brightdigit/FCPKit/issues/41). Note the multicam
+generation path already stopped emitting `smart-collection` (see "Generation
+Policy Follow-up" above); the DSL create path did not inherit that change.
+
+### Reproducing the DTD check
+
+`xmllint --dtdvalid` fails with `xmlSAX2ResolveEntity` when the DTD is
+referenced by its absolute path inside the Final Cut app bundle. Copy it to the
+working directory and reference it by bare filename:
+
+```sh
+cp "/Applications/Final Cut Pro*.app/Contents/Frameworks/Interchange.framework/Resources/FCPXMLv1_14.dtd" .
+xmllint --noout --dtdvalid FCPXMLv1_14.dtd rgb.fcpxml
+```

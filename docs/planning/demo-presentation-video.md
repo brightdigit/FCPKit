@@ -866,11 +866,14 @@ rather than taking the claim on trust.
 - **Does Final Cut render an anchored title over a `<video>`-backed generator on
   lane 1?** The DTD permits it and lane semantics say yes, but this combination has
   not been round-tripped through Final Cut in this repo.
-- **Do cross dissolves between two generators behave like dissolves between asset
-  clips?** Transition packing assumes T/2 overlap on both neighbors. Generators have
-  no media handles beyond their declared duration, so Final Cut may object to the
-  overlap. If it does, the mitigation is extending each generator's duration by T/2
-  on each side.
+- ~~**Do cross dissolves between two generators behave like dissolves between asset
+  clips?**~~ **ANSWERED 2026-08-02: yes.** The `rgb` document (three color solids,
+  1s dissolves) imported into Final Cut and rendered correctly — Final Cut accepted
+  the T/2 overlap with no objection, and the sequence read `13:00` matching the
+  generated `duration="13s"`. The reserved mitigation (extending each generator by
+  T/2 per side) is **not needed**. Evidence:
+  [manual/typed-generation-gate.md](../manual/typed-generation-gate.md)
+  "Generator Dissolve Gate".
 
 Record the outcome of both in `docs/manual/presentation-demo.md` either way — a
 negative result is evidence worth keeping.
