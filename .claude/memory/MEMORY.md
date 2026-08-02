@@ -1,3 +1,3 @@
 - [Corrections log directive](corrections-log-directive.md) — log corrections/always-never directives in `.claude/agent-notes.md`; read that file first every session
 - [v0.1.0 plan & DSL](v0.1.0-plan-and-dsl.md) — ADR 0002 accepted; FCPKitDSL surface locked; resume on Step 0 via `v0.1.x` after docs merged
-- [FCP scripting live facts](fcp-scripting-live-facts.md) — FCPLibraryInspector crashes vs real FCP (cocoa keys ≠ SBObject terms); AppleScript census works; xmllint DTD path quirk
+- [FCP scripting live facts](fcp-scripting-live-facts.md) — no export/render verb in the sdef (`get` only, all `access="r"`), so FCP export stays manual; cocoa keys ≠ SBObject terms; AppleScript census works; xmllint DTD path quirk

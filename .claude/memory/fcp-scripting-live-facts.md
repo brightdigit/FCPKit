@@ -1,6 +1,6 @@
 ---
 name: fcp-scripting-live-facts
-description: Live-verified FCP scripting facts — SBObject term-name contract (#27 fixed); AppleScript census works; DTD/xmllint quirks
+description: Live-verified FCP scripting facts — no export/render verb exists (get only); SBObject term-name contract (#27 fixed); AppleScript census works; DTD/xmllint quirks
 metadata:
   node_type: memory
   type: project
@@ -29,6 +29,28 @@ Verified against Final Cut Pro Creator Studio on Leo's machine while building
 - FCP's sdef: `Contents/Resources/ProEditor.sdef` (or `sdef "/Applications/Final
   Cut Pro Creator Studio.app"`). Read-only suite `com.apple.FinalCut.library.inspection`;
   classes library/event/project/sequence.
+
+## No export/render verb exists (verified 2026-08-02)
+
+The sdef declares **exactly one command — `get`**. There is no `export`, `share`,
+`render`, or `open` verb anywhere in it, every property on every class is
+`access="r"`, and both suites sit behind
+`<access-group identifier="com.apple.FinalCut.library.inspection" access="r"/>`.
+So **ScriptingBridge cannot trigger a Final Cut export** — it is not a matter of
+finding the right selector; there is no verb to call. Exporting a movie is a manual
+Share → Master File step, or UI scripting via System Events (brittle, needs
+Accessibility).
+
+Re-verify against a future FCP release with:
+
+```sh
+sdef "$(mdfind 'kMDItemCFBundleIdentifier == com.apple.FinalCutApp' | head -1)" \
+  | grep -o '<command name="[^"]*"'
+```
+
+Resolve by bundle id, not path — `sdef "/Applications/Final Cut Pro.app"` fails with
+error -43 on this machine, where the app is `Final Cut Pro Creator Studio.app`. The
+bundle id `com.apple.FinalCutApp` is stable across both.
 
 ## What does work live
 
