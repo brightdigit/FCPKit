@@ -33,13 +33,21 @@ import FCPKit
 public struct Title: DSLNode {
   internal let preset: TitlePreset
   internal let text: String
-  internal let duration: FCPTime
+  /// Clip duration on the storyline.
+  public let duration: FCPTime
   internal let lane: Int?
   internal let offset: FCPTime?
-  /// Creates a title from a preset, text, and duration.
-  public init(_ preset: TitlePreset, text: String, duration: FCPTime) {
-    self.init(preset: preset, text: text, duration: duration, lane: nil, offset: nil)
+
+  /// Creates a Basic Title from text and optional duration.
+  public init(_ text: String, duration: FCPTime? = nil) {
+    self.init(.basic, text: text, duration: duration)
   }
+
+  /// Creates a title from a preset, text, and optional duration.
+  public init(_ preset: TitlePreset, text: String, duration: FCPTime? = nil) {
+    self.init(preset: preset, text: text, duration: duration ?? .zero, lane: nil, offset: nil)
+  }
+
   private init(preset: TitlePreset, text: String, duration: FCPTime, lane: Int?, offset: FCPTime?) {
     self.preset = preset
     self.text = text
@@ -47,8 +55,14 @@ public struct Title: DSLNode {
     self.lane = lane
     self.offset = offset
   }
+
+  /// Sets the title clip duration.
+  public func duration(_ duration: FCPTime) -> Title {
+    Title(preset: preset, text: text, duration: duration, lane: lane, offset: offset)
+  }
+
   internal func build(_ resources: inout ResourceStore) throws -> Built {
-    let ref = try resources.effect(name: "Basic Title", uid: TitlePreset.uid)
+    let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let style = FCPKit.TextStyle(ref: "ts1", content: text)
     let definition = FCPKit.TextStyleDef(
       id: "ts1",
@@ -64,7 +78,7 @@ public struct Title: DSLNode {
       .title(
         FCPKit.Title(
           ref: ref,
-          name: "Basic Title",
+          name: preset.name,
           duration: duration.description,
           start: "3600s",
           lane: lane.map(String.init),

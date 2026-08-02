@@ -1,5 +1,5 @@
 //
-//  DocumentContent.swift
+//  GeneratorPreset.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,32 +27,22 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
-import Foundation
+/// A fixture-backed or custom generator effect preset.
+public struct GeneratorPreset: Equatable, Sendable {
+  /// Final Cut Pro's default Solids > Custom generator.
+  public static let custom = GeneratorPreset(
+    name: "Custom",
+    uid: ".../Generators.localized/Solids.localized/Custom.localized/Custom.motn"
+  )
 
-/// A value accepted as document or story content by the DSL builders.
-public protocol DocumentContent {
-  /// Sets clip duration. Default is a no-op; types that carry duration override this.
-  func duration(_ duration: FCPTime) -> Self
-}
+  /// The generator effect resource name.
+  public let name: String
+  /// The generator effect resource unique identifier.
+  public let uid: String
 
-extension DocumentContent {
-  /// No-op by default. Types that carry duration override this.
-  public func duration(_ duration: FCPTime) -> Self { self }
-
-  /// Sets duration using a `TimeInterval` in seconds.
-  public func duration(_ interval: TimeInterval) -> Self {
-    duration(FCPTime.seconds(interval))
-  }
-
-  /// Sets duration using an `Int` in seconds.
-  public func duration(_ seconds: Int) -> Self {
-    duration(FCPTime.seconds(seconds))
-  }
-
-  /// Sets duration using Swift's `Duration` type.
-  @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
-  public func duration(_ duration: Swift.Duration) -> Self {
-    self.duration(FCPTime(duration))
+  /// Creates a generator preset from an effect name and UID.
+  public init(name: String, uid: String) {
+    self.name = name
+    self.uid = uid
   }
 }

@@ -29,13 +29,19 @@
 
 import FCPKit
 
-/// A gap on the storyline. Duration is required — there is no default.
+/// A gap on the storyline. Duration is required — set in initializer or via `.duration(...)`.
 public struct Gap: DSLNode {
-  internal let duration: FCPTime?
+  /// Gap duration on the storyline, when set.
+  public let duration: FCPTime?
 
   /// Creates a gap. Export fails when `duration` is omitted.
   public init(duration: FCPTime? = nil) {
     self.duration = duration
+  }
+
+  /// Sets the gap duration.
+  public func duration(_ duration: FCPTime) -> Gap {
+    Gap(duration: duration)
   }
 
   internal func build(_ resources: inout ResourceStore) throws -> Built {

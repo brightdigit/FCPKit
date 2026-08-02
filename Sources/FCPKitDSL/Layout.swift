@@ -35,6 +35,25 @@ internal enum Layout {
     internal let duration: String
   }
 
+  internal struct Overlap {
+    internal let previous: Int64
+    internal let next: Int64
+  }
+
+  internal struct Placement {
+    internal let offset: Int64
+    internal let start: Int64
+    internal let duration: Int64
+    internal let cursor: Int64
+    internal let longest: Int64
+  }
+
+  internal struct PackStep {
+    internal let item: FCPKit.SpineItem
+    internal let cursor: Int64
+    internal let longest: Int64
+  }
+
   /// Packs spine offsets using centered transition overlap.
   ///
   /// Each transition of duration `T` overlaps the previous clip's end and the next
@@ -43,61 +62,60 @@ internal enum Layout {
   internal static func pack(_ items: [FCPKit.SpineItem], frameDuration: String?) throws -> Packed {
     let tickDenominator = tickDenominator(for: frameDuration)
     var cursor: Int64 = 0
-    var output: [FCPKit.SpineItem] = []
     var longest: Int64 = 0
+    var output: [FCPKit.SpineItem] = []
 
     for index in items.indices {
-      let previousOverlap =
-        index > 0 ? transitionDuration(items[index - 1], tickDenominator) / 2 : 0
-      let nextOverlap =
-        index + 1 < items.count
-        ? transitionDuration(items[index + 1], tickDenominator) / 2
-        : 0
-
-      switch items[index] {
-      case .assetClip(var clip):
-        let original = try ticks(clip.duration, tickDenominator, "asset clip")
-        let start = previousOverlap
-        let duration = original - start - nextOverlap
-        let offset = cursor
-        clip.offset = render(offset, tickDenominator)
-        clip.start = start == 0 ? nil : render(start, tickDenominator)
-        clip.duration = render(duration, tickDenominator)
-        longest = max(
-          longest,
-          offset + duration,
-          offset + anchoredExtent(clip.anchoredItems, tickDenominator)
-        )
-        cursor += duration
-        output.append(.assetClip(clip))
-
-      case .gap(var gap):
-        let duration = try ticks(gap.duration, tickDenominator, "gap")
-        gap.offset = render(cursor, tickDenominator)
-        cursor += duration
-        longest = max(longest, cursor)
-        output.append(.gap(gap))
-
-      case .transition(var transition):
-        let duration = try ticks(transition.duration, tickDenominator, "transition")
-        transition.offset = render(cursor - duration / 2, tickDenominator)
-        transition.duration = render(duration, tickDenominator)
-        output.append(.transition(transition))
-
-      case .title(var title):
-        let duration = try ticks(title.duration, tickDenominator, "title")
-        title.offset = render(cursor, tickDenominator)
-        title.duration = render(duration, tickDenominator)
-        cursor += duration
-        longest = max(longest, cursor)
-        output.append(.title(title))
-
-      default:
-        output.append(items[index])
-      }
+      let packed = try packItem(
+        items[index],
+        overlap: overlap(at: index, in: items, tickDenominator: tickDenominator),
+        cursor: cursor,
+        longest: longest,
+        tickDenominator: tickDenominator
+      )
+      cursor = packed.cursor
+      longest = packed.longest
+      output.append(packed.item)
     }
 
     return Packed(items: output, duration: render(max(cursor, longest), tickDenominator))
+  }
+
+  private static func packItem(
+    _ item: FCPKit.SpineItem,
+    overlap: Overlap,
+    cursor: Int64,
+    longest: Int64,
+    tickDenominator: Int32
+  ) throws -> PackStep {
+    if let overlapping = try packOverlapping(
+      item,
+      overlap: overlap,
+      cursor: cursor,
+      longest: longest,
+      tickDenominator: tickDenominator
+    ) {
+      return overlapping
+    }
+    return try packNonOverlapping(
+      item,
+      cursor: cursor,
+      longest: longest,
+      tickDenominator: tickDenominator
+    )
+  }
+
+  private static func overlap(
+    at index: Int,
+    in items: [FCPKit.SpineItem],
+    tickDenominator: Int32
+  ) -> Overlap {
+    let previous = index > 0 ? transitionDuration(items[index - 1], tickDenominator) / 2 : 0
+    let next =
+      index + 1 < items.count
+      ? transitionDuration(items[index + 1], tickDenominator) / 2
+      : 0
+    return Overlap(previous: previous, next: next)
   }
 
   private static func tickDenominator(for frameDuration: String?) -> Int32 {
@@ -112,43 +130,5 @@ internal enum Layout {
       return 0
     }
     return (try? ticks(transition.duration, denominator, "transition")) ?? 0
-  }
-
-  private static func ticks(
-    _ description: String?,
-    _ denominator: Int32,
-    _ subject: String
-  ) throws -> Int64 {
-    guard let description, let value = FCPTime(description) else {
-      throw BuildError.missingDuration(subject)
-    }
-    return value.numerator * Int64(denominator) / Int64(value.denominator)
-  }
-
-  private static func render(_ ticks: Int64, _ denominator: Int32) -> String {
-    if ticks.isMultiple(of: Int64(denominator)) {
-      return "\(ticks / Int64(denominator))s"
-    }
-    return "\(ticks)/\(denominator)s"
-  }
-
-  private static func anchoredExtent(
-    _ items: [FCPKit.AnchoredItem]?,
-    _ denominator: Int32
-  ) -> Int64 {
-    (items ?? []).reduce(0) { result, item in
-      switch item {
-      case .title(let title):
-        let offset = (try? ticks(title.offset ?? "0s", denominator, "title")) ?? 0
-        let duration = (try? ticks(title.duration, denominator, "title")) ?? 0
-        return max(result, offset + duration)
-      case .assetClip(let clip):
-        let offset = (try? ticks(clip.offset ?? "0s", denominator, "asset clip")) ?? 0
-        let duration = (try? ticks(clip.duration, denominator, "asset clip")) ?? 0
-        return max(result, offset + duration)
-      default:
-        return result
-      }
-    }
   }
 }

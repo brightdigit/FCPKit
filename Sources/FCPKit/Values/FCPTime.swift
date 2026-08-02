@@ -27,6 +27,8 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import Foundation
+
 /// A rational FCPXML time value that preserves the exact textual form it was written in.
 ///
 /// FCPXML times are rational seconds — `"5s"`, `"0s"`, `"1001/30000s"`,

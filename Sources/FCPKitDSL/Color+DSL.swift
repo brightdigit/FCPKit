@@ -1,5 +1,5 @@
 //
-//  DocumentContent.swift
+//  Color+DSL.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,31 +28,23 @@
 //
 
 import FCPKit
-import Foundation
 
-/// A value accepted as document or story content by the DSL builders.
-public protocol DocumentContent {
-  /// Sets clip duration. Default is a no-op; types that carry duration override this.
-  func duration(_ duration: FCPTime) -> Self
-}
+/// Re-export ``Color`` for FCPKitDSL users.
+public typealias Color = FCPKit.Color
 
-extension DocumentContent {
-  /// No-op by default. Types that carry duration override this.
-  public func duration(_ duration: FCPTime) -> Self { self }
-
-  /// Sets duration using a `TimeInterval` in seconds.
-  public func duration(_ interval: TimeInterval) -> Self {
-    duration(FCPTime.seconds(interval))
+extension Color: DSLNode {
+  /// Returns a copy of this color with the specified clip duration.
+  public func duration(_ duration: FCPTime) -> Color {
+    var copy = self
+    copy.duration = duration
+    return copy
   }
 
-  /// Sets duration using an `Int` in seconds.
-  public func duration(_ seconds: Int) -> Self {
-    duration(FCPTime.seconds(seconds))
-  }
-
-  /// Sets duration using Swift's `Duration` type.
-  @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
-  public func duration(_ duration: Swift.Duration) -> Self {
-    self.duration(FCPTime(duration))
+  internal func build(_ resources: inout ResourceStore) throws -> Built {
+    guard let duration else {
+      throw BuildError.missingDuration("color generator")
+    }
+    let generator = Generator(.custom, duration: duration).color(self)
+    return try generator.build(&resources)
   }
 }

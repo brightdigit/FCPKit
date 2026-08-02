@@ -32,7 +32,8 @@ import FCPKit
 /// A transition between adjacent story items.
 public struct Transition: DSLNode {
   internal let preset: TransitionPreset
-  internal let duration: FCPTime
+  /// Transition duration on the storyline.
+  public let duration: FCPTime
 
   /// Creates a transition from a preset. Default duration is one second.
   public init(_ preset: TransitionPreset, duration: FCPTime = FCPTime(numerator: 1)) {
@@ -40,17 +41,20 @@ public struct Transition: DSLNode {
     self.duration = duration
   }
 
+  /// Sets the transition duration.
+  public func duration(_ duration: FCPTime) -> Transition {
+    Transition(preset, duration: duration)
+  }
+
   internal func build(_ resources: inout ResourceStore) throws -> Built {
-    let video = try resources.effect(name: "Cross Dissolve", uid: TransitionPreset.videoUID)
-    let audio = try resources.effect(name: "Audio Crossfade", uid: TransitionPreset.audioUID)
-    let filters =
-      preset == .crossDissolve
-      ? CrossDissolveFilters.make(video: video, audio: audio) : (nil, nil)
+    let video = try resources.effect(name: preset.name, uid: preset.videoUID)
+    let audio = try resources.effect(name: "Audio Crossfade", uid: preset.audioUID)
+    let filters = CrossDissolveFilters.make(video: video, audio: audio)
     return .item(
       .transition(
         FCPKit.Transition(
           duration: duration.description,
-          name: "Cross Dissolve",
+          name: preset.name,
           filterVideo: filters.0,
           filterAudio: filters.1
         )

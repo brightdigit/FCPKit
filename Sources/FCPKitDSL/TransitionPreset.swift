@@ -27,10 +27,26 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A fixture-backed transition effect preset.
-public enum TransitionPreset: Equatable, Sendable {
+/// A fixture-backed or custom transition effect preset.
+public struct TransitionPreset: Equatable, Sendable {
   /// Final Cut Pro's default Cross Dissolve, including audio crossfade.
-  case crossDissolve
-  internal static let videoUID = "FxPlug:4731E73A-8DAC-4113-9A30-AE85B1761265"
-  internal static let audioUID = "FFAudioTransition"
+  public static let crossDissolve = TransitionPreset(
+    name: "Cross Dissolve",
+    videoUID: "FxPlug:4731E73A-8DAC-4113-9A30-AE85B1761265",
+    audioUID: "FFAudioTransition"
+  )
+
+  /// The video transition effect resource name.
+  public let name: String
+  /// The video transition effect resource unique identifier.
+  public let videoUID: String
+  /// The companion audio transition effect resource unique identifier.
+  public let audioUID: String
+
+  /// Creates a transition preset from a display name and video/audio effect UIDs.
+  public init(name: String, videoUID: String, audioUID: String) {
+    self.name = name
+    self.videoUID = videoUID
+    self.audioUID = audioUID
+  }
 }

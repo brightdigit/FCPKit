@@ -1,5 +1,5 @@
 //
-//  DocumentContent.swift
+//  Color+AppKit.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,32 +27,24 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
-import Foundation
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+  import AppKit
 
-/// A value accepted as document or story content by the DSL builders.
-public protocol DocumentContent {
-  /// Sets clip duration. Default is a no-op; types that carry duration override this.
-  func duration(_ duration: FCPTime) -> Self
-}
-
-extension DocumentContent {
-  /// No-op by default. Types that carry duration override this.
-  public func duration(_ duration: FCPTime) -> Self { self }
-
-  /// Sets duration using a `TimeInterval` in seconds.
-  public func duration(_ interval: TimeInterval) -> Self {
-    duration(FCPTime.seconds(interval))
+  extension Color {
+    /// Creates a ``Color`` from an `NSColor`.
+    public init(_ nsColor: NSColor) {
+      if let srgb = nsColor.usingColorSpace(.sRGB) {
+        self.init(
+          red: Double(srgb.redComponent),
+          green: Double(srgb.greenComponent),
+          blue: Double(srgb.blueComponent),
+          alpha: Double(srgb.alphaComponent)
+        )
+      } else if let converted = Color(nsColor.cgColor) {
+        self = converted
+      } else {
+        self.init(red: 0, green: 0, blue: 0, alpha: 1)
+      }
+    }
   }
-
-  /// Sets duration using an `Int` in seconds.
-  public func duration(_ seconds: Int) -> Self {
-    duration(FCPTime.seconds(seconds))
-  }
-
-  /// Sets duration using Swift's `Duration` type.
-  @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
-  public func duration(_ duration: Swift.Duration) -> Self {
-    self.duration(FCPTime(duration))
-  }
-}
+#endif

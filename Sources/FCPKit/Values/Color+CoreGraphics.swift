@@ -1,5 +1,5 @@
 //
-//  DocumentContent.swift
+//  Color+CoreGraphics.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,32 +27,24 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
-import Foundation
+#if canImport(CoreGraphics)
+  import CoreGraphics
 
-/// A value accepted as document or story content by the DSL builders.
-public protocol DocumentContent {
-  /// Sets clip duration. Default is a no-op; types that carry duration override this.
-  func duration(_ duration: FCPTime) -> Self
-}
-
-extension DocumentContent {
-  /// No-op by default. Types that carry duration override this.
-  public func duration(_ duration: FCPTime) -> Self { self }
-
-  /// Sets duration using a `TimeInterval` in seconds.
-  public func duration(_ interval: TimeInterval) -> Self {
-    duration(FCPTime.seconds(interval))
+  extension Color {
+    /// Creates a ``Color`` from a `CGColor`.
+    public init?(_ cgColor: CGColor) {
+      guard let srgbSpace = CGColorSpace(name: CGColorSpace.sRGB),
+        let converted = cgColor.converted(to: srgbSpace, intent: .defaultIntent, options: nil),
+        let components = converted.components,
+        components.count >= 3
+      else {
+        return nil
+      }
+      let redVal = Double(components[0])
+      let greenVal = Double(components[1])
+      let blueVal = Double(components[2])
+      let alphaVal = components.count >= 4 ? Double(components[3]) : 1.0
+      self.init(red: redVal, green: greenVal, blue: blueVal, alpha: alphaVal)
+    }
   }
-
-  /// Sets duration using an `Int` in seconds.
-  public func duration(_ seconds: Int) -> Self {
-    duration(FCPTime.seconds(seconds))
-  }
-
-  /// Sets duration using Swift's `Duration` type.
-  @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
-  public func duration(_ duration: Swift.Duration) -> Self {
-    self.duration(FCPTime(duration))
-  }
-}
+#endif
