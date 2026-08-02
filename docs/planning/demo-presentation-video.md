@@ -1,6 +1,10 @@
 # Demo Presentation Video — Implementation Spec
 
-Status: proposal (not yet accepted)
+Status: proposal (not yet accepted). Decomposed into GitHub issues
+[#35](https://github.com/brightdigit/FCPKit/issues/35)-[#40](https://github.com/brightdigit/FCPKit/issues/40),
+plus non-blocking [#33](https://github.com/brightdigit/FCPKit/issues/33) and
+[#34](https://github.com/brightdigit/FCPKit/issues/34). Blocking relationships are
+tracked as native GitHub issue dependencies.
 Target: a ~30-45s movie embedded in `README.md`, showcasing FCPKit by using FCPKit.
 
 ## Goal
@@ -71,9 +75,9 @@ Cut release before revisiting.
 ## Dependency graph
 
 ```
-Issue 1 (text-style-def ids)  ─┐
-Issue 2 (StoryItem)            ├─→ Issue 4 (PresentationDocument) ─→ Issue 5 (CLI) ─→ Issue 6 (share + export)
-Issue 3 (Title style/position)─┘
+Issue 1 #35 (text-style-def ids) ─┐
+Issue 2 #36 (StoryItem)           ├─→ Issue 4 #38 (PresentationDocument) ─→ Issue 5 #39 (CLI) ─→ Issue 6 #40 (share + export)
+Issue 3 #37 (Title style/pos)   ─┘
 
 Issue 7 (clip modifiers, #33) ─── independent; enriches the Issue 4 deck
 Issue 8 (effect vocab,   #34) ─── independent; enriches the Issue 4 deck
@@ -103,6 +107,8 @@ GitHub issues so the demo can ship on cross dissolves and be revisited.
 ---
 
 ## Issue 1 — Fix duplicate `text-style-def` ids
+
+**Filed as [#35](https://github.com/brightdigit/FCPKit/issues/35)**
 
 **Labels:** `bug`, `ready-for-agent`
 
@@ -198,6 +204,8 @@ New `Tests/FCPKitDSLTests/TextStyleIDTests.swift`:
 ---
 
 ## Issue 2 — `StoryItem`: lift `.anchor` off `AssetClip`
+
+**Filed as [#36](https://github.com/brightdigit/FCPKit/issues/36)**
 
 **Labels:** `enhancement`, `ready-for-agent`
 
@@ -368,6 +376,8 @@ Extend `Tests/FCPKitDSLTests/GeneratorDSLTests.swift` and add
 ---
 
 ## Issue 3 — Title styling and positioning modifiers
+
+**Filed as [#37](https://github.com/brightdigit/FCPKit/issues/37)**
 
 **Labels:** `enhancement`, `ready-for-agent`
 
@@ -607,6 +617,8 @@ included for completeness but is likewise unverified.
 
 ## Issue 4 — `PresentationDocument`
 
+**Filed as [#38](https://github.com/brightdigit/FCPKit/issues/38)**
+
 **Labels:** `enhancement`, `ready-for-agent`
 **Depends on:** Issues 1, 2, 3
 
@@ -754,6 +766,8 @@ New `Tests/FCPKitDSLTests/PresentationDocumentTests.swift`:
 
 ## Issue 5 — `export presentation` CLI subcommand
 
+**Filed as [#39](https://github.com/brightdigit/FCPKit/issues/39)**
+
 **Labels:** `enhancement`, `ready-for-agent`
 **Depends on:** Issue 4
 
@@ -797,6 +811,8 @@ inside for consistency with its siblings and to avoid restructuring the conditio
 ---
 
 ## Issue 6 — Share and export the demo, then embed it in the README
+
+**Filed as [#40](https://github.com/brightdigit/FCPKit/issues/40)**
 
 **Labels:** `documentation`, `ready-for-human`
 **Depends on:** Issue 5
