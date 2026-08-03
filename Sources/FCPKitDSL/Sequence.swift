@@ -44,7 +44,7 @@ public struct Sequence: DSLNode {
   public func build(_ resources: inout ResourceStore) throws -> Built {
     let formatRef = try format.map { try resources.format($0) }
     let packed = try Layout.pack(
-      storyItems(content.contents, resources: &resources),
+      StoryItemLowering.items(content.contents, resources: &resources),
       frameDuration: format?.format.frameDuration
     )
     return .sequence(

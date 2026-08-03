@@ -30,7 +30,7 @@
 import FCPKit
 
 /// A gap on the storyline. Duration is required — set in initializer or via `.duration(...)`.
-public struct Gap: DSLNode, StoryItem {
+public struct Gap: StoryItem {
   /// Gap duration on the storyline, when set.
   public let duration: FCPTime?
   /// The anchors attached to this gap.
@@ -60,7 +60,7 @@ public struct Gap: DSLNode, StoryItem {
   public func build(_ resources: inout ResourceStore) throws -> Built {
     guard let duration else { throw BuildError.missingDuration("gap") }
     var element = FCPKit.Gap(duration: duration.description)
-    element.anchoredItems = try anchoredItems(anchors, resources: &resources)
+    element.anchoredItems = try AnchoredItemBuilder.items(anchors, resources: &resources)
     return .item(.gap(element))
   }
 }

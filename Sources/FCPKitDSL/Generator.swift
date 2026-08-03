@@ -133,7 +133,7 @@ public struct Generator: DSLNode {
       duration: duration.description,
       param: params.isEmpty ? nil : params
     )
-    videoElement.anchoredItems = try anchoredItems(anchors, resources: &resources)
+    videoElement.anchoredItems = try AnchoredItemBuilder.items(anchors, resources: &resources)
     return .item(.video(videoElement))
   }
 

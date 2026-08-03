@@ -30,7 +30,7 @@
 import FCPKit
 
 /// A title clip, typically anchored onto an asset clip.
-public struct Title: DSLNode, StoryItem {
+public struct Title: StoryItem {
   internal let preset: TitlePreset
   internal let text: String
   /// Clip duration on the storyline.
@@ -121,7 +121,7 @@ public struct Title: DSLNode, StoryItem {
       text: [FCPKit.TextElement(textStyle: [style])],
       textStyleDef: [definition]
     )
-    element.anchoredItems = try anchoredItems(anchors, resources: &resources)
+    element.anchoredItems = try AnchoredItemBuilder.items(anchors, resources: &resources)
     return .item(.title(element))
   }
 }

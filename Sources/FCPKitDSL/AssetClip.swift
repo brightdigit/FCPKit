@@ -31,7 +31,7 @@ import FCPKit
 import Foundation
 
 /// An `asset-clip` story item with optional anchors and audio role.
-public struct AssetClip: DSLNode, StoryItem {
+public struct AssetClip: StoryItem {
   internal let source: AssetSource
   /// Clip duration on the storyline, when set explicitly.
   public let duration: FCPTime?
@@ -111,7 +111,7 @@ public struct AssetClip: DSLNode, StoryItem {
     if let format = source.format, source.formatOnClip {
       clip.format = try resources.format(FormatPreset(format))
     }
-    clip.anchoredItems = try anchoredItems(anchors, resources: &resources)
+    clip.anchoredItems = try AnchoredItemBuilder.items(anchors, resources: &resources)
     return .item(.assetClip(clip))
   }
 

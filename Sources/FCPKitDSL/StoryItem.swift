@@ -33,7 +33,7 @@ import FCPKit
 ///
 /// Conformers gain ``anchor(lane:offset:content:)``, which attaches connected clips on
 /// numbered lanes above or below the storyline.
-public protocol StoryItem: DocumentContent {
+public protocol StoryItem: DSLNode {
   /// The type produced by anchoring. Usually `Self`, but ``Color`` promotes to
   /// ``Generator`` because a model type cannot gain stored properties.
   associatedtype Anchored: DocumentContent

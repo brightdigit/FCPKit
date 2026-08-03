@@ -1,5 +1,5 @@
 //
-//  StoryItems.swift
+//  StoryItemLowering.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,14 +29,20 @@
 
 import FCPKit
 
-internal func storyItems(
-  _ content: [any DocumentContent],
-  resources: inout ResourceStore
-) throws -> [FCPKit.SpineItem] {
-  try content.map { value in
-    guard let node = value as? any DSLNode, case .item(let item) = try node.build(&resources) else {
-      throw BuildError.unsupportedContent
+/// Lowers document content into ordered spine items.
+internal enum StoryItemLowering {
+  /// Lowers each content value into a spine item, preserving order.
+  internal static func items(
+    _ content: [any DocumentContent],
+    resources: inout ResourceStore
+  ) throws -> [FCPKit.SpineItem] {
+    try content.map { value in
+      guard let node = value as? any DSLNode,
+        case .item(let item) = try node.build(&resources)
+      else {
+        throw BuildError.unsupportedContent
+      }
+      return item
     }
-    return item
   }
 }

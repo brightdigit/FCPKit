@@ -43,7 +43,7 @@ public struct DocumentGroup: DocumentContent, DSLNode {
     if contents.count == 1, let node = contents[0] as? any DSLNode {
       return try node.build(&resources)
     }
-    let items = try storyItems(contents, resources: &resources)
+    let items = try StoryItemLowering.items(contents, resources: &resources)
     let packed = try Layout.pack(items, frameDuration: FormatPreset.p1080p24.format.frameDuration)
     return .spine(FCPKit.Spine(items: packed.items))
   }

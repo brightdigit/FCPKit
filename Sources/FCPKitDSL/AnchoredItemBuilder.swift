@@ -29,26 +29,29 @@
 
 import FCPKit
 
-/// Lowers a single anchor node into the DTD's `%anchor_item;` entity.
-internal func anchoredItem(
-  _ node: any DSLNode,
-  resources: inout ResourceStore
-) throws -> FCPKit.AnchoredItem {
-  switch try node.build(&resources) {
-  case .item(.title(let title)): return .title(title)
-  case .item(.assetClip(let clip)): return .assetClip(clip)
-  case .item(.generator(let gen)): return .generator(gen)
-  case .item(.video(let vid)): return .video(vid)
-  case .spine(let spine): return .spine(spine)
-  default: throw BuildError.unsupportedContent
+/// Lowers anchor nodes into the DTD's `%anchor_item;` entity.
+internal enum AnchoredItemBuilder {
+  /// Lowers a single anchor node into an anchored item.
+  internal static func item(
+    _ node: any DSLNode,
+    resources: inout ResourceStore
+  ) throws -> FCPKit.AnchoredItem {
+    switch try node.build(&resources) {
+    case .item(.title(let title)): return .title(title)
+    case .item(.assetClip(let clip)): return .assetClip(clip)
+    case .item(.generator(let gen)): return .generator(gen)
+    case .item(.video(let vid)): return .video(vid)
+    case .spine(let spine): return .spine(spine)
+    default: throw BuildError.unsupportedContent
+    }
   }
-}
 
-/// Lowers a list of anchor nodes, returning `nil` when the list is empty.
-internal func anchoredItems(
-  _ nodes: [any DSLNode],
-  resources: inout ResourceStore
-) throws -> [FCPKit.AnchoredItem]? {
-  let items = try nodes.map { try anchoredItem($0, resources: &resources) }
-  return items.isEmpty ? nil : items
+  /// Lowers a list of anchor nodes, returning `nil` when the list is empty.
+  internal static func items(
+    _ nodes: [any DSLNode],
+    resources: inout ResourceStore
+  ) throws -> [FCPKit.AnchoredItem]? {
+    let items = try nodes.map { try item($0, resources: &resources) }
+    return items.isEmpty ? nil : items
+  }
 }
