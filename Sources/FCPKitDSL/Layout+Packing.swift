@@ -173,6 +173,14 @@ extension Layout {
         let offset = (try? ticks(clip.offset ?? "0s", denominator, "asset clip")) ?? 0
         let duration = (try? ticks(clip.duration, denominator, "asset clip")) ?? 0
         return max(result, offset + duration)
+      case .video(let video):
+        let offset = (try? ticks(video.offset ?? "0s", denominator, "video")) ?? 0
+        let duration = (try? ticks(video.duration, denominator, "video")) ?? 0
+        return max(result, offset + duration)
+      case .generator(let gen):
+        let offset = (try? ticks(gen.offset ?? "0s", denominator, "generator")) ?? 0
+        let duration = (try? ticks(gen.duration, denominator, "generator")) ?? 0
+        return max(result, offset + duration)
       default:
         return result
       }

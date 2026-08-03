@@ -31,12 +31,13 @@ import FCPKit
 import Foundation
 
 /// An `asset-clip` story item with optional anchors and audio role.
-public struct AssetClip: DSLNode {
+public struct AssetClip: DSLNode, StoryItem {
   internal let source: AssetSource
   /// Clip duration on the storyline, when set explicitly.
   public let duration: FCPTime?
   internal let name: String?
-  internal let anchors: [any DSLNode]
+  /// The anchors attached to this clip.
+  public let anchors: [any DSLNode]
   internal let audioRole: String?
 
   /// Creates a clip from an ``AssetSource``.
@@ -89,7 +90,13 @@ public struct AssetClip: DSLNode {
     )
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  /// Returns a copy of this clip carrying exactly the given anchors.
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> AssetClip {
+    replacing(anchors: anchors)
+  }
+
+  /// Lowers this clip into an `<asset-clip>` story item.
+  public func build(_ resources: inout ResourceStore) throws -> Built {
     let ref = try resources.asset(source)
     guard let value = duration?.description ?? source.asset.duration, FCPTime(value) != nil else {
       throw BuildError.missingDuration(name ?? source.asset.name ?? "asset clip")
@@ -104,8 +111,7 @@ public struct AssetClip: DSLNode {
     if let format = source.format, source.formatOnClip {
       clip.format = try resources.format(FormatPreset(format))
     }
-    let items = try anchors.map { try anchoredItem($0, resources: &resources) }
-    clip.anchoredItems = items.isEmpty ? nil : items
+    clip.anchoredItems = try anchoredItems(anchors, resources: &resources)
     return .item(.assetClip(clip))
   }
 
@@ -117,18 +123,5 @@ public struct AssetClip: DSLNode {
       anchors: anchors ?? self.anchors,
       audioRole: audioRole ?? self.audioRole
     )
-  }
-
-  private func anchoredItem(_ node: any DSLNode, resources: inout ResourceStore) throws
-    -> FCPKit.AnchoredItem
-  {
-    switch try node.build(&resources) {
-    case .item(.title(let title)): return .title(title)
-    case .item(.assetClip(let clip)): return .assetClip(clip)
-    case .item(.generator(let gen)): return .generator(gen)
-    case .item(.video(let vid)): return .video(vid)
-    case .spine(let spine): return .spine(spine)
-    default: throw BuildError.unsupportedContent
-    }
   }
 }

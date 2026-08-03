@@ -1,5 +1,5 @@
 //
-//  Event.swift
+//  StoryItemDoc.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,34 +28,17 @@
 //
 
 import FCPKit
+import FCPKitDSL
+import Foundation
+import Testing
 
-/// An event shell around a project.
-public struct Event: DSLNode {
-  internal let name: String?
-  internal let uid: String?
-  internal let content: DocumentGroup
+/// Wraps arbitrary story content in a 1080p24 sequence.
+internal struct StoryItemDoc<Content: DocumentContent>: Document {
+  internal let content: Content
 
-  /// Creates an event with optional name and uid.
-  public init(
-    name: String? = nil, uid: String? = nil, @DocumentBuilder content: () -> DocumentGroup
-  ) {
-    self.name = name
-    self.uid = uid
-    self.content = content()
-  }
-
-  /// Lowers this event into an `<event>` containing its promoted projects.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
-    let built = try content.build(&resources)
-    let project = try project(from: built)
-    return .event(FCPKit.Event(name: name ?? "Untitled", uid: uid, projects: [project]))
-  }
-
-  private func project(from built: Built) throws -> FCPKit.Project {
-    switch built {
-    case .project(let project): return project
-    case .sequence(let sequence): return FCPKit.Project(name: "Untitled", sequence: sequence)
-    default: throw BuildError.unsupportedContent
+  internal var body: some DocumentContent {
+    Sequence(format: .p1080p24) {
+      content
     }
   }
 }

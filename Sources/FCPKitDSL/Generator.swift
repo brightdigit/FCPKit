@@ -41,6 +41,8 @@ public struct Generator: DSLNode {
   internal let params: [ParamElement]
   internal let lane: Int?
   internal let offset: FCPTime?
+  /// The anchors attached to this generator clip.
+  public let anchors: [any DSLNode]
 
   /// Creates a generator clip from a preset and optional duration.
   public init(_ preset: GeneratorPreset = .custom, duration: FCPTime? = nil, name: String? = nil) {
@@ -50,7 +52,8 @@ public struct Generator: DSLNode {
       name: name,
       params: [],
       lane: nil,
-      offset: nil
+      offset: nil,
+      anchors: []
     )
   }
 
@@ -60,7 +63,8 @@ public struct Generator: DSLNode {
     name: String?,
     params: [ParamElement],
     lane: Int?,
-    offset: FCPTime?
+    offset: FCPTime?,
+    anchors: [any DSLNode]
   ) {
     self.preset = preset
     self.duration = duration
@@ -68,6 +72,7 @@ public struct Generator: DSLNode {
     self.params = params
     self.lane = lane
     self.offset = offset
+    self.anchors = anchors
   }
 
   /// Sets the clip duration.
@@ -110,9 +115,16 @@ public struct Generator: DSLNode {
     return replacing(params: updated)
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  /// Lowers this generator into a `<video>` story item.
+  ///
+  /// - Throws: ``BuildError/missingDuration(_:)`` when no duration was ever set. This is
+  ///   how a ``Color`` anchored before `.duration(_:)` surfaces at `export()`.
+  public func build(_ resources: inout ResourceStore) throws -> Built {
+    guard duration != .zero else {
+      throw BuildError.missingDuration(name ?? preset.name)
+    }
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
-    let videoElement = FCPKit.Video(
+    var videoElement = FCPKit.Video(
       ref: ResourceRef<AssetKind>(ref.rawValue),
       lane: lane.map(String.init),
       offset: offset?.description ?? "0s",
@@ -121,16 +133,18 @@ public struct Generator: DSLNode {
       duration: duration.description,
       param: params.isEmpty ? nil : params
     )
+    videoElement.anchoredItems = try anchoredItems(anchors, resources: &resources)
     return .item(.video(videoElement))
   }
 
-  private func replacing(
+  internal func replacing(
     preset: GeneratorPreset? = nil,
     duration: FCPTime? = nil,
     name: String? = nil,
     params: [ParamElement]? = nil,
     lane: Int? = nil,
-    offset: FCPTime? = nil
+    offset: FCPTime? = nil,
+    anchors: [any DSLNode]? = nil
   ) -> Generator {
     Generator(
       preset: preset ?? self.preset,
@@ -138,7 +152,8 @@ public struct Generator: DSLNode {
       name: name ?? self.name,
       params: params ?? self.params,
       lane: lane ?? self.lane,
-      offset: offset ?? self.offset
+      offset: offset ?? self.offset,
+      anchors: anchors ?? self.anchors
     )
   }
 }

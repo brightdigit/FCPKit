@@ -38,7 +38,8 @@ public struct Spine: DSLNode {
     self.content = content()
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  /// Lowers this spine into an ordered `<spine>` of story items.
+  public func build(_ resources: inout ResourceStore) throws -> Built {
     let packed = try Layout.pack(
       storyItems(content.contents, resources: &resources),
       frameDuration: FormatPreset.p1080p24.format.frameDuration

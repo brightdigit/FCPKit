@@ -1,5 +1,5 @@
 //
-//  Event.swift
+//  Generator+Modifiers.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,33 +29,9 @@
 
 import FCPKit
 
-/// An event shell around a project.
-public struct Event: DSLNode {
-  internal let name: String?
-  internal let uid: String?
-  internal let content: DocumentGroup
-
-  /// Creates an event with optional name and uid.
-  public init(
-    name: String? = nil, uid: String? = nil, @DocumentBuilder content: () -> DocumentGroup
-  ) {
-    self.name = name
-    self.uid = uid
-    self.content = content()
-  }
-
-  /// Lowers this event into an `<event>` containing its promoted projects.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
-    let built = try content.build(&resources)
-    let project = try project(from: built)
-    return .event(FCPKit.Event(name: name ?? "Untitled", uid: uid, projects: [project]))
-  }
-
-  private func project(from built: Built) throws -> FCPKit.Project {
-    switch built {
-    case .project(let project): return project
-    case .sequence(let sequence): return FCPKit.Project(name: "Untitled", sequence: sequence)
-    default: throw BuildError.unsupportedContent
-    }
+extension Generator: StoryItem {
+  /// Returns a copy of this generator carrying exactly the given anchors.
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> Generator {
+    replacing(anchors: anchors)
   }
 }

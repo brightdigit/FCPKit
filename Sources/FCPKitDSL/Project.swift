@@ -49,7 +49,8 @@ public struct Project: DSLNode {
     self.content = content()
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  /// Lowers this project into a `<project>` wrapping its promoted sequence.
+  public func build(_ resources: inout ResourceStore) throws -> Built {
     guard case .sequence(let sequence) = try content.build(&resources) else {
       throw BuildError.unsupportedContent
     }

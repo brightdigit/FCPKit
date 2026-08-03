@@ -1,5 +1,5 @@
 //
-//  Event.swift
+//  StoryItemSupport.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,34 +28,38 @@
 //
 
 import FCPKit
+import FCPKitDSL
+import Foundation
+import Testing
 
-/// An event shell around a project.
-public struct Event: DSLNode {
-  internal let name: String?
-  internal let uid: String?
-  internal let content: DocumentGroup
-
-  /// Creates an event with optional name and uid.
-  public init(
-    name: String? = nil, uid: String? = nil, @DocumentBuilder content: () -> DocumentGroup
-  ) {
-    self.name = name
-    self.uid = uid
-    self.content = content()
+internal enum StoryItemSupport {
+  /// A deck whose middle transition carries an anchor that must not be emitted.
+  internal struct TransitionAnchored: Document {
+    internal var body: some DocumentContent {
+      Sequence(format: .p1080p24) {
+        Generator(.custom, duration: FCPTime(numerator: 5)).color(.blue)
+        Transition(.crossDissolve)
+          .anchor(lane: 1) {
+            Title("Ignored", duration: FCPTime(numerator: 2))
+          }
+        Generator(.custom, duration: FCPTime(numerator: 5)).color(.green)
+      }
+    }
   }
 
-  /// Lowers this event into an `<event>` containing its promoted projects.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
-    let built = try content.build(&resources)
-    let project = try project(from: built)
-    return .event(FCPKit.Event(name: name ?? "Untitled", uid: uid, projects: [project]))
+  /// Returns the packed spine items of an exported document.
+  internal static func spine(_ exported: FCPXML) throws -> [FCPKit.SpineItem] {
+    let sequence = try #require(exported.library?.events?.first?.projects?.first?.sequence)
+    return try #require(sequence.spine?.items)
   }
 
-  private func project(from built: Built) throws -> FCPKit.Project {
-    switch built {
-    case .project(let project): return project
-    case .sequence(let sequence): return FCPKit.Project(name: "Untitled", sequence: sequence)
-    default: throw BuildError.unsupportedContent
+  /// Returns the `lane` of every anchored title, in order.
+  internal static func anchoredTitleLanes(_ items: [FCPKit.AnchoredItem]) -> [String?] {
+    items.compactMap { item in
+      guard case .title(let title) = item else {
+        return nil
+      }
+      return title.lane
     }
   }
 }

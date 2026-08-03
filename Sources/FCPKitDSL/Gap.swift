@@ -30,22 +30,37 @@
 import FCPKit
 
 /// A gap on the storyline. Duration is required — set in initializer or via `.duration(...)`.
-public struct Gap: DSLNode {
+public struct Gap: DSLNode, StoryItem {
   /// Gap duration on the storyline, when set.
   public let duration: FCPTime?
+  /// The anchors attached to this gap.
+  public let anchors: [any DSLNode]
 
   /// Creates a gap. Export fails when `duration` is omitted.
   public init(duration: FCPTime? = nil) {
+    self.init(duration: duration, anchors: [])
+  }
+
+  private init(duration: FCPTime?, anchors: [any DSLNode]) {
     self.duration = duration
+    self.anchors = anchors
   }
 
   /// Sets the gap duration.
   public func duration(_ duration: FCPTime) -> Gap {
-    Gap(duration: duration)
+    Gap(duration: duration, anchors: anchors)
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  /// Returns a copy of this gap carrying exactly the given anchors.
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> Gap {
+    Gap(duration: duration, anchors: anchors)
+  }
+
+  /// Lowers this gap into a `<gap>` story item.
+  public func build(_ resources: inout ResourceStore) throws -> Built {
     guard let duration else { throw BuildError.missingDuration("gap") }
-    return .item(.gap(FCPKit.Gap(duration: duration.description)))
+    var element = FCPKit.Gap(duration: duration.description)
+    element.anchoredItems = try anchoredItems(anchors, resources: &resources)
+    return .item(.gap(element))
   }
 }
