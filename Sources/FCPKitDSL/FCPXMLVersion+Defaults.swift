@@ -1,5 +1,5 @@
 //
-//  Defaults.swift
+//  FCPXMLVersion+Defaults.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,9 +29,25 @@
 
 import FCPKit
 
-internal enum Defaults {
-  internal static func smartCollections() -> [SmartCollection] {
-    [
+extension FCPXMLVersion {
+  /// The FCPXML version that introduced `match-analysis-type`.
+  private static let analysisMatchingIntroduced = FCPXMLVersion("1.14")
+
+  /// Indicates whether this version's DTD declares `match-analysis-type`.
+  ///
+  /// The element was introduced in FCPXML 1.14; emitting it in a 1.13 document
+  /// makes the document invalid against Final Cut's own 1.13 DTD. A malformed
+  /// version string is admitted so unparseable inputs keep prior behavior.
+  internal var admitsAnalysisMatching: Bool {
+    compatibility(relativeTo: Self.analysisMatchingIntroduced) != .older
+  }
+
+  /// The smart collections Final Cut creates in a new library at this version.
+  ///
+  /// `Missing Analysis` is included only where the schema declares
+  /// `match-analysis-type`; see ``admitsAnalysisMatching``.
+  internal var defaultSmartCollections: [SmartCollection] {
+    var collections: [SmartCollection] = [
       SmartCollection(
         name: "Projects",
         match: "all",
@@ -60,31 +76,16 @@ internal enum Defaults {
         match: "all",
         matchRatings: [MatchRatings(value: "favorites")]
       ),
-      SmartCollection(
-        name: "Missing Analysis",
-        match: "all",
-        matchAnalysisType: [MatchAnalysisType(rule: "isMissing", value: "any")]
-      ),
     ]
-  }
-
-  internal static func sequence(
-    spine: FCPKit.Spine,
-    format: ResourceRef<FormatKind>?
-  ) throws(BuildError) -> FCPKit.Sequence {
-    let packed = try Layout.pack(
-      spine.items,
-      frameDuration: FormatPreset.p1080p24.format.frameDuration
-    )
-    return FCPKit.Sequence(
-      format: format,
-      duration: packed.duration,
-      tcStart: "0s",
-      tcFormat: .nonDropFrame,
-      audioLayout: .stereo,
-      audioRate: .hz48000,
-      renderFormat: "FFRenderFormatProRes422HQ",
-      spine: FCPKit.Spine(items: packed.items)
-    )
+    if admitsAnalysisMatching {
+      collections.append(
+        SmartCollection(
+          name: "Missing Analysis",
+          match: "all",
+          matchAnalysisType: [MatchAnalysisType(rule: "isMissing", value: "any")]
+        )
+      )
+    }
+    return collections
   }
 }

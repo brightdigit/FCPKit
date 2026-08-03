@@ -55,7 +55,7 @@ public struct Library: DSLNode {
         location: location,
         colorProcessing: colorProcessing,
         events: [event],
-        smartCollections: Defaults.smartCollections()
+        smartCollections: resources.version.defaultSmartCollections
       )
     )
   }
