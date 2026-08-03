@@ -30,22 +30,43 @@
 import Foundation
 import XMLCoder
 
-/// An `adjust-transform` element controlling a clip's spatial transform (position and scale).
+/// An `adjust-transform` element controlling a clip's spatial transform.
+///
+/// Covers the DTD's `enabled`, `position`, `scale`, `rotation`, and `anchor`
+/// attributes. `CodingKeys` follow DTD declaration order.
 public struct AdjustTransform: Codable {
   internal enum CodingKeys: String, CodingKey {
+    case enabled
     case position
     case scale
+    case rotation
+    case anchor
   }
 
+  /// Whether the adjustment is active. `"0"` disables it; the DTD default is `"1"`.
+  public var enabled: String?
   /// The position offset as an "x y" pair, as a string.
   public var position: String?
   /// The scale factor as an "x y" pair, as a string.
   public var scale: String?
+  /// The rotation in degrees, as a string.
+  public var rotation: String?
+  /// The anchor point as an "x y" pair, as a string.
+  public var anchor: String?
 
-  /// Creates an `adjust-transform` adjustment with an optional position and scale.
-  public init(position: String? = nil, scale: String? = nil) {
+  /// Creates an `adjust-transform` adjustment. Omitted values are not encoded.
+  public init(
+    enabled: String? = nil,
+    position: String? = nil,
+    scale: String? = nil,
+    rotation: String? = nil,
+    anchor: String? = nil
+  ) {
+    self.enabled = enabled
     self.position = position
     self.scale = scale
+    self.rotation = rotation
+    self.anchor = anchor
   }
 }
 

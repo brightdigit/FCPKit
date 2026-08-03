@@ -1,5 +1,5 @@
 //
-//  BuildError.swift
+//  String+FCPXMLValue.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,22 +27,30 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A required timeline or resource value could not be inferred during export.
-public enum BuildError: Error, Equatable, Sendable {
-  /// The document body did not resolve to a single root content value.
-  case invalidDocumentBody
-  /// A builder received a content value it cannot place in that position.
-  case unsupportedContent
-  /// A clip or gap is missing a duration after defaults were applied.
-  case missingDuration(String)
-  /// An anchored item used lane `0`, which the DTD reserves for the primary storyline.
-  case invalidLane
-  /// Two different resource specs requested the same explicit resource id.
-  case conflictingResourceID(String)
-  /// A format was required but could not be resolved.
-  case missingFormat
-  /// An absolute frame position was used with no enclosing sequence format.
-  case missingFrameSize
-  /// A resource identifier string was illegal.
-  case invalidResourceID(String)
+import Foundation
+
+extension String {
+  /// Creates an FCPXML attribute value from a `Double`, collapsing whole numbers.
+  ///
+  /// Final Cut writes `63` rather than `63.0`, so whole values lose their
+  /// fractional part. Values outside `Int`'s range, and non-finite values, fall
+  /// back to the plain `Double` description: converting them with `Int(_:)`
+  /// would trap and take the host process down with it.
+  ///
+  /// `Decimal.FormatStyle` is deliberately not used here. It is locale-aware, so
+  /// `63.5` renders as `63,5` under a German or French locale, which is invalid
+  /// FCPXML; it rounds to six fractional digits, which would corrupt position
+  /// values like `7.777777777`; and `Decimal(Double.infinity)` traps outright.
+  ///
+  /// - Parameter value: The number to render.
+  internal init(fcpxmlValue value: Double) {
+    guard value.isFinite,
+      value.truncatingRemainder(dividingBy: 1) == 0,
+      value >= Double(Int.min), value <= Double(Int.max)
+    else {
+      self = String(value)
+      return
+    }
+    self = String(Int(value))
+  }
 }

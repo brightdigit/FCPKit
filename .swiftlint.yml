@@ -116,6 +116,10 @@ identifier_name:
   excluded:
     - id
     - no
+    # Frame coordinate labels: `.position(x:y:)` reads better than any longer
+    # spelling, and matches how the DTD names the axes.
+    - x
+    - y
 excluded:
   - DerivedData
   - .build

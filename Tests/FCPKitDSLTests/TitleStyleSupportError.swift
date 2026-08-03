@@ -1,5 +1,5 @@
 //
-//  BuildError.swift
+//  TitleStyleSupportError.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,22 +27,10 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// A required timeline or resource value could not be inferred during export.
-public enum BuildError: Error, Equatable, Sendable {
-  /// The document body did not resolve to a single root content value.
-  case invalidDocumentBody
-  /// A builder received a content value it cannot place in that position.
-  case unsupportedContent
-  /// A clip or gap is missing a duration after defaults were applied.
-  case missingDuration(String)
-  /// An anchored item used lane `0`, which the DTD reserves for the primary storyline.
-  case invalidLane
-  /// Two different resource specs requested the same explicit resource id.
-  case conflictingResourceID(String)
-  /// A format was required but could not be resolved.
-  case missingFormat
-  /// An absolute frame position was used with no enclosing sequence format.
-  case missingFrameSize
-  /// A resource identifier string was illegal.
-  case invalidResourceID(String)
+import Foundation
+
+/// Failures raised by the title styling test helpers.
+internal enum TitleStyleSupportError: Error {
+  /// The first spine item was not a title.
+  case notATitle
 }

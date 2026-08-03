@@ -45,6 +45,18 @@ public struct Sequence: DSLNode {
     let formatRef = try format.map { preset throws(BuildError) in
       try resources.format(preset)
     }
+
+    // Publish the frame size before building children: story items resolve
+    // absolute `FramePosition` coordinates against it.
+    let outerFrameSize = resources.frameSize
+    if let format,
+      let width = format.format.width.flatMap(Double.init),
+      let height = format.format.height.flatMap(Double.init)
+    {
+      resources.frameSize = (width: width, height: height)
+    }
+    defer { resources.frameSize = outerFrameSize }
+
     let packed = try Layout.pack(
       content.contents.spineItems(resources: &resources),
       frameDuration: format?.format.frameDuration
