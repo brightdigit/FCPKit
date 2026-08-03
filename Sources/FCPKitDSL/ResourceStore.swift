@@ -38,12 +38,20 @@ import Foundation
 public struct ResourceStore {
   internal static let draftID: ResourceID = "draft"
 
+  /// Target document version, used to gate version-specific default vocabulary.
+  internal let version: FCPXMLVersion
+
   private var assets: [FCPKit.Asset] = []
   private var formats: [FCPKit.Format] = []
   private var effects: [FCPKit.Effect] = []
   private var fingerprints: [String: ResourceID] = [:]
   private var explicitFingerprints: [String: String] = [:]
   private var nextNumber = 1
+
+  /// Creates a store targeting the given document version.
+  internal init(version: FCPXMLVersion = .supportedGeneration) {
+    self.version = version
+  }
 
   private static func formatFingerprint(_ format: FCPKit.Format) -> String {
     [
