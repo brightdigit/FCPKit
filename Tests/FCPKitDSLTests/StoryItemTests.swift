@@ -152,4 +152,74 @@ internal struct StoryItemTests {
     }
     #expect(nested.items.count == 2)
   }
+
+  @Test
+  internal func anchoredGeneratorLongerThanBackgroundExtendsSequence() throws {
+    // Covers the `.video` case added to `anchoredExtent`. The pre-existing
+    // `.title` case would not exercise it, so without this the new branch could
+    // be deleted and the suite would stay green.
+    let document = StoryItemDoc(
+      content: Generator(.custom, duration: FCPTime(numerator: 4))
+        .color(.blue)
+        .anchor(lane: 1) {
+          Generator(.custom, duration: FCPTime(numerator: 9)).color(.green)
+        }
+    )
+
+    let exported = try document.export()
+    let sequence = try #require(exported.library?.events?.first?.projects?.first?.sequence)
+    #expect(sequence.duration == "9s")
+  }
+
+  @Test
+  internal func negativeLanesAreAccepted() throws {
+    // Negative lanes are legal FCPXML — content below the primary storyline.
+    // Only lane 0 is reserved and rejected.
+    let document = StoryItemDoc(
+      content: Generator(.custom, duration: FCPTime(numerator: 6))
+        .color(.blue)
+        .anchor(lane: -1) {
+          Title("Below", duration: FCPTime(numerator: 4))
+        }
+    )
+
+    let items = try StoryItemSupport.spine(try document.export())
+    guard case .video(let video) = items[0] else {
+      Issue.record("Expected spine item to be .video")
+      return
+    }
+    let anchored = try #require(video.anchoredItems)
+    #expect(StoryItemSupport.anchoredTitleLanes(anchored) == ["-1"])
+  }
+
+  @Test
+  internal func titleAndGapAlsoHostAnchors() throws {
+    // `Title` and `Gap` gained `StoryItem` conformance in this change but were
+    // otherwise untested as anchor hosts.
+    let titleHost = StoryItemDoc(
+      content: Title("Host", duration: FCPTime(numerator: 6))
+        .anchor(lane: 1) {
+          Title("Anchored", duration: FCPTime(numerator: 3))
+        }
+    )
+    let titleItems = try StoryItemSupport.spine(try titleHost.export())
+    guard case .title(let host) = titleItems[0] else {
+      Issue.record("Expected spine item to be .title")
+      return
+    }
+    #expect(try #require(host.anchoredItems).count == 1)
+
+    let gapHost = StoryItemDoc(
+      content: Gap(duration: FCPTime(numerator: 6))
+        .anchor(lane: 1) {
+          Title("Anchored", duration: FCPTime(numerator: 3))
+        }
+    )
+    let gapItems = try StoryItemSupport.spine(try gapHost.export())
+    guard case .gap(let gap) = gapItems[0] else {
+      Issue.record("Expected spine item to be .gap")
+      return
+    }
+    #expect(try #require(gap.anchoredItems).count == 1)
+  }
 }

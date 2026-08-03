@@ -76,6 +76,9 @@ extension Layout {
         cursor: cursor,
         longest: longest,
         tickDenominator: tickDenominator,
+        // `FCPKit.Generator` has no `anchoredItems`: `<generator>` is absent from
+        // the DTD's `%anchor_item;` list, and the DSL's own `Generator` lowers to
+        // `<video>` anyway. Zero is the only correct extent here, not a stub.
         anchoredExtent: 0
       )
       gen.offset = render(placement.offset, tickDenominator)
