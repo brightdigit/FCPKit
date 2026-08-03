@@ -39,6 +39,7 @@ internal struct ResourceStore {
   private var fingerprints: [String: ResourceID] = [:]
   private var explicitFingerprints: [String: String] = [:]
   private var nextNumber = 1
+  private var nextTextStyleNumber = 1
 
   private static func formatFingerprint(_ format: FCPKit.Format) -> String {
     [
@@ -114,6 +115,15 @@ internal struct ResourceStore {
       effects.append(FCPKit.Effect(id: id, name: name, uid: uid))
     }
     return try resourceRef(id)
+  }
+
+  /// Allocates the next document-unique `text-style-def` id (`ts1`, `ts2`, …).
+  ///
+  /// The DTD declares `text-style-def/@id` as `ID`, which XML requires to be unique
+  /// across the whole document, so ids are numbered globally rather than per title.
+  internal mutating func textStyleID() -> String {
+    defer { nextTextStyleNumber += 1 }
+    return "ts\(nextTextStyleNumber)"
   }
 
   internal func materialize() -> FCPKit.Resources {
