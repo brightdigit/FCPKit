@@ -98,7 +98,7 @@ public struct Title: StoryItem {
   }
 
   /// Lowers this title into a `<title>` story item.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let style = FCPKit.TextStyle(ref: "ts1", content: text)
     let definition = FCPKit.TextStyleDef(
@@ -121,7 +121,7 @@ public struct Title: StoryItem {
       text: [FCPKit.TextElement(textStyle: [style])],
       textStyleDef: [definition]
     )
-    element.anchoredItems = try AnchoredItemBuilder.items(anchors, resources: &resources)
+    element.anchoredItems = try anchors.anchoredItems(resources: &resources)
     return .item(.title(element))
   }
 }

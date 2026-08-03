@@ -41,7 +41,7 @@ extension Color: DSLNode {
   }
 
   /// Lowers this color into a custom solid generator `<video>` story item.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard let duration else {
       throw BuildError.missingDuration("color generator")
     }

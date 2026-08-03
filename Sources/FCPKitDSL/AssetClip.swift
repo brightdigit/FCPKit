@@ -96,7 +96,7 @@ public struct AssetClip: StoryItem {
   }
 
   /// Lowers this clip into an `<asset-clip>` story item.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.asset(source)
     guard let value = duration?.description ?? source.asset.duration, FCPTime(value) != nil else {
       throw BuildError.missingDuration(name ?? source.asset.name ?? "asset clip")
@@ -111,7 +111,7 @@ public struct AssetClip: StoryItem {
     if let format = source.format, source.formatOnClip {
       clip.format = try resources.format(FormatPreset(format))
     }
-    clip.anchoredItems = try AnchoredItemBuilder.items(anchors, resources: &resources)
+    clip.anchoredItems = try anchors.anchoredItems(resources: &resources)
     return .item(.assetClip(clip))
   }
 

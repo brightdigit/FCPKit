@@ -57,10 +57,10 @@ public struct Gap: StoryItem {
   }
 
   /// Lowers this gap into a `<gap>` story item.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard let duration else { throw BuildError.missingDuration("gap") }
     var element = FCPKit.Gap(duration: duration.description)
-    element.anchoredItems = try AnchoredItemBuilder.items(anchors, resources: &resources)
+    element.anchoredItems = try anchors.anchoredItems(resources: &resources)
     return .item(.gap(element))
   }
 }

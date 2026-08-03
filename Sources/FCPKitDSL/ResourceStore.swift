@@ -75,7 +75,9 @@ public struct ResourceStore {
     ].joined(separator: "|")
   }
 
-  internal mutating func format(_ preset: FormatPreset) throws -> ResourceRef<FormatKind> {
+  internal mutating func format(_ preset: FormatPreset) throws(BuildError) -> ResourceRef<
+    FormatKind
+  > {
     let fingerprint = Self.formatFingerprint(preset.format)
     let id = try register(
       key: "format:\(fingerprint)",
@@ -90,7 +92,7 @@ public struct ResourceStore {
     return try resourceRef(id)
   }
 
-  internal mutating func asset(_ source: AssetSource) throws -> ResourceRef<AssetKind> {
+  internal mutating func asset(_ source: AssetSource) throws(BuildError) -> ResourceRef<AssetKind> {
     let fingerprint = Self.assetFingerprint(source.asset)
     let id = try register(
       key: "asset:\(fingerprint)",
@@ -108,7 +110,9 @@ public struct ResourceStore {
     return try resourceRef(id)
   }
 
-  internal mutating func effect(name: String, uid: String) throws -> ResourceRef<EffectKind> {
+  internal mutating func effect(name: String, uid: String) throws(BuildError) -> ResourceRef<
+    EffectKind
+  > {
     let fingerprint = "\(name)|\(uid)"
     let id = try register(
       key: "effect:\(fingerprint)",
@@ -133,7 +137,7 @@ public struct ResourceStore {
     key: String,
     explicitID: ResourceID?,
     fingerprint: String
-  ) throws -> ResourceID {
+  ) throws(BuildError) -> ResourceID {
     if let existing = fingerprints[key] {
       return existing
     }
@@ -154,7 +158,7 @@ public struct ResourceStore {
     return id
   }
 
-  private func resourceRef<Kind>(_ id: ResourceID) throws -> ResourceRef<Kind> {
+  private func resourceRef<Kind>(_ id: ResourceID) throws(BuildError) -> ResourceRef<Kind> {
     guard let ref = ResourceRef<Kind>(id.rawValue) else {
       throw BuildError.invalidResourceID(id.rawValue)
     }

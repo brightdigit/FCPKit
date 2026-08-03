@@ -42,5 +42,5 @@ public protocol DSLNode: DocumentContent {
   /// - Returns: The model value this node lowers to.
   /// - Throws: A ``BuildError`` when the node is incomplete or cannot be represented.
   /// - Warning: This signature is expected to evolve before 1.0.
-  func build(_ resources: inout ResourceStore) throws -> Built
+  func build(_ resources: inout ResourceStore) throws(BuildError) -> Built
 }

@@ -50,7 +50,7 @@ public struct Project: DSLNode {
   }
 
   /// Lowers this project into a `<project>` wrapping its promoted sequence.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard case .sequence(let sequence) = try content.build(&resources) else {
       throw BuildError.unsupportedContent
     }

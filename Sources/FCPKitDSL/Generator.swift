@@ -119,7 +119,7 @@ public struct Generator: DSLNode {
   ///
   /// - Throws: ``BuildError/missingDuration(_:)`` when no duration was ever set. This is
   ///   how a ``Color`` anchored before `.duration(_:)` surfaces at `export()`.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard duration != .zero else {
       throw BuildError.missingDuration(name ?? preset.name)
     }
@@ -133,7 +133,7 @@ public struct Generator: DSLNode {
       duration: duration.description,
       param: params.isEmpty ? nil : params
     )
-    videoElement.anchoredItems = try AnchoredItemBuilder.items(anchors, resources: &resources)
+    videoElement.anchoredItems = try anchors.anchoredItems(resources: &resources)
     return .item(.video(videoElement))
   }
 

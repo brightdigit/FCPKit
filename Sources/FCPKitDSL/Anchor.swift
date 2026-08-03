@@ -34,38 +34,15 @@ internal struct Anchor: DSLNode {
   internal let offset: FCPTime
   internal let content: any DSLNode
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard lane != 0 else { throw BuildError.invalidLane }
     let built = try content.build(&resources)
-    if let item = try applyLaneOffset(to: built) {
+    if let item = built.placed(lane: lane, offset: offset) {
       return item
     }
     guard case .spine(let spine) = built else {
       throw BuildError.unsupportedContent
     }
     return .spine(spine)
-  }
-
-  private func applyLaneOffset(to built: Built) throws -> Built? {
-    switch built {
-    case .item(.title(var title)):
-      title.lane = String(lane)
-      title.offset = offset.description
-      return .item(.title(title))
-    case .item(.assetClip(var clip)):
-      clip.lane = String(lane)
-      clip.offset = offset.description
-      return .item(.assetClip(clip))
-    case .item(.generator(var gen)):
-      gen.lane = String(lane)
-      gen.offset = offset.description
-      return .item(.generator(gen))
-    case .item(.video(var vid)):
-      vid.lane = String(lane)
-      vid.offset = offset.description
-      return .item(.video(vid))
-    default:
-      return nil
-    }
   }
 }

@@ -71,7 +71,7 @@ internal enum Defaults {
   internal static func sequence(
     spine: FCPKit.Spine,
     format: ResourceRef<FormatKind>?
-  ) throws -> FCPKit.Sequence {
+  ) throws(BuildError) -> FCPKit.Sequence {
     let packed = try Layout.pack(
       spine.items,
       frameDuration: FormatPreset.p1080p24.format.frameDuration

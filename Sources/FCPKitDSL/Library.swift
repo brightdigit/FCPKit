@@ -47,7 +47,7 @@ public struct Library: DSLNode {
   }
 
   /// Lowers this library into a `<library>` with the default smart collections.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let built = try content.build(&resources)
     let event = try event(from: built)
     return .library(
@@ -60,7 +60,7 @@ public struct Library: DSLNode {
     )
   }
 
-  private func event(from built: Built) throws -> FCPKit.Event {
+  private func event(from built: Built) throws(BuildError) -> FCPKit.Event {
     switch built {
     case .event(let event): return event
     case .project(let project): return FCPKit.Event(name: "Untitled", projects: [project])

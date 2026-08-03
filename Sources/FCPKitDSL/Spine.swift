@@ -39,9 +39,9 @@ public struct Spine: DSLNode {
   }
 
   /// Lowers this spine into an ordered `<spine>` of story items.
-  public func build(_ resources: inout ResourceStore) throws -> Built {
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let packed = try Layout.pack(
-      StoryItemLowering.items(content.contents, resources: &resources),
+      content.contents.spineItems(resources: &resources),
       frameDuration: FormatPreset.p1080p24.format.frameDuration
     )
     return .spine(FCPKit.Spine(items: packed.items))
