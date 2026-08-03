@@ -1,0 +1,4 @@
+<fcpxml><resources>
+    <asset id="r1" name="Clip" format="r3"/>
+    <format id="r3" name="Format"/>
+</resources><library><asset-clip ref="r1" format="r3"/></library></fcpxml>

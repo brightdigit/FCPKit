@@ -1,0 +1,8 @@
+<fcpxml version="1.13">
+    <resources>
+        <effect id="r1" name="New Effect"/>
+        <format id="r2" name="Format"/>
+        <asset id="r3" name="Clip" format="r2"/>
+    </resources>
+    <library><event><asset-clip ref="r3" format="r2"/></event></library>
+</fcpxml>

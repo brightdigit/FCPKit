@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.11">
+    <resources>
+        <format id="r1" name="FFVideoFormat1080p24" frameDuration="1/24s" width="1920" height="1080"/>
+        <asset id="r2" name="clip1.mov" hasVideo="1" duration="600s"/>
+        <asset id="r3" name="clip2.mov" hasVideo="1" duration="600s"/>
+        <effect id="r4" name="Cross Dissolve" uid="CEB4AC37-2A4F-4C6B-A0C3-C1004DC2CBD1"/>
+    </resources>
+    <library>
+        <event name="Transition Test">
+            <project name="Transition Project">
+                <sequence format="r1" duration="1100s">
+                    <spine>
+                        <asset-clip ref="r2" offset="0s" duration="550s"/>
+                        <transition ref="r4" offset="500s" duration="100s" alignment="center"/>
+                        <asset-clip ref="r3" offset="550s" duration="550s"/>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>

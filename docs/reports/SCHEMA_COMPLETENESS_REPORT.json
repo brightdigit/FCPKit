@@ -1,0 +1,67 @@
+{
+  "aggregateFindings" : [
+
+  ],
+  "files" : [
+    {
+      "fcpxmlVersion" : "1.13",
+      "findings" : [
+
+      ],
+      "path" : "Tests/FCPKitTests/TestData/Both-Multicam.fcpxml",
+      "summary" : {
+        "droppedAttributes" : 0,
+        "droppedElements" : 0,
+        "droppedText" : 0
+      }
+    },
+    {
+      "fcpxmlVersion" : "1.14",
+      "findings" : [
+
+      ],
+      "path" : "Tests/FCPKitTests/TestData/FCPKit-Sample-1.14.fcpxml",
+      "summary" : {
+        "droppedAttributes" : 0,
+        "droppedElements" : 0,
+        "droppedText" : 0
+      }
+    },
+    {
+      "fcpxmlVersion" : "1.13",
+      "findings" : [
+
+      ],
+      "path" : "Tests/FCPKitTests/TestData/Interview.fcpxml",
+      "summary" : {
+        "droppedAttributes" : 0,
+        "droppedElements" : 0,
+        "droppedText" : 0
+      }
+    },
+    {
+      "fcpxmlVersion" : "1.13",
+      "findings" : [
+
+      ],
+      "path" : "Tests/FCPKitTests/TestData/UntitledXML.fcpxml",
+      "summary" : {
+        "droppedAttributes" : 0,
+        "droppedElements" : 0,
+        "droppedText" : 0
+      }
+    }
+  ],
+  "formatVersion" : 1,
+  "normalization" : [
+    "Resource identifiers matching r1...rN are replaced with pair-stable symbolic references.",
+    "uid, sig, and modDate attribute values are replaced with a volatile placeholder.",
+    "bookmark and data[key=effectConfig] text is replaced with an opaque placeholder.",
+    "Formatting-only whitespace and attribute ordering are ignored."
+  ],
+  "totals" : {
+    "droppedAttributes" : 0,
+    "droppedElements" : 0,
+    "droppedText" : 0
+  }
+}

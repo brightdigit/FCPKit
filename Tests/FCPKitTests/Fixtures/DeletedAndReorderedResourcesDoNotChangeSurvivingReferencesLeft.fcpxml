@@ -1,0 +1,5 @@
+<fcpxml><resources>
+    <format id="r1" name="Format"/>
+    <effect id="r2" name="Removed"/>
+    <asset id="r3" name="Clip" format="r1"/>
+</resources><library><asset-clip ref="r3" format="r1"/></library></fcpxml>
