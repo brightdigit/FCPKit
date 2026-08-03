@@ -40,7 +40,8 @@ public struct Sequence: DSLNode {
     self.content = content()
   }
 
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+  /// Lowers this sequence into a `<sequence>`, packing its spine onto the timeline.
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let formatRef = try format.map { preset throws(BuildError) in
       try resources.format(preset)
     }
@@ -57,7 +58,7 @@ public struct Sequence: DSLNode {
     defer { resources.frameSize = outerFrameSize }
 
     let packed = try Layout.pack(
-      storyItems(content.contents, resources: &resources),
+      content.contents.spineItems(resources: &resources),
       frameDuration: format?.format.frameDuration
     )
     return .sequence(

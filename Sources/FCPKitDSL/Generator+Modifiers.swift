@@ -1,5 +1,5 @@
 //
-//  Spine.swift
+//  Generator+Modifiers.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,21 +29,9 @@
 
 import FCPKit
 
-/// A connected storyline permitted only as anchored content.
-public struct Spine: DSLNode {
-  internal let content: DocumentGroup
-
-  /// Creates a nested spine for use inside ``AssetClip/anchor(lane:offset:content:)``.
-  public init(@DocumentBuilder content: () -> DocumentGroup) {
-    self.content = content()
-  }
-
-  /// Lowers this spine into an ordered `<spine>` of story items.
-  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
-    let packed = try Layout.pack(
-      content.contents.spineItems(resources: &resources),
-      frameDuration: FormatPreset.p1080p24.format.frameDuration
-    )
-    return .spine(FCPKit.Spine(items: packed.items))
+extension Generator: StoryItem {
+  /// Returns a copy of this generator carrying exactly the given anchors.
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> Generator {
+    replacing(anchors: anchors)
   }
 }

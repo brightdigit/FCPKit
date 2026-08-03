@@ -165,20 +165,6 @@ internal struct FeaturePairAcceptanceTests {
     #expect(spine.children.map(\.name) == names)
   }
 
-  private func assertDTDValidates(_ data: Data) throws {
-    let requireDTD = ProcessInfo.processInfo.environment["FCPKIT_REQUIRE_DTD"] != nil
-    do {
-      let report = try FCPXMLDTDValidator().validate(data: data)
-      #expect(report.isValid, "DTD issues: \(report.issues)")
-    } catch FCPXMLValidationError.dtdNotFound, FCPXMLValidationError.xmllintUnavailable {
-      if requireDTD {
-        Issue.record("FCPKIT_REQUIRE_DTD is set but DTD tooling is unavailable")
-      } else {
-        // Soft skip when Final Cut / xmllint are absent.
-      }
-    }
-  }
-
   private func firstNode(named name: String, in node: XMLTreeNode) -> XMLTreeNode? {
     if node.name == name {
       return node

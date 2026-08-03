@@ -1,6 +1,6 @@
 //
-//  StoryItems.swift
-//  FCPKit
+//  DTDValidationSupport.swift
+//  FCPKitDSLTests
 //
 //  Created by Leo Dion.
 //  Copyright © 2026 BrightDigit.
@@ -27,16 +27,25 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
+import FCPXMLDiff
+import Foundation
+import Testing
 
-internal func storyItems(
-  _ content: [any DocumentContent],
-  resources: inout ResourceStore
-) throws(BuildError) -> [FCPKit.SpineItem] {
-  try content.map { value throws(BuildError) in
-    guard let node = value as? any DSLNode, case .item(let item) = try node.build(&resources) else {
-      throw BuildError.unsupportedContent
+/// Validates serialized FCPXML against Final Cut's bundled DTD.
+///
+/// When Final Cut or `xmllint` are unavailable the check soft-skips, unless the
+/// `FCPKIT_REQUIRE_DTD` environment variable is set, in which case the missing
+/// tooling is recorded as a failure.
+internal func assertDTDValidates(_ data: Data) throws {
+  let requireDTD = ProcessInfo.processInfo.environment["FCPKIT_REQUIRE_DTD"] != nil
+  do {
+    let report = try FCPXMLDTDValidator().validate(data: data)
+    #expect(report.isValid, "DTD issues: \(report.issues)")
+  } catch FCPXMLValidationError.dtdNotFound, FCPXMLValidationError.xmllintUnavailable {
+    if requireDTD {
+      Issue.record("FCPKIT_REQUIRE_DTD is set but DTD tooling is unavailable")
+    } else {
+      // Soft skip when Final Cut / xmllint are absent.
     }
-    return item
   }
 }

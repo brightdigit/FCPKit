@@ -35,8 +35,8 @@ extension Document {
     guard let root = body as? any DSLNode else {
       throw BuildError.unsupportedContent
     }
-    var resources = ResourceStore()
-    let library = try softPromote(try root.build(&resources), resources: &resources)
+    var resources = ResourceStore(version: version)
+    let library = try root.build(&resources).promotedLibrary(resources: &resources)
     return FCPXML(
       version: version.rawValue,
       resources: resources.materialize(),

@@ -30,10 +30,13 @@
 import FCPKit
 
 /// A transition between adjacent story items.
-public struct Transition: DSLNode {
+public struct Transition: StoryItem {
   internal let preset: TransitionPreset
   /// Transition duration on the storyline.
   public let duration: FCPTime
+
+  /// Always empty. The FCPXML DTD does not admit anchored items on a `<transition>`.
+  public var anchors: [any DSLNode] { [] }
 
   /// Creates a transition from a preset. Default duration is one second.
   public init(_ preset: TransitionPreset, duration: FCPTime = FCPTime(numerator: 1)) {
@@ -46,7 +49,16 @@ public struct Transition: DSLNode {
     Transition(preset, duration: duration)
   }
 
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+  /// Discards the given anchors and returns this transition unchanged.
+  ///
+  /// Anchoring onto a transition is a documented no-op: the FCPXML DTD's
+  /// `%anchor_item;` entity does not include transitions, so nothing is emitted.
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> Transition {
+    self
+  }
+
+  /// Lowers this transition into a `<transition>` story item.
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let video = try resources.effect(name: preset.name, uid: preset.videoUID)
     let audio = try resources.effect(name: "Audio Crossfade", uid: preset.audioUID)
     let filters = CrossDissolveFilters.make(video: video, audio: audio)

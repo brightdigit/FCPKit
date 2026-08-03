@@ -46,7 +46,8 @@ public struct Library: DSLNode {
     self.content = content()
   }
 
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+  /// Lowers this library into a `<library>` with the default smart collections.
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let built = try content.build(&resources)
     let event = try event(from: built)
     return .library(
@@ -54,7 +55,7 @@ public struct Library: DSLNode {
         location: location,
         colorProcessing: colorProcessing,
         events: [event],
-        smartCollections: Defaults.smartCollections()
+        smartCollections: resources.version.defaultSmartCollections
       )
     )
   }

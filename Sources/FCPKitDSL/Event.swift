@@ -44,7 +44,8 @@ public struct Event: DSLNode {
     self.content = content()
   }
 
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+  /// Lowers this event into an `<event>` containing its promoted projects.
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let built = try content.build(&resources)
     let project = try project(from: built)
     return .event(FCPKit.Event(name: name ?? "Untitled", uid: uid, projects: [project]))

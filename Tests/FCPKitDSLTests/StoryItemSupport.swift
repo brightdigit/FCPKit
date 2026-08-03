@@ -1,5 +1,5 @@
 //
-//  Spine.swift
+//  StoryItemSupport.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,22 +28,38 @@
 //
 
 import FCPKit
+import FCPKitDSL
+import Foundation
+import Testing
 
-/// A connected storyline permitted only as anchored content.
-public struct Spine: DSLNode {
-  internal let content: DocumentGroup
-
-  /// Creates a nested spine for use inside ``AssetClip/anchor(lane:offset:content:)``.
-  public init(@DocumentBuilder content: () -> DocumentGroup) {
-    self.content = content()
+internal enum StoryItemSupport {
+  /// A deck whose middle transition carries an anchor that must not be emitted.
+  internal struct TransitionAnchored: Document {
+    internal var body: some DocumentContent {
+      Sequence(format: .p1080p24) {
+        Generator(.custom, duration: FCPTime(numerator: 5)).color(.blue)
+        Transition(.crossDissolve)
+          .anchor(lane: 1) {
+            Title("Ignored", duration: FCPTime(numerator: 2))
+          }
+        Generator(.custom, duration: FCPTime(numerator: 5)).color(.green)
+      }
+    }
   }
 
-  /// Lowers this spine into an ordered `<spine>` of story items.
-  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
-    let packed = try Layout.pack(
-      content.contents.spineItems(resources: &resources),
-      frameDuration: FormatPreset.p1080p24.format.frameDuration
-    )
-    return .spine(FCPKit.Spine(items: packed.items))
+  /// Returns the packed spine items of an exported document.
+  internal static func spine(_ exported: FCPXML) throws -> [FCPKit.SpineItem] {
+    let sequence = try #require(exported.library?.events?.first?.projects?.first?.sequence)
+    return try #require(sequence.spine?.items)
+  }
+
+  /// Returns the `lane` of every anchored title, in order.
+  internal static func anchoredTitleLanes(_ items: [FCPKit.AnchoredItem]) -> [String?] {
+    items.compactMap { item in
+      guard case .title(let title) = item else {
+        return nil
+      }
+      return title.lane
+    }
   }
 }

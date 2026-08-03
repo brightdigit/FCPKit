@@ -29,6 +29,18 @@
 
 import FCPKit
 
-internal protocol DSLNode: DocumentContent {
+/// A piece of DSL content that can lower itself into FCPXML model values.
+///
+/// Conformance is an implementation detail of the built-in DSL types. The protocol is
+/// `public` only so that public API such as ``StoryItem`` can name it; the pieces it
+/// hands you (``ResourceStore``) expose no usable members outside this module.
+public protocol DSLNode: DocumentContent {
+  /// Lowers this node into a ``Built`` value, registering any resources it needs.
+  ///
+  /// - Parameter resources: The document's shared resource table, mutated in place as
+  ///   assets, formats, and effects are interned.
+  /// - Returns: The model value this node lowers to.
+  /// - Throws: A ``BuildError`` when the node is incomplete or cannot be represented.
+  /// - Warning: This signature is expected to evolve before 1.0.
   func build(_ resources: inout ResourceStore) throws(BuildError) -> Built
 }

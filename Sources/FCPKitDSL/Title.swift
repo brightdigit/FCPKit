@@ -30,13 +30,15 @@
 import FCPKit
 
 /// A title clip, typically anchored onto an asset clip.
-public struct Title: DSLNode {
+public struct Title: StoryItem {
   internal let preset: TitlePreset
   internal let text: String
   /// Clip duration on the storyline.
   public let duration: FCPTime
   internal let lane: Int?
   internal let offset: FCPTime?
+  /// The anchors attached to this title.
+  public let anchors: [any DSLNode]
   internal let style: TitleStyle
   internal let position: FramePosition?
   internal let displayName: String?
@@ -57,6 +59,7 @@ public struct Title: DSLNode {
     duration: FCPTime,
     lane: Int?,
     offset: FCPTime?,
+    anchors: [any DSLNode] = [],
     style: TitleStyle = .default,
     position: FramePosition? = nil,
     displayName: String? = nil
@@ -66,6 +69,7 @@ public struct Title: DSLNode {
     self.duration = duration
     self.lane = lane
     self.offset = offset
+    self.anchors = anchors
     self.style = style
     self.position = position
     self.displayName = displayName
@@ -79,6 +83,7 @@ public struct Title: DSLNode {
   /// Returns a copy of this title with the given fields replaced.
   internal func replacing(
     duration: FCPTime? = nil,
+    anchors: [any DSLNode]? = nil,
     style: TitleStyle? = nil,
     position: FramePosition? = nil,
     displayName: String? = nil
@@ -89,13 +94,20 @@ public struct Title: DSLNode {
       duration: duration ?? self.duration,
       lane: lane,
       offset: offset,
+      anchors: anchors ?? self.anchors,
       style: style ?? self.style,
       position: position ?? self.position,
       displayName: displayName ?? self.displayName
     )
   }
 
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+  /// Returns a copy of this title carrying exactly the given anchors.
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> Title {
+    replacing(anchors: anchors)
+  }
+
+  /// Lowers this title into a `<title>` story item.
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let styleID = resources.textStyleID()
     let style = FCPKit.TextStyle(ref: styleID, content: text)
@@ -119,6 +131,7 @@ public struct Title: DSLNode {
       textStyleDef: [definition]
     )
     element.adjustTransform = transform
+    element.anchoredItems = try anchors.anchoredItems(resources: &resources)
     return .item(.title(element))
   }
 }
