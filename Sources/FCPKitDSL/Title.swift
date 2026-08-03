@@ -37,6 +37,9 @@ public struct Title: DSLNode {
   public let duration: FCPTime
   internal let lane: Int?
   internal let offset: FCPTime?
+  internal let style: TitleStyle
+  internal let position: FramePosition?
+  internal let displayName: String?
 
   /// Creates a Basic Title from text and optional duration.
   public init(_ text: String, duration: FCPTime? = nil) {
@@ -48,46 +51,74 @@ public struct Title: DSLNode {
     self.init(preset: preset, text: text, duration: duration ?? .zero, lane: nil, offset: nil)
   }
 
-  private init(preset: TitlePreset, text: String, duration: FCPTime, lane: Int?, offset: FCPTime?) {
+  internal init(
+    preset: TitlePreset,
+    text: String,
+    duration: FCPTime,
+    lane: Int?,
+    offset: FCPTime?,
+    style: TitleStyle = .default,
+    position: FramePosition? = nil,
+    displayName: String? = nil
+  ) {
     self.preset = preset
     self.text = text
     self.duration = duration
     self.lane = lane
     self.offset = offset
+    self.style = style
+    self.position = position
+    self.displayName = displayName
   }
 
   /// Sets the title clip duration.
   public func duration(_ duration: FCPTime) -> Title {
-    Title(preset: preset, text: text, duration: duration, lane: lane, offset: offset)
+    replacing(duration: duration)
+  }
+
+  /// Returns a copy of this title with the given fields replaced.
+  internal func replacing(
+    duration: FCPTime? = nil,
+    style: TitleStyle? = nil,
+    position: FramePosition? = nil,
+    displayName: String? = nil
+  ) -> Title {
+    Title(
+      preset: preset,
+      text: text,
+      duration: duration ?? self.duration,
+      lane: lane,
+      offset: offset,
+      style: style ?? self.style,
+      position: position ?? self.position,
+      displayName: displayName ?? self.displayName
+    )
   }
 
   internal func build(_ resources: inout ResourceStore) throws -> Built {
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let styleID = resources.textStyleID()
     let style = FCPKit.TextStyle(ref: styleID, content: text)
-    let definition = FCPKit.TextStyleDef(
-      id: styleID,
-      textStyle: FCPKit.TextStyle(
-        font: "Helvetica",
-        fontSize: "63",
-        fontFace: "Regular",
-        fontColor: "1 1 1 1",
-        alignment: "center"
-      )
+    let definition = FCPKit.TextStyleDef(id: styleID, textStyle: self.style.textStyle())
+
+    // No adjust-transform unless a position was requested, so unpositioned
+    // titles stay byte-identical to real Final Cut output.
+    let transform =
+      try position
+      .flatMap { try $0.resolve(frameSize: resources.frameSize) }
+      .map { FCPKit.AdjustTransform(position: $0) }
+
+    var element = FCPKit.Title(
+      ref: ref,
+      name: displayName ?? preset.name,
+      duration: duration.description,
+      start: "3600s",
+      lane: lane.map(String.init),
+      offset: offset?.description ?? "0s",
+      text: [FCPKit.TextElement(textStyle: [style])],
+      textStyleDef: [definition]
     )
-    return .item(
-      .title(
-        FCPKit.Title(
-          ref: ref,
-          name: preset.name,
-          duration: duration.description,
-          start: "3600s",
-          lane: lane.map(String.init),
-          offset: offset?.description ?? "0s",
-          text: [FCPKit.TextElement(textStyle: [style])],
-          textStyleDef: [definition]
-        )
-      )
-    )
+    element.adjustTransform = transform
+    return .item(.title(element))
   }
 }

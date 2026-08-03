@@ -41,6 +41,13 @@ internal struct ResourceStore {
   private var nextNumber = 1
   private var nextTextStyleNumber = 1
 
+  /// The enclosing sequence's frame size, once a format has been resolved.
+  ///
+  /// Ambient build context rather than a resource: story items nested under a
+  /// ``Sequence`` need the frame size to resolve absolute ``FramePosition``
+  /// coordinates, and `ResourceStore` is already threaded through every `build`.
+  internal var frameSize: (width: Double, height: Double)?
+
   private static func formatFingerprint(_ format: FCPKit.Format) -> String {
     [
       format.name ?? "",
