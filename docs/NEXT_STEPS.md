@@ -102,6 +102,13 @@ parser accepts the OSType enumerator numbers live proxies return.
   `RefClip` / `<media>` authoring; transition-overlap algorithm write-up;
   preset catalog membership; `URL` vs `filePath` spelling.
 - Swift Testing migration of the remaining XCTest files (no behavior change).
+- README demo movie — a media-free slide deck authored in `FCPKitDSL`, specced as
+  six issues in
+  [planning/demo-presentation-video.md](planning/demo-presentation-video.md).
+  Blocked on three DSL gaps, one of which is a live defect: every `Title` emits
+  `text-style-def id="ts1"`, so any multi-title document is invalid XML
+  (`FCPXMLv1_14.dtd:581` declares the attribute as type `ID`). That fix stands
+  alone and does not depend on the demo work.
 
 Planning references: [planning/v0.1.0-first-working-version.md](planning/v0.1.0-first-working-version.md)
 (**§3 is the locked `FCPKitDSL` surface**),
@@ -151,7 +158,11 @@ Specs: [manual/final-cut-artifacts.md](manual/final-cut-artifacts.md).
 ## Ready for Human
 
 These steps require Final Cut Pro and cannot be completed unattended.
-AppleScript cannot automate exports.
+AppleScript cannot automate exports — verified 2026-08-02 by dumping the sdef,
+which declares exactly one command (`get`) with every property `access="r"`
+behind the `com.apple.FinalCut.library.inspection` read-only access group. There
+is no export verb for ScriptingBridge to call. Re-verification command and full
+evidence: [planning/demo-presentation-video.md](planning/demo-presentation-video.md).
 
 **Child-simple recipes:** [manual/easy-export-recipes.md](manual/easy-export-recipes.md)
 
@@ -162,6 +173,13 @@ AppleScript cannot automate exports.
    the `FCPKitDSL` surface grows.
 3. Re-export after Final Cut upgrades that change FCPXML output.
 4. Privacy review for any new exports that leave Shared/generic paths.
+5. Share and export the README demo movie once the DSL work in
+   [planning/demo-presentation-video.md](planning/demo-presentation-video.md)
+   lands. This is a manual Final Cut step, because Final Cut exposes no
+   scripting verb for export: generate the deck with
+   `fcpxml-dsl export presentation`, import it, confirm anchored titles render
+   over their generator backgrounds, then Share → Master File and embed the
+   resulting `.mp4` in the README.
 
 
 ## Documentation Accuracy

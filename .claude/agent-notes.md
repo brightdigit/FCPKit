@@ -34,3 +34,7 @@ Running log of user corrections and standing always/never directives for this re
 
 - 2026-07-30: Never `swiftlint:disable cyclomatic_complexity` for choice Codable or stacked if-let seed chains; use `XMLChoiceCodable` / `XMLChoiceField` / `OrderedChoiceContainer` / `AnchoredChoiceContainer` instead (large if/switch ladders are an anti-pattern; do not re-copy Codable loops or get/set helpers).
 - 2026-07-31: Always check branch/merge state against the fetched remote (`git fetch` + `origin/*` refs), never local refs; and because PRs are squash-merged, verify "unmerged" claims by content (`git diff` / tree hash), not commit ranges.
+- 2026-08-02: Demo/scaffolding documents (e.g. `RGBDocument`) belong only in `Sources/fcpxml-dsl`, not duplicated into the library; when a showcase type must ship in the library, the executable holds a thin command that invokes it rather than a second copy.
+- 2026-08-02: Pre-1.0, do not contort a design to avoid changing DSL APIs — make types public and change signatures when that yields the simpler design.
+- 2026-08-02: Do not add public API for a capability nothing needs yet (e.g. keep build-environment keys internal until an external need appears).
+- 2026-08-02: When designing DSL ergonomics, ask what SwiftUI would do and prefer the option that demands least from the developer (alignment-style APIs over coordinate math), keeping absolute-value APIs as an escape hatch.
