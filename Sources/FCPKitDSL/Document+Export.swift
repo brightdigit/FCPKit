@@ -36,7 +36,7 @@ extension Document {
       throw BuildError.unsupportedContent
     }
     var resources = ResourceStore(version: version)
-    let library = try softPromote(try root.build(&resources), resources: &resources)
+    let library = try SoftPromote.promote(try root.build(&resources), resources: &resources)
     return FCPXML(
       version: version.rawValue,
       resources: resources.materialize(),
