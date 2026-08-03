@@ -94,14 +94,25 @@ extension FramePosition {
     )
   }
 
-  /// Resolves an alignment, returning `nil` for a dead-centre position.
+  /// Resolves an alignment, returning `nil` when it needs no transform.
+  ///
+  /// - Throws: ``BuildError/missingFrameSize`` when a non-zero inset is requested
+  ///   without a frame size. An inset is in points, and converting points to
+  ///   Final Cut's percent-of-height unit requires the frame height — silently
+  ///   dropping it would emit a position the caller did not ask for.
   private static func alignmentPercent(
     _ alignment: Alignment,
     inset: Double,
     frameSize: (width: Double, height: Double)?
-  ) -> (x: Double, y: Double)? {
-    if alignment == .center, inset == 0 {
+  ) throws -> (x: Double, y: Double)? {
+    // `.center` is the frame centre on both axes, so an inset has no direction
+    // to move along and the position needs no `adjust-transform` at all.
+    if alignment == .center {
       return nil
+    }
+
+    guard inset == 0 || frameSize != nil else {
+      throw BuildError.missingFrameSize
     }
 
     // Vertical extent is exactly ±50% of the height. Horizontal extent depends
@@ -159,7 +170,8 @@ extension FramePosition {
 
     switch kind {
     case .alignment(let alignment, let inset):
-      guard let resolved = Self.alignmentPercent(alignment, inset: inset, frameSize: frameSize)
+      guard
+        let resolved = try Self.alignmentPercent(alignment, inset: inset, frameSize: frameSize)
       else {
         return nil
       }
@@ -182,9 +194,6 @@ extension FramePosition {
 
   /// Formats a component, collapsing whole numbers (`0`, not `0.0`).
   fileprivate func format(_ value: Double) -> String {
-    if value.truncatingRemainder(dividingBy: 1) == 0 {
-      return String(Int(value))
-    }
-    return String(value)
+    decimalString(value)
   }
 }

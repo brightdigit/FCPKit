@@ -59,11 +59,16 @@ internal struct FramePositionTests {
 
   @Test
   internal func absoluteCoordinatesMatchTheFixtureFormula() throws {
-    // Real Final Cut output on a 1920x1080 sequence contains
-    // position="-17.8241 7.77778" (TestData/UntitledXML.fcpxml:448). The unit is
-    // percent of frame HEIGHT on both axes, from the centre, Y-up. So Y=7.77778
-    // is 84px ABOVE centre, i.e. an absolute y of 540 - 84 = 456, and
-    // X=-17.8241 is 192.5px left of centre, i.e. an absolute x of 767.5.
+    // Real Final Cut output contains position="-17.8241 7.77778"
+    // (TestData/UntitledXML.fcpxml:448). That fixture's sequence uses format r2,
+    // FFVideoFormat3840x2160p24 — 3840x2160, not 1080p.
+    //
+    // The unit is percent of frame HEIGHT on both axes, from the centre, Y-up,
+    // which makes it scale-invariant: the same percentages describe the same
+    // relative position at any resolution. So the fixture's values reproduce on
+    // a 1080p sequence at the proportionally equivalent pixels — Y=7.77778 is
+    // 0.0777778 * 1080 = 84px above centre (absolute y 456), and X=-17.8241 is
+    // 192.5px left of centre (absolute x 767.5).
     let position = try #require(
       try TitleStyleSupport.transformPosition(
         Title("Hello", duration: .seconds(5)).position(x: 960 - 192.5, y: 540 - 84)
@@ -133,5 +138,59 @@ internal struct FramePositionTests {
     #expect(transform.rotation == "45")
     #expect(transform.anchor == "0 0")
     #expect(transform.enabled == "1")
+  }
+
+  @Test
+  internal func hugeFontSizeDoesNotTrap() throws {
+    // Whole-but-huge doubles took an unguarded Int(_:) conversion, which traps
+    // and takes the host process down. A library must not crash on user input.
+    let huge = Double("1e21") ?? 0
+    let style = try TitleStyleSupport.definitionStyle(
+      Title("Hello", duration: .seconds(5)).fontSize(huge)
+    )
+    #expect(style.fontSize != nil)
+  }
+
+  @Test
+  internal func nonFiniteFontSizeDoesNotTrap() throws {
+    let style = try TitleStyleSupport.definitionStyle(
+      Title("Hello", duration: .seconds(5)).fontSize(.infinity)
+    )
+    #expect(style.fontSize != nil)
+  }
+
+  @Test
+  internal func centerIgnoresInsetAndEmitsNoTransform() throws {
+    // `.center` is the frame centre on both axes, so an inset has no direction
+    // to move along. It must still emit nothing rather than a no-op transform.
+    let built = try TitleStyleSupport.firstTitle(
+      Title("Hello", duration: .seconds(5)).position(.center, inset: 100)
+    )
+    #expect(built.adjustTransform == nil)
+  }
+
+  @Test
+  internal func insetWithoutFormatThrowsRatherThanSilentlyDropping() throws {
+    // An inset is in points; converting to percent-of-height needs the frame
+    // height. Silently dropping it would emit a position never asked for.
+    let document = TitleStyleSupport.TitleDoc(
+      Title("Hello", duration: .seconds(5)).position(.top, inset: 80),
+      format: nil
+    )
+    #expect(throws: BuildError.missingFrameSize) {
+      _ = try document.export()
+    }
+  }
+
+  @Test
+  internal func zeroInsetAlignmentWithoutFormatStillResolves() throws {
+    // Only a non-zero inset needs the frame size; plain alignments never throw.
+    let document = TitleStyleSupport.TitleDoc(
+      Title("Hello", duration: .seconds(5)).position(.top),
+      format: nil
+    )
+    #expect(throws: Never.self) {
+      _ = try document.export()
+    }
   }
 }

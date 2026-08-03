@@ -86,10 +86,7 @@ public struct TitleStyle: Equatable, Sendable {
 extension TitleStyle {
   /// The `fontSize` attribute value, collapsing whole numbers (`63`, not `63.0`).
   internal var fontSizeString: String {
-    if fontSize.truncatingRemainder(dividingBy: 1) == 0 {
-      return String(Int(fontSize))
-    }
-    return String(fontSize)
+    decimalString(fontSize)
   }
 
   /// Lowers this style into the model's `text-style` element.
