@@ -46,7 +46,7 @@ public struct Library: DSLNode {
     self.content = content()
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let built = try content.build(&resources)
     let event = try event(from: built)
     return .library(
@@ -59,7 +59,7 @@ public struct Library: DSLNode {
     )
   }
 
-  private func event(from built: Built) throws -> FCPKit.Event {
+  private func event(from built: Built) throws(BuildError) -> FCPKit.Event {
     switch built {
     case .event(let event): return event
     case .project(let project): return FCPKit.Event(name: "Untitled", projects: [project])

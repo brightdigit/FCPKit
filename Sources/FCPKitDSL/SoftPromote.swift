@@ -29,7 +29,9 @@
 
 import FCPKit
 
-internal func softPromote(_ built: Built, resources: inout ResourceStore) throws -> FCPKit.Library {
+internal func softPromote(_ built: Built, resources: inout ResourceStore) throws(BuildError)
+  -> FCPKit.Library
+{
   switch built {
   case .library(let library):
     return library
@@ -64,6 +66,6 @@ private func project(for sequence: FCPKit.Sequence) -> FCPKit.Project {
 private func sequence(
   for spine: FCPKit.Spine,
   resources: inout ResourceStore
-) throws -> FCPKit.Sequence {
+) throws(BuildError) -> FCPKit.Sequence {
   try Defaults.sequence(spine: spine, format: resources.format(.p1080p24))
 }

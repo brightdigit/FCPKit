@@ -30,5 +30,5 @@
 import FCPKit
 
 internal protocol DSLNode: DocumentContent {
-  func build(_ resources: inout ResourceStore) throws -> Built
+  func build(_ resources: inout ResourceStore) throws(BuildError) -> Built
 }

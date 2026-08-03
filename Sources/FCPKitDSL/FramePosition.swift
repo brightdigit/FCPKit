@@ -104,7 +104,7 @@ extension FramePosition {
     _ alignment: Alignment,
     inset: Double,
     frameSize: (width: Double, height: Double)?
-  ) throws -> (x: Double, y: Double)? {
+  ) throws(BuildError) -> (x: Double, y: Double)? {
     // `.center` is the frame centre on both axes, so an inset has no direction
     // to move along and the position needs no `adjust-transform` at all.
     if alignment == .center {
@@ -165,7 +165,7 @@ extension FramePosition {
   ///   frame centre and therefore needs no `adjust-transform` at all.
   /// - Throws: ``BuildError/missingFrameSize`` when absolute coordinates were
   ///   used without an enclosing format.
-  internal func resolve(frameSize: (width: Double, height: Double)?) throws -> String? {
+  internal func resolve(frameSize: (width: Double, height: Double)?) throws(BuildError) -> String? {
     let point: (x: Double, y: Double)
 
     switch kind {

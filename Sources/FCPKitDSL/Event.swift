@@ -44,13 +44,13 @@ public struct Event: DSLNode {
     self.content = content()
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let built = try content.build(&resources)
     let project = try project(from: built)
     return .event(FCPKit.Event(name: name ?? "Untitled", uid: uid, projects: [project]))
   }
 
-  private func project(from built: Built) throws -> FCPKit.Project {
+  private func project(from built: Built) throws(BuildError) -> FCPKit.Project {
     switch built {
     case .project(let project): return project
     case .sequence(let sequence): return FCPKit.Project(name: "Untitled", sequence: sequence)

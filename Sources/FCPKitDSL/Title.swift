@@ -95,7 +95,7 @@ public struct Title: DSLNode {
     )
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let styleID = resources.textStyleID()
     let style = FCPKit.TextStyle(ref: styleID, content: text)
@@ -103,10 +103,10 @@ public struct Title: DSLNode {
 
     // No adjust-transform unless a position was requested, so unpositioned
     // titles stay byte-identical to real Final Cut output.
-    let transform =
-      try position
-      .flatMap { try $0.resolve(frameSize: resources.frameSize) }
-      .map { FCPKit.AdjustTransform(position: $0) }
+    var transform: FCPKit.AdjustTransform?
+    if let position, let resolved = try position.resolve(frameSize: resources.frameSize) {
+      transform = FCPKit.AdjustTransform(position: resolved)
+    }
 
     var element = FCPKit.Title(
       ref: ref,

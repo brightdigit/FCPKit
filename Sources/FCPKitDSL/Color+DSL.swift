@@ -40,7 +40,7 @@ extension Color: DSLNode {
     return copy
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard let duration else {
       throw BuildError.missingDuration("color generator")
     }

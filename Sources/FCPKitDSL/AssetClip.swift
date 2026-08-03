@@ -89,7 +89,7 @@ public struct AssetClip: DSLNode {
     )
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.asset(source)
     guard let value = duration?.description ?? source.asset.duration, FCPTime(value) != nil else {
       throw BuildError.missingDuration(name ?? source.asset.name ?? "asset clip")
@@ -104,7 +104,9 @@ public struct AssetClip: DSLNode {
     if let format = source.format, source.formatOnClip {
       clip.format = try resources.format(FormatPreset(format))
     }
-    let items = try anchors.map { try anchoredItem($0, resources: &resources) }
+    let items = try anchors.map { node throws(BuildError) in
+      try anchoredItem(node, resources: &resources)
+    }
     clip.anchoredItems = items.isEmpty ? nil : items
     return .item(.assetClip(clip))
   }
@@ -119,7 +121,7 @@ public struct AssetClip: DSLNode {
     )
   }
 
-  private func anchoredItem(_ node: any DSLNode, resources: inout ResourceStore) throws
+  private func anchoredItem(_ node: any DSLNode, resources: inout ResourceStore) throws(BuildError)
     -> FCPKit.AnchoredItem
   {
     switch try node.build(&resources) {

@@ -40,8 +40,10 @@ public struct Sequence: DSLNode {
     self.content = content()
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
-    let formatRef = try format.map { try resources.format($0) }
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+    let formatRef = try format.map { preset throws(BuildError) in
+      try resources.format(preset)
+    }
 
     // Publish the frame size before building children: story items resolve
     // absolute `FramePosition` coordinates against it.

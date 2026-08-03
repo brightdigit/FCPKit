@@ -31,7 +31,7 @@ import FCPKit
 
 extension Document {
   /// Soft-promotes shells, interns resources, packs the spine, and returns `FCPXML`.
-  public func export(version: FCPXMLVersion = .supportedGeneration) throws -> FCPXML {
+  public func export(version: FCPXMLVersion = .supportedGeneration) throws(BuildError) -> FCPXML {
     guard let root = body as? any DSLNode else {
       throw BuildError.unsupportedContent
     }
