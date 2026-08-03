@@ -1,5 +1,5 @@
 //
-//  RGBDocument.swift
+//  PresentationSlide.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,26 +29,27 @@
 
 import FCPKit
 
-/// A sample document creating a sequence of red, green, and blue solid generator clips.
-public struct RGBDocument: Document {
-  /// The Final Cut Pro project name written into the exported document.
-  public let projectName: String
+/// A slide in a ``PresentationDocument``: a heading over a solid color background.
+public struct PresentationSlide: Sendable {
+  /// The slide's primary heading.
+  public var heading: String
+  /// An optional secondary line beneath the heading.
+  public var subheading: String?
+  /// The solid color filling the frame behind the text.
+  public var background: Color
+  /// How long the slide holds on screen, before dissolve overlap is deducted.
+  public var duration: FCPTime
 
-  /// Red, green, and blue generator clips separated by cross-dissolve transitions.
-  public var body: some DocumentContent {
-    Project(name: projectName) {
-      Sequence {
-        Color.red.duration(.seconds(5.0))
-        Transition(.crossDissolve)
-        Color.green.duration(.seconds(5.0))
-        Transition(.crossDissolve)
-        Color.blue.duration(.seconds(5.0))
-      }
-    }
-  }
-
-  /// Creates an RGB sample document with an optional project name.
-  public init(projectName: String = "DSL RGB") {
-    self.projectName = projectName
+  /// Creates a slide.
+  public init(
+    heading: String,
+    subheading: String? = nil,
+    background: Color,
+    duration: FCPTime = .seconds(6)
+  ) {
+    self.heading = heading
+    self.subheading = subheading
+    self.background = background
+    self.duration = duration
   }
 }

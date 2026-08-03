@@ -142,3 +142,5 @@ xcuserdata
 # fcpxml-dsl export outputs (regenerate with: swift run fcpxml-dsl export)
 /transitions.fcpxml
 /titles.fcpxml
+/rgb.fcpxml
+/presentation.fcpxml
