@@ -46,7 +46,7 @@ public struct Transition: DSLNode {
     Transition(preset, duration: duration)
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let video = try resources.effect(name: preset.name, uid: preset.videoUID)
     let audio = try resources.effect(name: "Audio Crossfade", uid: preset.audioUID)
     let filters = CrossDissolveFilters.make(video: video, audio: audio)

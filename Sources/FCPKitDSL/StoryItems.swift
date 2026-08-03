@@ -32,8 +32,8 @@ import FCPKit
 internal func storyItems(
   _ content: [any DocumentContent],
   resources: inout ResourceStore
-) throws -> [FCPKit.SpineItem] {
-  try content.map { value in
+) throws(BuildError) -> [FCPKit.SpineItem] {
+  try content.map { value throws(BuildError) in
     guard let node = value as? any DSLNode, case .item(let item) = try node.build(&resources) else {
       throw BuildError.unsupportedContent
     }

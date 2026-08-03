@@ -61,7 +61,7 @@ public struct Title: DSLNode {
     Title(preset: preset, text: text, duration: duration, lane: lane, offset: offset)
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let style = FCPKit.TextStyle(ref: "ts1", content: text)
     let definition = FCPKit.TextStyleDef(

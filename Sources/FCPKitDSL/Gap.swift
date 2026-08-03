@@ -44,7 +44,7 @@ public struct Gap: DSLNode {
     Gap(duration: duration)
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard let duration else { throw BuildError.missingDuration("gap") }
     return .item(.gap(FCPKit.Gap(duration: duration.description)))
   }

@@ -1,6 +1,6 @@
 //
-//  Event.swift
-//  FCPKit
+//  DTDValidationSupport.swift
+//  FCPKitDSLTests
 //
 //  Created by Leo Dion.
 //  Copyright © 2026 BrightDigit.
@@ -27,34 +27,25 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
+import FCPXMLDiff
+import Foundation
+import Testing
 
-/// An event shell around a project.
-public struct Event: DSLNode {
-  internal let name: String?
-  internal let uid: String?
-  internal let content: DocumentGroup
-
-  /// Creates an event with optional name and uid.
-  public init(
-    name: String? = nil, uid: String? = nil, @DocumentBuilder content: () -> DocumentGroup
-  ) {
-    self.name = name
-    self.uid = uid
-    self.content = content()
-  }
-
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
-    let built = try content.build(&resources)
-    let project = try project(from: built)
-    return .event(FCPKit.Event(name: name ?? "Untitled", uid: uid, projects: [project]))
-  }
-
-  private func project(from built: Built) throws(BuildError) -> FCPKit.Project {
-    switch built {
-    case .project(let project): return project
-    case .sequence(let sequence): return FCPKit.Project(name: "Untitled", sequence: sequence)
-    default: throw BuildError.unsupportedContent
+/// Validates serialized FCPXML against Final Cut's bundled DTD.
+///
+/// When Final Cut or `xmllint` are unavailable the check soft-skips, unless the
+/// `FCPKIT_REQUIRE_DTD` environment variable is set, in which case the missing
+/// tooling is recorded as a failure.
+internal func assertDTDValidates(_ data: Data) throws {
+  let requireDTD = ProcessInfo.processInfo.environment["FCPKIT_REQUIRE_DTD"] != nil
+  do {
+    let report = try FCPXMLDTDValidator().validate(data: data)
+    #expect(report.isValid, "DTD issues: \(report.issues)")
+  } catch FCPXMLValidationError.dtdNotFound, FCPXMLValidationError.xmllintUnavailable {
+    if requireDTD {
+      Issue.record("FCPKIT_REQUIRE_DTD is set but DTD tooling is unavailable")
+    } else {
+      // Soft skip when Final Cut / xmllint are absent.
     }
   }
 }
