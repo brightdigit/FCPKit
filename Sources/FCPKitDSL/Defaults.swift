@@ -30,8 +30,17 @@
 import FCPKit
 
 internal enum Defaults {
-  internal static func smartCollections() -> [SmartCollection] {
-    [
+  /// Indicates whether a version's DTD declares `match-analysis-type`.
+  ///
+  /// The element was introduced in FCPXML 1.14; emitting it in a 1.13 document
+  /// makes the document invalid against Final Cut's own 1.13 DTD. A malformed
+  /// version string is admitted so unparseable inputs keep prior behavior.
+  internal static func admitsAnalysisMatching(_ version: FCPXMLVersion) -> Bool {
+    version.compatibility(relativeTo: FCPXMLVersion("1.14")) != .older
+  }
+
+  internal static func smartCollections(version: FCPXMLVersion) -> [SmartCollection] {
+    var collections: [SmartCollection] = [
       SmartCollection(
         name: "Projects",
         match: "all",
@@ -60,12 +69,17 @@ internal enum Defaults {
         match: "all",
         matchRatings: [MatchRatings(value: "favorites")]
       ),
-      SmartCollection(
-        name: "Missing Analysis",
-        match: "all",
-        matchAnalysisType: [MatchAnalysisType(rule: "isMissing", value: "any")]
-      ),
     ]
+    if admitsAnalysisMatching(version) {
+      collections.append(
+        SmartCollection(
+          name: "Missing Analysis",
+          match: "all",
+          matchAnalysisType: [MatchAnalysisType(rule: "isMissing", value: "any")]
+        )
+      )
+    }
+    return collections
   }
 
   internal static func sequence(

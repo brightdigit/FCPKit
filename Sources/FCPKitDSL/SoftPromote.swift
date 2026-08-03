@@ -34,27 +34,36 @@ internal func softPromote(_ built: Built, resources: inout ResourceStore) throws
   case .library(let library):
     return library
   case .event(let event):
-    return FCPKit.Library(events: [event], smartCollections: Defaults.smartCollections())
+    return FCPKit.Library(
+      events: [event],
+      smartCollections: Defaults.smartCollections(version: resources.version)
+    )
   case .project(let project):
-    return library(for: FCPKit.Event(name: "Untitled", projects: [project]))
+    return library(
+      for: FCPKit.Event(name: "Untitled", projects: [project]),
+      version: resources.version
+    )
   case .sequence(let sequence):
-    return library(for: project(for: sequence))
+    return library(for: project(for: sequence), version: resources.version)
   case .spine(let spine):
-    return library(for: project(for: try sequence(for: spine, resources: &resources)))
+    let version = resources.version
+    let generatedSequence = try sequence(for: spine, resources: &resources)
+    return library(for: project(for: generatedSequence), version: version)
   case .item(let item):
     let packed = try Layout.pack([item], frameDuration: FormatPreset.p1080p24.format.frameDuration)
     let spine = FCPKit.Spine(items: packed.items)
+    let version = resources.version
     let generatedSequence = try sequence(for: spine, resources: &resources)
-    return library(for: project(for: generatedSequence))
+    return library(for: project(for: generatedSequence), version: version)
   }
 }
 
-private func library(for project: FCPKit.Project) -> FCPKit.Library {
-  library(for: FCPKit.Event(name: "Untitled", projects: [project]))
+private func library(for project: FCPKit.Project, version: FCPXMLVersion) -> FCPKit.Library {
+  library(for: FCPKit.Event(name: "Untitled", projects: [project]), version: version)
 }
 
-private func library(for event: FCPKit.Event) -> FCPKit.Library {
-  FCPKit.Library(events: [event], smartCollections: Defaults.smartCollections())
+private func library(for event: FCPKit.Event, version: FCPXMLVersion) -> FCPKit.Library {
+  FCPKit.Library(events: [event], smartCollections: Defaults.smartCollections(version: version))
 }
 
 private func project(for sequence: FCPKit.Sequence) -> FCPKit.Project {

@@ -1,6 +1,6 @@
 //
-//  Document+Export.swift
-//  FCPKit
+//  DTDValidationSupport.swift
+//  FCPKitDSLTests
 //
 //  Created by Leo Dion.
 //  Copyright © 2026 BrightDigit.
@@ -27,20 +27,25 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
+import FCPXMLDiff
+import Foundation
+import Testing
 
-extension Document {
-  /// Soft-promotes shells, interns resources, packs the spine, and returns `FCPXML`.
-  public func export(version: FCPXMLVersion = .supportedGeneration) throws -> FCPXML {
-    guard let root = body as? any DSLNode else {
-      throw BuildError.unsupportedContent
+/// Validates serialized FCPXML against Final Cut's bundled DTD.
+///
+/// When Final Cut or `xmllint` are unavailable the check soft-skips, unless the
+/// `FCPKIT_REQUIRE_DTD` environment variable is set, in which case the missing
+/// tooling is recorded as a failure.
+internal func assertDTDValidates(_ data: Data) throws {
+  let requireDTD = ProcessInfo.processInfo.environment["FCPKIT_REQUIRE_DTD"] != nil
+  do {
+    let report = try FCPXMLDTDValidator().validate(data: data)
+    #expect(report.isValid, "DTD issues: \(report.issues)")
+  } catch FCPXMLValidationError.dtdNotFound, FCPXMLValidationError.xmllintUnavailable {
+    if requireDTD {
+      Issue.record("FCPKIT_REQUIRE_DTD is set but DTD tooling is unavailable")
+    } else {
+      // Soft skip when Final Cut / xmllint are absent.
     }
-    var resources = ResourceStore(version: version)
-    let library = try softPromote(try root.build(&resources), resources: &resources)
-    return FCPXML(
-      version: version.rawValue,
-      resources: resources.materialize(),
-      library: library
-    )
   }
 }
