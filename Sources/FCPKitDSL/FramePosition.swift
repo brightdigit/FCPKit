@@ -189,11 +189,6 @@ extension FramePosition {
       )
     }
 
-    return "\(format(point.x)) \(format(point.y))"
-  }
-
-  /// Formats a component, collapsing whole numbers (`0`, not `0.0`).
-  fileprivate func format(_ value: Double) -> String {
-    decimalString(value)
+    return "\(AttributeValue.decimal(point.x)) \(AttributeValue.decimal(point.y))"
   }
 }

@@ -193,4 +193,23 @@ internal struct FramePositionTests {
       _ = try document.export()
     }
   }
+
+  @Test
+  internal func decimalStringsUseAPeriodRegardlessOfLocale() throws {
+    // FCPXML attribute values are machine-readable and must always use a period
+    // as the decimal separator. `Decimal.FormatStyle` would emit "63,5" under a
+    // German or French locale, producing invalid FCPXML — this pins the
+    // locale-independent formatting so nobody swaps one in.
+    let style = try TitleStyleSupport.definitionStyle(
+      Title("Hello", duration: .seconds(5)).fontSize(63.5)
+    )
+    #expect(style.fontSize == "63.5")
+
+    let position = try #require(
+      try TitleStyleSupport.transformPosition(
+        Title("Hello", duration: .seconds(5)).position(x: 0, y: 0)
+      )
+    )
+    #expect(!position.contains(","))
+  }
 }
