@@ -36,7 +36,7 @@ extension Layout {
     cursor: Int64,
     longest: Int64,
     tickDenominator: Int32
-  ) throws -> PackStep? {
+  ) throws(BuildError) -> PackStep? {
     switch item {
     case .assetClip(var clip):
       let placement = try placeOverlapping(
@@ -93,7 +93,7 @@ extension Layout {
     cursor: Int64,
     longest: Int64,
     tickDenominator: Int32
-  ) throws -> PackStep {
+  ) throws(BuildError) -> PackStep {
     switch item {
     case .gap(var gap):
       let duration = try ticks(gap.duration, tickDenominator, "gap")
@@ -127,7 +127,7 @@ extension Layout {
     longest: Int64,
     tickDenominator: Int32,
     anchoredExtent: Int64
-  ) throws -> Placement {
+  ) throws(BuildError) -> Placement {
     let original = try ticks(description, tickDenominator, subject)
     let start = overlap.previous
     let duration = original - start - overlap.next
@@ -145,7 +145,7 @@ extension Layout {
     _ description: String?,
     _ denominator: Int32,
     _ subject: String
-  ) throws -> Int64 {
+  ) throws(BuildError) -> Int64 {
     guard let description, let value = FCPTime(description) else {
       throw BuildError.missingDuration(subject)
     }

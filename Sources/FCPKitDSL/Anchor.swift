@@ -34,7 +34,7 @@ internal struct Anchor: DSLNode {
   internal let offset: FCPTime
   internal let content: any DSLNode
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard lane != 0 else { throw BuildError.invalidLane }
     let built = try content.build(&resources)
     if let item = try applyLaneOffset(to: built) {
@@ -46,7 +46,7 @@ internal struct Anchor: DSLNode {
     return .spine(spine)
   }
 
-  private func applyLaneOffset(to built: Built) throws -> Built? {
+  private func applyLaneOffset(to built: Built) throws(BuildError) -> Built? {
     switch built {
     case .item(.title(var title)):
       title.lane = String(lane)

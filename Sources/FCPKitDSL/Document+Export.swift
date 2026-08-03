@@ -31,12 +31,12 @@ import FCPKit
 
 extension Document {
   /// Soft-promotes shells, interns resources, packs the spine, and returns `FCPXML`.
-  public func export(version: FCPXMLVersion = .supportedGeneration) throws -> FCPXML {
+  public func export(version: FCPXMLVersion = .supportedGeneration) throws(BuildError) -> FCPXML {
     guard let root = body as? any DSLNode else {
       throw BuildError.unsupportedContent
     }
     var resources = ResourceStore(version: version)
-    let library = try SoftPromote.promote(try root.build(&resources), resources: &resources)
+    let library = try root.build(&resources).promotedLibrary(resources: &resources)
     return FCPXML(
       version: version.rawValue,
       resources: resources.materialize(),

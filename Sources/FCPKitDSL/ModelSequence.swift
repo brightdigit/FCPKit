@@ -1,5 +1,5 @@
 //
-//  Spine.swift
+//  ModelSequence.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,20 +29,37 @@
 
 import FCPKit
 
-/// A connected storyline permitted only as anchored content.
-public struct Spine: DSLNode {
-  internal let content: DocumentGroup
+/// The FCPXML model sequence, disambiguated from the DSL's own ``Sequence``.
+internal typealias ModelSequence = FCPKit.Sequence
 
-  /// Creates a nested spine for use inside ``AssetClip/anchor(lane:offset:content:)``.
-  public init(@DocumentBuilder content: () -> DocumentGroup) {
-    self.content = content()
-  }
-
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+extension ModelSequence {
+  /// Creates a sequence around a spine, packing its items onto the timeline.
+  ///
+  /// Used when a document is soft-promoted from a bare spine or story item and
+  /// no explicit ``Sequence`` shell was authored. The non-spine settings match
+  /// what Final Cut writes for a new 1080p24 project.
+  ///
+  /// - Parameters:
+  ///   - spine: The spine whose items are packed.
+  ///   - format: The interned format resource, when one is available.
+  /// - Throws: ``BuildError`` when an item carries an unusable duration.
+  internal init(
+    packing spine: FCPKit.Spine,
+    format: ResourceRef<FormatKind>?
+  ) throws(BuildError) {
     let packed = try Layout.pack(
-      storyItems(content.contents, resources: &resources),
+      spine.items,
       frameDuration: FormatPreset.p1080p24.format.frameDuration
     )
-    return .spine(FCPKit.Spine(items: packed.items))
+    self.init(
+      format: format,
+      duration: packed.duration,
+      tcStart: "0s",
+      tcFormat: .nonDropFrame,
+      audioLayout: .stereo,
+      audioRate: .hz48000,
+      renderFormat: "FFRenderFormatProRes422HQ",
+      spine: FCPKit.Spine(items: packed.items)
+    )
   }
 }

@@ -38,7 +38,7 @@ public struct DocumentGroup: DocumentContent, DSLNode {
     self.contents = contents
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     if contents.count == 1, let node = contents[0] as? any DSLNode {
       return try node.build(&resources)
     }

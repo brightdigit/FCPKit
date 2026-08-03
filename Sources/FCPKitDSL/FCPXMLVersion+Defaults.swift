@@ -1,5 +1,5 @@
 //
-//  Defaults.swift
+//  FCPXMLVersion+Defaults.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,17 +29,24 @@
 
 import FCPKit
 
-internal enum Defaults {
-  /// Indicates whether a version's DTD declares `match-analysis-type`.
+extension FCPXMLVersion {
+  /// The FCPXML version that introduced `match-analysis-type`.
+  private static let analysisMatchingIntroduced = FCPXMLVersion("1.14")
+
+  /// Indicates whether this version's DTD declares `match-analysis-type`.
   ///
   /// The element was introduced in FCPXML 1.14; emitting it in a 1.13 document
   /// makes the document invalid against Final Cut's own 1.13 DTD. A malformed
   /// version string is admitted so unparseable inputs keep prior behavior.
-  internal static func admitsAnalysisMatching(_ version: FCPXMLVersion) -> Bool {
-    version.compatibility(relativeTo: FCPXMLVersion("1.14")) != .older
+  internal var admitsAnalysisMatching: Bool {
+    compatibility(relativeTo: Self.analysisMatchingIntroduced) != .older
   }
 
-  internal static func smartCollections(version: FCPXMLVersion) -> [SmartCollection] {
+  /// The smart collections Final Cut creates in a new library at this version.
+  ///
+  /// `Missing Analysis` is included only where the schema declares
+  /// `match-analysis-type`; see ``admitsAnalysisMatching``.
+  internal var defaultSmartCollections: [SmartCollection] {
     var collections: [SmartCollection] = [
       SmartCollection(
         name: "Projects",
@@ -70,7 +77,7 @@ internal enum Defaults {
         matchRatings: [MatchRatings(value: "favorites")]
       ),
     ]
-    if admitsAnalysisMatching(version) {
+    if admitsAnalysisMatching {
       collections.append(
         SmartCollection(
           name: "Missing Analysis",
@@ -80,25 +87,5 @@ internal enum Defaults {
       )
     }
     return collections
-  }
-
-  internal static func sequence(
-    spine: FCPKit.Spine,
-    format: ResourceRef<FormatKind>?
-  ) throws -> FCPKit.Sequence {
-    let packed = try Layout.pack(
-      spine.items,
-      frameDuration: FormatPreset.p1080p24.format.frameDuration
-    )
-    return FCPKit.Sequence(
-      format: format,
-      duration: packed.duration,
-      tcStart: "0s",
-      tcFormat: .nonDropFrame,
-      audioLayout: .stereo,
-      audioRate: .hz48000,
-      renderFormat: "FFRenderFormatProRes422HQ",
-      spine: FCPKit.Spine(items: packed.items)
-    )
   }
 }

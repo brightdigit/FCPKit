@@ -110,7 +110,7 @@ public struct Generator: DSLNode {
     return replacing(params: updated)
   }
 
-  internal func build(_ resources: inout ResourceStore) throws -> Built {
+  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let videoElement = FCPKit.Video(
       ref: ResourceRef<AssetKind>(ref.rawValue),

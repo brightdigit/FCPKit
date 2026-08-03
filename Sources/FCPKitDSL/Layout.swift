@@ -59,7 +59,9 @@ internal enum Layout {
   /// Each transition of duration `T` overlaps the previous clip's end and the next
   /// clip's start by `T/2`. Times that reduce to whole seconds render as `"Ns"`;
   /// otherwise they keep the sequence tick denominator (for 24fps, `/2400s`).
-  internal static func pack(_ items: [FCPKit.SpineItem], frameDuration: String?) throws -> Packed {
+  internal static func pack(_ items: [FCPKit.SpineItem], frameDuration: String?) throws(BuildError)
+    -> Packed
+  {
     let tickDenominator = tickDenominator(for: frameDuration)
     var cursor: Int64 = 0
     var longest: Int64 = 0
@@ -87,7 +89,7 @@ internal enum Layout {
     cursor: Int64,
     longest: Int64,
     tickDenominator: Int32
-  ) throws -> PackStep {
+  ) throws(BuildError) -> PackStep {
     if let overlapping = try packOverlapping(
       item,
       overlap: overlap,
