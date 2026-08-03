@@ -30,7 +30,12 @@
 import FCPKit
 import Foundation
 
-internal struct ResourceStore {
+/// The document's shared table of assets, formats, and effects.
+///
+/// Instances are created and threaded through the build by the DSL itself. The type is
+/// `public` only so that ``DSLNode/build(_:)`` can name it; every member is internal, so
+/// it offers no extension point outside this module.
+public struct ResourceStore {
   internal static let draftID: ResourceID = "draft"
 
   /// Target document version, used to gate version-specific default vocabulary.

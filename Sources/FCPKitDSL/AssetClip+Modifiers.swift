@@ -34,19 +34,4 @@ extension AssetClip {
   public func audioRole(_ role: String) -> AssetClip {
     replacing(audioRole: role)
   }
-  /// Anchors content on a connected lane. `lane` must be nonzero.
-  public func anchor(
-    lane: Int,
-    offset: FCPTime = .zero,
-    @DocumentBuilder content: () -> DocumentGroup
-  ) -> AssetClip {
-    replacing(
-      anchors: content().contents.compactMap { value in
-        guard let node = value as? any DSLNode else {
-          return nil
-        }
-        return Anchor(lane: lane, offset: offset, content: node)
-      }
-    )
-  }
 }

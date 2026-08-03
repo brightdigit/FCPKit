@@ -30,13 +30,15 @@
 import FCPKit
 
 /// A title clip, typically anchored onto an asset clip.
-public struct Title: DSLNode {
+public struct Title: StoryItem {
   internal let preset: TitlePreset
   internal let text: String
   /// Clip duration on the storyline.
   public let duration: FCPTime
   internal let lane: Int?
   internal let offset: FCPTime?
+  /// The anchors attached to this title.
+  public let anchors: [any DSLNode]
 
   /// Creates a Basic Title from text and optional duration.
   public init(_ text: String, duration: FCPTime? = nil) {
@@ -45,23 +47,58 @@ public struct Title: DSLNode {
 
   /// Creates a title from a preset, text, and optional duration.
   public init(_ preset: TitlePreset, text: String, duration: FCPTime? = nil) {
-    self.init(preset: preset, text: text, duration: duration ?? .zero, lane: nil, offset: nil)
+    self.init(
+      preset: preset,
+      text: text,
+      duration: duration ?? .zero,
+      lane: nil,
+      offset: nil,
+      anchors: []
+    )
   }
 
-  private init(preset: TitlePreset, text: String, duration: FCPTime, lane: Int?, offset: FCPTime?) {
+  private init(
+    preset: TitlePreset,
+    text: String,
+    duration: FCPTime,
+    lane: Int?,
+    offset: FCPTime?,
+    anchors: [any DSLNode]
+  ) {
     self.preset = preset
     self.text = text
     self.duration = duration
     self.lane = lane
     self.offset = offset
+    self.anchors = anchors
   }
 
   /// Sets the title clip duration.
   public func duration(_ duration: FCPTime) -> Title {
-    Title(preset: preset, text: text, duration: duration, lane: lane, offset: offset)
+    Title(
+      preset: preset,
+      text: text,
+      duration: duration,
+      lane: lane,
+      offset: offset,
+      anchors: anchors
+    )
   }
 
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+  /// Returns a copy of this title carrying exactly the given anchors.
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> Title {
+    Title(
+      preset: preset,
+      text: text,
+      duration: duration,
+      lane: lane,
+      offset: offset,
+      anchors: anchors
+    )
+  }
+
+  /// Lowers this title into a `<title>` story item.
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let style = FCPKit.TextStyle(ref: "ts1", content: text)
     let definition = FCPKit.TextStyleDef(
@@ -74,19 +111,17 @@ public struct Title: DSLNode {
         alignment: "center"
       )
     )
-    return .item(
-      .title(
-        FCPKit.Title(
-          ref: ref,
-          name: preset.name,
-          duration: duration.description,
-          start: "3600s",
-          lane: lane.map(String.init),
-          offset: offset?.description ?? "0s",
-          text: [FCPKit.TextElement(textStyle: [style])],
-          textStyleDef: [definition]
-        )
-      )
+    var element = FCPKit.Title(
+      ref: ref,
+      name: preset.name,
+      duration: duration.description,
+      start: "3600s",
+      lane: lane.map(String.init),
+      offset: offset?.description ?? "0s",
+      text: [FCPKit.TextElement(textStyle: [style])],
+      textStyleDef: [definition]
     )
+    element.anchoredItems = try anchors.anchoredItems(resources: &resources)
+    return .item(.title(element))
   }
 }

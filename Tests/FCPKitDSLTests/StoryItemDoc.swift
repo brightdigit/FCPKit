@@ -1,5 +1,5 @@
 //
-//  StoryItems.swift
+//  StoryItemDoc.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -28,15 +28,17 @@
 //
 
 import FCPKit
+import FCPKitDSL
+import Foundation
+import Testing
 
-internal func storyItems(
-  _ content: [any DocumentContent],
-  resources: inout ResourceStore
-) throws(BuildError) -> [FCPKit.SpineItem] {
-  try content.map { value throws(BuildError) in
-    guard let node = value as? any DSLNode, case .item(let item) = try node.build(&resources) else {
-      throw BuildError.unsupportedContent
+/// Wraps arbitrary story content in a 1080p24 sequence.
+internal struct StoryItemDoc<Content: DocumentContent>: Document {
+  internal let content: Content
+
+  internal var body: some DocumentContent {
+    Sequence(format: .p1080p24) {
+      content
     }
-    return item
   }
 }

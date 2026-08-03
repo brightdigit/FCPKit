@@ -1,5 +1,5 @@
 //
-//  Spine.swift
+//  Array+Lowering.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,21 +29,24 @@
 
 import FCPKit
 
-/// A connected storyline permitted only as anchored content.
-public struct Spine: DSLNode {
-  internal let content: DocumentGroup
-
-  /// Creates a nested spine for use inside ``AssetClip/anchor(lane:offset:content:)``.
-  public init(@DocumentBuilder content: () -> DocumentGroup) {
-    self.content = content()
-  }
-
-  /// Lowers this spine into an ordered `<spine>` of story items.
-  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
-    let packed = try Layout.pack(
-      content.contents.spineItems(resources: &resources),
-      frameDuration: FormatPreset.p1080p24.format.frameDuration
-    )
-    return .spine(FCPKit.Spine(items: packed.items))
+extension Array where Element == any DocumentContent {
+  /// Lowers this content into ordered spine items, preserving authored order.
+  ///
+  /// - Throws: ``BuildError/unsupportedContent`` when a value is not a story
+  ///   item — a document shell such as a `Project` cannot sit in a spine.
+  internal func spineItems(
+    resources: inout ResourceStore
+  ) throws(BuildError) -> [FCPKit.SpineItem] {
+    var items: [FCPKit.SpineItem] = []
+    items.reserveCapacity(count)
+    for value in self {
+      guard let node = value as? any DSLNode,
+        case .item(let item) = try node.build(&resources)
+      else {
+        throw BuildError.unsupportedContent
+      }
+      items.append(item)
+    }
+    return items
   }
 }

@@ -40,11 +40,33 @@ extension Color: DSLNode {
     return copy
   }
 
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+  /// Lowers this color into a custom solid generator `<video>` story item.
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard let duration else {
       throw BuildError.missingDuration("color generator")
     }
     let generator = Generator(.custom, duration: duration).color(self)
     return try generator.build(&resources)
+  }
+}
+
+extension Color: StoryItem {
+  /// Always empty: a color carries no anchors until it is promoted to a ``Generator``.
+  public var anchors: [any DSLNode] { [] }
+
+  /// Promotes this color to a ``Generator`` carrying the given anchors.
+  ///
+  /// `Color` is a model type and cannot gain stored properties, so anchoring performs
+  /// the `Color` → `Generator` desugaring one step early. Chaining still works, because
+  /// ``Generator`` is itself a ``StoryItem``.
+  ///
+  /// - Important: Call `.duration(_:)` *before* `.anchor(lane:offset:content:)`. Because
+  ///   `.anchor` cannot throw from builder position, a color with no duration promotes
+  ///   with a zero duration, which surfaces later as ``BuildError/missingDuration`` at
+  ///   `export()`.
+  public func replacingAnchors(_ anchors: [any DSLNode]) -> Generator {
+    Generator(.custom, duration: duration ?? .zero)
+      .color(self)
+      .replacingAnchors(anchors)
   }
 }

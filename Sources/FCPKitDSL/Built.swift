@@ -29,11 +29,20 @@
 
 import FCPKit
 
-internal enum Built {
+/// The model value a ``DSLNode`` lowers to.
+///
+/// - Warning: The case list is expected to evolve before 1.0.
+public enum Built {
+  /// A built `<library>` element.
   case library(FCPKit.Library)
+  /// A built `<event>` element.
   case event(FCPKit.Event)
+  /// A built `<project>` element.
   case project(FCPKit.Project)
+  /// A built `<sequence>` element.
   case sequence(FCPKit.Sequence)
+  /// A built `<spine>` element.
   case spine(FCPKit.Spine)
+  /// A built story item, such as an asset clip, title, gap, or video.
   case item(FCPKit.SpineItem)
 }

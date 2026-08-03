@@ -38,11 +38,12 @@ public struct DocumentGroup: DocumentContent, DSLNode {
     self.contents = contents
   }
 
-  internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+  /// Lowers this group's single child, or a synthesized spine of its children.
+  public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     if contents.count == 1, let node = contents[0] as? any DSLNode {
       return try node.build(&resources)
     }
-    let items = try storyItems(contents, resources: &resources)
+    let items = try contents.spineItems(resources: &resources)
     let packed = try Layout.pack(items, frameDuration: FormatPreset.p1080p24.format.frameDuration)
     return .spine(FCPKit.Spine(items: packed.items))
   }
