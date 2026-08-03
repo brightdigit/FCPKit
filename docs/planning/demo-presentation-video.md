@@ -89,6 +89,11 @@ Issues 7 and 8 are **not blockers** for the demo. They expand what the deck can 
 (goofier transitions, blend modes, opacity, masking) and are tracked as separate
 GitHub issues so the demo can ship on cross dissolves and be revisited.
 
+Execution plan across parallel worktrees:
+[demo-parallel-worktree-plan.md](demo-parallel-worktree-plan.md). Note that
+#35 and #37 both rewrite `Title.build` and **cannot** be worked in parallel
+despite being independent in the graph above.
+
 ## Conventions for every issue below
 
 - MIT header block on every new file (see `Scripts/header.sh`, or copy from any
