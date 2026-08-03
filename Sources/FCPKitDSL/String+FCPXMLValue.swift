@@ -1,5 +1,5 @@
 //
-//  AttributeValue.swift
+//  String+FCPXMLValue.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -29,9 +29,8 @@
 
 import Foundation
 
-/// Renders Swift values as FCPXML attribute strings.
-internal enum AttributeValue {
-  /// Formats a `Double` for an FCPXML attribute, collapsing whole numbers.
+extension String {
+  /// Creates an FCPXML attribute value from a `Double`, collapsing whole numbers.
   ///
   /// Final Cut writes `63` rather than `63.0`, so whole values lose their
   /// fractional part. Values outside `Int`'s range, and non-finite values, fall
@@ -42,15 +41,16 @@ internal enum AttributeValue {
   /// `63.5` renders as `63,5` under a German or French locale, which is invalid
   /// FCPXML; it rounds to six fractional digits, which would corrupt position
   /// values like `7.777777777`; and `Decimal(Double.infinity)` traps outright.
-  internal static func decimal(_ value: Double) -> String {
-    guard value.isFinite else {
-      return String(value)
-    }
-    guard value.truncatingRemainder(dividingBy: 1) == 0,
+  ///
+  /// - Parameter value: The number to render.
+  internal init(fcpxmlValue value: Double) {
+    guard value.isFinite,
+      value.truncatingRemainder(dividingBy: 1) == 0,
       value >= Double(Int.min), value <= Double(Int.max)
     else {
-      return String(value)
+      self = String(value)
+      return
     }
-    return String(Int(value))
+    self = String(Int(value))
   }
 }

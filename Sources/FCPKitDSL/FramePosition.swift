@@ -189,6 +189,6 @@ extension FramePosition {
       )
     }
 
-    return "\(AttributeValue.decimal(point.x)) \(AttributeValue.decimal(point.y))"
+    return "\(String(fcpxmlValue: point.x)) \(String(fcpxmlValue: point.y))"
   }
 }

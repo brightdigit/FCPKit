@@ -86,7 +86,7 @@ public struct TitleStyle: Equatable, Sendable {
 extension TitleStyle {
   /// The `fontSize` attribute value, collapsing whole numbers (`63`, not `63.0`).
   internal var fontSizeString: String {
-    AttributeValue.decimal(fontSize)
+    String(fcpxmlValue: fontSize)
   }
 
   /// Lowers this style into the model's `text-style` element.
