@@ -45,7 +45,7 @@ extension Color: DSLNode {
     guard let duration else {
       throw BuildError.missingDuration("color generator")
     }
-    let generator = Generator(.custom, duration: duration).color(self)
+    let generator = Generator(.custom).duration(duration).color(self)
     return try generator.build(&resources)
   }
 }
@@ -60,13 +60,14 @@ extension Color: StoryItem {
   /// the `Color` → `Generator` desugaring one step early. Chaining still works, because
   /// ``Generator`` is itself a ``StoryItem``.
   ///
-  /// - Important: Call `.duration(_:)` *before* `.anchor(lane:offset:content:)`. Because
-  ///   `.anchor` cannot throw from builder position, a color with no duration promotes
-  ///   with a zero duration, which surfaces later as ``BuildError/missingDuration`` at
-  ///   `export()`.
+  /// - Important: Call `.duration(_:)` *before* `.anchor(lane:offset:content:)` on the
+  ///   color host. Anchored children without an explicit duration inherit that host
+  ///   duration at export.
   public func replacingAnchors(_ anchors: [any DSLNode]) -> Generator {
-    Generator(.custom, duration: duration ?? .zero)
-      .color(self)
-      .replacingAnchors(anchors)
+    var generator = Generator(.custom).color(self)
+    if let duration {
+      generator = generator.duration(duration)
+    }
+    return generator.replacingAnchors(anchors)
   }
 }

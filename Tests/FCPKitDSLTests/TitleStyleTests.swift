@@ -38,7 +38,7 @@ internal struct TitleStyleTests {
   internal func unstyledTitleMatchesFinalCutDefaults() throws {
     // Fixture parity guard: these are exactly the attributes real Final Cut
     // writes (Tests/FCPKitTests/FeaturePairs/titles/after.fcpxml).
-    let style = try TitleStyleSupport.definitionStyle(Title("Hello", duration: .seconds(5)))
+    let style = try TitleStyleSupport.definitionStyle(Title("Hello").duration(.seconds(5)))
     #expect(style.font == "Helvetica")
     #expect(style.fontSize == "63")
     #expect(style.fontFace == "Regular")
@@ -49,7 +49,7 @@ internal struct TitleStyleTests {
 
   @Test
   internal func modifiersApplyToTextStyle() throws {
-    let title = Title("Hello", duration: .seconds(5))
+    let title = Title("Hello").duration(.seconds(5))
       .font("Avenir Next")
       .fontSize(96)
       .fontColor(.red)
@@ -64,11 +64,11 @@ internal struct TitleStyleTests {
 
   @Test
   internal func boldIsEmittedOnlyWhenSet() throws {
-    let plain = try TitleStyleSupport.definitionStyle(Title("Hello", duration: .seconds(5)))
+    let plain = try TitleStyleSupport.definitionStyle(Title("Hello").duration(.seconds(5)))
     #expect(plain.bold == nil)
 
     let bolded = try TitleStyleSupport.definitionStyle(
-      Title("Hello", duration: .seconds(5)).bold()
+      Title("Hello").duration(.seconds(5)).bold()
     )
     #expect(bolded.bold == "1")
   }
@@ -76,12 +76,12 @@ internal struct TitleStyleTests {
   @Test
   internal func fontSizeCollapsesWholeNumbers() throws {
     let whole = try TitleStyleSupport.definitionStyle(
-      Title("Hello", duration: .seconds(5)).fontSize(63)
+      Title("Hello").duration(.seconds(5)).fontSize(63)
     )
     #expect(whole.fontSize == "63")
 
     let fractional = try TitleStyleSupport.definitionStyle(
-      Title("Hello", duration: .seconds(5)).fontSize(63.5)
+      Title("Hello").duration(.seconds(5)).fontSize(63.5)
     )
     #expect(fractional.fontSize == "63.5")
   }
@@ -89,7 +89,7 @@ internal struct TitleStyleTests {
   @Test
   internal func fontFaceIsSettable() throws {
     let style = try TitleStyleSupport.definitionStyle(
-      Title("Hello", duration: .seconds(5)).fontFace("Bold")
+      Title("Hello").duration(.seconds(5)).fontFace("Bold")
     )
     #expect(style.fontFace == "Bold")
   }
@@ -97,7 +97,7 @@ internal struct TitleStyleTests {
   @Test
   internal func nameOverridesDisplayNameWithoutChangingText() throws {
     let title = try TitleStyleSupport.firstTitle(
-      Title("Body copy", duration: .seconds(5)).name("Slide Heading")
+      Title("Body copy").duration(.seconds(5)).name("Slide Heading")
     )
     #expect(title.name == "Slide Heading")
 

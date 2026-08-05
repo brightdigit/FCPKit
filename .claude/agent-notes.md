@@ -38,4 +38,4 @@ Running log of user corrections and standing always/never directives for this re
 - 2026-08-02: Pre-1.0, do not contort a design to avoid changing DSL APIs — make types public and change signatures when that yields the simpler design.
 - 2026-08-02: Do not add public API for a capability nothing needs yet (e.g. keep build-environment keys internal until an external need appears).
 - 2026-08-02: When designing DSL ergonomics, ask what SwiftUI would do and prefer the option that demands least from the developer (alignment-style APIs over coordinate math), keeping absolute-value APIs as an escape hatch.
-- 2026-08-05: Showcase presentation types (`PresentationDocument` / `PresentationSlide`) ship in `FCPKitDemo`, not `FCPKitDSL`; that product depends only on the public DSL.
+- 2026-08-05: Presentation authoring lives in `FCPKitDemo` (not `FCPKitDSL`) and depends only on the public DSL; `PresentationDocument` is a thin editable shell, not a canned feature deck.

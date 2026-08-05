@@ -114,15 +114,13 @@ internal struct FeaturePairAcceptanceTests {
           Sequence(format: .p1080p24) {
             AssetClip(
               URL(fileURLWithPath: "/tmp/Left.mov"),
-              duration: FCPTime(numerator: 10),
               name: "Left"
-            )
+            ).duration(FCPTime(numerator: 10))
             Transition(.crossDissolve)
             AssetClip(
               URL(fileURLWithPath: "/tmp/Right.mov"),
-              duration: FCPTime(numerator: 9),
               name: "Right"
-            )
+            ).duration(FCPTime(numerator: 9))
           }
         }
       }

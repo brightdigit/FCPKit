@@ -35,7 +35,16 @@ internal struct Anchor: DSLNode {
   internal let content: any DSLNode
 
   internal func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+    try build(&resources, hostDuration: nil)
+  }
+
+  /// Lowers anchored content, inheriting `hostDuration` when the content has none.
+  internal func build(
+    _ resources: inout ResourceStore,
+    hostDuration: FCPTime?
+  ) throws(BuildError) -> Built {
     guard lane != 0 else { throw BuildError.invalidLane }
+    let content = Self.resolvingDuration(hostDuration, into: content)
     let built = try content.build(&resources)
     if let item = built.placed(lane: lane, offset: offset) {
       return item
@@ -44,5 +53,27 @@ internal struct Anchor: DSLNode {
       throw BuildError.unsupportedContent
     }
     return .spine(spine)
+  }
+
+  /// Applies the host's duration to content that has not set one.
+  private static func resolvingDuration(
+    _ host: FCPTime?,
+    into content: any DSLNode
+  ) -> any DSLNode {
+    guard let host, host != .zero else { return content }
+    switch content {
+    case let title as Title where title.duration == nil:
+      return title.duration(host)
+    case let generator as Generator where generator.duration == nil:
+      return generator.duration(host)
+    case let gap as Gap where gap.duration == nil:
+      return gap.duration(host)
+    case let clip as AssetClip where clip.duration == nil && clip.source.asset.duration == nil:
+      return clip.duration(host)
+    case let color as Color where color.duration == nil:
+      return color.duration(host)
+    default:
+      return content
+    }
   }
 }

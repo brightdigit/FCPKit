@@ -34,6 +34,7 @@ public struct Project: DSLNode {
   internal let name: String?
   internal let uid: String?
   internal let modDate: String?
+  internal let colorProcessing: ColorProcessing?
   internal let content: DocumentGroup
 
   /// Creates a project with optional name, uid, and modification date.
@@ -43,23 +44,66 @@ public struct Project: DSLNode {
     modDate: String? = nil,
     @DocumentBuilder content: () -> DocumentGroup
   ) {
+    self.init(
+      name: name,
+      uid: uid,
+      modDate: modDate,
+      colorProcessing: nil,
+      content: content()
+    )
+  }
+
+  private init(
+    name: String?,
+    uid: String?,
+    modDate: String?,
+    colorProcessing: ColorProcessing?,
+    content: DocumentGroup
+  ) {
     self.name = name
     self.uid = uid
     self.modDate = modDate
-    self.content = content()
+    self.colorProcessing = colorProcessing
+    self.content = content
+  }
+
+  /// Sets the soft-promoted library's color-processing mode.
+  ///
+  /// When set, export wraps this project in a `<library>` that carries
+  /// `colorProcessing` so Final Cut Pro does not treat the document as
+  /// standard against a wide-gamut HDR library.
+  public func colorProcessing(_ mode: ColorProcessing) -> Project {
+    Project(
+      name: name,
+      uid: uid,
+      modDate: modDate,
+      colorProcessing: mode,
+      content: content
+    )
   }
 
   /// Lowers this project into a `<project>` wrapping its promoted sequence.
+  ///
+  /// When ``colorProcessing(_:)`` was applied, returns a `<library>` with that
+  /// mode so soft-promotion does not drop the attribute.
   public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard case .sequence(let sequence) = try content.build(&resources) else {
       throw BuildError.unsupportedContent
     }
-    return .project(
-      FCPKit.Project(
-        name: name ?? "Untitled",
-        uid: uid,
-        modDate: modDate,
-        sequence: sequence
+    let project = FCPKit.Project(
+      name: name ?? "Untitled",
+      uid: uid,
+      modDate: modDate,
+      sequence: sequence
+    )
+    guard let colorProcessing else {
+      return .project(project)
+    }
+    return .library(
+      FCPKit.Library(
+        colorProcessing: colorProcessing,
+        events: [FCPKit.Event(name: "Untitled", projects: [project])],
+        smartCollections: resources.version.defaultSmartCollections
       )
     )
   }

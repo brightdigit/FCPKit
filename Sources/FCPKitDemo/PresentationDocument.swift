@@ -30,103 +30,33 @@
 import FCPKit
 import FCPKitDSL
 
-/// A media-free slide deck showcasing `FCPKitDSL`.
+/// A starter `FCPKitDSL` document for hand-authored presentation video.
 ///
-/// Each slide is a solid color generator with a styled title anchored on lane 1,
-/// separated by cross dissolves. No `.mov` files and no `ffmpeg` are involved, so
-/// anyone who clones the repository can regenerate the `.fcpxml` with one command.
+/// Replace the placeholder cut in ``body`` with your own storyline — colors,
+/// titles, clips, transitions, and anything else the DSL supports. Export with
+/// `fcpxml-dsl export presentation`.
 public struct PresentationDocument: Document {
   /// The Final Cut Pro project name written into the exported document.
   public let projectName: String
-  /// The slides, in order.
-  public let slides: [PresentationSlide]
-  /// The cross dissolve duration between consecutive slides.
-  public let transitionDuration: FCPTime
 
-  /// The slides, interleaved with cross dissolves.
+  /// The project shell; author the cut inside the ``Sequence``.
   public var body: DocumentGroup {
     Project(name: projectName) {
       Sequence {
-        for (index, slide) in slides.enumerated() {
-          // Prefer `if`/`else` over `if` alone so the builder never emits an empty
-          // `DocumentGroup` (which lowers to `.spine`, not a spine `.item`).
-          if index > 0 {
-            Transition(.crossDissolve, duration: transitionDuration)
-            background(for: slide, at: index)
-          } else {
-            background(for: slide, at: index)
-          }
+        Color.white.duration(2.0).anchor(lane: 1) {
+          Title("Welcome to FCPKit!").fontColor(.black).alignment(.center)
+        }
+        // insert wipes ad movement transitions
+        Color.green.duration(5.0).anchor(lane: 1) {
+          Title("This library allows you to create Final Cut Pro project documents at ease.").alignment(.center)
         }
       }
     }
+    .colorProcessing(.wideHDR)
   }
 
-  /// Creates a presentation document.
-  public init(
-    projectName: String = "FCPKit Presentation",
-    slides: [PresentationSlide] = PresentationDocument.featureShowcase,
-    transitionDuration: FCPTime = FCPTime(numerator: 1)
-  ) {
+  /// Creates a presentation document shell.
+  public init(projectName: String = "FCPKit Presentation") {
     self.projectName = projectName
-    self.slides = slides
-    self.transitionDuration = transitionDuration
   }
-
-  /// A slide's color background carrying its anchored, dissolve-safe title.
-  private func background(for slide: PresentationSlide, at index: Int) -> some DocumentContent {
-    slide.background
-      .duration(slide.duration)
-      .anchor(lane: 1, offset: .zero) {
-        Title(slide.heading, duration: titleDuration(for: slide, at: index))
-          .font("Helvetica")
-          .fontFace("Bold")
-          .fontSize(96)
-          .position(.center)
-      }
-  }
-
-  /// The visible span of a slide after its dissolves are deducted.
-  ///
-  /// Anchored items are not swept into a primary-storyline transition, so a title
-  /// spanning a dissolve would hard-cut while its background dissolved. Packing
-  /// sets a dissolved clip's `start` to T/2 and shrinks its duration by both
-  /// overlaps, and an anchor's offset is relative to that trimmed start — so a
-  /// title at offset zero already begins where the incoming dissolve ends, and
-  /// only the tail needs trimming.
-  public func titleDuration(for slide: PresentationSlide, at index: Int) -> FCPTime {
-    let incoming = index == 0 ? 0 : transitionDuration.seconds / 2
-    let outgoing = index == slides.count - 1 ? 0 : transitionDuration.seconds / 2
-    return .seconds(slide.duration.seconds - incoming - outgoing)
-  }
-}
-
-extension PresentationDocument {
-  /// The default FCPKit feature deck.
-  public static let featureShowcase: [PresentationSlide] = [
-    PresentationSlide(heading: "FCPKit", background: Color(red: 0.08, green: 0.08, blue: 0.08)),
-    PresentationSlide(
-      heading: "Typed FCPXML model",
-      background: Color(red: 0.05, green: 0.15, blue: 0.42)
-    ),
-    PresentationSlide(
-      heading: "Ordered spine, preserved",
-      background: Color(red: 0.0, green: 0.32, blue: 0.36)
-    ),
-    PresentationSlide(
-      heading: "SwiftUI-shaped DSL",
-      background: Color(red: 0.29, green: 0.12, blue: 0.45)
-    ),
-    PresentationSlide(
-      heading: "Resource interning",
-      background: Color(red: 0.6, green: 0.28, blue: 0.02)
-    ),
-    PresentationSlide(
-      heading: "DTD-validated output",
-      background: Color(red: 0.06, green: 0.36, blue: 0.16)
-    ),
-    PresentationSlide(
-      heading: "brightdigit/FCPKit",
-      background: Color(red: 0.08, green: 0.08, blue: 0.08)
-    ),
-  ]
 }

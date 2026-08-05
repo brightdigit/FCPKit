@@ -37,10 +37,10 @@ internal struct StoryItemAnchorErrorTests {
   @Test
   internal func generatorLaneZeroThrowsInvalidLane() throws {
     let document = StoryItemDoc(
-      content: Generator(.custom, duration: FCPTime(numerator: 6))
+      content: Generator(.custom).duration(FCPTime(numerator: 6))
         .color(.blue)
         .anchor(lane: 0) {
-          Title("Heading", duration: FCPTime(numerator: 4))
+          Title("Heading").duration(FCPTime(numerator: 4))
         }
     )
 
@@ -55,7 +55,7 @@ internal struct StoryItemAnchorErrorTests {
       content: Color.red
         .duration(FCPTime(numerator: 6))
         .anchor(lane: 0) {
-          Title("Heading", duration: FCPTime(numerator: 4))
+          Title("Heading").duration(FCPTime(numerator: 4))
         }
     )
 
@@ -72,7 +72,7 @@ internal struct StoryItemAnchorErrorTests {
     let document = StoryItemDoc(
       content: Color.red
         .anchor(lane: 1) {
-          Title("Heading", duration: FCPTime(numerator: 4))
+          Title("Heading").duration(FCPTime(numerator: 4))
         }
     )
 

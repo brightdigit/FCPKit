@@ -90,8 +90,7 @@ extension FCPXMLDSLCommand {
       projectName: String,
       version: FCPXMLVersion
     ) async throws {
-      // The deck itself lives in FCPKitDemo so it ships as a browsable showcase;
-      // this command only parses arguments and invokes it.
+      // Thin editable shell in FCPKitDemo; this command only invokes it.
       let document = PresentationDocument(projectName: projectName)
       try write(document: document, to: output, version: version)
       print("Wrote presentation → \(output.path)")

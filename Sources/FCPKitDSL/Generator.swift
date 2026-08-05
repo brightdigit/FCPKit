@@ -35,8 +35,8 @@ public struct Generator: DSLNode {
   public static let customColorKey = "9999/10008/10006/2/1/1"
 
   internal let preset: GeneratorPreset
-  /// Clip duration on the storyline.
-  public let duration: FCPTime
+  /// Clip duration on the storyline, when set via ``duration(_:)`` or inherited from a host.
+  public let duration: FCPTime?
   internal let name: String?
   internal let params: [ParamElement]
   internal let lane: Int?
@@ -44,11 +44,31 @@ public struct Generator: DSLNode {
   /// The anchors attached to this generator clip.
   public let anchors: [any DSLNode]
 
-  /// Creates a generator clip from a preset and optional duration.
-  public init(_ preset: GeneratorPreset = .custom, duration: FCPTime? = nil, name: String? = nil) {
+  /// Creates a generator clip from a preset.
+  ///
+  /// Set duration with ``duration(_:)``. When this generator is anchored and has
+  /// no duration, it inherits the host clip's duration.
+  public init(_ preset: GeneratorPreset = .custom, name: String? = nil) {
     self.init(
       preset: preset,
-      duration: duration ?? .zero,
+      duration: nil,
+      name: name,
+      params: [],
+      lane: nil,
+      offset: nil,
+      anchors: []
+    )
+  }
+
+  /// Creates a generator clip from a preset and optional duration.
+  @available(*, deprecated, message: """
+    Use `.duration(_:)` instead of passing duration to the initializer. \
+    Anchored generators inherit the host duration when omitted.
+    """)
+  public init(_ preset: GeneratorPreset, duration: FCPTime?, name: String? = nil) {
+    self.init(
+      preset: preset,
+      duration: duration,
       name: name,
       params: [],
       lane: nil,
@@ -59,7 +79,7 @@ public struct Generator: DSLNode {
 
   private init(
     preset: GeneratorPreset,
-    duration: FCPTime,
+    duration: FCPTime?,
     name: String?,
     params: [ParamElement],
     lane: Int?,
@@ -117,10 +137,11 @@ public struct Generator: DSLNode {
 
   /// Lowers this generator into a `<video>` story item.
   ///
-  /// - Throws: ``BuildError/missingDuration(_:)`` when no duration was ever set. This is
-  ///   how a ``Color`` anchored before `.duration(_:)` surfaces at `export()`.
+  /// - Throws: ``BuildError/missingDuration(_:)`` when no duration was set and
+  ///   none was inherited from an anchor host. This is how a ``Color`` anchored
+  ///   before `.duration(_:)` surfaces at `export()`.
   public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
-    guard duration != .zero else {
+    guard let duration else {
       throw BuildError.missingDuration(name ?? preset.name)
     }
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
@@ -133,7 +154,10 @@ public struct Generator: DSLNode {
       duration: duration.description,
       param: params.isEmpty ? nil : params
     )
-    videoElement.anchoredItems = try anchors.anchoredItems(resources: &resources)
+    videoElement.anchoredItems = try anchors.anchoredItems(
+      resources: &resources,
+      hostDuration: duration
+    )
     return .item(.video(videoElement))
   }
 

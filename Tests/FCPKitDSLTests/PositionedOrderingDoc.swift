@@ -40,9 +40,9 @@ import Foundation
 internal struct PositionedOrderingDoc: Document {
   internal var body: some DocumentContent {
     Sequence(format: .p1080p24) {
-      Title("First", duration: .seconds(5)).position(.topLeading)
+      Title("First").duration(.seconds(5)).position(.topLeading)
       Transition(.crossDissolve)
-      Title("Second", duration: .seconds(5)).position(x: 200, y: 300)
+      Title("Second").duration(.seconds(5)).position(x: 200, y: 300)
     }
   }
 }

@@ -40,9 +40,8 @@ internal struct SmartCollectionVersionTests {
         Sequence(format: .p1080p24) {
           AssetClip(
             URL(fileURLWithPath: "/tmp/Left.mov"),
-            duration: FCPTime(numerator: 10),
             name: "Left"
-          )
+          ).duration(FCPTime(numerator: 10))
         }
       }
     }

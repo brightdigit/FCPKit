@@ -39,14 +39,26 @@ public struct Transition: StoryItem {
   public var anchors: [any DSLNode] { [] }
 
   /// Creates a transition from a preset. Default duration is one second.
-  public init(_ preset: TransitionPreset, duration: FCPTime = FCPTime(numerator: 1)) {
+  public init(_ preset: TransitionPreset) {
+    self.preset = preset
+    self.duration = FCPTime(numerator: 1)
+  }
+
+  /// Creates a transition from a preset with an explicit duration.
+  @available(*, deprecated, message: "Use `.duration(_:)` instead of passing duration to the initializer.")
+  public init(_ preset: TransitionPreset, duration: FCPTime) {
     self.preset = preset
     self.duration = duration
   }
 
   /// Sets the transition duration.
   public func duration(_ duration: FCPTime) -> Transition {
-    Transition(preset, duration: duration)
+    Transition(preset: preset, duration: duration)
+  }
+
+  private init(preset: TransitionPreset, duration: FCPTime) {
+    self.preset = preset
+    self.duration = duration
   }
 
   /// Discards the given anchors and returns this transition unchanged.

@@ -40,12 +40,12 @@ internal struct TextStyleIDTests {
 
     var body: some DocumentContent {
       Sequence(format: .p1080p24) {
-        Title("Slide 1", duration: FCPTime(numerator: 5))
+        Title("Slide 1").duration(FCPTime(numerator: 5))
         if count > 1 {
-          Title("Slide 2", duration: FCPTime(numerator: 5))
+          Title("Slide 2").duration(FCPTime(numerator: 5))
         }
         if count > 2 {
-          Title("Slide 3", duration: FCPTime(numerator: 5))
+          Title("Slide 3").duration(FCPTime(numerator: 5))
         }
       }
     }
@@ -54,7 +54,7 @@ internal struct TextStyleIDTests {
   private struct SingleTitleDoc: Document {
     var body: some DocumentContent {
       Sequence(format: .p1080p24) {
-        Title("Only", duration: FCPTime(numerator: 5))
+        Title("Only").duration(FCPTime(numerator: 5))
       }
     }
   }
