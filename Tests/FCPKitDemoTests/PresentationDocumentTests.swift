@@ -28,6 +28,7 @@
 //
 
 import FCPKit
+import FCPKitDemo
 import FCPKitDSL
 import FCPXMLDiff
 import Foundation

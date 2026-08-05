@@ -28,6 +28,7 @@
 //
 
 import FCPKit
+import FCPKitDemo
 import FCPKitDSL
 import Foundation
 
@@ -89,7 +90,7 @@ extension FCPXMLDSLCommand {
       projectName: String,
       version: FCPXMLVersion
     ) async throws {
-      // The deck itself lives in FCPKitDSL so it ships as a browsable showcase;
+      // The deck itself lives in FCPKitDemo so it ships as a browsable showcase;
       // this command only parses arguments and invokes it.
       let document = PresentationDocument(projectName: projectName)
       try write(document: document, to: output, version: version)

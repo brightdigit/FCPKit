@@ -28,6 +28,7 @@
 //
 
 import FCPKit
+import FCPKitDSL
 
 /// A media-free slide deck showcasing `FCPKitDSL`.
 ///
@@ -43,9 +44,20 @@ public struct PresentationDocument: Document {
   public let transitionDuration: FCPTime
 
   /// The slides, interleaved with cross dissolves.
-  public var body: some DocumentContent {
+  public var body: DocumentGroup {
     Project(name: projectName) {
-      PresentationSequence(document: self)
+      Sequence {
+        for (index, slide) in slides.enumerated() {
+          // Prefer `if`/`else` over `if` alone so the builder never emits an empty
+          // `DocumentGroup` (which lowers to `.spine`, not a spine `.item`).
+          if index > 0 {
+            Transition(.crossDissolve, duration: transitionDuration)
+            background(for: slide, at: index)
+          } else {
+            background(for: slide, at: index)
+          }
+        }
+      }
     }
   }
 
@@ -60,20 +72,8 @@ public struct PresentationDocument: Document {
     self.transitionDuration = transitionDuration
   }
 
-  /// Builds the alternating background / transition sequence.
-  internal func storyContent() -> [any DocumentContent] {
-    var content: [any DocumentContent] = []
-    for (index, slide) in slides.enumerated() {
-      if index > 0 {
-        content.append(Transition(.crossDissolve, duration: transitionDuration))
-      }
-      content.append(background(for: slide, at: index))
-    }
-    return content
-  }
-
   /// A slide's color background carrying its anchored, dissolve-safe title.
-  private func background(for slide: PresentationSlide, at index: Int) -> any DocumentContent {
+  private func background(for slide: PresentationSlide, at index: Int) -> some DocumentContent {
     slide.background
       .duration(slide.duration)
       .anchor(lane: 1, offset: .zero) {
