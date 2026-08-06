@@ -32,22 +32,22 @@ import FCPKit
 extension Title {
   /// Sets the text layout method (for example Paragraph wrapping).
   public func layout(_ method: TextLayoutMethod) -> Title {
-    var layout = textLayout ?? TitleTextLayout()
+    var layout = textBoxLayout ?? TextBoxLayout()
     layout.method = method
-    return replacing(textLayout: layout)
+    return replacing(textBoxLayout: layout)
   }
 
   /// Sets absolute text-box margins in Final Cut's margin coordinate space.
   ///
   /// Also enables ``TextLayoutMethod/paragraph`` when no layout method was set.
   public func margins(left: Double, right: Double, top: Double, bottom: Double) -> Title {
-    var layout = textLayout ?? TitleTextLayout()
+    var layout = textBoxLayout ?? TextBoxLayout()
     if layout.method == nil {
       layout.method = .paragraph
     }
     layout.margins = TextMargins(left: left, right: right, top: top, bottom: bottom)
     layout.fillInset = nil
-    return replacing(textLayout: layout)
+    return replacing(textBoxLayout: layout)
   }
 
   /// Configures a wrap box for this title.
@@ -55,13 +55,13 @@ extension Title {
   /// ``TextBox/fillFrame(inset:)`` sets Paragraph layout and derives margins from
   /// the enclosing sequence frame.
   public func textBox(_ box: TextBox) -> Title {
-    var layout = textLayout ?? TitleTextLayout()
+    var layout = textBoxLayout ?? TextBoxLayout()
     layout.method = .paragraph
     switch box.kind {
     case .fillFrame(let inset):
       layout.fillInset = inset
       layout.margins = nil
     }
-    return replacing(textLayout: layout)
+    return replacing(textBoxLayout: layout)
   }
 }

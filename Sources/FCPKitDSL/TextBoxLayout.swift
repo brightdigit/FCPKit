@@ -1,5 +1,5 @@
 //
-//  TitleTextLayout.swift
+//  TextBoxLayout.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,8 +27,8 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-/// Title text-box configuration carried until ``Title/build(_:)``.
-internal struct TitleTextLayout: Equatable, Sendable {
+/// Title wrap-box configuration carried until ``Title/build(_:)``.
+internal struct TextBoxLayout: Equatable, Sendable {
   internal var method: TextLayoutMethod?
   internal var margins: TextMargins?
   internal var fillInset: Double?

@@ -42,7 +42,7 @@ public struct Title: StoryItem {
   internal let style: TitleStyle
   internal let position: FramePosition?
   internal let displayName: String?
-  internal let textLayout: TitleTextLayout?
+  internal let textBoxLayout: TextBoxLayout?
 
   /// Creates a Basic Title from text.
   ///
@@ -94,7 +94,7 @@ public struct Title: StoryItem {
     style: TitleStyle = .default,
     position: FramePosition? = nil,
     displayName: String? = nil,
-    textLayout: TitleTextLayout? = nil
+    textBoxLayout: TextBoxLayout? = nil
   ) {
     self.preset = preset
     self.text = text
@@ -105,7 +105,7 @@ public struct Title: StoryItem {
     self.style = style
     self.position = position
     self.displayName = displayName
-    self.textLayout = textLayout
+    self.textBoxLayout = textBoxLayout
   }
 
   /// Sets the title clip duration.
@@ -120,7 +120,7 @@ public struct Title: StoryItem {
     style: TitleStyle? = nil,
     position: FramePosition? = nil,
     displayName: String? = nil,
-    textLayout: TitleTextLayout? = nil
+    textBoxLayout: TextBoxLayout? = nil
   ) -> Title {
     Title(
       preset: preset,
@@ -132,7 +132,7 @@ public struct Title: StoryItem {
       style: style ?? self.style,
       position: position ?? self.position,
       displayName: displayName ?? self.displayName,
-      textLayout: textLayout ?? self.textLayout
+      textBoxLayout: textBoxLayout ?? self.textBoxLayout
     )
   }
 
@@ -163,7 +163,7 @@ public struct Title: StoryItem {
       transform = FCPKit.AdjustTransform(position: resolved)
     }
 
-    let params = try textLayoutParameters(frameSize: resources.frameSize)
+    let params = try textBoxLayoutParameters(frameSize: resources.frameSize)
 
     var element = FCPKit.Title(
       ref: ref,
@@ -184,15 +184,15 @@ public struct Title: StoryItem {
     return .item(.title(element))
   }
 
-  private func textLayoutParameters(
+  private func textBoxLayoutParameters(
     frameSize: (width: Double, height: Double)?
   ) throws(BuildError) -> [ParamElement]? {
-    guard let textLayout else {
+    guard let textBoxLayout else {
       return nil
     }
-    var method = textLayout.method
+    var method = textBoxLayout.method
     let margins: TextMargins?
-    if let inset = textLayout.fillInset {
+    if let inset = textBoxLayout.fillInset {
       guard let frameSize else {
         throw BuildError.missingFrameSize
       }
@@ -203,8 +203,8 @@ public struct Title: StoryItem {
         height: frameSize.height
       )
     } else {
-      margins = textLayout.margins
+      margins = textBoxLayout.margins
     }
-    return BasicTitleTextLayoutParams.parameters(method: method, margins: margins)
+    return BasicTextBoxLayoutParams.parameters(method: method, margins: margins)
   }
 }

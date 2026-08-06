@@ -1,5 +1,5 @@
 //
-//  BasicTitleTextLayoutParams.swift
+//  BasicTextBoxLayoutParams.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -30,7 +30,7 @@
 import FCPKit
 
 /// Basic Title Motion param keys from FeaturePairs/title-wrap/after.fcpxml.
-internal enum BasicTitleTextLayoutParams {
+internal enum BasicTextBoxLayoutParams {
   private static let prefix = "9999/999166631/999166633/2"
 
   internal static func parameters(
