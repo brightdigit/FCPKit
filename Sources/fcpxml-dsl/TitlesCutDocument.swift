@@ -42,10 +42,10 @@ internal struct TitlesCutDocument: Document {
   internal var body: some DocumentContent {
     Project(name: projectName) {
       Sequence(format: .p1080p24) {
-        AssetClip(mediaURL, duration: mediaDuration)
+        AssetClip(mediaURL).duration(mediaDuration)
           .audioRole("dialogue")
           .anchor(lane: 1) {
-            Title(.basic, text: titleText, duration: titleDuration)
+            Title(.basic, text: titleText).duration(titleDuration)
           }
       }
     }

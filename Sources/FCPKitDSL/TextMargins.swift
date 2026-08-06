@@ -1,5 +1,5 @@
 //
-//  PositionedOrderingDoc.swift
+//  TextMargins.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,22 +27,39 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
-import FCPKitDSL
-import Foundation
+/// The wrap box for a title, in Final Cut margin space (origin at frame
+/// centre; +X right, +Y up).
+public struct TextMargins: Equatable, Sendable {
+  /// Left margin.
+  public var left: Double
+  /// Right margin.
+  public var right: Double
+  /// Top margin.
+  public var top: Double
+  /// Bottom margin.
+  public var bottom: Double
 
-/// A clip / transition / clip spine where the clips carry deferred positions.
-///
-/// The v0.1.0 Step 3 ordering guarantee is that `Spine.items` keeps DTD order.
-/// Position resolution rewrites title elements on the way out, so these tests
-/// assert order survives *after* resolution — the schema-completeness inventory
-/// is order-blind and would not catch a reordering here.
-internal struct PositionedOrderingDoc: Document {
-  internal var body: some DocumentContent {
-    Sequence(format: .p1080p24) {
-      Title("First").duration(.seconds(5)).position(.topLeading)
-      Transition(.crossDissolve)
-      Title("Second").duration(.seconds(5)).position(x: 200, y: 300)
-    }
+  /// Creates absolute margins in Final Cut's text-box coordinate space.
+  public init(left: Double, right: Double, top: Double, bottom: Double) {
+    self.left = left
+    self.right = right
+    self.top = top
+    self.bottom = bottom
+  }
+
+  /// Margins that inset the wrap box from each edge of a `width`×`height` frame.
+  internal static func fillFrame(
+    inset: Double,
+    width: Double,
+    height: Double
+  ) -> TextMargins {
+    let halfWidth = width / 2
+    let halfHeight = height / 2
+    return TextMargins(
+      left: -(halfWidth - inset),
+      right: halfWidth - inset,
+      top: halfHeight - inset,
+      bottom: -(halfHeight - inset)
+    )
   }
 }

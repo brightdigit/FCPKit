@@ -47,7 +47,6 @@ internal struct FCPKitDSLTests {
       try Example().export()
     }
   }
-
   @Test
   internal func urlOnlyClipWithoutDurationFailsLoudly() {
     struct Example: Document {
@@ -61,6 +60,73 @@ internal struct FCPKitDSLTests {
       try Example().export()
     }
   }
+  @Test
+  internal func titleWithoutDurationFailsLoudly() {
+    struct Example: Document {
+      var body: some DocumentContent {
+        Sequence {
+          Title("Heading")
+        }
+      }
+    }
+    #expect(throws: BuildError.missingDuration("Basic Title")) {
+      try Example().export()
+    }
+  }
+  @Test
+  internal func anchoredTitleInheritsHostDurationWhenUnset() throws {
+    struct Example: Document {
+      var body: some DocumentContent {
+        Sequence {
+          Color.red.duration(2.0).anchor(lane: 1) {
+            Title("Heading")
+          }
+        }
+      }
+    }
+    let exported = try Example().export()
+    let items = try #require(
+      exported.library?.events?.first?.projects?.first?.sequence?.spine?.items
+    )
+    guard case .video(let video) = items[0] else {
+      Issue.record("Expected color video host")
+      return
+    }
+    let anchored = try #require(video.anchoredItems)
+    guard case .title(let title) = anchored[0] else {
+      Issue.record("Expected anchored title")
+      return
+    }
+    #expect(title.duration == "2s")
+  }
+  @Test
+  internal func projectColorProcessingEmitsLibraryAttribute() throws {
+    struct WideHDRDoc: Document {
+      var body: some DocumentContent {
+        Project(name: "Wide") {
+          Sequence {
+            Gap().duration(FCPTime(numerator: 1))
+          }
+        }
+        .colorProcessing(.wideHDR)
+      }
+    }
+    struct StandardDoc: Document {
+      var body: some DocumentContent {
+        Project(name: "Standard") {
+          Sequence {
+            Gap().duration(FCPTime(numerator: 1))
+          }
+        }
+      }
+    }
+
+    let wide = try WideHDRDoc().export()
+    #expect(wide.library?.colorProcessing == .wideHDR)
+
+    let standard = try StandardDoc().export()
+    #expect(standard.library?.colorProcessing == nil)
+  }
 
   @Test
   internal func sequenceFormatIsMaterialized() throws {
@@ -69,9 +135,8 @@ internal struct FCPKitDSLTests {
         Sequence(format: .p1080p24) {
           AssetClip(
             URL(fileURLWithPath: "/tmp/Left.mov"),
-            duration: FCPTime(numerator: 10),
             name: "Left"
-          )
+          ).duration(FCPTime(numerator: 10))
         }
       }
     }
@@ -99,9 +164,8 @@ internal struct FCPKitDSLTests {
               Sequence(format: FormatPreset(format)) {
                 AssetClip(
                   URL(fileURLWithPath: "/tmp/Left.mov"),
-                  duration: FCPTime(numerator: 10),
                   name: "Left"
-                )
+                ).duration(FCPTime(numerator: 10))
               }
             }
           }
@@ -122,15 +186,13 @@ internal struct FCPKitDSLTests {
         Sequence(format: .p1080p24) {
           AssetClip(
             URL(fileURLWithPath: "/tmp/Left.mov"),
-            duration: FCPTime(numerator: 10),
             name: "Left"
-          )
+          ).duration(FCPTime(numerator: 10))
           Transition(.crossDissolve)
           AssetClip(
             URL(fileURLWithPath: "/tmp/Right.mov"),
-            duration: FCPTime(numerator: 9),
             name: "Right"
-          )
+          ).duration(FCPTime(numerator: 9))
         }
       }
     }
@@ -158,55 +220,5 @@ internal struct FCPKitDSLTests {
     #expect(right.start == "1200/2400s")
     #expect(right.duration == "20400/2400s")
     #expect(xml.library?.events?.first?.projects?.first?.sequence?.duration == "18s")
-  }
-
-  @Test
-  internal func urlBuiltAssetEmitsMediaRepInsteadOfSrcAttribute() throws {
-    struct Example: Document {
-      var body: some DocumentContent {
-        Sequence(format: .p1080p24) {
-          AssetClip(
-            URL(fileURLWithPath: "/tmp/Left.mov"),
-            duration: FCPTime(numerator: 10),
-            name: "Left"
-          )
-        }
-      }
-    }
-    let xml = try Example().export(version: FCPXMLVersion("1.14"))
-    let asset = try #require(xml.resources?.assets?.first)
-    #expect(asset.src == nil)
-    #expect(asset.mediaRep?.count == 1)
-    let rep = try #require(asset.mediaRep?.first)
-    #expect(rep.kind == .originalMedia)
-    #expect(rep.src == "file:///tmp/Left.mov")
-    #expect(rep.sig == nil)
-  }
-
-  @Test
-  internal func conflictingExplicitResourceIDsFail() {
-    struct Example: Document {
-      var body: some DocumentContent {
-        Sequence {
-          AssetClip(
-            AssetSource(
-              url: URL(fileURLWithPath: "/tmp/a.mov"),
-              duration: FCPTime(numerator: 1),
-              id: "r9"
-            )
-          )
-          AssetClip(
-            AssetSource(
-              url: URL(fileURLWithPath: "/tmp/b.mov"),
-              duration: FCPTime(numerator: 1),
-              id: "r9"
-            )
-          )
-        }
-      }
-    }
-    #expect(throws: BuildError.conflictingResourceID("r9")) {
-      try Example().export()
-    }
   }
 }

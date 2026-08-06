@@ -1,6 +1,6 @@
 //
-//  RGBDocument.swift
-//  FCPKit
+//  DTDValidationSupport.swift
+//  FCPKitDemoTests
 //
 //  Created by Leo Dion.
 //  Copyright © 2026 BrightDigit.
@@ -27,28 +27,25 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
+import FCPXMLDiff
+import Foundation
+import Testing
 
-/// A sample document creating a sequence of red, green, and blue solid generator clips.
-public struct RGBDocument: Document {
-  /// The Final Cut Pro project name written into the exported document.
-  public let projectName: String
-
-  /// Red, green, and blue generator clips separated by cross-dissolve transitions.
-  public var body: some DocumentContent {
-    Project(name: projectName) {
-      Sequence {
-        Color.red.duration(.seconds(5.0))
-        Transition(.crossDissolve)
-        Color.green.duration(.seconds(5.0))
-        Transition(.crossDissolve)
-        Color.blue.duration(.seconds(5.0))
-      }
+/// Validates serialized FCPXML against Final Cut's bundled DTD.
+///
+/// When Final Cut or `xmllint` are unavailable the check soft-skips, unless the
+/// `FCPKIT_REQUIRE_DTD` environment variable is set, in which case the missing
+/// tooling is recorded as a failure.
+internal func assertDTDValidates(_ data: Data) throws {
+  let requireDTD = ProcessInfo.processInfo.environment["FCPKIT_REQUIRE_DTD"] != nil
+  do {
+    let report = try FCPXMLDTDValidator().validate(data: data)
+    #expect(report.isValid, "DTD issues: \(report.issues)")
+  } catch FCPXMLValidationError.dtdNotFound, FCPXMLValidationError.xmllintUnavailable {
+    if requireDTD {
+      Issue.record("FCPKIT_REQUIRE_DTD is set but DTD tooling is unavailable")
+    } else {
+      // Soft skip when Final Cut / xmllint are absent.
     }
-  }
-
-  /// Creates an RGB sample document with an optional project name.
-  public init(projectName: String = "DSL RGB") {
-    self.projectName = projectName
   }
 }

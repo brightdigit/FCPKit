@@ -37,10 +37,10 @@ internal struct StoryItemTests {
   @Test
   internal func generatorAnchorsTitleOnLaneOne() throws {
     let document = StoryItemDoc(
-      content: Generator(.custom, duration: FCPTime(numerator: 6))
+      content: Generator(.custom).duration(FCPTime(numerator: 6))
         .color(.blue)
         .anchor(lane: 1) {
-          Title("Heading", duration: FCPTime(numerator: 4))
+          Title("Heading").duration(FCPTime(numerator: 4))
         }
     )
 
@@ -66,7 +66,7 @@ internal struct StoryItemTests {
       content: Color.red
         .duration(FCPTime(numerator: 6))
         .anchor(lane: 1) {
-          Title("Heading", duration: FCPTime(numerator: 4))
+          Title("Heading").duration(FCPTime(numerator: 4))
         }
     )
 
@@ -87,13 +87,13 @@ internal struct StoryItemTests {
   @Test
   internal func chainedAnchorsAccumulateLanes() throws {
     let document = StoryItemDoc(
-      content: Generator(.custom, duration: FCPTime(numerator: 8))
+      content: Generator(.custom).duration(FCPTime(numerator: 8))
         .color(.blue)
         .anchor(lane: 1) {
-          Title("First", duration: FCPTime(numerator: 3))
+          Title("First").duration(FCPTime(numerator: 3))
         }
         .anchor(lane: 2) {
-          Title("Second", duration: FCPTime(numerator: 3))
+          Title("Second").duration(FCPTime(numerator: 3))
         }
     )
 
@@ -112,10 +112,10 @@ internal struct StoryItemTests {
   @Test
   internal func anchoredTitleLongerThanBackgroundExtendsSequence() throws {
     let document = StoryItemDoc(
-      content: Generator(.custom, duration: FCPTime(numerator: 4))
+      content: Generator(.custom).duration(FCPTime(numerator: 4))
         .color(.blue)
         .anchor(lane: 1) {
-          Title("Long", duration: FCPTime(numerator: 9))
+          Title("Long").duration(FCPTime(numerator: 9))
         }
     )
 
@@ -128,12 +128,12 @@ internal struct StoryItemTests {
   @Test
   internal func nestedSpineInsideAnchorPassesThrough() throws {
     let document = StoryItemDoc(
-      content: Generator(.custom, duration: FCPTime(numerator: 10))
+      content: Generator(.custom).duration(FCPTime(numerator: 10))
         .color(.blue)
         .anchor(lane: 1) {
           Spine {
-            Title("First", duration: FCPTime(numerator: 3))
-            Title("Second", duration: FCPTime(numerator: 3))
+            Title("First").duration(FCPTime(numerator: 3))
+            Title("Second").duration(FCPTime(numerator: 3))
           }
         }
     )
@@ -159,10 +159,10 @@ internal struct StoryItemTests {
     // `.title` case would not exercise it, so without this the new branch could
     // be deleted and the suite would stay green.
     let document = StoryItemDoc(
-      content: Generator(.custom, duration: FCPTime(numerator: 4))
+      content: Generator(.custom).duration(FCPTime(numerator: 4))
         .color(.blue)
         .anchor(lane: 1) {
-          Generator(.custom, duration: FCPTime(numerator: 9)).color(.green)
+          Generator(.custom).duration(FCPTime(numerator: 9)).color(.green)
         }
     )
 
@@ -176,10 +176,10 @@ internal struct StoryItemTests {
     // Negative lanes are legal FCPXML — content below the primary storyline.
     // Only lane 0 is reserved and rejected.
     let document = StoryItemDoc(
-      content: Generator(.custom, duration: FCPTime(numerator: 6))
+      content: Generator(.custom).duration(FCPTime(numerator: 6))
         .color(.blue)
         .anchor(lane: -1) {
-          Title("Below", duration: FCPTime(numerator: 4))
+          Title("Below").duration(FCPTime(numerator: 4))
         }
     )
 
@@ -197,9 +197,9 @@ internal struct StoryItemTests {
     // `Title` and `Gap` gained `StoryItem` conformance in this change but were
     // otherwise untested as anchor hosts.
     let titleHost = StoryItemDoc(
-      content: Title("Host", duration: FCPTime(numerator: 6))
+      content: Title("Host").duration(FCPTime(numerator: 6))
         .anchor(lane: 1) {
-          Title("Anchored", duration: FCPTime(numerator: 3))
+          Title("Anchored").duration(FCPTime(numerator: 3))
         }
     )
     let titleItems = try StoryItemSupport.spine(try titleHost.export())
@@ -210,9 +210,9 @@ internal struct StoryItemTests {
     #expect(try #require(host.anchoredItems).count == 1)
 
     let gapHost = StoryItemDoc(
-      content: Gap(duration: FCPTime(numerator: 6))
+      content: Gap().duration(FCPTime(numerator: 6))
         .anchor(lane: 1) {
-          Title("Anchored", duration: FCPTime(numerator: 3))
+          Title("Anchored").duration(FCPTime(numerator: 3))
         }
     )
     let gapItems = try StoryItemSupport.spine(try gapHost.export())

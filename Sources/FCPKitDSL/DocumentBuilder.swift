@@ -30,9 +30,16 @@
 /// Builds a document or story body from declarative child values.
 @resultBuilder
 public enum DocumentBuilder {
-  /// Joins child content values into a ``DocumentGroup``.
+  /// Joins child content values into a ``DocumentGroup``, flattening nested groups.
   public static func buildBlock(_ components: any DocumentContent...) -> DocumentGroup {
-    DocumentGroup(components)
+    DocumentGroup(
+      components.flatMap { component -> [any DocumentContent] in
+        if let group = component as? DocumentGroup {
+          return group.contents
+        }
+        return [component]
+      }
+    )
   }
 
   /// Passes an expression through as document content.

@@ -82,7 +82,14 @@ public class FCPXMLParser {
     encoder.dateEncodingStrategy = .iso8601
     encoder.keyEncodingStrategy = .useDefaultKeys
     encoder.outputFormatting = [.prettyPrinted]
-    return try encoder.encode(fcpxml, withRootKey: "fcpxml")
+    let data = try encoder.encode(fcpxml, withRootKey: "fcpxml")
+    guard let xml = String(data: data, encoding: .utf8) else {
+      return data
+    }
+    let compacted = Self.compactingOpaqueDataCharacterData(
+      in: Self.compactingTextStyleCharacterData(in: xml)
+    )
+    return Data(compacted.utf8)
   }
 
   /// Encodes a document as an FCPXML string.
@@ -105,5 +112,51 @@ public class FCPXMLParser {
   public func write(_ fcpxml: FCPXML, to url: URL) throws {
     let data = try encode(fcpxml)
     try data.write(to: url)
+  }
+}
+
+extension FCPXMLParser {
+  /// Collapses pretty-print whitespace around pure-text `<text-style>` runs.
+  ///
+  /// XMLCoder's `.prettyPrinted` wraps element character data onto indented
+  /// lines. Final Cut Pro treats that leading/trailing whitespace as part of
+  /// the title string. Elements that contain nested children (for example a
+  /// definition style with `<param>` children) are left unchanged.
+  internal static func compactingTextStyleCharacterData(in xml: String) -> String {
+    compactingCharacterOnlyElement("text-style", in: xml)
+  }
+
+  /// Collapses pretty-print whitespace inside character-only `<data>` elements.
+  ///
+  /// Opaque payloads such as `effectConfig` are base64; indented newlines from
+  /// `.prettyPrinted` make Final Cut report an unexpected value on the parent
+  /// transition.
+  internal static func compactingOpaqueDataCharacterData(in xml: String) -> String {
+    compactingCharacterOnlyElement("data", in: xml)
+  }
+
+  private static func compactingCharacterOnlyElement(_ name: String, in xml: String) -> String {
+    let pattern = "<\(name)([^>]*)>([^<]*)</\(name)>"
+    guard let regex = try? NSRegularExpression(pattern: pattern) else {
+      return xml
+    }
+    let nsRange = NSRange(xml.startIndex..<xml.endIndex, in: xml)
+    var result = ""
+    var lastEnd = xml.startIndex
+    for match in regex.matches(in: xml, range: nsRange) {
+      guard
+        let fullRange = Range(match.range, in: xml),
+        let attrsRange = Range(match.range(at: 1), in: xml),
+        let bodyRange = Range(match.range(at: 2), in: xml)
+      else {
+        continue
+      }
+      result += xml[lastEnd..<fullRange.lowerBound]
+      let trimmed = xml[bodyRange].trimmingCharacters(in: .whitespacesAndNewlines)
+      result += "<\(name)\(xml[attrsRange])>\(trimmed)</\(name)>"
+      lastEnd = fullRange.upperBound
+    }
+    result += xml[lastEnd...]
+    return result
   }
 }

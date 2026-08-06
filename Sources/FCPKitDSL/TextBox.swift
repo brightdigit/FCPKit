@@ -1,5 +1,5 @@
 //
-//  PositionedOrderingDoc.swift
+//  TextBox.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,22 +27,19 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
-import FCPKitDSL
-import Foundation
+/// Convenience wrap-box presets for ``Title/textBox(_:)``.
+public struct TextBox: Equatable, Sendable {
+  internal enum Kind: Equatable, Sendable {
+    case fillFrame(inset: Double)
+  }
 
-/// A clip / transition / clip spine where the clips carry deferred positions.
-///
-/// The v0.1.0 Step 3 ordering guarantee is that `Spine.items` keeps DTD order.
-/// Position resolution rewrites title elements on the way out, so these tests
-/// assert order survives *after* resolution — the schema-completeness inventory
-/// is order-blind and would not catch a reordering here.
-internal struct PositionedOrderingDoc: Document {
-  internal var body: some DocumentContent {
-    Sequence(format: .p1080p24) {
-      Title("First").duration(.seconds(5)).position(.topLeading)
-      Transition(.crossDissolve)
-      Title("Second").duration(.seconds(5)).position(x: 200, y: 300)
-    }
+  internal let kind: Kind
+
+  /// Paragraph layout with a wrap box inset from each edge of the sequence frame.
+  ///
+  /// - Throws: At `export()`, ``BuildError/missingFrameSize`` when no enclosing
+  ///   sequence format is available.
+  public static func fillFrame(inset: Double = 0) -> TextBox {
+    TextBox(kind: .fillFrame(inset: inset))
   }
 }

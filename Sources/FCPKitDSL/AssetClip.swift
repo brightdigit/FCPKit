@@ -33,7 +33,7 @@ import Foundation
 /// An `asset-clip` story item with optional anchors and audio role.
 public struct AssetClip: StoryItem {
   internal let source: AssetSource
-  /// Clip duration on the storyline, when set explicitly.
+  /// Clip duration on the storyline, when set explicitly via ``duration(_:)``.
   public let duration: FCPTime?
   internal let name: String?
   /// The anchors attached to this clip.
@@ -41,8 +41,8 @@ public struct AssetClip: StoryItem {
   internal let audioRole: String?
 
   /// Creates a clip from an ``AssetSource``.
-  public init(_ source: AssetSource, duration: FCPTime? = nil, name: String? = nil) {
-    self.init(source: source, duration: duration, name: name, anchors: [], audioRole: nil)
+  public init(_ source: AssetSource, name: String? = nil) {
+    self.init(source: source, duration: nil, name: name, anchors: [], audioRole: nil)
   }
 
   /// Creates a clip from a model asset and optional format.
@@ -50,7 +50,44 @@ public struct AssetClip: StoryItem {
     _ asset: FCPKit.Asset,
     format: FCPKit.Format? = nil,
     formatOnClip: Bool = false,
-    duration: FCPTime? = nil,
+    name: String? = nil
+  ) {
+    self.init(
+      AssetSource(asset, format: format, formatOnClip: formatOnClip),
+      name: name
+    )
+  }
+
+  /// Creates a clip from a media URL.
+  public init(_ url: URL, name: String? = nil) {
+    self.init(AssetSource(url: url, name: name), name: name)
+  }
+
+  /// Creates a clip from an ``AssetSource`` with an optional duration.
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored clips inherit the host duration when omitted.
+      """
+  )
+  public init(_ source: AssetSource, duration: FCPTime?, name: String? = nil) {
+    self.init(source: source, duration: duration, name: name, anchors: [], audioRole: nil)
+  }
+
+  /// Creates a clip from a model asset with an optional duration.
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored clips inherit the host duration when omitted.
+      """
+  )
+  public init(
+    _ asset: FCPKit.Asset,
+    format: FCPKit.Format? = nil,
+    formatOnClip: Bool = false,
+    duration: FCPTime?,
     name: String? = nil
   ) {
     self.init(
@@ -60,8 +97,15 @@ public struct AssetClip: StoryItem {
     )
   }
 
-  /// Creates a clip from a media URL.
-  public init(_ url: URL, duration: FCPTime? = nil, name: String? = nil) {
+  /// Creates a clip from a media URL with an optional duration.
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored clips inherit the host duration when omitted.
+      """
+  )
+  public init(_ url: URL, duration: FCPTime?, name: String? = nil) {
     self.init(AssetSource(url: url, name: name, duration: duration), duration: duration, name: name)
   }
 
@@ -95,11 +139,32 @@ public struct AssetClip: StoryItem {
     replacing(anchors: anchors)
   }
 
-  /// Lowers this clip into an `<asset-clip>` story item.
+  /// Lowers this clip into a story item.
+  ///
+  /// Still sources (`asset` `duration="0s"`, as from ``AssetSource/still(url:width:height:name:id:)``)
+  /// become `<video>` — Final Cut imports real still PNGs that way and aborts in
+  /// `addAssetClip` when they are emitted as `<asset-clip>`. Movies stay `<asset-clip>`.
   public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.asset(source)
+    let displayName = name ?? source.asset.name ?? "asset clip"
+    if source.asset.duration == "0s" {
+      guard let storyDuration = duration else {
+        throw BuildError.missingDuration(displayName)
+      }
+      var video = FCPKit.Video(
+        ref: ResourceRef<AssetKind>(ref.rawValue),
+        name: name ?? source.asset.name,
+        start: "0s",
+        duration: storyDuration.description
+      )
+      video.anchoredItems = try anchors.anchoredItems(
+        resources: &resources,
+        hostDuration: storyDuration
+      )
+      return .item(.video(video))
+    }
     guard let value = duration?.description ?? source.asset.duration, FCPTime(value) != nil else {
-      throw BuildError.missingDuration(name ?? source.asset.name ?? "asset clip")
+      throw BuildError.missingDuration(displayName)
     }
     var clip = FCPKit.AssetClip(
       ref: ref,
@@ -111,7 +176,11 @@ public struct AssetClip: StoryItem {
     if let format = source.format, source.formatOnClip {
       clip.format = try resources.format(FormatPreset(format))
     }
-    clip.anchoredItems = try anchors.anchoredItems(resources: &resources)
+    let hostDuration = FCPTime(value)
+    clip.anchoredItems = try anchors.anchoredItems(
+      resources: &resources,
+      hostDuration: hostDuration
+    )
     return .item(.assetClip(clip))
   }
 

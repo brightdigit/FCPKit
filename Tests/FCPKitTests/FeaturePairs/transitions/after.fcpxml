@@ -51,10 +51,11 @@
                         <transition name="Cross Dissolve" offset="9s" duration="1s">
                             <filter-video ref="r3" name="Cross Dissolve">
                                 <data key="effectConfig">YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGlCwwVFhdVJG51bGzTDQ4PEBIUV05TLmtleXNaTlMub2JqZWN0c1YkY2xhc3OhEYACoROAA4AEXXBsdWdpblZlcnNpb24QAdIYGRobWiRjbGFzc25hbWVYJGNsYXNzZXNfEBNOU011dGFibGVEaWN0aW9uYXJ5oxocHVxOU0RpY3Rpb25hcnlYTlNPYmplY3QIERokKTI3SUxRU1lfZm55gIKEhoiKmJqfqrPJzdoAAAAAAAABAQAAAAAAAAAeAAAAAAAAAAAAAAAAAAAA4w==</data>
-                                <param name="Look" key="1" value="11 (Video)"/>
+                                <param name="Look" key="1" value="12 (Video)"/>
                                 <param name="Amount" key="2" value="50"/>
                                 <param name="Ease" key="50" value="2 (In &amp; Out)"/>
                                 <param name="Ease Amount" key="51" value="0"/>
+                                <param name="disableDRT" key="3733" value="1"/>
                             </filter-video>
                             <filter-audio ref="r4" name="Audio Crossfade"/>
                         </transition>

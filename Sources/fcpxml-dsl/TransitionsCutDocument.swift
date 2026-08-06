@@ -42,10 +42,10 @@ internal struct TransitionsCutDocument: Document {
   internal var body: some DocumentContent {
     Project(name: projectName) {
       Sequence(format: .p1080p24) {
-        AssetClip(leftURL, duration: leftDuration)
+        AssetClip(leftURL).duration(leftDuration)
           .audioRole("dialogue")
         Transition(.crossDissolve)
-        AssetClip(rightURL, duration: rightDuration)
+        AssetClip(rightURL).duration(rightDuration)
           .audioRole("dialogue")
       }
     }

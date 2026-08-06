@@ -61,6 +61,7 @@ public struct Sequence: DSLNode {
       content.contents.spineItems(resources: &resources),
       frameDuration: format?.format.frameDuration
     )
+    let items = Layout.clearingStillMediaStarts(packed.items, assets: resources.registeredAssets)
     return .sequence(
       FCPKit.Sequence(
         format: formatRef,
@@ -70,7 +71,7 @@ public struct Sequence: DSLNode {
         audioLayout: .stereo,
         audioRate: .hz48000,
         renderFormat: "FFRenderFormatProRes422HQ",
-        spine: FCPKit.Spine(items: packed.items)
+        spine: FCPKit.Spine(items: items)
       )
     )
   }

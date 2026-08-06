@@ -1,5 +1,5 @@
 //
-//  PositionedOrderingDoc.swift
+//  TransitionPreset+Wipes.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,22 +27,10 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
-import FCPKitDSL
-import Foundation
+extension TransitionPreset {
+  /// Diagonal wipe from Final Cut Pro Creator Studio PETemplates.
+  public static let diagonal = TransitionPreset.motionTemplate(name: "Diagonal", category: "Wipes")
 
-/// A clip / transition / clip spine where the clips carry deferred positions.
-///
-/// The v0.1.0 Step 3 ordering guarantee is that `Spine.items` keeps DTD order.
-/// Position resolution rewrites title elements on the way out, so these tests
-/// assert order survives *after* resolution — the schema-completeness inventory
-/// is order-blind and would not catch a reordering here.
-internal struct PositionedOrderingDoc: Document {
-  internal var body: some DocumentContent {
-    Sequence(format: .p1080p24) {
-      Title("First").duration(.seconds(5)).position(.topLeading)
-      Transition(.crossDissolve)
-      Title("Second").duration(.seconds(5)).position(x: 200, y: 300)
-    }
-  }
+  /// Mask wipe from Final Cut Pro Creator Studio PETemplates.
+  public static let mask = TransitionPreset.motionTemplate(name: "Mask", category: "Wipes")
 }

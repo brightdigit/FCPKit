@@ -47,10 +47,13 @@ internal enum CrossDissolveFilters {
           name: "Cross Dissolve",
           data: [DataElement(key: "effectConfig", value: effectConfig)],
           param: [
-            ParamElement(name: "Look", key: "1", value: "11 (Video)"),
+            // Flexo Look indices: 11 = Shadows, 12 = Video. Older exports
+            // mislabeled `"11 (Video)"`; FCP 12.x rejects that as unexpected.
+            ParamElement(name: "Look", key: "1", value: "12 (Video)"),
             ParamElement(name: "Amount", key: "2", value: "50"),
             ParamElement(name: "Ease", key: "50", value: "2 (In & Out)"),
             ParamElement(name: "Ease Amount", key: "51", value: "0"),
+            ParamElement(name: "disableDRT", key: "3733", value: "1"),
           ]
         )
       ],

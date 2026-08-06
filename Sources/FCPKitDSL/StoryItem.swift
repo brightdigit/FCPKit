@@ -57,6 +57,9 @@ extension StoryItem {
   /// Chaining accumulates: each call appends to the anchors already present, so
   /// `clip.anchor(lane: 1) { … }.anchor(lane: 2) { … }` keeps both lanes.
   ///
+  /// Anchored children that have no duration set via ``DocumentContent/duration(_:)``
+  /// inherit this host's duration at export.
+  ///
   /// A lane of `0` is the storyline itself and is rejected at build time with
   /// ``BuildError/invalidLane``, because this modifier cannot throw from builder
   /// position.

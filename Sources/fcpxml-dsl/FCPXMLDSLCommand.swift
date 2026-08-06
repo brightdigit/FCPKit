@@ -86,6 +86,12 @@ internal enum FCPXMLDSLCommand {
         )
       case "rgb":
         try await exportRGBCommand(positionals, projectName: projectName, version: version)
+      case "presentation":
+        try await exportPresentationCommand(
+          positionals,
+          projectName: projectName,
+          version: version
+        )
       default:
         throw FCPXMLDSLCommandError.usage
       }
@@ -142,6 +148,19 @@ internal enum FCPXMLDSLCommand {
         version: version
       )
     }
+
+    private static func exportPresentationCommand(
+      _ positionals: [String],
+      projectName: String,
+      version: FCPXMLVersion
+    ) async throws {
+      let output = URL(fileURLWithPath: positionals.first ?? "presentation.fcpxml")
+      try await exportPresentation(
+        output: output,
+        projectName: projectName,
+        version: version
+      )
+    }
   #endif
 
   private static func parseOptions(_ arguments: inout [String]) throws -> [String: String] {
@@ -170,46 +189,10 @@ internal enum FCPXMLDSLCommand {
       return "DSL Titles"
     case "rgb":
       return "DSL RGB"
+    case "presentation":
+      return "FCPKit Presentation"
     default:
       return "DSL Export"
     }
-  }
-
-  private static func printUsage() {
-    // swiftlint:disable indentation_width
-    print(
-      """
-      fcpxml-dsl - Export FCPKitDSL documents to FCPXML for Final Cut import
-
-      USAGE:
-          fcpxml-dsl export transitions <left> <right> [output.fcpxml]
-          fcpxml-dsl export titles <media> [output.fcpxml]
-          fcpxml-dsl export rgb [output.fcpxml]
-          fcpxml-dsl verify-import <file.fcpxml>
-
-      OPTIONS:
-          --project <name>   Project name (defaults per kind; verify-import: expected name)
-          --text <string>    Title text for `titles` (default: Title)
-          --version <ver>    FCPXML version (default: 1.14)
-          --timeout <sec>    verify-import wait in seconds (default: 30)
-          -h, --help         Show this help
-
-      EXAMPLES:
-          fcpxml-dsl export transitions Left.mov Right.mov transitions.fcpxml
-          fcpxml-dsl export titles Left.mov titles.fcpxml --text "Hello"
-          fcpxml-dsl export rgb rgb.fcpxml
-          fcpxml-dsl verify-import rgb.fcpxml
-
-      DESCRIPTION:
-          `export` probes media durations with AVFoundation, builds a typed DSL
-          document, and writes FCPXML you can import into Final Cut Pro.
-
-          `verify-import` opens the file in Final Cut Pro and confirms the
-          project appears in the library (needs Automation permission; the
-          rejection alert check also needs Accessibility). The import lands in
-          the active library and must be cleaned up manually.
-      """
-    )
-    // swiftlint:enable indentation_width
   }
 }

@@ -37,12 +37,12 @@ internal enum StoryItemSupport {
   internal struct TransitionAnchored: Document {
     internal var body: some DocumentContent {
       Sequence(format: .p1080p24) {
-        Generator(.custom, duration: FCPTime(numerator: 5)).color(.blue)
+        Generator(.custom).duration(FCPTime(numerator: 5)).color(.blue)
         Transition(.crossDissolve)
           .anchor(lane: 1) {
-            Title("Ignored", duration: FCPTime(numerator: 2))
+            Title("Ignored").duration(FCPTime(numerator: 2))
           }
-        Generator(.custom, duration: FCPTime(numerator: 5)).color(.green)
+        Generator(.custom).duration(FCPTime(numerator: 5)).color(.green)
       }
     }
   }

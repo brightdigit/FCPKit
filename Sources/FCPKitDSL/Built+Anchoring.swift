@@ -74,13 +74,27 @@ extension Array where Element == any DSLNode {
   ///
   /// The optional is load-bearing: the model omits the element entirely rather
   /// than emitting an empty container.
+  ///
+  /// - Parameters:
+  ///   - resources: The document resource table.
+  ///   - hostDuration: Duration of the storyline host. Anchored content with no
+  ///     explicit duration inherits this value.
+  /// - Returns: The anchored items, or `nil` when this array is empty.
+  /// - Throws: ``BuildError`` when any node cannot be lowered or anchored.
   internal func anchoredItems(
-    resources: inout ResourceStore
+    resources: inout ResourceStore,
+    hostDuration: FCPTime? = nil
   ) throws(BuildError) -> [FCPKit.AnchoredItem]? {
     var items: [FCPKit.AnchoredItem] = []
     items.reserveCapacity(count)
     for node in self {
-      items.append(try node.build(&resources).anchoredItem())
+      let built: Built
+      if let anchor = node as? Anchor {
+        built = try anchor.build(&resources, hostDuration: hostDuration)
+      } else {
+        built = try node.build(&resources)
+      }
+      items.append(try built.anchoredItem())
     }
     return items.isEmpty ? nil : items
   }

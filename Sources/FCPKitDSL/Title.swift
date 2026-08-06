@@ -33,8 +33,8 @@ import FCPKit
 public struct Title: StoryItem {
   internal let preset: TitlePreset
   internal let text: String
-  /// Clip duration on the storyline.
-  public let duration: FCPTime
+  /// Clip duration on the storyline, when set via ``duration(_:)`` or inherited from a host.
+  public let duration: FCPTime?
   internal let lane: Int?
   internal let offset: FCPTime?
   /// The anchors attached to this title.
@@ -42,27 +42,59 @@ public struct Title: StoryItem {
   internal let style: TitleStyle
   internal let position: FramePosition?
   internal let displayName: String?
+  internal let textBoxLayout: TextBoxLayout?
+
+  /// Creates a Basic Title from text.
+  ///
+  /// Set duration with ``duration(_:)``. When this title is anchored and has no
+  /// duration, it inherits the host clip's duration.
+  public init(_ text: String) {
+    self.init(.basic, text: text)
+  }
+
+  /// Creates a title from a preset and text.
+  ///
+  /// Set duration with ``duration(_:)``. When this title is anchored and has no
+  /// duration, it inherits the host clip's duration.
+  public init(_ preset: TitlePreset, text: String) {
+    self.init(preset: preset, text: text, duration: nil, lane: nil, offset: nil)
+  }
 
   /// Creates a Basic Title from text and optional duration.
-  public init(_ text: String, duration: FCPTime? = nil) {
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored titles inherit the host duration when omitted.
+      """
+  )
+  public init(_ text: String, duration: FCPTime?) {
     self.init(.basic, text: text, duration: duration)
   }
 
   /// Creates a title from a preset, text, and optional duration.
-  public init(_ preset: TitlePreset, text: String, duration: FCPTime? = nil) {
-    self.init(preset: preset, text: text, duration: duration ?? .zero, lane: nil, offset: nil)
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored titles inherit the host duration when omitted.
+      """
+  )
+  public init(_ preset: TitlePreset, text: String, duration: FCPTime?) {
+    self.init(preset: preset, text: text, duration: duration, lane: nil, offset: nil)
   }
 
   internal init(
     preset: TitlePreset,
     text: String,
-    duration: FCPTime,
+    duration: FCPTime?,
     lane: Int?,
     offset: FCPTime?,
     anchors: [any DSLNode] = [],
     style: TitleStyle = .default,
     position: FramePosition? = nil,
-    displayName: String? = nil
+    displayName: String? = nil,
+    textBoxLayout: TextBoxLayout? = nil
   ) {
     self.preset = preset
     self.text = text
@@ -73,6 +105,7 @@ public struct Title: StoryItem {
     self.style = style
     self.position = position
     self.displayName = displayName
+    self.textBoxLayout = textBoxLayout
   }
 
   /// Sets the title clip duration.
@@ -86,7 +119,8 @@ public struct Title: StoryItem {
     anchors: [any DSLNode]? = nil,
     style: TitleStyle? = nil,
     position: FramePosition? = nil,
-    displayName: String? = nil
+    displayName: String? = nil,
+    textBoxLayout: TextBoxLayout? = nil
   ) -> Title {
     Title(
       preset: preset,
@@ -97,7 +131,8 @@ public struct Title: StoryItem {
       anchors: anchors ?? self.anchors,
       style: style ?? self.style,
       position: position ?? self.position,
-      displayName: displayName ?? self.displayName
+      displayName: displayName ?? self.displayName,
+      textBoxLayout: textBoxLayout ?? self.textBoxLayout
     )
   }
 
@@ -107,7 +142,15 @@ public struct Title: StoryItem {
   }
 
   /// Lowers this title into a `<title>` story item.
+  ///
+  /// - Throws: ``BuildError/missingDuration(_:)`` when no duration was set and
+  ///   none was inherited from an anchor host.
+  /// - Throws: ``BuildError/missingFrameSize`` when ``textBox(_:)`` /
+  ///   ``TextBox/fillFrame(inset:)`` needs a sequence format.
   public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
+    guard let duration else {
+      throw BuildError.missingDuration(displayName ?? preset.name)
+    }
     let ref = try resources.effect(name: preset.name, uid: preset.uid)
     let styleID = resources.textStyleID()
     let style = FCPKit.TextStyle(ref: styleID, content: text)
@@ -120,6 +163,8 @@ public struct Title: StoryItem {
       transform = FCPKit.AdjustTransform(position: resolved)
     }
 
+    let params = try textBoxLayoutParameters(frameSize: resources.frameSize)
+
     var element = FCPKit.Title(
       ref: ref,
       name: displayName ?? preset.name,
@@ -127,11 +172,39 @@ public struct Title: StoryItem {
       start: "3600s",
       lane: lane.map(String.init),
       offset: offset?.description ?? "0s",
+      param: params,
       text: [FCPKit.TextElement(textStyle: [style])],
       textStyleDef: [definition]
     )
     element.adjustTransform = transform
-    element.anchoredItems = try anchors.anchoredItems(resources: &resources)
+    element.anchoredItems = try anchors.anchoredItems(
+      resources: &resources,
+      hostDuration: duration
+    )
     return .item(.title(element))
+  }
+
+  private func textBoxLayoutParameters(
+    frameSize: (width: Double, height: Double)?
+  ) throws(BuildError) -> [ParamElement]? {
+    guard let textBoxLayout else {
+      return nil
+    }
+    var method = textBoxLayout.method
+    let margins: TextMargins?
+    if let inset = textBoxLayout.fillInset {
+      guard let frameSize else {
+        throw BuildError.missingFrameSize
+      }
+      method = method ?? .paragraph
+      margins = TextMargins.fillFrame(
+        inset: inset,
+        width: frameSize.width,
+        height: frameSize.height
+      )
+    } else {
+      margins = textBoxLayout.margins
+    }
+    return BasicTextBoxLayoutParams.parameters(method: method, margins: margins)
   }
 }

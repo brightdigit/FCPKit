@@ -27,9 +27,12 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+// swiftlint:disable sorted_imports
 import FCPKit
 import FCPKitDSL
+import FCPKitDemo
 import Foundation
+// swiftlint:enable sorted_imports
 
 extension FCPXMLDSLCommand {
   #if canImport(AVFoundation)
@@ -82,6 +85,17 @@ extension FCPXMLDSLCommand {
       let document = RGBDocument(projectName: projectName)
       try write(document: document, to: output, version: version)
       print("Wrote RGB cut → \(output.path)")
+    }
+
+    internal static func exportPresentation(
+      output: URL,
+      projectName: String,
+      version: FCPXMLVersion
+    ) async throws {
+      // Thin editable shell in FCPKitDemo; this command only invokes it.
+      let document = PresentationDocument(projectName: projectName)
+      try write(document: document, to: output, version: version)
+      print("Wrote presentation → \(output.path)")
     }
   #endif
 

@@ -37,14 +37,14 @@ internal struct FramePositionTests {
   @Test
   internal func unpositionedTitleEmitsNoAdjustTransform() throws {
     // Regression guard: existing output must stay byte-identical.
-    let built = try TitleStyleSupport.firstTitle(Title("Hello", duration: .seconds(5)))
+    let built = try TitleStyleSupport.firstTitle(Title("Hello").duration(.seconds(5)))
     #expect(built.adjustTransform == nil)
   }
 
   @Test
   internal func frameCentreEmitsNoAdjustTransform() throws {
     let built = try TitleStyleSupport.firstTitle(
-      Title("Hello", duration: .seconds(5)).position(.center)
+      Title("Hello").duration(.seconds(5)).position(.center)
     )
     #expect(built.adjustTransform == nil)
   }
@@ -52,7 +52,7 @@ internal struct FramePositionTests {
   @Test
   internal func absoluteCentreResolvesToZero() throws {
     let position = try TitleStyleSupport.transformPosition(
-      Title("Hello", duration: .seconds(5)).position(x: 960, y: 540)
+      Title("Hello").duration(.seconds(5)).position(x: 960, y: 540)
     )
     #expect(position == "0 0")
   }
@@ -71,7 +71,7 @@ internal struct FramePositionTests {
     // 192.5px left of centre (absolute x 767.5).
     let position = try #require(
       try TitleStyleSupport.transformPosition(
-        Title("Hello", duration: .seconds(5)).position(x: 960 - 192.5, y: 540 - 84)
+        Title("Hello").duration(.seconds(5)).position(x: 960 - 192.5, y: 540 - 84)
       )
     )
 
@@ -92,12 +92,12 @@ internal struct FramePositionTests {
   internal func topAndBottomAreSymmetric() throws {
     let top = try #require(
       try TitleStyleSupport.transformPosition(
-        Title("Hello", duration: .seconds(5)).position(.top)
+        Title("Hello").duration(.seconds(5)).position(.top)
       )
     )
     let bottom = try #require(
       try TitleStyleSupport.transformPosition(
-        Title("Hello", duration: .seconds(5)).position(.bottom)
+        Title("Hello").duration(.seconds(5)).position(.bottom)
       )
     )
     #expect(top == "0 50")
@@ -107,7 +107,7 @@ internal struct FramePositionTests {
   @Test
   internal func absolutePositionWithoutFormatThrows() throws {
     let document = TitleStyleSupport.TitleDoc(
-      Title("Hello", duration: .seconds(5)).position(x: 100, y: 100),
+      Title("Hello").duration(.seconds(5)).position(x: 100, y: 100),
       format: nil
     )
     #expect(throws: BuildError.missingFrameSize) {
@@ -118,7 +118,7 @@ internal struct FramePositionTests {
   @Test
   internal func alignmentPositionWithoutFormatDoesNotThrow() throws {
     let document = TitleStyleSupport.TitleDoc(
-      Title("Hello", duration: .seconds(5)).position(.topLeading),
+      Title("Hello").duration(.seconds(5)).position(.topLeading),
       format: nil
     )
     #expect(throws: Never.self) {
@@ -146,7 +146,7 @@ internal struct FramePositionTests {
     // and takes the host process down. A library must not crash on user input.
     let huge = Double("1e21") ?? 0
     let style = try TitleStyleSupport.definitionStyle(
-      Title("Hello", duration: .seconds(5)).fontSize(huge)
+      Title("Hello").duration(.seconds(5)).fontSize(huge)
     )
     #expect(style.fontSize != nil)
   }
@@ -154,7 +154,7 @@ internal struct FramePositionTests {
   @Test
   internal func nonFiniteFontSizeDoesNotTrap() throws {
     let style = try TitleStyleSupport.definitionStyle(
-      Title("Hello", duration: .seconds(5)).fontSize(.infinity)
+      Title("Hello").duration(.seconds(5)).fontSize(.infinity)
     )
     #expect(style.fontSize != nil)
   }
@@ -164,7 +164,7 @@ internal struct FramePositionTests {
     // `.center` is the frame centre on both axes, so an inset has no direction
     // to move along. It must still emit nothing rather than a no-op transform.
     let built = try TitleStyleSupport.firstTitle(
-      Title("Hello", duration: .seconds(5)).position(.center, inset: 100)
+      Title("Hello").duration(.seconds(5)).position(.center, inset: 100)
     )
     #expect(built.adjustTransform == nil)
   }
@@ -174,7 +174,7 @@ internal struct FramePositionTests {
     // An inset is in points; converting to percent-of-height needs the frame
     // height. Silently dropping it would emit a position never asked for.
     let document = TitleStyleSupport.TitleDoc(
-      Title("Hello", duration: .seconds(5)).position(.top, inset: 80),
+      Title("Hello").duration(.seconds(5)).position(.top, inset: 80),
       format: nil
     )
     #expect(throws: BuildError.missingFrameSize) {
@@ -186,7 +186,7 @@ internal struct FramePositionTests {
   internal func zeroInsetAlignmentWithoutFormatStillResolves() throws {
     // Only a non-zero inset needs the frame size; plain alignments never throw.
     let document = TitleStyleSupport.TitleDoc(
-      Title("Hello", duration: .seconds(5)).position(.top),
+      Title("Hello").duration(.seconds(5)).position(.top),
       format: nil
     )
     #expect(throws: Never.self) {
@@ -201,13 +201,13 @@ internal struct FramePositionTests {
     // German or French locale, producing invalid FCPXML — this pins the
     // locale-independent formatting so nobody swaps one in.
     let style = try TitleStyleSupport.definitionStyle(
-      Title("Hello", duration: .seconds(5)).fontSize(63.5)
+      Title("Hello").duration(.seconds(5)).fontSize(63.5)
     )
     #expect(style.fontSize == "63.5")
 
     let position = try #require(
       try TitleStyleSupport.transformPosition(
-        Title("Hello", duration: .seconds(5)).position(x: 0, y: 0)
+        Title("Hello").duration(.seconds(5)).position(x: 0, y: 0)
       )
     )
     #expect(!position.contains(","))

@@ -42,17 +42,17 @@ internal struct GeneratorDSLTests {
     var body: some DocumentContent {
       Sequence(format: .p1080p24) {
         if let color, let name {
-          Generator(.custom, duration: duration)
+          Generator(.custom).duration(duration)
             .name(name)
             .color(color)
         } else if let color {
-          Generator(.custom, duration: duration)
+          Generator(.custom).duration(duration)
             .color(color)
         } else if let name {
-          Generator(.custom, duration: duration)
+          Generator(.custom).duration(duration)
             .name(name)
         } else {
-          Generator(.custom, duration: duration)
+          Generator(.custom).duration(duration)
         }
       }
     }
@@ -98,9 +98,9 @@ internal struct GeneratorDSLTests {
     struct AnchoredDoc: Document {
       var body: some DocumentContent {
         Sequence(format: .p1080p24) {
-          AssetClip(URL(fileURLWithPath: "/tmp/video.mp4"), duration: FCPTime(numerator: 10))
+          AssetClip(URL(fileURLWithPath: "/tmp/video.mp4")).duration(FCPTime(numerator: 10))
             .anchor(lane: 1) {
-              Generator(.custom, duration: FCPTime(numerator: 5))
+              Generator(.custom).duration(FCPTime(numerator: 5))
                 .color(.blue)
             }
         }

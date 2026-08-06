@@ -56,12 +56,12 @@ internal enum TitleStyleSupport {
   internal struct StyledPair: Document {
     internal var body: some DocumentContent {
       Sequence(format: .p1080p24) {
-        Title("Heading", duration: .seconds(5))
+        Title("Heading").duration(.seconds(5))
           .font("Helvetica")
           .fontSize(96)
           .fontColor(.white)
           .position(.top, inset: 80)
-        Title("Body", duration: .seconds(5))
+        Title("Body").duration(.seconds(5))
           .fontSize(48)
           .alignment(.left)
           .position(.bottomLeading, inset: 40)
