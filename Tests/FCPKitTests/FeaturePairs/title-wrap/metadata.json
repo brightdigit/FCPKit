@@ -1,0 +1,16 @@
+{
+  "feature": "title-wrap",
+  "fcpxmlVersion": "1.14",
+  "finalCutVersion": "12.3",
+  "finalCutApp": "Final Cut Pro Creator Studio.app",
+  "exportedAt": "2026-08-05T17:28:00-04:00",
+  "baselineState": "Project timeline with one Left clip and a default Basic Title (Layout Method Type / default box) showing a long single-line string.",
+  "changedAction": "Opened a copy of Basic Title in Motion, set Layout Method to Paragraph, expanded all four margins toward full frame, saved back. Export references the resulting Moti title copy (FCPKit Paragram Test) while Basic Title Motion node IDs in param keys remain 999166631/999166633.",
+  "exportWarnings": [
+    "after.fcpxml effect uid points at a user Motion Templates copy (~/Titles.../FCPKit Paragram Test.moti), not stock Basic Title; param key prefix matches Basic Title template node IDs."
+  ],
+  "artifacts": {
+    "before": "before.fcpxml",
+    "after": "after.fcpxml"
+  }
+}

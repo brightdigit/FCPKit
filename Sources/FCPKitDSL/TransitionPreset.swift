@@ -28,6 +28,11 @@
 //
 
 /// A fixture-backed or custom transition effect preset.
+///
+/// Motion-template wipe and movement presets derive UIDs from Final Cut Pro
+/// Creator Studio's `PETemplates.localized/Transitions.localized` catalog
+/// (`…/Transitions.localized/<Category>/<Name>/<Name>.motr`). Cross Dissolve
+/// remains the FxPlug special case captured from real exports.
 public struct TransitionPreset: Equatable, Sendable {
   /// Final Cut Pro's default Cross Dissolve, including audio crossfade.
   public static let crossDissolve = TransitionPreset(
@@ -48,5 +53,19 @@ public struct TransitionPreset: Equatable, Sendable {
     self.name = name
     self.videoUID = videoUID
     self.audioUID = audioUID
+  }
+
+  /// Builds a Motion-template transition preset under `Transitions.localized`.
+  ///
+  /// - Parameters:
+  ///   - name: Display name and `.motr` basename (for example `Push`).
+  ///   - category: Catalog category folder without `.localized` (for example `Movements`).
+  /// - Returns: A preset whose video UID points at the named Motion template.
+  internal static func motionTemplate(name: String, category: String) -> TransitionPreset {
+    TransitionPreset(
+      name: name,
+      videoUID: ".../Transitions.localized/\(category).localized/\(name).localized/\(name).motr",
+      audioUID: "FFAudioTransition"
+    )
   }
 }

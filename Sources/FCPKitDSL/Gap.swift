@@ -43,10 +43,13 @@ public struct Gap: StoryItem {
   }
 
   /// Creates a gap with an optional duration.
-  @available(*, deprecated, message: """
-    Use `.duration(_:)` instead of passing duration to the initializer. \
-    Anchored gaps inherit the host duration when omitted.
-    """)
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored gaps inherit the host duration when omitted.
+      """
+  )
   public init(duration: FCPTime?) {
     self.init(duration: duration, anchors: [])
   }

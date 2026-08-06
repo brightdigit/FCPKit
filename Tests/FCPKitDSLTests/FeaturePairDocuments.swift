@@ -76,7 +76,9 @@ internal enum FeaturePairDocuments {
               AssetClip(left, format: format1080)
                 .audioRole("dialogue")
                 .anchor(lane: 1) {
-                  Title(.basic, text: "Title").duration(FCPTime(numerator: 24_100, denominator: 2_400))
+                  Title(.basic, text: "Title").duration(
+                    FCPTime(numerator: 24_100, denominator: 2_400)
+                  )
                 }
             }
           }

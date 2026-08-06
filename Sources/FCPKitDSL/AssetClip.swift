@@ -64,19 +64,25 @@ public struct AssetClip: StoryItem {
   }
 
   /// Creates a clip from an ``AssetSource`` with an optional duration.
-  @available(*, deprecated, message: """
-    Use `.duration(_:)` instead of passing duration to the initializer. \
-    Anchored clips inherit the host duration when omitted.
-    """)
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored clips inherit the host duration when omitted.
+      """
+  )
   public init(_ source: AssetSource, duration: FCPTime?, name: String? = nil) {
     self.init(source: source, duration: duration, name: name, anchors: [], audioRole: nil)
   }
 
   /// Creates a clip from a model asset with an optional duration.
-  @available(*, deprecated, message: """
-    Use `.duration(_:)` instead of passing duration to the initializer. \
-    Anchored clips inherit the host duration when omitted.
-    """)
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored clips inherit the host duration when omitted.
+      """
+  )
   public init(
     _ asset: FCPKit.Asset,
     format: FCPKit.Format? = nil,
@@ -92,10 +98,13 @@ public struct AssetClip: StoryItem {
   }
 
   /// Creates a clip from a media URL with an optional duration.
-  @available(*, deprecated, message: """
-    Use `.duration(_:)` instead of passing duration to the initializer. \
-    Anchored clips inherit the host duration when omitted.
-    """)
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored clips inherit the host duration when omitted.
+      """
+  )
   public init(_ url: URL, duration: FCPTime?, name: String? = nil) {
     self.init(AssetSource(url: url, name: name, duration: duration), duration: duration, name: name)
   }

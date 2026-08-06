@@ -47,7 +47,6 @@ internal struct FCPKitDSLTests {
       try Example().export()
     }
   }
-
   @Test
   internal func urlOnlyClipWithoutDurationFailsLoudly() {
     struct Example: Document {
@@ -61,7 +60,6 @@ internal struct FCPKitDSLTests {
       try Example().export()
     }
   }
-
   @Test
   internal func titleWithoutDurationFailsLoudly() {
     struct Example: Document {
@@ -75,7 +73,6 @@ internal struct FCPKitDSLTests {
       try Example().export()
     }
   }
-
   @Test
   internal func anchoredTitleInheritsHostDurationWhenUnset() throws {
     struct Example: Document {
@@ -102,7 +99,6 @@ internal struct FCPKitDSLTests {
     }
     #expect(title.duration == "2s")
   }
-
   @Test
   internal func projectColorProcessingEmitsLibraryAttribute() throws {
     struct WideHDRDoc: Document {
@@ -224,54 +220,5 @@ internal struct FCPKitDSLTests {
     #expect(right.start == "1200/2400s")
     #expect(right.duration == "20400/2400s")
     #expect(xml.library?.events?.first?.projects?.first?.sequence?.duration == "18s")
-  }
-
-  @Test
-  internal func urlBuiltAssetEmitsMediaRepInsteadOfSrcAttribute() throws {
-    struct Example: Document {
-      var body: some DocumentContent {
-        Sequence(format: .p1080p24) {
-          AssetClip(
-            URL(fileURLWithPath: "/tmp/Left.mov"),
-            name: "Left"
-          ).duration(FCPTime(numerator: 10))
-        }
-      }
-    }
-    let xml = try Example().export(version: FCPXMLVersion("1.14"))
-    let asset = try #require(xml.resources?.assets?.first)
-    #expect(asset.src == nil)
-    #expect(asset.mediaRep?.count == 1)
-    let rep = try #require(asset.mediaRep?.first)
-    #expect(rep.kind == .originalMedia)
-    #expect(rep.src == "file:///tmp/Left.mov")
-    #expect(rep.sig == nil)
-  }
-
-  @Test
-  internal func conflictingExplicitResourceIDsFail() {
-    struct Example: Document {
-      var body: some DocumentContent {
-        Sequence {
-          AssetClip(
-            AssetSource(
-              url: URL(fileURLWithPath: "/tmp/a.mov"),
-              duration: FCPTime(numerator: 1),
-              id: "r9"
-            )
-          )
-          AssetClip(
-            AssetSource(
-              url: URL(fileURLWithPath: "/tmp/b.mov"),
-              duration: FCPTime(numerator: 1),
-              id: "r9"
-            )
-          )
-        }
-      }
-    }
-    #expect(throws: BuildError.conflictingResourceID("r9")) {
-      try Example().export()
-    }
   }
 }

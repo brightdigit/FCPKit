@@ -27,10 +27,12 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+// swiftlint:disable sorted_imports
 import FCPKit
-import FCPKitDemo
 import FCPKitDSL
+import FCPKitDemo
 import Foundation
+// swiftlint:enable sorted_imports
 
 extension FCPXMLDSLCommand {
   #if canImport(AVFoundation)

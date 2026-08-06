@@ -1,5 +1,5 @@
 //
-//  PresentationDocument.swift
+//  TitleTextWhitespaceTests.swift
 //  FCPKit
 //
 //  Created by Leo Dion.
@@ -27,42 +27,39 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import FCPKit
 import FCPKitDSL
+import Foundation
+import Testing
 
-/// A starter `FCPKitDSL` document for hand-authored presentation video.
-///
-/// Replace the placeholder cut in ``body`` with your own storyline — colors,
-/// titles, clips, transitions, and anything else the DSL supports. Export with
-/// `fcpxml-dsl export presentation`.
-public struct PresentationDocument: Document {
-  /// The Final Cut Pro project name written into the exported document.
-  public let projectName: String
+@testable import FCPKit
 
-  /// The project shell; author the cut inside the ``Sequence``.
-  public var body: DocumentGroup {
-    Project(name: projectName) {
+@Suite
+internal struct TitleTextWhitespaceTests {
+  private struct WelcomeTitle: Document {
+    var body: some DocumentContent {
       Sequence {
         Color.white.duration(2.0).anchor(lane: 1) {
-          Title("Welcome to FCPKit!").fontColor(.black).alignment(.center)
-        }
-        Transition(.diagonal)
-        Color.green.duration(5.0).anchor(lane: 1) {
-          Title("This library allows you to create Final Cut Pro project documents at ease.")
-            .alignment(.center)
-            .textBox(.fillFrame(inset: 80))
-        }
-        Transition(.push)
-        Color.blue.duration(3.0).anchor(lane: 1) {
-          Title("Typed FCPXML, ready for Final Cut Pro.").alignment(.center)
+          Title("Welcome to FCPKit!")
         }
       }
     }
-    .colorProcessing(.wideHDR)
   }
 
-  /// Creates a presentation document shell.
-  public init(projectName: String = "FCPKit Presentation") {
-    self.projectName = projectName
+  @Test
+  internal func encodedTitleTextStyleKeepsContentInline() throws {
+    let exported = try WelcomeTitle().export()
+    let xml = try FCPXMLParser().encodeToString(exported)
+    #expect(xml.contains(#"<text-style ref="ts1">Welcome to FCPKit!</text-style>"#))
+    #expect(!xml.contains(#"<text-style ref="ts1">\#n"#))
+  }
+
+  @Test
+  internal func compactingLeavesNestedTextStyleBodiesAlone() {
+    let withParam = """
+      <text-style font="Helvetica" fontSize="63">
+        <param name="Position" key="9999/1" value="0 0"/>
+      </text-style>
+      """
+    #expect(FCPXMLParser.compactingTextStyleCharacterData(in: withParam) == withParam)
   }
 }

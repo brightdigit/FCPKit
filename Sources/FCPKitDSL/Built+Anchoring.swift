@@ -79,6 +79,8 @@ extension Array where Element == any DSLNode {
   ///   - resources: The document resource table.
   ///   - hostDuration: Duration of the storyline host. Anchored content with no
   ///     explicit duration inherits this value.
+  /// - Returns: The anchored items, or `nil` when this array is empty.
+  /// - Throws: ``BuildError`` when any node cannot be lowered or anchored.
   internal func anchoredItems(
     resources: inout ResourceStore,
     hostDuration: FCPTime? = nil

@@ -27,12 +27,14 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
+// swiftlint:disable sorted_imports
 import FCPKit
-import FCPKitDemo
 import FCPKitDSL
+import FCPKitDemo
 import FCPXMLDiff
 import Foundation
 import Testing
+// swiftlint:enable sorted_imports
 
 @Suite
 internal struct PresentationDocumentTests {
@@ -43,26 +45,27 @@ internal struct PresentationDocumentTests {
 
     let sequence = try #require(exported.library?.events?.first?.projects?.first?.sequence)
     let items = try #require(sequence.spine?.items)
-    #expect(items.count == 2)
+    #expect(items.count == 5)
 
-    let expected: [(host: Double, title: Double)] = [(2.0, 2.0), (5.0, 5.0)]
-    for (index, pair) in expected.enumerated() {
-      guard case .video(let video) = items[index] else {
-        Issue.record("Expected spine item \(index) to be a color video")
-        return
+    let names: [String] = items.map { item in
+      switch item {
+      case .video: "video"
+      case .transition: "transition"
+      default: "other"
       }
-      let hostDuration = try #require(video.duration.flatMap(FCPTime.init))
-      #expect(abs(hostDuration.seconds - pair.host) < 0.0001)
+    }
+    #expect(names == ["video", "transition", "video", "transition", "video"])
+    try expectTransition(items[1], named: TransitionPreset.diagonal.name)
+    try expectTransition(items[3], named: TransitionPreset.push.name)
 
-      let anchored = try #require(video.anchoredItems)
-      #expect(anchored.count == 1)
-      guard case .title(let title) = anchored[0] else {
-        Issue.record("Expected anchored item on video \(index) to be a title")
-        return
-      }
-      let titleDuration = try #require(title.duration.flatMap(FCPTime.init))
-      #expect(abs(titleDuration.seconds - pair.title) < 0.0001)
-      #expect(titleDuration != .zero)
+    // Host durations after 1s centered-overlap packing; titles inherit authored host length.
+    let expected: [(host: Double, title: Double)] = [
+      (1.5, 2.0),
+      (4.0, 5.0),
+      (2.5, 3.0),
+    ]
+    for (pairIndex, pair) in expected.enumerated() {
+      try expectTitledVideo(items[pairIndex * 2], host: pair.host, title: pair.title)
     }
   }
 
@@ -71,5 +74,39 @@ internal struct PresentationDocumentTests {
     let exported = try PresentationDocument().export()
     let encoded = try FCPXMLParser().encode(exported)
     try assertDTDValidates(encoded)
+    let xml = try FCPXMLParser().encodeToString(exported)
+    #expect(xml.contains(#"<text-style ref="ts1">Welcome to FCPKit!</text-style>"#))
+  }
+}
+
+extension PresentationDocumentTests {
+  private func expectTransition(_ item: SpineItem, named name: String) throws {
+    guard case .transition(let transition) = item else {
+      Issue.record("Expected \(name) transition")
+      return
+    }
+    #expect(transition.name == name)
+  }
+
+  private func expectTitledVideo(_ item: SpineItem, host: Double, title: Double) throws {
+    guard case .video(let video) = item else {
+      Issue.record("Expected color video spine item")
+      return
+    }
+    let hostDuration = try #require(video.duration.flatMap(FCPTime.init))
+    #expect(abs(hostDuration.seconds - host) < 0.0001)
+
+    let anchored = try #require(video.anchoredItems)
+    #expect(anchored.count == 1)
+    guard case .title(let titleItem) = anchored[0] else {
+      Issue.record("Expected anchored title on color video")
+      return
+    }
+    let titleDuration = try #require(titleItem.duration.flatMap(FCPTime.init))
+    #expect(abs(titleDuration.seconds - title) < 0.0001)
+    #expect(titleDuration != .zero)
+
+    let styleContent = titleItem.text?.first?.textStyle?.first?.content
+    #expect(styleContent?.hasPrefix(" ") != true)
   }
 }

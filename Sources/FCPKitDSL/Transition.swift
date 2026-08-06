@@ -45,8 +45,15 @@ public struct Transition: StoryItem {
   }
 
   /// Creates a transition from a preset with an explicit duration.
-  @available(*, deprecated, message: "Use `.duration(_:)` instead of passing duration to the initializer.")
+  @available(
+    *, deprecated, message: "Use `.duration(_:)` instead of passing duration to the initializer."
+  )
   public init(_ preset: TransitionPreset, duration: FCPTime) {
+    self.preset = preset
+    self.duration = duration
+  }
+
+  private init(preset: TransitionPreset, duration: FCPTime) {
     self.preset = preset
     self.duration = duration
   }
@@ -54,11 +61,6 @@ public struct Transition: StoryItem {
   /// Sets the transition duration.
   public func duration(_ duration: FCPTime) -> Transition {
     Transition(preset: preset, duration: duration)
-  }
-
-  private init(preset: TransitionPreset, duration: FCPTime) {
-    self.preset = preset
-    self.duration = duration
   }
 
   /// Discards the given anchors and returns this transition unchanged.
@@ -73,7 +75,7 @@ public struct Transition: StoryItem {
   public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let video = try resources.effect(name: preset.name, uid: preset.videoUID)
     let audio = try resources.effect(name: "Audio Crossfade", uid: preset.audioUID)
-    let filters = CrossDissolveFilters.make(video: video, audio: audio)
+    let filters = Self.filters(for: preset, video: video, audio: audio)
     return .item(
       .transition(
         FCPKit.Transition(
@@ -83,6 +85,22 @@ public struct Transition: StoryItem {
           filterAudio: filters.1
         )
       )
+    )
+  }
+}
+
+extension Transition {
+  private static func filters(
+    for preset: TransitionPreset,
+    video: ResourceRef<EffectKind>,
+    audio: ResourceRef<EffectKind>
+  ) -> ([FilterVideo]?, [FilterAudio]?) {
+    if preset == .crossDissolve {
+      return CrossDissolveFilters.make(video: video, audio: audio)
+    }
+    return (
+      [FilterVideo(ref: video, name: preset.name)],
+      [FilterAudio(ref: audio, name: "Audio Crossfade")]
     )
   }
 }

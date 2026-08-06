@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+
+<fcpxml version="1.14">
+    <resources>
+        <format id="r1" name="FFVideoFormat1080p24" frameDuration="100/2400s" width="1920" height="1080" colorSpace="9-16-9 (Rec. 2020 PQ)"/>
+        <asset id="r2" name="Left" uid="E061F5EAC6D99B79B612F65B3A906807" start="0s" duration="10s" hasVideo="1" format="r3" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+            <media-rep kind="original-media" sig="E061F5EAC6D99B79B612F65B3A906807" src="file:///Users/leo/Movies/Current.fcpbundle/Untitled/Original%20Media/Left.mov">
+                <bookmark>Ym9vawAEAAAAAAUQQAAAAOPWPIYzJylpse2CWrv7RLDBpnX0IK5Fq5BvW1uv2deAAAAAAAAAAAAAAAAAAgAAALACAAAgAAAAAQIAACzs8ZYA5LabWampqHRssbMyRzas4DXIzYt78z8UMCFOBAAAAAMDAAAAGAAoBQAAAAEBAABVc2VycwAAAAMAAAABAQAAbGVvAAYAAAABAQAATW92aWVzAAARAAAAAQEAAEN1cnJlbnQuZmNwYnVuZGxlAAAACAAAAAEBAABVbnRpdGxlZA4AAAABAQAAT3JpZ2luYWwgTWVkaWEAAAgAAAABAQAATGVmdC5tb3YcAAAAAQYAADgAAABIAAAAVAAAAGQAAACAAAAAkAAAAKgAAAAIAAAABAMAAPBHAAAAAAAACAAAAAQDAABwTQUAAAAAAAgAAAAEAwAAn00FAAAAAAAIAAAABAMAAH8aVgcAAAAACAAAAAQDAAAVNOIIAAAAAAgAAAAEAwAA1Qr2CAAAAAAIAAAABAMAAPcK9ggAAAAAHAAAAAEGAADcAAAA7AAAAPwAAAAMAQAAHAEAACwBAAA8AQAACAAAAAAEAABByAyTqQGxdBgAAAABAgAAAQAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAEFAAAEAAAAAwMAAAgAAAAEAAAAAwMAAAUAAAAIAAAABAMAAAUAAAAAAAAABAAAAAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAATWFjaW50b3NoIEhECAAAAAQDAAAAICWJ0AEAAAgAAAAABAAAQcgE+NQAAAAkAAAAAQEAADQwQTM5NzVELTJBNzctNEFGMi1CMkE4LUQ1ODIwRUMyNzQ5NhgAAAABAgAAgQAAAAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAALwAAAAEBAABOU1VSTEJvb2ttYXJrUXVhcmFudGluZU1vdW50ZWROZXR3b3JrVm9sdW1lc0tleQAIAQAA/v///wEAAAAAAAAAFQAAAAQQAAC4AAAAAAAAAAUQAABMAQAAAAAAABAQAACAAQAAAAAAAEAQAABwAQAAAAAAAFQQAACoAQAAAAAAAFUQAAC0AQAAAAAAAFYQAACgAQAAAAAAAAIgAABsAgAAAAAAAAUgAADcAQAAAAAAABAgAADsAQAAAAAAABEgAAAgAgAAAAAAABIgAAAAAgAAAAAAABMgAAAQAgAAAAAAACAgAABMAgAAAAAAADAgAACgAQAAAAAAAAHAAADAAQAAAAAAABHAAABIAAAAAAAAABLAAADQAQAAAAAAABDQAAAsAAAAAAAAAITwAAAEAAAAAAAAAHgCAICgAQAAAAAAAA==</bookmark>
+            </media-rep>
+            <metadata>
+                <md key="com.apple.proapps.studio.rawToLogConversion" value="0"/>
+                <md key="com.apple.proapps.studio.cameraISO" value="0"/>
+                <md key="com.apple.proapps.studio.cameraColorTemperature" value="0"/>
+                <md key="com.apple.proapps.spotlight.kMDItemCodecs">
+                    <array>
+                        <string>Lavc62.28.101 libx264</string>
+                        <string>Linear PCM</string>
+                    </array>
+                </md>
+                <md key="com.apple.proapps.mio.ingestDate" value="2026-08-05 16:56:23 -0400"/>
+            </metadata>
+        </asset>
+        <format id="r3" name="FFVideoFormat1080p24" frameDuration="512/12288s" width="1920" height="1080" colorSpace="1-1-1 (Rec. 709)"/>
+        <effect id="r4" name="FCPKit Paragram Test" uid="~/Titles.localized/Bumper:Opener.localized/FCPKit Paragram Test/FCPKit Paragram Test.moti" src="file:///Users/leo/Library/Containers/com.apple.FinalCutApp/Data/Movies/Motion%20Templates.localized/Titles.localized/Bumper:Opener.localized/FCPKit%20Paragram%20Test/FCPKit%20Paragram%20Test.moti"/>
+    </resources>
+    <library location="file:///Users/leo/Movies/Current.fcpbundle/" colorProcessing="wide-hdr">
+        <event name="Untitled" uid="634253F6-BB4E-478E-8ED2-66AD5FB1526B">
+            <project name="After" uid="C7D83120-D2BA-4EED-9972-5A5E0A44CA97" modDate="2026-08-05 17:28:08 -0400">
+                <sequence format="r1" duration="24100/2400s" tcStart="0s" tcFormat="NDF" renderFormat="FFRenderFormatProRes422HQ" audioLayout="stereo" audioRate="48k">
+                    <spine>
+                        <asset-clip ref="r2" offset="0s" name="Left" duration="10s" format="r3" tcFormat="NDF" audioRole="dialogue">
+                            <title ref="r4" lane="1" offset="0s" name="Nunc in vulputate felis, at tincidunt arcu. Cras. - FCPKit Paragram Test" start="3600s" duration="24100/2400s">
+                                <param name="Layout Method" key="9999/999166631/999166633/2/314" value="1 (Paragraph)"/>
+                                <param name="Left Margin" key="9999/999166631/999166633/2/323" value="-952.652"/>
+                                <param name="Right Margin" key="9999/999166631/999166633/2/324" value="954.592"/>
+                                <param name="Top Margin" key="9999/999166631/999166633/2/325" value="527.887"/>
+                                <param name="Bottom Margin" key="9999/999166631/999166633/2/326" value="-523.048"/>
+                                <param name="Flatten" key="9999/999166631/999166633/2/351" value="1"/>
+                                <param name="Alignment" key="9999/999166631/999166633/2/354/999169573/401" value="1 (Center)"/>
+                                <text>
+                                    <text-style ref="ts1">Nunc in vulputate felis, at tincidunt arcu. Cras.</text-style>
+                                </text>
+                                <text-style-def id="ts1">
+                                    <text-style font="Helvetica" fontSize="63" fontFace="Regular" fontColor="1 1 1 1" alignment="center"/>
+                                </text-style-def>
+                            </title>
+                        </asset-clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+        <smart-collection name="Projects" match="all">
+            <match-clip rule="is" type="project"/>
+        </smart-collection>
+        <smart-collection name="All Video" match="any">
+            <match-media rule="is" type="videoOnly"/>
+            <match-media rule="is" type="videoWithAudio"/>
+        </smart-collection>
+        <smart-collection name="Audio Only" match="all">
+            <match-media rule="is" type="audioOnly"/>
+        </smart-collection>
+        <smart-collection name="Stills" match="all">
+            <match-media rule="is" type="stills"/>
+        </smart-collection>
+        <smart-collection name="Favorites" match="all">
+            <match-ratings value="favorites"/>
+        </smart-collection>
+        <smart-collection name="Missing Analysis" match="all">
+            <match-analysis-type rule="isMissing" value="any"/>
+        </smart-collection>
+    </library>
+</fcpxml>

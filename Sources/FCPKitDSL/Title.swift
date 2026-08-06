@@ -42,6 +42,7 @@ public struct Title: StoryItem {
   internal let style: TitleStyle
   internal let position: FramePosition?
   internal let displayName: String?
+  internal let textLayout: TitleTextLayout?
 
   /// Creates a Basic Title from text.
   ///
@@ -60,19 +61,25 @@ public struct Title: StoryItem {
   }
 
   /// Creates a Basic Title from text and optional duration.
-  @available(*, deprecated, message: """
-    Use `.duration(_:)` instead of passing duration to the initializer. \
-    Anchored titles inherit the host duration when omitted.
-    """)
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored titles inherit the host duration when omitted.
+      """
+  )
   public init(_ text: String, duration: FCPTime?) {
     self.init(.basic, text: text, duration: duration)
   }
 
   /// Creates a title from a preset, text, and optional duration.
-  @available(*, deprecated, message: """
-    Use `.duration(_:)` instead of passing duration to the initializer. \
-    Anchored titles inherit the host duration when omitted.
-    """)
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored titles inherit the host duration when omitted.
+      """
+  )
   public init(_ preset: TitlePreset, text: String, duration: FCPTime?) {
     self.init(preset: preset, text: text, duration: duration, lane: nil, offset: nil)
   }
@@ -86,7 +93,8 @@ public struct Title: StoryItem {
     anchors: [any DSLNode] = [],
     style: TitleStyle = .default,
     position: FramePosition? = nil,
-    displayName: String? = nil
+    displayName: String? = nil,
+    textLayout: TitleTextLayout? = nil
   ) {
     self.preset = preset
     self.text = text
@@ -97,6 +105,7 @@ public struct Title: StoryItem {
     self.style = style
     self.position = position
     self.displayName = displayName
+    self.textLayout = textLayout
   }
 
   /// Sets the title clip duration.
@@ -110,7 +119,8 @@ public struct Title: StoryItem {
     anchors: [any DSLNode]? = nil,
     style: TitleStyle? = nil,
     position: FramePosition? = nil,
-    displayName: String? = nil
+    displayName: String? = nil,
+    textLayout: TitleTextLayout? = nil
   ) -> Title {
     Title(
       preset: preset,
@@ -121,7 +131,8 @@ public struct Title: StoryItem {
       anchors: anchors ?? self.anchors,
       style: style ?? self.style,
       position: position ?? self.position,
-      displayName: displayName ?? self.displayName
+      displayName: displayName ?? self.displayName,
+      textLayout: textLayout ?? self.textLayout
     )
   }
 
@@ -134,6 +145,8 @@ public struct Title: StoryItem {
   ///
   /// - Throws: ``BuildError/missingDuration(_:)`` when no duration was set and
   ///   none was inherited from an anchor host.
+  /// - Throws: ``BuildError/missingFrameSize`` when ``textBox(_:)`` /
+  ///   ``TextBox/fillFrame(inset:)`` needs a sequence format.
   public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     guard let duration else {
       throw BuildError.missingDuration(displayName ?? preset.name)
@@ -150,6 +163,8 @@ public struct Title: StoryItem {
       transform = FCPKit.AdjustTransform(position: resolved)
     }
 
+    let params = try textLayoutParameters(frameSize: resources.frameSize)
+
     var element = FCPKit.Title(
       ref: ref,
       name: displayName ?? preset.name,
@@ -157,6 +172,7 @@ public struct Title: StoryItem {
       start: "3600s",
       lane: lane.map(String.init),
       offset: offset?.description ?? "0s",
+      param: params,
       text: [FCPKit.TextElement(textStyle: [style])],
       textStyleDef: [definition]
     )
@@ -166,5 +182,29 @@ public struct Title: StoryItem {
       hostDuration: duration
     )
     return .item(.title(element))
+  }
+
+  private func textLayoutParameters(
+    frameSize: (width: Double, height: Double)?
+  ) throws(BuildError) -> [ParamElement]? {
+    guard let textLayout else {
+      return nil
+    }
+    var method = textLayout.method
+    let margins: TextMargins?
+    if let inset = textLayout.fillInset {
+      guard let frameSize else {
+        throw BuildError.missingFrameSize
+      }
+      method = method ?? .paragraph
+      margins = TextMargins.fillFrame(
+        inset: inset,
+        width: frameSize.width,
+        height: frameSize.height
+      )
+    } else {
+      margins = textLayout.margins
+    }
+    return BasicTitleTextLayoutParams.parameters(method: method, margins: margins)
   }
 }

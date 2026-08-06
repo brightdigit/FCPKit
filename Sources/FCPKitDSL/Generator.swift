@@ -61,10 +61,13 @@ public struct Generator: DSLNode {
   }
 
   /// Creates a generator clip from a preset and optional duration.
-  @available(*, deprecated, message: """
-    Use `.duration(_:)` instead of passing duration to the initializer. \
-    Anchored generators inherit the host duration when omitted.
-    """)
+  @available(
+    *, deprecated,
+    message: """
+      Use `.duration(_:)` instead of passing duration to the initializer. \
+      Anchored generators inherit the host duration when omitted.
+      """
+  )
   public init(_ preset: GeneratorPreset, duration: FCPTime?, name: String? = nil) {
     self.init(
       preset: preset,
