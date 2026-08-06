@@ -56,6 +56,9 @@ public struct ResourceStore {
   /// coordinates, and `ResourceStore` is already threaded through every `build`.
   internal var frameSize: (width: Double, height: Double)?
 
+  /// Resource assets registered so far (used to post-correct still packing).
+  internal var registeredAssets: [FCPKit.Asset] { assets }
+
   /// Creates a store targeting the given document version.
   internal init(version: FCPXMLVersion = .supportedGeneration) {
     self.version = version

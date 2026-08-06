@@ -75,7 +75,10 @@ let package = Package(
         ),
         .target(
             name: "FCPKitDemo",
-            dependencies: ["FCPKitDSL"]
+            dependencies: ["FCPKitDSL"],
+            resources: [
+                .process("Resources")
+            ]
         ),
         .executableTarget(
             name: "fcpxml-generator",

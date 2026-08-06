@@ -45,28 +45,47 @@ internal struct PresentationDocumentTests {
 
     let sequence = try #require(exported.library?.events?.first?.projects?.first?.sequence)
     let items = try #require(sequence.spine?.items)
-    #expect(items.count == 5)
+    #expect(items.count == 7)
 
     let names: [String] = items.map { item in
       switch item {
       case .video: "video"
+      case .assetClip: "asset-clip"
       case .transition: "transition"
       default: "other"
       }
     }
-    #expect(names == ["video", "transition", "video", "transition", "video"])
+    #expect(
+      names == [
+        "video", "transition", "video", "transition", "video", "transition", "asset-clip",
+      ]
+    )
     try expectTransition(items[1], named: TransitionPreset.diagonal.name)
     try expectTransition(items[3], named: TransitionPreset.push.name)
+    try expectTransition(items[5], named: TransitionPreset.crossDissolve.name)
 
     // Host durations after 1s centered-overlap packing; titles inherit authored host length.
     let expected: [(host: Double, title: Double)] = [
       (1.5, 2.0),
       (4.0, 5.0),
-      (2.5, 3.0),
+      (2.0, 3.0),
+      (3.5, 4.0),
     ]
     for (pairIndex, pair) in expected.enumerated() {
-      try expectTitledVideo(items[pairIndex * 2], host: pair.host, title: pair.title)
+      try expectTitledHost(items[pairIndex * 2], host: pair.host, title: pair.title)
     }
+
+    let assets = try #require(exported.resources?.assets)
+    #expect(assets.count == 1)
+    let asset = assets[0]
+    #expect(asset.mediaRep?.first?.src?.hasSuffix("Placeholder.png") == true)
+    #expect(asset.duration == "0s")
+    #expect(asset.start == "0s")
+    #expect(asset.hasVideo?.value == true)
+    #expect(asset.videoSources == "1")
+    #expect(asset.format != nil)
+    let formats = try #require(exported.resources?.formats)
+    #expect(formats.contains { $0.name == "FFVideoFormatRateUndefined" })
   }
 
   @Test
@@ -76,6 +95,13 @@ internal struct PresentationDocumentTests {
     try assertDTDValidates(encoded)
     let xml = try FCPXMLParser().encodeToString(exported)
     #expect(xml.contains(#"<text-style ref="ts1">Welcome to FCPKit!</text-style>"#))
+  }
+
+  @Test
+  internal func placeholderImageIsBundled() {
+    let url = PresentationDocument.placeholderImageURL
+    #expect(FileManager.default.fileExists(atPath: url.path))
+    #expect(url.pathExtension == "png")
   }
 }
 
@@ -88,18 +114,25 @@ extension PresentationDocumentTests {
     #expect(transition.name == name)
   }
 
-  private func expectTitledVideo(_ item: SpineItem, host: Double, title: Double) throws {
-    guard case .video(let video) = item else {
-      Issue.record("Expected color video spine item")
+  private func expectTitledHost(_ item: SpineItem, host: Double, title: Double) throws {
+    let hostDuration: FCPTime
+    let anchored: [AnchoredItem]
+    switch item {
+    case .video(let video):
+      hostDuration = try #require(video.duration.flatMap(FCPTime.init))
+      anchored = try #require(video.anchoredItems)
+    case .assetClip(let clip):
+      hostDuration = try #require(clip.duration.flatMap(FCPTime.init))
+      anchored = try #require(clip.anchoredItems)
+    default:
+      Issue.record("Expected color video or asset-clip spine item")
       return
     }
-    let hostDuration = try #require(video.duration.flatMap(FCPTime.init))
     #expect(abs(hostDuration.seconds - host) < 0.0001)
 
-    let anchored = try #require(video.anchoredItems)
     #expect(anchored.count == 1)
     guard case .title(let titleItem) = anchored[0] else {
-      Issue.record("Expected anchored title on color video")
+      Issue.record("Expected anchored title on host")
       return
     }
     let titleDuration = try #require(titleItem.duration.flatMap(FCPTime.init))

@@ -139,11 +139,32 @@ public struct AssetClip: StoryItem {
     replacing(anchors: anchors)
   }
 
-  /// Lowers this clip into an `<asset-clip>` story item.
+  /// Lowers this clip into a story item.
+  ///
+  /// Still sources (`asset` `duration="0s"`, as from ``AssetSource/still(url:width:height:name:id:)``)
+  /// become `<video>` — Final Cut imports real still PNGs that way and aborts in
+  /// `addAssetClip` when they are emitted as `<asset-clip>`. Movies stay `<asset-clip>`.
   public func build(_ resources: inout ResourceStore) throws(BuildError) -> Built {
     let ref = try resources.asset(source)
+    let displayName = name ?? source.asset.name ?? "asset clip"
+    if source.asset.duration == "0s" {
+      guard let storyDuration = duration else {
+        throw BuildError.missingDuration(displayName)
+      }
+      var video = FCPKit.Video(
+        ref: ResourceRef<AssetKind>(ref.rawValue),
+        name: name ?? source.asset.name,
+        start: "0s",
+        duration: storyDuration.description
+      )
+      video.anchoredItems = try anchors.anchoredItems(
+        resources: &resources,
+        hostDuration: storyDuration
+      )
+      return .item(.video(video))
+    }
     guard let value = duration?.description ?? source.asset.duration, FCPTime(value) != nil else {
-      throw BuildError.missingDuration(name ?? source.asset.name ?? "asset clip")
+      throw BuildError.missingDuration(displayName)
     }
     var clip = FCPKit.AssetClip(
       ref: ref,

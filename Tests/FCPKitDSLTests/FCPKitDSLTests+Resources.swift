@@ -81,4 +81,78 @@ extension FCPKitDSLTests {
       try Example().export()
     }
   }
+
+  @Test
+  internal func stillAssetEmitsRateUndefinedFormatAndZeroDuration() throws {
+    struct Example: Document {
+      var body: some DocumentContent {
+        Sequence(format: .p1080p24) {
+          AssetClip(
+            .still(
+              url: URL(fileURLWithPath: "/tmp/Slide.png"),
+              width: 1_920,
+              height: 1_080
+            )
+          ).duration(FCPTime(numerator: 4))
+        }
+      }
+    }
+    let xml = try Example().export(version: FCPXMLVersion("1.14"))
+    let asset = try #require(xml.resources?.assets?.first)
+    #expect(asset.duration == "0s")
+    #expect(asset.start == "0s")
+    #expect(asset.hasVideo?.value == true)
+    #expect(asset.videoSources == "1")
+    #expect(asset.mediaRep?.first?.src == "file:///tmp/Slide.png")
+    let formatRef = try #require(asset.format)
+    let format = try #require(
+      xml.resources?.formats?.first { $0.id.rawValue == formatRef.rawValue }
+    )
+    #expect(format.name == "FFVideoFormatRateUndefined")
+    #expect(format.width == "1920")
+    #expect(format.height == "1080")
+    #expect(format.frameDuration == nil)
+
+    let items = try StoryItemSupport.spine(xml)
+    #expect(items.count == 1)
+    guard case .video(let video) = items[0] else {
+      Issue.record("Expected still to lower to spine <video>, got \(items[0])")
+      return
+    }
+    #expect(video.ref?.rawValue == asset.id.rawValue)
+    #expect(video.duration == "4s")
+    #expect(items.contains { if case .assetClip = $0 { return true }; return false } == false)
+  }
+
+  @Test
+  internal func stillVideoAfterTransitionHasNoMediaStart() throws {
+    struct Example: Document {
+      var body: some DocumentContent {
+        Sequence(format: .p1080p24) {
+          Generator(.custom).duration(FCPTime(numerator: 5)).color(.blue)
+          Transition(.crossDissolve)
+          AssetClip(
+            .still(
+              url: URL(fileURLWithPath: "/tmp/Slide.png"),
+              width: 1_920,
+              height: 1_080
+            )
+          ).duration(FCPTime(numerator: 4))
+        }
+      }
+    }
+    let xml = try Example().export(version: FCPXMLVersion("1.14"))
+    let stillAsset = try #require(
+      xml.resources?.assets?.first { $0.duration == "0s" }
+    )
+    let items = try StoryItemSupport.spine(xml)
+    let stillVideo = items.compactMap { item -> FCPKit.Video? in
+      guard case .video(let video) = item, video.ref?.rawValue == stillAsset.id.rawValue else {
+        return nil
+      }
+      return video
+    }.first
+    let video = try #require(stillVideo)
+    #expect(video.start == nil)
+  }
 }

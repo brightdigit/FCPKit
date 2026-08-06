@@ -29,6 +29,7 @@
 
 import FCPKit
 import FCPKitDSL
+import Foundation
 
 /// A starter `FCPKitDSL` document for hand-authored presentation video.
 ///
@@ -36,6 +37,14 @@ import FCPKitDSL
 /// titles, clips, transitions, and anything else the DSL supports. Export with
 /// `fcpxml-dsl export presentation`.
 public struct PresentationDocument: Document {
+  /// Bundled demo still used by the sample image slide.
+  public static var placeholderImageURL: URL {
+    guard let url = resourceBundle.url(forResource: "Placeholder", withExtension: "jpg") else {
+      fatalError("Missing Placeholder.png in FCPKitDemo module resources")
+    }
+    return url
+  }
+
   /// The Final Cut Pro project name written into the exported document.
   public let projectName: String
 
@@ -56,6 +65,14 @@ public struct PresentationDocument: Document {
         Color.blue.duration(3.0).anchor(lane: 1) {
           Title("Typed FCPXML, ready for Final Cut Pro.").alignment(.center)
         }
+        Transition(.crossDissolve)
+        AssetClip(
+          .still(url: Self.placeholderImageURL, width: 1_920, height: 1_080)
+        )
+        .duration(4.0)
+        .anchor(lane: 1) {
+          Title("Bundled stills ship with FCPKitDemo resources.").alignment(.center)
+        }
       }
     }
     .colorProcessing(.wideHDR)
@@ -64,5 +81,27 @@ public struct PresentationDocument: Document {
   /// Creates a presentation document shell.
   public init(projectName: String = "FCPKit Presentation") {
     self.projectName = projectName
+  }
+}
+
+extension PresentationDocument {
+  private final class ResourceBundleToken {}
+
+  /// Locates `FCPKit_FCPKitDemo.bundle` without using SPM's `Bundle.module`
+  /// (SourceKit often fails to surface that synthesized accessor).
+  private static var resourceBundle: Bundle {
+    let bundleName = "FCPKit_FCPKitDemo"
+    let candidates: [URL?] = [
+      Bundle.main.resourceURL?.appendingPathComponent("\(bundleName).bundle"),
+      Bundle(for: ResourceBundleToken.self).resourceURL?
+        .appendingPathComponent("\(bundleName).bundle"),
+      Bundle.main.bundleURL.appendingPathComponent("\(bundleName).bundle"),
+    ]
+    for candidate in candidates {
+      if let candidate, let bundle = Bundle(url: candidate) {
+        return bundle
+      }
+    }
+    fatalError("unable to find bundle named \(bundleName)")
   }
 }

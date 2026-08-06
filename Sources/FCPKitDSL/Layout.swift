@@ -83,6 +83,43 @@ internal enum Layout {
     return Packed(items: output, duration: render(max(cursor, longest), tickDenominator))
   }
 
+  /// Drops media `start` on still story items (`asset` `duration="0s"`).
+  ///
+  /// Stills lower to `<video>`; transition packing still seeks by `T/2`. That
+  /// offset is meaningful for movies but seeks into zero-length still media —
+  /// clear it for still `<video>` (and any residual still `<asset-clip>`).
+  internal static func clearingStillMediaStarts(
+    _ items: [FCPKit.SpineItem],
+    assets: [FCPKit.Asset]
+  ) -> [FCPKit.SpineItem] {
+    let stillIDs = Set(
+      assets.compactMap { asset -> String? in
+        asset.duration == "0s" ? asset.id.rawValue : nil
+      }
+    )
+    guard !stillIDs.isEmpty else {
+      return items
+    }
+    return items.map { item in
+      switch item {
+      case .video(var video):
+        guard let ref = video.ref?.rawValue, stillIDs.contains(ref) else {
+          return item
+        }
+        video.start = nil
+        return .video(video)
+      case .assetClip(var clip):
+        guard let ref = clip.ref?.rawValue, stillIDs.contains(ref) else {
+          return item
+        }
+        clip.start = nil
+        return .assetClip(clip)
+      default:
+        return item
+      }
+    }
+  }
+
   private static func packItem(
     _ item: FCPKit.SpineItem,
     overlap: Overlap,
