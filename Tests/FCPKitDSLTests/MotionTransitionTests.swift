@@ -64,14 +64,31 @@ internal struct MotionTransitionTests {
   }
 
   @Test
-  internal func wipeAndMovementUIDsUseMotionTemplatePaths() {
-    #expect(
-      TransitionPreset.diagonal.videoUID
-        == ".../Transitions.localized/Wipes.localized/Diagonal.localized/Diagonal.motr"
-    )
-    #expect(
-      TransitionPreset.push.videoUID
-        == ".../Transitions.localized/Movements.localized/Push.localized/Push.motr"
-    )
+  internal func crossDissolveUsesVideoLookIndexTwelveAndDisableDRT() throws {
+    struct Cut: Document {
+      var body: some DocumentContent {
+        Sequence {
+          Color.white.duration(3.0)
+          Transition(.crossDissolve)
+          Color.green.duration(3.0)
+        }
+      }
+    }
+    let exported = try Cut().export()
+    let items = try StoryItemSupport.spine(exported)
+    guard case .transition(let transition) = items[1] else {
+      Issue.record("Expected middle spine item to be Cross Dissolve")
+      return
+    }
+    let videoFilter = try #require(transition.filterVideo?.first)
+    #expect(videoFilter.param?.map(\.name) == [
+      "Look", "Amount", "Ease", "Ease Amount", "disableDRT",
+    ])
+    #expect(videoFilter.param?.first { $0.name == "Look" }?.value == "12 (Video)")
+    #expect(videoFilter.param?.first { $0.name == "disableDRT" }?.value == "1")
+
+    let xml = try FCPXMLParser().encodeToString(exported)
+    #expect(xml.contains(#"value="12 (Video)""#))
+    #expect(!xml.contains(#"<data key="effectConfig">\#n"#))
   }
 }

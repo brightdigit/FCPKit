@@ -40,7 +40,7 @@ public struct PresentationDocument: Document {
   /// Bundled demo still used by the sample image slide.
   public static var placeholderImageURL: URL {
     guard let url = resourceBundle.url(forResource: "Placeholder", withExtension: "jpg") else {
-      fatalError("Missing Placeholder.png in FCPKitDemo module resources")
+      fatalError("Missing Placeholder.jpg in FCPKitDemo module resources")
     }
     return url
   }

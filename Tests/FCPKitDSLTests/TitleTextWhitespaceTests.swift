@@ -62,4 +62,17 @@ internal struct TitleTextWhitespaceTests {
       """
     #expect(FCPXMLParser.compactingTextStyleCharacterData(in: withParam) == withParam)
   }
+
+  @Test
+  internal func compactingCollapsesPrettyPrintedDataPayloads() {
+    let pretty = """
+      <data key="effectConfig">
+        YnBsaXN0MDDUAQID
+      </data>
+      """
+    #expect(
+      FCPXMLParser.compactingOpaqueDataCharacterData(in: pretty)
+        == #"<data key="effectConfig">YnBsaXN0MDDUAQID</data>"#
+    )
+  }
 }

@@ -86,7 +86,10 @@ public class FCPXMLParser {
     guard let xml = String(data: data, encoding: .utf8) else {
       return data
     }
-    return Data(Self.compactingTextStyleCharacterData(in: xml).utf8)
+    let compacted = Self.compactingOpaqueDataCharacterData(
+      in: Self.compactingTextStyleCharacterData(in: xml)
+    )
+    return Data(compacted.utf8)
   }
 
   /// Encodes a document as an FCPXML string.
@@ -120,7 +123,20 @@ extension FCPXMLParser {
   /// the title string. Elements that contain nested children (for example a
   /// definition style with `<param>` children) are left unchanged.
   internal static func compactingTextStyleCharacterData(in xml: String) -> String {
-    let pattern = #"<text-style([^>]*)>([^<]*)</text-style>"#
+    compactingCharacterOnlyElement("text-style", in: xml)
+  }
+
+  /// Collapses pretty-print whitespace inside character-only `<data>` elements.
+  ///
+  /// Opaque payloads such as `effectConfig` are base64; indented newlines from
+  /// `.prettyPrinted` make Final Cut report an unexpected value on the parent
+  /// transition.
+  internal static func compactingOpaqueDataCharacterData(in xml: String) -> String {
+    compactingCharacterOnlyElement("data", in: xml)
+  }
+
+  private static func compactingCharacterOnlyElement(_ name: String, in xml: String) -> String {
+    let pattern = "<\(name)([^>]*)>([^<]*)</\(name)>"
     guard let regex = try? NSRegularExpression(pattern: pattern) else {
       return xml
     }
@@ -137,7 +153,7 @@ extension FCPXMLParser {
       }
       result += xml[lastEnd..<fullRange.lowerBound]
       let trimmed = xml[bodyRange].trimmingCharacters(in: .whitespacesAndNewlines)
-      result += "<text-style\(xml[attrsRange])>\(trimmed)</text-style>"
+      result += "<\(name)\(xml[attrsRange])>\(trimmed)</\(name)>"
       lastEnd = fullRange.upperBound
     }
     result += xml[lastEnd...]

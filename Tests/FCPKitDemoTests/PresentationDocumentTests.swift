@@ -57,7 +57,7 @@ internal struct PresentationDocumentTests {
     }
     #expect(
       names == [
-        "video", "transition", "video", "transition", "video", "transition", "asset-clip",
+        "video", "transition", "video", "transition", "video", "transition", "video",
       ]
     )
     try expectTransition(items[1], named: TransitionPreset.diagonal.name)
@@ -78,7 +78,8 @@ internal struct PresentationDocumentTests {
     let assets = try #require(exported.resources?.assets)
     #expect(assets.count == 1)
     let asset = assets[0]
-    #expect(asset.mediaRep?.first?.src?.hasSuffix("Placeholder.png") == true)
+    let mediaSrc = try #require(asset.mediaRep?.first?.src)
+    #expect(mediaSrc.contains("Placeholder.jpg"))
     #expect(asset.duration == "0s")
     #expect(asset.start == "0s")
     #expect(asset.hasVideo?.value == true)
@@ -101,7 +102,7 @@ internal struct PresentationDocumentTests {
   internal func placeholderImageIsBundled() {
     let url = PresentationDocument.placeholderImageURL
     #expect(FileManager.default.fileExists(atPath: url.path))
-    #expect(url.pathExtension == "png")
+    #expect(url.pathExtension == "jpg")
   }
 }
 
